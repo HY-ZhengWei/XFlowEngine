@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="dataSource"      class="com.mchange.v2.c3p0.ComboPooledDataSource" />
+	<import name="dataSourceGroup" class="org.hy.common.db.DataSourceGroup" />
+	<import name="xparam"          class="java.util.Hashtable" />
+	<import name="item"            class="org.hy.common.app.Param" />
+
+
+
+	<!-- 数据库配置信息 -->
+	<sqls>
+	
+		<!-- MySQL数据库 -->
+		<dataSource id="DS_Stock_01" if="MYSQL == DataSourceType.getValue">
+			<driverClass>com.mysql.jdbc.Driver</driverClass>
+			<jdbcUrl>jdbc:mysql://Stock:3306/Stock?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
+			<user>root</user>
+			<password>root</password>
+			<maxPoolSize>100</maxPoolSize>
+			<initialPoolSize>2</initialPoolSize>
+			<checkoutTimeout>10000</checkoutTimeout>
+		</dataSource>
+		
+		
+		<!-- SQL Server数据库 -->
+		<dataSource id="DS_Stock_01" if="SQLSERVER == DataSourceType.getValue">
+			<driverClass>net.sourceforge.jtds.jdbc.Driver</driverClass>
+			<jdbcUrl>jdbc:jtds:sqlserver://Stock:1433;DatabaseName=Stock</jdbcUrl>
+			<user>sa</user>
+			<password>sa123</password>
+			<maxPoolSize>100</maxPoolSize>
+			<initialPoolSize>2</initialPoolSize>
+			<checkoutTimeout>10000</checkoutTimeout>
+		</dataSource>
+		
+
+		<!-- 数据库连接池组 -->
+		<dataSourceGroup id="DSG_Stock">
+			<call name="add">
+				<dataSource ref="DS_Stock_01" />
+			</call>
+		</dataSourceGroup>
+		
+	</sqls>
+	
+</config>

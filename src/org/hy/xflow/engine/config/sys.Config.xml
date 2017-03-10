@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="xconfig"         class="java.util.ArrayList" />
+	<import name="xparam"          class="java.util.Hashtable" />
+	<import name="item"            class="org.hy.common.app.Param" />
+	
+	
+	
+	<!-- 系统配置参数信息 -->
+	<xconfig>
+		
+	    <xparam id="SYSParam" key="name">
+	    
+	    	<item id="APPWEBID">
+	            <name>APPWEBID</name>
+				<value>XFlowEngine</value>
+				<comment>部署Web服务所在主机的标示(建议只包含：数字和英文)</comment>
+	        </item>
+	    
+	    	<item id="RootPackageName">
+	            <name>RootPackageName</name>
+				<value>org.hy.xflow.engine</value>
+				<comment>顶级包的路径。用于初始化。一般不修改</comment>
+	        </item>
+	        
+	        <item id="ClusterServers">
+	            <name>ClusterServers</name>
+				<value>
+				    127.0.0.1:1621
+				</value>
+				<comment>全部集群服务器列表(用逗号分隔)</comment>
+	        </item>
+	        
+	        <item id="ClusterTimeout">
+	            <name>ClusterTimeout</name>
+				<value>30000</value>
+				<comment>集群并发通讯的超时时长(单位：毫秒)</comment>
+	        </item>
+			
+			<item id="DataSourceType">
+	            <name>DataSourceType</name>
+				<value>MYSQL</value>
+				<comment>配置数据库是什么类型的。目前支持有：MYSQL、SQLSERVER</comment>
+	        </item>
+			
+	        <item id="TPool_MaxThread">
+	            <name>TPool_MaxThread</name>
+				<value>16</value>
+				<comment>最大线程数</comment>
+	        </item>
+	        
+	        <item id="TPool_MinThread">
+	            <name>TPool_MinThread</name>
+				<value>2</value>
+				<comment>最小线程数</comment>
+	        </item>
+	        
+	        <item id="TPool_MinIdleThread">
+	            <name>TPool_MinIdleThread</name>
+				<value>2</value>
+				<comment>最小空闲数</comment>
+	        </item>
+	        
+	        <item id="TPool_IntervalTime">
+	            <name>TPool_IntervalTime</name>
+				<value>50</value>
+				<comment>间隔时间</comment>
+	        </item>
+	        
+	        <item id="TPool_IdleTimeKill">
+	            <name>TPool_IdleTimeKill</name>
+				<value>600</value>
+				<comment>空闲自毁时长</comment>
+	        </item>
+	        
+	        <item id="TPool_IsWatch">
+	            <name>TPool_IsWatch</name>
+				<value>false</value>
+				<comment>监视线程池</comment>
+	        </item>
+	        
+		</xparam>
+		
+	</xconfig>
+	
+</config>
