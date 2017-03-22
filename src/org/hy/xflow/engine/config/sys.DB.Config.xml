@@ -14,9 +14,9 @@
 	<sqls>
 	
 		<!-- MySQL数据库 -->
-		<dataSource id="DS_Stock_01" if="MYSQL == DataSourceType.getValue">
+		<dataSource id="DS_XFlow_01" if="MYSQL == DataSourceType.getValue">
 			<driverClass>com.mysql.jdbc.Driver</driverClass>
-			<jdbcUrl>jdbc:mysql://Stock:3306/Stock?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
+			<jdbcUrl>jdbc:mysql://127.0.0.1:3306/XFlow?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
 			<user>root</user>
 			<password>root</password>
 			<maxPoolSize>100</maxPoolSize>
@@ -26,9 +26,9 @@
 		
 		
 		<!-- SQL Server数据库 -->
-		<dataSource id="DS_Stock_01" if="SQLSERVER == DataSourceType.getValue">
+		<dataSource id="DS_XFlow_01" if="SQLSERVER == DataSourceType.getValue">
 			<driverClass>net.sourceforge.jtds.jdbc.Driver</driverClass>
-			<jdbcUrl>jdbc:jtds:sqlserver://Stock:1433;DatabaseName=Stock</jdbcUrl>
+			<jdbcUrl>jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=XFlow</jdbcUrl>
 			<user>sa</user>
 			<password>sa123</password>
 			<maxPoolSize>100</maxPoolSize>
@@ -38,9 +38,9 @@
 		
 
 		<!-- 数据库连接池组 -->
-		<dataSourceGroup id="DSG_Stock">
+		<dataSourceGroup id="DSG_XFlow">
 			<call name="add">
-				<dataSource ref="DS_Stock_01" />
+				<dataSource ref="DS_XFlow_01" />
 			</call>
 		</dataSourceGroup>
 		

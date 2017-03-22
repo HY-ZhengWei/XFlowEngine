@@ -14,6 +14,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.db"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.file"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.tpool"/>
-	<classpathentry kind="lib" path="lib/hy.common.net.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.net"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
