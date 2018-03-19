@@ -13,3 +13,5 @@
 引用 https://github.com/HY-ZhengWei/hy.common.net 类库
 
 引用 https://github.com/HY-ZhengWei/hy.common.tpool 类库
+
+引用 https://github.com/HY-ZhengWei/XJava 类库

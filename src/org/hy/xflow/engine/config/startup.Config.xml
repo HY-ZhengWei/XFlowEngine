@@ -21,6 +21,11 @@
 				<value>sys.DB.Config.xml</value>
 			</item>
 			
+			<!-- 加载目录中所有的配置文件 -->
+			<item>
+				<value>dbCreate/</value>
+			</item>
+			
 		</startupConfig>
 		
 	</xconfig>

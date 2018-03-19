@@ -4,16 +4,15 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="lib/c3p0-0.9.2-pre5.jar"/>
 	<classpathentry kind="lib" path="lib/fel.jar"/>
-	<classpathentry kind="lib" path="lib/json-smart-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/mchange-commons-java-0.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.30-bin.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="lib/xjava.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.base"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.db"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.file"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.tpool"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.net"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/XJava"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

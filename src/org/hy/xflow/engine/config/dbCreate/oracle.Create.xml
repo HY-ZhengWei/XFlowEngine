@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 数据库初始化对象创建（自动创建）的相关SQL -->
+	<sqls>
+		
+		<sql id="XSQL_Create_TFlowInfo">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TFlowInfo
+                (
+                 workID             VARCHAR2(64)                     NOT NULL
+                ,workFatherID       VARCHAR(64)                     
+                ,flowTemplateID     VARCHAR2(64)                     NOT NULL
+                ,flowVersion        VARCHAR2(32)                     NOT NULL                 
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            NVARCHAR2(128)
+                ,createOrgID        VARCHAR2(64)
+                ,createOrg          NVARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                ,lastUserID         VARCHAR2(64)                     NOT NULL
+                ,lastUser           NVARCHAR2(128)
+                ,lastOrgID          VARCHAR2(64)
+                ,lastOrg            NVARCHAR2(128)
+                ,lastProcessID      VARCHAR2(64)                     NOT NULL
+                ,isValid            NUMBER(1)                        NOT NULL
+                ,isDelete           NUMBER(1)                        NOT NULL
+                ,
+                );/
+                
+                ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo_WorkID PRIMARY KEY (workID);/
+                
+                COMMENT ON TABLE  TFlowInfo                               IS '工作流信息表';/
+                COMMENT ON COLUMN TFlowInfo.workID                        IS '工作流实例ID';/
+                COMMENT ON COLUMN TFlowInfo.workGroupID                   IS '工作流的父实例ID，可为空';/
+                COMMENT ON COLUMN TFlowInfo.flowTemplateID                IS '工作流的模板ID';/
+                COMMENT ON COLUMN TFlowInfo.flowVersion                   IS '工作流的模板版本号';/
+                COMMENT ON COLUMN TFlowInfo.createrID                     IS '创建人员ID';/
+                COMMENT ON COLUMN TFlowInfo.creater                       IS '创建人员名称';/
+                COMMENT ON COLUMN TFlowInfo.createOrgID                   IS '创建部门ID';/
+                COMMENT ON COLUMN TFlowInfo.createOrg                     IS '创建部门名称';/
+                COMMENT ON COLUMN TFlowInfo.createTime                    IS '创建时间';/
+                COMMENT ON COLUMN TFlowInfo.lastUserID                    IS '最后修改人员ID';/
+                COMMENT ON COLUMN TFlowInfo.lastUser                      IS '最后修改人员名称';/
+                COMMENT ON COLUMN TFlowInfo.lastOrgID                     IS '最后修改部门ID';/
+                COMMENT ON COLUMN TFlowInfo.lastOrg                       IS '最后修改部门名称';/
+                COMMENT ON COLUMN TFlowInfo.lastProcessID                 IS '最后修改的过程ID';/
+                COMMENT ON COLUMN TFlowInfo.isValid                       IS '是否有效标记(0:无效；1:有效)';/
+                COMMENT ON COLUMN TFlowInfo.isDelete                      IS '是否删除标记(0:未删除；1:已删除)';/
+				]]>
+			</content>
+			
+			<comment>工作流信息表</comment>
+			<create>TFlowInfo</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TProcess">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TProcess
+                (
+                 processID          VARCHAR2(64)                     NOT NULL
+                ,workID             VARCHAR2(64)                     NOT NULL
+                ,splitProcessID     VARCHAR2(64)
+                ,currentNodeID      VARCHAR2(64)                     NOT NULL
+                ,currentNode        NVARCHAR2(64)                    NOT NULL
+                ,previousProcessID  VARCHAR2(64)
+                ,previousNodeID     VARCHAR2(64)                     NOT NULL
+                ,previousNode       NVARCHAR2(64)                    NOT NULL
+                ,nextProcessID      VARCHAR2(64)
+                ,nextNodeID         VARCHAR2(64)
+                ,nextNode           NNVARCHAR2(64)
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            NVARCHAR2(128)
+                ,createOrgID        VARCHAR2(64)
+                ,createOrg          NVARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                ,limitUserID        VARCHAR2(64)
+                ,limitOrgID         VARCHAR2(64)
+                ,limitTime          DATE
+                ,operateTime        DATE
+                ,operateTimeLen     NUMBER(10)
+                ,operateTypeID      VARCHAR2(64)
+                ,operateType        NVARCHAR2(128)
+                ,operateUserID      VARCHAR2(64)
+                ,operateUser        NVARCHAR2(128)
+                ,operateOrgID       VARCHAR2(64)
+                ,operateOrg         NVARCHAR2(128)
+                ,operateFiles       VARCHAR2(2000)
+                ,operateDatas       VARCHAR2(2000)
+                ,comment            NVARCHAR2(2000)
+                );/
+                
+                ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess_ProcessID PRIMARY KEY (processID);/
+                
+                COMMENT ON TABLE  TProcess                               IS '工作流过程表';/
+                COMMENT ON COLUMN TProcess.processID                     IS '工作流的过程ID';/
+                COMMENT ON COLUMN TProcess.workID                        IS '工作流实例ID';/
+                COMMENT ON COLUMN TProcess.splitProcessID                IS '分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
+                COMMENT ON COLUMN TProcess.currentNodeID                 IS '当前节点ID';/
+                COMMENT ON COLUMN TProcess.currentNode                   IS '当前节点名称';/
+                COMMENT ON COLUMN TProcess.previousProcessID             IS '上一过程ID';/
+                COMMENT ON COLUMN TProcess.previousNodeID                IS '上一节点ID';/
+                COMMENT ON COLUMN TProcess.previousNode                  IS '上一节点名称';/
+                COMMENT ON COLUMN TProcess.nextProcessID                 IS '下一过程ID';/
+                COMMENT ON COLUMN TProcess.nextNodeID                    IS '下一节点ID';/
+                COMMENT ON COLUMN TProcess.nextNode                      IS '下一节点名称';/
+                COMMENT ON COLUMN TProcess.createrID                     IS '创建人员ID';/
+                COMMENT ON COLUMN TProcess.creater                       IS '创建人员名称';/
+                COMMENT ON COLUMN TProcess.createOrgID                   IS '创建部门ID';/
+                COMMENT ON COLUMN TProcess.createOrg                     IS '创建部门名称';/
+                COMMENT ON COLUMN TProcess.createTime                    IS '创建时间';/
+                COMMENT ON COLUMN TProcess.limitUserID                   IS '限制操作人员ID'
+                COMMENT ON COLUMN TProcess.limitOrgID                    IS '限制操作部门ID'
+                COMMENT ON COLUMN TProcess.limitTime                     IS '限制操作时间'
+                COMMENT ON COLUMN TProcess.operateTime                   IS '操作时间';/
+                COMMENT ON COLUMN TProcess.operateTimeLen                IS '操作时长（单位：秒）';/
+                COMMENT ON COLUMN TProcess.operateTypeID                 IS '操作类型ID';/
+                COMMENT ON COLUMN TProcess.operateType                   IS '操作类型名称';/
+                COMMENT ON COLUMN TProcess.operateUserID                 IS '操作人员ID';/
+                COMMENT ON COLUMN TProcess.operateUser                   IS '操作人员名称';/
+                COMMENT ON COLUMN TProcess.operateOrgID                  IS '操作部门ID';/
+                COMMENT ON COLUMN TProcess.operateOrg                    IS '操作部门名称';/
+                COMMENT ON COLUMN TProcess.operateFiles                  IS '操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
+                COMMENT ON COLUMN TProcess.operateDatas                  IS '操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
+                COMMENT ON COLUMN TProcess.comment                       IS '备注说明';/
+				]]>
+			</content>
+			
+			<comment>工作流过程表</comment>
+			<create>TProcess</create>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>
