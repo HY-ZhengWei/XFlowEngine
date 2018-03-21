@@ -19,7 +19,7 @@
                 CREATE TABLE TFlowInfo
                 (
                  workID             VARCHAR2(64)                     NOT NULL
-                ,workFatherID       VARCHAR(64)                     
+                ,workFatherID       VARCHAR2(64)                     
                 ,flowTemplateID     VARCHAR2(64)                     NOT NULL
                 ,flowVersion        VARCHAR2(32)                     NOT NULL                 
                 ,createrID          VARCHAR2(64)                     NOT NULL
@@ -29,6 +29,7 @@
                 ,createTime         DATE                             NOT NULL
                 ,lastUserID         VARCHAR2(64)                     NOT NULL
                 ,lastUser           NVARCHAR2(128)
+                ,lastTime           DATE
                 ,lastOrgID          VARCHAR2(64)
                 ,lastOrg            NVARCHAR2(128)
                 ,lastProcessID      VARCHAR2(64)                     NOT NULL
@@ -37,7 +38,7 @@
                 ,
                 );/
                 
-                ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo_WorkID PRIMARY KEY (workID);/
+                ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
                 
                 COMMENT ON TABLE  TFlowInfo                               IS '工作流信息表';/
                 COMMENT ON COLUMN TFlowInfo.workID                        IS '工作流实例ID';/
@@ -51,6 +52,7 @@
                 COMMENT ON COLUMN TFlowInfo.createTime                    IS '创建时间';/
                 COMMENT ON COLUMN TFlowInfo.lastUserID                    IS '最后修改人员ID';/
                 COMMENT ON COLUMN TFlowInfo.lastUser                      IS '最后修改人员名称';/
+                COMMENT ON COLUMN TFlowInfo.lastTime                      IS '最后修改时间';/
                 COMMENT ON COLUMN TFlowInfo.lastOrgID                     IS '最后修改部门ID';/
                 COMMENT ON COLUMN TFlowInfo.lastOrg                       IS '最后修改部门名称';/
                 COMMENT ON COLUMN TFlowInfo.lastProcessID                 IS '最后修改的过程ID';/
@@ -77,6 +79,7 @@
                  processID          VARCHAR2(64)                     NOT NULL
                 ,workID             VARCHAR2(64)                     NOT NULL
                 ,splitProcessID     VARCHAR2(64)
+                ,processNo          NUMBER(10)                       NOT NULL
                 ,currentNodeID      VARCHAR2(64)                     NOT NULL
                 ,currentNode        NVARCHAR2(64)                    NOT NULL
                 ,previousProcessID  VARCHAR2(64)
@@ -106,12 +109,13 @@
                 ,comment            NVARCHAR2(2000)
                 );/
                 
-                ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess_ProcessID PRIMARY KEY (processID);/
+                ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
                 
                 COMMENT ON TABLE  TProcess                               IS '工作流过程表';/
                 COMMENT ON COLUMN TProcess.processID                     IS '工作流的过程ID';/
                 COMMENT ON COLUMN TProcess.workID                        IS '工作流实例ID';/
                 COMMENT ON COLUMN TProcess.splitProcessID                IS '分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
+                COMMENT ON COLUMN TProcess.processNo                     IS '工作流的过程编号。下标从1开始';/
                 COMMENT ON COLUMN TProcess.currentNodeID                 IS '当前节点ID';/
                 COMMENT ON COLUMN TProcess.currentNode                   IS '当前节点名称';/
                 COMMENT ON COLUMN TProcess.previousProcessID             IS '上一过程ID';/
@@ -144,6 +148,175 @@
 			
 			<comment>工作流过程表</comment>
 			<create>TProcess</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TTemplate">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TTemplate
+                (
+                 templateID         VARCHAR2(64)                     NOT NULL
+                ,version            VARCHAR2(32)                     NOT NULL
+                ,templateName       NVARCHAR2(128)                   NOT NULL
+                ,comment            NVARCHAR2(2000)
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            NVARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                ,lastUserID         VARCHAR2(64)                     NOT NULL
+                ,lastUser           NVARCHAR2(128)
+                ,lastTime           DATE
+                ,isValid            NUMBER(1)                        NOT NULL
+                ,isDelete           NUMBER(1)                        NOT NULL
+                ,
+                );/
+                
+                ALTER TABLE TTemplate ADD CONSTRAINT PK_TTemplate PRIMARY KEY (templateID);/
+                
+                COMMENT ON TABLE  TTemplate                               IS '工作流模板表';/
+                COMMENT ON COLUMN TTemplate.templateID                    IS '模板ID';/
+                COMMENT ON COLUMN TTemplate.version                       IS '模板版本号';/
+                COMMENT ON COLUMN TTemplate.templateName                  IS '模板名称';/
+                COMMENT ON COLUMN TTemplate.comment                       IS '备注说明';/
+                COMMENT ON COLUMN TTemplate.createrID                     IS '创建人员ID';/
+                COMMENT ON COLUMN TTemplate.creater                       IS '创建人员名称';/
+                COMMENT ON COLUMN TTemplate.createTime                    IS '创建时间';/
+                COMMENT ON COLUMN TTemplate.lastUserID                    IS '最后修改人员ID';/
+                COMMENT ON COLUMN TTemplate.lastUser                      IS '最后修改人员名称';/
+                COMMENT ON COLUMN TTemplate.lastTime                      IS '最后修改时间';/
+                COMMENT ON COLUMN TTemplate.isValid                       IS '是否有效标记(0:无效；1:有效)';/
+                COMMENT ON COLUMN TTemplate.isDelete                      IS '是否删除标记(0:未删除；1:已删除)';/
+				]]>
+			</content>
+			
+			<comment>工作流模板表</comment>
+			<create>TTemplate</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TNodeInfo">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TNodeInfo
+                (
+                 nodeID             VARCHAR2(64)                     NOT NULL
+                ,templateID         VARCHAR2(64)                     NOT NULL                   
+                ,nodeName           NVARCHAR2(128)                   NOT NULL
+                ,nodeTypeID         VARCHAR2(64)                     NOT NULL
+                ,comment            NVARCHAR2(2000)
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            NVARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                ,lastUserID         VARCHAR2(64)                     NOT NULL
+                ,lastUser           NVARCHAR2(128)
+                ,lastTime           DATE
+                ,
+                );/
+                
+                ALTER TABLE TNodeInfo ADD CONSTRAINT PK_TNodeInfo PRIMARY KEY (nodeID);/
+                
+                COMMENT ON TABLE  TNodeInfo                               IS '工作流节点信息表';/
+                COMMENT ON COLUMN TNodeInfo.nodeID                        IS '工作流节点ID';/
+                COMMENT ON COLUMN TNodeInfo.templateID                    IS '工作流的模板ID';/
+                COMMENT ON COLUMN TNodeInfo.nodeName                      IS '节点名称';/
+                COMMENT ON COLUMN TNodeInfo.nodeTypeID                    IS '节点类型ID';/
+                COMMENT ON COLUMN TNodeInfo.comment                       IS '备注说明';/
+                COMMENT ON COLUMN TNodeInfo.createrID                     IS '创建人员ID';/
+                COMMENT ON COLUMN TNodeInfo.creater                       IS '创建人员名称';/
+                COMMENT ON COLUMN TNodeInfo.createTime                    IS '创建时间';/
+                COMMENT ON COLUMN TNodeInfo.lastUserID                    IS '最后修改人员ID';/
+                COMMENT ON COLUMN TNodeInfo.lastUser                      IS '最后修改人员名称';/
+                COMMENT ON COLUMN TNodeInfo.lastTime                      IS '最后修改时间';/
+				]]>
+			</content>
+			
+			<comment>工作流节点信息表</comment>
+			<create>TNodeInfo</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TNodeProcess">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TNodeProcess
+                (
+                 nodeID             VARCHAR2(64)                     NOT NULL
+                ,templateID         VARCHAR2(64)                     NOT NULL
+                ,version            VARCHAR2(32)                     NOT NULL
+                ,nextNodeID         VARCHAR2(64)                     NOT NULL
+                ,comment            NVARCHAR2(2000)
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            NVARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                ,lastUserID         VARCHAR2(64)                     NOT NULL
+                ,lastUser           NVARCHAR2(128)
+                ,lastTime           DATE
+                ,
+                );/
+                
+                ALTER TABLE TNodeProcess ADD CONSTRAINT PK_TNodeProcess PRIMARY KEY (nodeID);/
+                
+                COMMENT ON TABLE  TNodeProcess                            IS '工作流节点过程表';/
+                COMMENT ON COLUMN TNodeProcess.nodeID                     IS '工作流节点ID';/
+                COMMENT ON COLUMN TNodeProcess.templateID                 IS '工作流的模板ID';/
+                COMMENT ON COLUMN TNodeProcess.version                    IS '工作流的模板的版本号';/
+                COMMENT ON COLUMN TNodeProcess.nextNodeID                 IS '下一节点。可以为不同工作流模板的节点。即支持子流程';/
+                COMMENT ON COLUMN TNodeProcess.comment                    IS '备注说明';/
+                COMMENT ON COLUMN TNodeProcess.createrID                  IS '创建人员ID';/
+                COMMENT ON COLUMN TNodeProcess.creater                    IS '创建人员名称';/
+                COMMENT ON COLUMN TNodeProcess.createTime                 IS '创建时间';/
+                COMMENT ON COLUMN TNodeProcess.lastUserID                 IS '最后修改人员ID';/
+                COMMENT ON COLUMN TNodeProcess.lastUser                   IS '最后修改人员名称';/
+                COMMENT ON COLUMN TNodeProcess.lastTime                   IS '最后修改时间';/
+				]]>
+			</content>
+			
+			<comment>工作流节点过程表</comment>
+			<create>TNodeProcess</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TNodeType">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TNodeType
+                (
+                 nodeTypeID         VARCHAR2(64)                     NOT NULL
+                ,nodeType           NVARCHAR2(128)                   NOT NULL
+                ,comment            NVARCHAR2(2000)
+                );/
+                
+                ALTER TABLE TNodeType ADD CONSTRAINT PK_TNodeType PRIMARY KEY (nodeTypeID);/
+                
+                COMMENT ON TABLE  TNodeType                               IS '工作流节点类型';/
+                COMMENT ON COLUMN TNodeType.nodeTypeID                    IS '工作流节点类型ID';/
+                COMMENT ON COLUMN TNodeType.nodeType                      IS '工作流节点类型名称';/
+                COMMENT ON COLUMN TNodeType.comment                       IS '备注说明';/
+				]]>
+			</content>
+			
+			<comment>工作流节点类型</comment>
+			<create>TNodeType</create>
 			
 		</sql>
 		
