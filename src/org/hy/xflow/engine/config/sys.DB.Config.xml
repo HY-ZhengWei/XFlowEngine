@@ -13,6 +13,18 @@
 	<!-- 数据库配置信息 -->
 	<sqls>
 	
+		<!-- Oracle数据库 -->
+		<dataSource id="DS_XFlow_01" if="ORACLE == DataSourceType.getValue">
+			<driverClass>oracle.jdbc.driver.OracleDriver</driverClass>
+			<jdbcUrl>jdbc:oracle:thin:@127.0.0.1:1521:orcl</jdbcUrl>
+			<user>XFlow</user>
+			<password>xflow</password>
+			<maxPoolSize>100</maxPoolSize>
+			<initialPoolSize>2</initialPoolSize>
+			<checkoutTimeout>10000</checkoutTimeout>
+		</dataSource>
+		
+	
 		<!-- MySQL数据库 -->
 		<dataSource id="DS_XFlow_01" if="MYSQL == DataSourceType.getValue">
 			<driverClass>com.mysql.jdbc.Driver</driverClass>
@@ -36,7 +48,8 @@
 			<checkoutTimeout>10000</checkoutTimeout>
 		</dataSource>
 		
-
+		
+		
 		<!-- 数据库连接池组 -->
 		<dataSourceGroup id="DSG_XFlow">
 			<call name="add">

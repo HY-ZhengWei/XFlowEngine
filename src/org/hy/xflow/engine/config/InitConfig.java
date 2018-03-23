@@ -2,6 +2,7 @@ package org.hy.xflow.engine.config;
 
 import java.util.List;
 
+import org.hy.common.Help;
 import org.hy.common.app.Param;
 import org.hy.common.thread.ThreadPool;
 import org.hy.common.xml.XJava;
@@ -50,7 +51,7 @@ public final class InitConfig extends AppInitConfig
             {
                 this.init("sys.Config.xml");
                 this.init("startup.Config.xml");
-                this.init((List<Param>)XJava.getObject("StartupConfig"));
+                this.init((List<Param>)XJava.getObject("StartupConfig") ,Help.getClassPath(this));
                 this.init(((Param)XJava.getObject("RootPackageName")).getValue());
                 
                 if ( i_IsStartJobs )

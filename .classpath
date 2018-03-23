@@ -8,12 +8,14 @@
 	<classpathentry kind="lib" path="lib/mchange-commons-java-0.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.30-bin.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/XJava"/>
+	<classpathentry kind="lib" path="lib/json-smart-1.1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.base"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.db"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.file"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.tpool"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.net"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/XJava"/>
-	<classpathentry kind="lib" path="lib/json-smart-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-runtime-3.4.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
