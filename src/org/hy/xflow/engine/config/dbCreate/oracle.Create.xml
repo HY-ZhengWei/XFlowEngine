@@ -81,14 +81,14 @@
                 ,workID             VARCHAR2(64)                     NOT NULL
                 ,splitProcessID     VARCHAR2(64)
                 ,processNo          NUMBER(10)                       NOT NULL
-                ,currentNodeID      VARCHAR2(64)                     NOT NULL
-                ,currentNode        NVARCHAR2(64)                    NOT NULL
+                ,currentActivityID  VARCHAR2(64)                     NOT NULL
+                ,currentActivity    NVARCHAR2(64)                    NOT NULL
                 ,previousProcessID  VARCHAR2(64)
-                ,previousNodeID     VARCHAR2(64)                     NOT NULL
-                ,previousNode       NVARCHAR2(64)                    NOT NULL
+                ,previousActivityID VARCHAR2(64)                     NOT NULL
+                ,previousActivity   NVARCHAR2(64)                    NOT NULL
                 ,nextProcessID      VARCHAR2(64)
-                ,nextNodeID         VARCHAR2(64)
-                ,nextNode           NVARCHAR2(64)
+                ,nextActivityID     VARCHAR2(64)
+                ,nextActivity       NVARCHAR2(64)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
                 ,createOrgID        VARCHAR2(64)
@@ -117,14 +117,14 @@
                 COMMENT ON COLUMN TProcess.workID                        IS '工作流实例ID';/
                 COMMENT ON COLUMN TProcess.splitProcessID                IS '分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
                 COMMENT ON COLUMN TProcess.processNo                     IS '工作流的过程编号。下标从1开始';/
-                COMMENT ON COLUMN TProcess.currentNodeID                 IS '当前节点ID';/
-                COMMENT ON COLUMN TProcess.currentNode                   IS '当前节点名称';/
+                COMMENT ON COLUMN TProcess.currentActivityID             IS '当前活动ID';/
+                COMMENT ON COLUMN TProcess.currentActivity               IS '当前活动名称';/
                 COMMENT ON COLUMN TProcess.previousProcessID             IS '上一过程ID';/
-                COMMENT ON COLUMN TProcess.previousNodeID                IS '上一节点ID';/
-                COMMENT ON COLUMN TProcess.previousNode                  IS '上一节点名称';/
+                COMMENT ON COLUMN TProcess.previousActivityID            IS '上一活动ID';/
+                COMMENT ON COLUMN TProcess.previousActivity              IS '上一活动名称';/
                 COMMENT ON COLUMN TProcess.nextProcessID                 IS '下一过程ID';/
-                COMMENT ON COLUMN TProcess.nextNodeID                    IS '下一节点ID';/
-                COMMENT ON COLUMN TProcess.nextNode                      IS '下一节点名称';/
+                COMMENT ON COLUMN TProcess.nextActivityID                IS '下一活动ID';/
+                COMMENT ON COLUMN TProcess.nextActivity                  IS '下一活动名称';/
                 COMMENT ON COLUMN TProcess.createrID                     IS '创建人员ID';/
                 COMMENT ON COLUMN TProcess.creater                       IS '创建人员名称';/
                 COMMENT ON COLUMN TProcess.createOrgID                   IS '创建部门ID';/
@@ -185,7 +185,7 @@
                 COMMENT ON COLUMN TProcessParticipants.objectType         IS '参与者类型（1:任务执行人；2:任务执行部门；3:任务执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 COMMENT ON COLUMN TProcessParticipants.objectID           IS '参与者ID';/
                 COMMENT ON COLUMN TProcessParticipants.objectName         IS '参与者名称';/
-                COMMENT ON COLUMN TProcessParticipants.objectNo           IS '参与者序号。系统自动生成，下标从1开始';/
+                COMMENT ON COLUMN TProcessParticipants.objectNo           IS '参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
                 COMMENT ON COLUMN TProcessParticipants.createrID          IS '创建人员ID';/
                 COMMENT ON COLUMN TProcessParticipants.creater            IS '创建人员名称';/
                 COMMENT ON COLUMN TProcessParticipants.createOrgID        IS '创建部门ID';/
@@ -248,18 +248,18 @@
 		
 		
 		
-		<sql id="XSQL_Create_TNodeInfo">
+		<sql id="XSQL_Create_TActivityInfo">
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
 			<content if="ORACLE == DSG_XFlow.getDbProductType">
 				<![CDATA[
-                CREATE TABLE TNodeInfo
+                CREATE TABLE TActivityInfo
                 (
-                 nodeID             VARCHAR2(64)                     NOT NULL
+                 activityID         VARCHAR2(64)                     NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL                   
-                ,nodeName           NVARCHAR2(128)                   NOT NULL
-                ,nodeTypeID         VARCHAR2(64)                     NOT NULL
+                ,activityName       NVARCHAR2(128)                   NOT NULL
+                ,activityTypeID     VARCHAR2(64)                     NOT NULL
                 ,x                  NUMBER(10 ,2)
                 ,y                  NUMBER(10 ,2)
                 ,z                  NUMBER(10 ,2)
@@ -275,49 +275,49 @@
                 ,lastTime           DATE
                 );/
                 
-                ALTER TABLE TNodeInfo ADD CONSTRAINT PK_TNodeInfo PRIMARY KEY (nodeID);/
+                ALTER TABLE TActivityInfo ADD CONSTRAINT PK_TActivityInfo PRIMARY KEY (activityID);/
                 
-                COMMENT ON TABLE  TNodeInfo                               IS '工作流节点信息表';/
-                COMMENT ON COLUMN TNodeInfo.nodeID                        IS '工作流节点ID';/
-                COMMENT ON COLUMN TNodeInfo.templateID                    IS '工作流的模板ID';/
-                COMMENT ON COLUMN TNodeInfo.nodeName                      IS '节点名称';/
-                COMMENT ON COLUMN TNodeInfo.nodeTypeID                    IS '节点类型ID';/
-                COMMENT ON COLUMN TNodeInfo.x                             IS '位置x坐标值';/
-                COMMENT ON COLUMN TNodeInfo.y                             IS '位置y坐标值';/
-                COMMENT ON COLUMN TNodeInfo.z                             IS '位置z坐标值';/
-                COMMENT ON COLUMN TNodeInfo.height                        IS '图标高度';/
-                COMMENT ON COLUMN TNodeInfo.width                         IS '图标宽度';/
-                COMMENT ON COLUMN TNodeInfo.iconURL                       IS '图标路径';/
-                COMMENT ON COLUMN TNodeInfo.infoComment                   IS '备注说明';/
-                COMMENT ON COLUMN TNodeInfo.createrID                     IS '创建人员ID';/
-                COMMENT ON COLUMN TNodeInfo.creater                       IS '创建人员名称';/
-                COMMENT ON COLUMN TNodeInfo.createTime                    IS '创建时间';/
-                COMMENT ON COLUMN TNodeInfo.lastUserID                    IS '最后修改人员ID';/
-                COMMENT ON COLUMN TNodeInfo.lastUser                      IS '最后修改人员名称';/
-                COMMENT ON COLUMN TNodeInfo.lastTime                      IS '最后修改时间';/
+                COMMENT ON TABLE  TActivityInfo                           IS '工作流活动组件(节点)信息表';/
+                COMMENT ON COLUMN TActivityInfo.activityID                IS '工作流活动ID';/
+                COMMENT ON COLUMN TActivityInfo.templateID                IS '工作流的模板ID';/
+                COMMENT ON COLUMN TActivityInfo.activityName              IS '活动名称';/
+                COMMENT ON COLUMN TActivityInfo.activityTypeID            IS '活动类型ID';/
+                COMMENT ON COLUMN TActivityInfo.x                         IS '位置x坐标值';/
+                COMMENT ON COLUMN TActivityInfo.y                         IS '位置y坐标值';/
+                COMMENT ON COLUMN TActivityInfo.z                         IS '位置z坐标值';/
+                COMMENT ON COLUMN TActivityInfo.height                    IS '图标高度';/
+                COMMENT ON COLUMN TActivityInfo.width                     IS '图标宽度';/
+                COMMENT ON COLUMN TActivityInfo.iconURL                   IS '图标路径';/
+                COMMENT ON COLUMN TActivityInfo.infoComment               IS '备注说明';/
+                COMMENT ON COLUMN TActivityInfo.createrID                 IS '创建人员ID';/
+                COMMENT ON COLUMN TActivityInfo.creater                   IS '创建人员名称';/
+                COMMENT ON COLUMN TActivityInfo.createTime                IS '创建时间';/
+                COMMENT ON COLUMN TActivityInfo.lastUserID                IS '最后修改人员ID';/
+                COMMENT ON COLUMN TActivityInfo.lastUser                  IS '最后修改人员名称';/
+                COMMENT ON COLUMN TActivityInfo.lastTime                  IS '最后修改时间';/
 				]]>
 			</content>
 			
-			<comment>工作流节点信息表</comment>
-			<create>TNodeInfo</create>
+			<comment>工作流活动组件(节点)信息表</comment>
+			<create>TActivityInfo</create>
 			
 		</sql>
 		
 		
 		
-		<sql id="XSQL_Create_TNodeProcess">
+		<sql id="XSQL_Create_TActivityRoute">
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
 			<content if="ORACLE == DSG_XFlow.getDbProductType">
 				<![CDATA[
-                CREATE TABLE TNodeProcess
+                CREATE TABLE TActivityRoute
                 (
-                 npID               VARCHAR2(64)                     NOT NULL
-                ,nodeID             VARCHAR2(64)                     NOT NULL
+                 arID               VARCHAR2(64)                     NOT NULL
+                ,activityID         VARCHAR2(64)                     NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL
                 ,version            VARCHAR2(32)                     NOT NULL
-                ,nextNodeID         VARCHAR2(64)                     NOT NULL
+                ,nextActivityID     VARCHAR2(64)                     NOT NULL
                 ,conditionXJavaID   VARCHAR2(128)
                 ,conditionMethod    VARCHAR2(64)
                 ,conditionValue     VARCHAR2(500)
@@ -332,61 +332,61 @@
                 ,lastTime           DATE
                 );/
                 
-                ALTER TABLE TNodeProcess ADD CONSTRAINT PK_TNodeProcess PRIMARY KEY (npID);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT PK_TActivityRoute PRIMARY KEY (arID);/
                 
-                COMMENT ON TABLE  TNodeProcess                            IS '工作流节点过程表';/
-                COMMENT ON COLUMN TNodeProcess.nodeID                     IS '主键ID';/
-                COMMENT ON COLUMN TNodeProcess.nodeID                     IS '工作流节点ID';/
-                COMMENT ON COLUMN TNodeProcess.templateID                 IS '工作流的模板ID';/
-                COMMENT ON COLUMN TNodeProcess.version                    IS '工作流的模板的版本号';/
-                COMMENT ON COLUMN TNodeProcess.nextNodeID                 IS '下一节点。可以为不同工作流模板的节点。即支持子流程';/
-                COMMENT ON COLUMN TNodeProcess.conditionXJavaID           IS '有条件判定时，执行的XJava对象ID';/
-                COMMENT ON COLUMN TNodeProcess.conditionMethod            IS '有条件判定时，执行的对象方法名称';/
-                COMMENT ON COLUMN TNodeProcess.conditionValue             IS '有条件判定时，方法执行结果的对比值';/
-                COMMENT ON COLUMN TNodeProcess.conditionVType             IS '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
-                COMMENT ON COLUMN TNodeProcess.title                      IS '标题';/
-                COMMENT ON COLUMN TNodeProcess.infoComment                IS '备注说明';/
-                COMMENT ON COLUMN TNodeProcess.createrID                  IS '创建人员ID';/
-                COMMENT ON COLUMN TNodeProcess.creater                    IS '创建人员名称';/
-                COMMENT ON COLUMN TNodeProcess.createTime                 IS '创建时间';/
-                COMMENT ON COLUMN TNodeProcess.lastUserID                 IS '最后修改人员ID';/
-                COMMENT ON COLUMN TNodeProcess.lastUser                   IS '最后修改人员名称';/
-                COMMENT ON COLUMN TNodeProcess.lastTime                   IS '最后修改时间';/
+                COMMENT ON TABLE  TActivityRoute                          IS '工作流活动组件(节点)的路由表';/
+                COMMENT ON COLUMN TActivityRoute.arID                     IS '主键ID';/
+                COMMENT ON COLUMN TActivityRoute.activityID               IS '工作流活动ID';/
+                COMMENT ON COLUMN TActivityRoute.templateID               IS '工作流的模板ID';/
+                COMMENT ON COLUMN TActivityRoute.version                  IS '工作流的模板的版本号';/
+                COMMENT ON COLUMN TActivityRoute.nextActivityID           IS '下一活动ID。可以为不同工作流模板的活动。即支持子流程';/
+                COMMENT ON COLUMN TActivityRoute.conditionXJavaID         IS '有条件判定时，执行的XJava对象ID';/
+                COMMENT ON COLUMN TActivityRoute.conditionMethod          IS '有条件判定时，执行的对象方法名称';/
+                COMMENT ON COLUMN TActivityRoute.conditionValue           IS '有条件判定时，方法执行结果的对比值';/
+                COMMENT ON COLUMN TActivityRoute.conditionVType           IS '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
+                COMMENT ON COLUMN TActivityRoute.title                    IS '标题';/
+                COMMENT ON COLUMN TActivityRoute.infoComment              IS '备注说明';/
+                COMMENT ON COLUMN TActivityRoute.createrID                IS '创建人员ID';/
+                COMMENT ON COLUMN TActivityRoute.creater                  IS '创建人员名称';/
+                COMMENT ON COLUMN TActivityRoute.createTime               IS '创建时间';/
+                COMMENT ON COLUMN TActivityRoute.lastUserID               IS '最后修改人员ID';/
+                COMMENT ON COLUMN TActivityRoute.lastUser                 IS '最后修改人员名称';/
+                COMMENT ON COLUMN TActivityRoute.lastTime                 IS '最后修改时间';/
 				]]>
 			</content>
 			
-			<comment>工作流节点过程表</comment>
-			<create>TNodeProcess</create>
+			<comment>工作流活动组件(节点)的路由表</comment>
+			<create>TActivityRoute</create>
 			
 		</sql>
 		
 		
 		
-		<!-- 节点类型有：开始、结束、转派、驳回、追回、回退、催办、分派、汇签、限时自动流、自由流 -->
-		<sql id="XSQL_Create_TNodeType">
+		<!-- 活动类型有：开始、结束、转派、驳回、追回、回退、催办、分派、汇签、限时自动流、自由流 -->
+		<sql id="XSQL_Create_TActivityType">
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
 			<content if="ORACLE == DSG_XFlow.getDbProductType">
 				<![CDATA[
-                CREATE TABLE TNodeType
+                CREATE TABLE TActivityType
                 (
-                 nodeTypeID         VARCHAR2(64)                     NOT NULL
-                ,nodeType           NVARCHAR2(128)                   NOT NULL
+                 activityTypeID     VARCHAR2(64)                     NOT NULL
+                ,activityType       NVARCHAR2(128)                   NOT NULL
                 ,infoComment        NVARCHAR2(2000)
                 );/
                 
-                ALTER TABLE TNodeType ADD CONSTRAINT PK_TNodeType PRIMARY KEY (nodeTypeID);/
+                ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
                 
-                COMMENT ON TABLE  TNodeType                               IS '工作流节点类型';/
-                COMMENT ON COLUMN TNodeType.nodeTypeID                    IS '工作流节点类型ID';/
-                COMMENT ON COLUMN TNodeType.nodeType                      IS '工作流节点类型名称';/
-                COMMENT ON COLUMN TNodeType.infoComment                   IS '备注说明';/
+                COMMENT ON TABLE  TActivityType                           IS '工作流活动(节点)类型';/
+                COMMENT ON COLUMN TActivityType.activityTypeID            IS '工作流活动类型ID';/
+                COMMENT ON COLUMN TActivityType.activityType              IS '工作流活动类型名称';/
+                COMMENT ON COLUMN TActivityType.infoComment               IS '备注说明';/
 				]]>
 			</content>
 			
-			<comment>工作流节点类型</comment>
-			<create>TNodeType</create>
+			<comment>工作流活动(节点)类型</comment>
+			<create>TActivityType</create>
 			
 		</sql>
 		
