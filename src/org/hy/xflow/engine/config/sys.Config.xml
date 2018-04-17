@@ -41,7 +41,7 @@
 			
 			<item id="DataSourceType">
 	            <name>DataSourceType</name>
-				<value>ORACLE</value>
+				<value>SQLSERVER</value>
 				<comment>配置数据库是什么类型的。详见：org.hy.common.db.DataSourceGroup</comment>
 	        </item>
 			
