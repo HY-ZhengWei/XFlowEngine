@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流活动(节点)类型 模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_ActivityType_Query"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.activityTypeID
+                       ,A.activityType
+                       ,A.infoComment
+                       ,A.orderNo
+				  FROM  TActivityType  A
+				 ORDER  BY A.orderNo
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.ActivityType</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>

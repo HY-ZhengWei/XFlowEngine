@@ -26,6 +26,11 @@
 				<value>dbCreate/</value>
 			</item>
 			
+			<!-- 加载目录中所有的配置文件 -->
+			<item>
+				<value>db/</value>
+			</item>
+			
 		</startupConfig>
 		
 	</xconfig>

@@ -14,7 +14,7 @@ import org.hy.common.xml.SerializableDef;
  * @createDate  2018-04-17
  * @version     v1.0
  */
-public class TActivityRoute extends SerializableDef
+public class ActivityRoute extends SerializableDef
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	

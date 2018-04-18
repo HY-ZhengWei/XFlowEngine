@@ -737,7 +737,33 @@
 		
 		
 		
-		<!-- 活动类型有：开始、结束、转派、驳回、追回、回退、催办、分派、汇签、限时自动流、自由流 -->
+		<sql id="XSQL_Create_TActivityType_Init_Insert">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT001' ,'开始'      ,1);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT002' ,'转派'      ,2);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT003' ,'分派'      ,3);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT004' ,'汇签'      ,4);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT020' ,'驳回'      ,20);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT021' ,'追回'      ,21);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT022' ,'回退'      ,22);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT030' ,'催办'      ,30);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT050' ,'限时自动流' ,50);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT051' ,'自由流'    ,51);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT999' ,'结束'      ,999);/
+				]]>
+			</content>
+			
+			<comment>工作流活动(节点)类型表的初始化数据</comment>
+			
+		</sql>
+		
+		
+		
+		<!-- 活动类型有：开始、结束、转派、分派、汇签、驳回、追回、回退、催办、限时自动流、自由流 -->
 		<sql id="XSQL_Create_TActivityType">
 		
 			<dataSourceGroup ref="DSG_XFlow" />
@@ -749,6 +775,7 @@
                  activityTypeID     VARCHAR2(64)                     NOT NULL
                 ,activityType       NVARCHAR2(128)                   NOT NULL
                 ,infoComment        NVARCHAR2(2000)
+                ,orderNo            NUMBER(10)
                 );/
                 
                 ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
@@ -757,6 +784,7 @@
                 COMMENT ON COLUMN TActivityType.activityTypeID            IS '工作流活动类型ID';/
                 COMMENT ON COLUMN TActivityType.activityType              IS '工作流活动类型名称';/
                 COMMENT ON COLUMN TActivityType.infoComment               IS '备注说明';/
+                COMMENT ON COLUMN TActivityType.orderNo                   IS '排列顺序';/
 				]]>
 			</content>
 			
@@ -767,6 +795,7 @@
                  activityTypeID     VARCHAR(64)                     NOT NULL
                 ,activityType       NVARCHAR(128)                   NOT NULL
                 ,infoComment        NVARCHAR(2000)
+                ,orderNo            INT
                 );/
                 
                 ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
@@ -775,8 +804,13 @@
                 EXEC P_ColumnComment TActivityType ,activityTypeID            ,'工作流活动类型ID';/
                 EXEC P_ColumnComment TActivityType ,activityType              ,'工作流活动类型名称';/
                 EXEC P_ColumnComment TActivityType ,infoComment               ,'备注说明';/
+                EXEC P_ColumnComment TActivityType ,orderNo                   ,'排列顺序';/
 				]]>
 			</content>
+			
+			<trigger>
+				<create ref="XSQL_Create_TActivityType_Init_Insert"/>
+			</trigger>
 			
 			<comment>工作流活动(节点)类型</comment>
 			<create>TActivityType</create>

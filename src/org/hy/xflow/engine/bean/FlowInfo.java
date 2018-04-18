@@ -14,7 +14,7 @@ import org.hy.common.xml.SerializableDef;
  * @createDate  2018-04-17
  * @version     v1.0
  */
-public class TFlowInfo extends SerializableDef
+public class FlowInfo extends SerializableDef
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	

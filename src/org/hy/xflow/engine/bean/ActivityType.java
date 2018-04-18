@@ -13,19 +13,22 @@ import org.hy.common.xml.SerializableDef;
  * @createDate  2018-04-17
  * @version     v1.0
  */
-public class TActivityType extends SerializableDef
+public class ActivityType extends SerializableDef
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	
     
 	/** 工作流活动类型ID */
-    private String activityTypeID;
+    private String  activityTypeID;
     
 	/** 工作流活动类型名称 */
-    private String activityType;
+    private String  activityType;
     
 	/** 备注说明 */
-    private String infoComment;
+    private String  infoComment;
+    
+    /** 排列顺序 */
+    private Integer orderNo;
     
 	
 	
@@ -86,6 +89,26 @@ public class TActivityType extends SerializableDef
     public void setInfoComment(String i_InfoComment)
     {
         this.infoComment = i_InfoComment;
+    }
+
+    
+    /**
+     * 获取：排列顺序
+     */
+    public Integer getOrderNo()
+    {
+        return orderNo;
+    }
+
+    
+    /**
+     * 设置：排列顺序
+     * 
+     * @param orderNo 
+     */
+    public void setOrderNo(Integer orderNo)
+    {
+        this.orderNo = orderNo;
     }
 
 }
