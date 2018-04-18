@@ -17,15 +17,16 @@
 			
 			<content>
 				<![CDATA[
-				SELECT  A.arID
-				       ,A.activityID
+				SELECT  A.activityID
 				       ,A.templateID
-				       ,A.nextActivityID
-				       ,A.conditionXJavaID
-				       ,A.conditionMethod
-				       ,A.conditionValue
-				       ,A.conditionVType
-				       ,A.title
+				       ,A.activityName
+				       ,A.activityTypeID
+				       ,A.x
+				       ,A.y
+				       ,A.z
+				       ,A.height
+				       ,A.width
+				       ,A.iconURL
 				       ,A.infoComment
 				       ,A.createrID
 				       ,A.creater
@@ -33,7 +34,7 @@
 				       ,A.lastUserID
 				       ,A.lastUser
 				       ,A.lastTime
-				  FROM  TActivityRoute  A
+				  FROM  TActivityInfo  A
 				 WHERE  A.templateID = ':templateID'
 				]]>
 			</content>
