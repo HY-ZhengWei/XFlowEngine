@@ -1,25 +1,24 @@
 package org.hy.xflow.engine.dao;
 
-import java.util.List;
-
+import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xsql;
-import org.hy.xflow.engine.bean.ActivityType;
+import org.hy.xflow.engine.bean.ActivityRoute;
 
 
 
 
 
 /**
- * 工作流活动(节点)类型的DAO
+ * 工作流活动组件(节点)的路由表的DAO
  *
  * @author      ZhengWei(HY)
  * @createDate  2018-04-18
  * @version     v1.0
  */
-@Xjava(id="ActivityTypeDAO" ,value=XType.XSQL)
-public interface IActivityTypeDAO
+@Xjava(id="ActivityRouteDAO" ,value=XType.XSQL)
+public interface IActivityRouteDAO
 {
     
     /**
@@ -31,7 +30,7 @@ public interface IActivityTypeDAO
      *
      * @return
      */
-    @Xsql("XSQL_XFlow_ActivityType_Query")
-    public List<ActivityType> query();
+    @Xsql("XSQL_XFlow_ActivityRoute_QueryByTemplateID")
+    public PartitionMap<String ,ActivityRoute> query();
     
 }

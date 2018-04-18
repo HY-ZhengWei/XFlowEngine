@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流模板表模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_Template_QueryByID_NameVersion"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.templateID
+				       ,A.version
+				       ,A.templateName
+				       ,A.infoComment
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createTime
+				       ,A.lastUserID
+				       ,A.lastUser
+				       ,A.lastTime
+				       ,A.isValid
+				       ,A.isDelete
+				  FROM  TTemplate  A
+				 WHERE  1 = 1
+			  <[   AND  A.templateID   = ':templateID'   ]>
+			  <[   AND  A.templateName = ':templateName'
+			       AND  A.version      = ':version'      ]>
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.Template</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>

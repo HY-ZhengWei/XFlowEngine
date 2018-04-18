@@ -645,7 +645,6 @@
                  arID               VARCHAR2(64)                     NOT NULL
                 ,activityID         VARCHAR2(64)                     NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL
-                ,version            VARCHAR2(32)                     NOT NULL
                 ,nextActivityID     VARCHAR2(64)                     NOT NULL
                 ,conditionXJavaID   VARCHAR2(128)
                 ,conditionMethod    VARCHAR2(64)
@@ -667,7 +666,6 @@
                 COMMENT ON COLUMN TActivityRoute.arID                     IS '主键ID';/
                 COMMENT ON COLUMN TActivityRoute.activityID               IS '工作流活动ID';/
                 COMMENT ON COLUMN TActivityRoute.templateID               IS '工作流的模板ID';/
-                COMMENT ON COLUMN TActivityRoute.version                  IS '工作流的模板的版本号';/
                 COMMENT ON COLUMN TActivityRoute.nextActivityID           IS '下一活动ID。可以为不同工作流模板的活动。即支持子流程';/
                 COMMENT ON COLUMN TActivityRoute.conditionXJavaID         IS '有条件判定时，执行的XJava对象ID';/
                 COMMENT ON COLUMN TActivityRoute.conditionMethod          IS '有条件判定时，执行的对象方法名称';/
@@ -691,7 +689,6 @@
                  arID               VARCHAR(64)                     NOT NULL
                 ,activityID         VARCHAR(64)                     NOT NULL
                 ,templateID         VARCHAR(64)                     NOT NULL
-                ,version            VARCHAR(32)                     NOT NULL
                 ,nextActivityID     VARCHAR(64)                     NOT NULL
                 ,conditionXJavaID   VARCHAR(128)
                 ,conditionMethod    VARCHAR(64)
@@ -713,7 +710,6 @@
                 EXEC P_ColumnComment TActivityRoute ,arID                     ,'主键ID';/
                 EXEC P_ColumnComment TActivityRoute ,activityID               ,'工作流活动ID';/
                 EXEC P_ColumnComment TActivityRoute ,templateID               ,'工作流的模板ID';/
-                EXEC P_ColumnComment TActivityRoute ,version                  ,'工作流的模板的版本号';/
                 EXEC P_ColumnComment TActivityRoute ,nextActivityID           ,'下一活动ID。可以为不同工作流模板的活动。即支持子流程';/
                 EXEC P_ColumnComment TActivityRoute ,conditionXJavaID         ,'有条件判定时，执行的XJava对象ID';/
                 EXEC P_ColumnComment TActivityRoute ,conditionMethod          ,'有条件判定时，执行的对象方法名称';/

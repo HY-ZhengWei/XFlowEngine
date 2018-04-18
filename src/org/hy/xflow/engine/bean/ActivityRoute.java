@@ -28,9 +28,6 @@ public class ActivityRoute extends SerializableDef
 	/** 工作流的模板ID */
     private String templateID;
     
-	/** 工作流的模板的版本号 */
-    private String version;
-    
 	/** 下一活动ID。可以为不同工作流模板的活动。即支持子流程 */
     private String nextActivityID;
     
@@ -129,26 +126,6 @@ public class ActivityRoute extends SerializableDef
     public void setTemplateID(String i_TemplateID)
     {
         this.templateID = i_TemplateID;
-    }
-	
-	
-	/**
-     * 获取：工作流的模板的版本号
-     */
-    public String getVersion()
-    {
-        return this.version;
-    }
-
-    
-    /**
-     * 设置：工作流的模板的版本号
-     * 
-     * @param i_Version
-     */
-    public void setVersion(String i_Version)
-    {
-        this.version = i_Version;
     }
 	
 	

@@ -8,7 +8,7 @@
 
 
 
-    <!-- 工作流活动(节点)类型 模块的相关SQL -->
+    <!-- 工作流活动(节点)类型模块的相关SQL -->
 	<sqls>
 	
 		<sql id="XSQL_XFlow_ActivityType_Query"> 

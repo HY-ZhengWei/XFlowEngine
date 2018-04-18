@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流活动组件(节点)信息表模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_ActivityInfo_QueryByTemplateID"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.arID
+				       ,A.activityID
+				       ,A.templateID
+				       ,A.nextActivityID
+				       ,A.conditionXJavaID
+				       ,A.conditionMethod
+				       ,A.conditionValue
+				       ,A.conditionVType
+				       ,A.title
+				       ,A.infoComment
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createTime
+				       ,A.lastUserID
+				       ,A.lastUser
+				       ,A.lastTime
+				  FROM  TActivityRoute  A
+				 WHERE  A.templateID = ':templateID'
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.ActivityInfo</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>
