@@ -21,6 +21,9 @@
 				       ,A.templateID
 				       ,A.activityName
 				       ,A.activityTypeID
+				       ,B.activityTypeID  AS "activityType.activityTypeID"
+				       ,B.activityType    AS "activityType.activityType"
+				       ,B.infoComment     AS "activityType.infoComment"
 				       ,A.x
 				       ,A.y
 				       ,A.z
@@ -35,7 +38,8 @@
 				       ,A.lastUser
 				       ,A.lastTime
 				  FROM  TActivityInfo  A
-				 WHERE  A.templateID = ':templateID'
+				 WHERE  A.activityTypeID = B.activityTypeID
+				   AND  A.templateID     = ':templateID'
 				]]>
 			</content>
 			

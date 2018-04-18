@@ -31,6 +31,9 @@ public class ActivityInfo extends SerializableDef
 	/** 活动类型ID */
     private String activityTypeID;
     
+    /** 活动类型 */
+    private ActivityType activityType;
+    
 	/** 位置x坐标值 */
     private Double x;
     
@@ -152,7 +155,27 @@ public class ActivityInfo extends SerializableDef
     }
 	
 	
-	/**
+    /**
+     * 获取：活动类型
+     */
+    public ActivityType getActivityType()
+    {
+        return activityType;
+    }
+    
+    
+    /**
+     * 设置：活动类型
+     * 
+     * @param activityType 
+     */
+    public void setActivityType(ActivityType activityType)
+    {
+        this.activityType = activityType;
+    }
+    
+
+    /**
      * 获取：位置x坐标值
      */
     public Double getX()
