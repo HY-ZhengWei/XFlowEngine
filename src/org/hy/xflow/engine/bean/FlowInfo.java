@@ -1,7 +1,7 @@
 package org.hy.xflow.engine.bean;
 
 import org.hy.common.Date;
-import org.hy.common.xml.SerializableDef;
+import org.hy.xflow.engine.common.BaseModel;
 
 
 
@@ -14,7 +14,7 @@ import org.hy.common.xml.SerializableDef;
  * @createDate  2018-04-17
  * @version     v1.0
  */
-public class FlowInfo extends SerializableDef
+public class FlowInfo extends BaseModel
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	

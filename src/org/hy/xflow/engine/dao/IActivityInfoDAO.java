@@ -1,6 +1,6 @@
 package org.hy.xflow.engine.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
@@ -32,10 +32,10 @@ public interface IActivityInfoDAO
      * @version     v1.0
      *
      * @param i_TemplateID  模板ID
-     * @return
+     * @return              有顺序的LinkedHashMap，"开始"排在最前面，"结束"在最后
      */
     @Xsql("XSQL_XFlow_ActivityInfo_QueryByTemplateID")
-    public List<ActivityInfo> queryByTemplateID(@Xparam(id="templateID" ,notNull=true)String i_TemplateID);
+    public Map<String ,ActivityInfo> queryByTemplateID(@Xparam(id="templateID" ,notNull=true)String i_TemplateID);
     
     
     
@@ -47,9 +47,9 @@ public interface IActivityInfoDAO
      * @version     v1.0
      *
      * @param i_Template  模板对象
-     * @return
+     * @return            有顺序的LinkedHashMap，"开始"排在最前面，"结束"在最后
      */
     @Xsql("XSQL_XFlow_ActivityInfo_QueryByTemplateID")
-    public List<ActivityInfo> queryByTemplateID(@Xparam(notNulls={"templateID"}) Template i_Template); 
+    public Map<String ,ActivityInfo> queryByTemplateID(@Xparam(notNulls={"templateID"}) Template i_Template); 
     
 }

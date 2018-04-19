@@ -1,7 +1,9 @@
 package org.hy.xflow.engine.bean;
 
+import java.util.List;
+
 import org.hy.common.Date;
-import org.hy.common.xml.SerializableDef;
+import org.hy.xflow.engine.common.BaseModel;
 
 
 
@@ -14,10 +16,13 @@ import org.hy.common.xml.SerializableDef;
  * @createDate  2018-04-17
  * @version     v1.0
  */
-public class ActivityInfo extends SerializableDef
+public class ActivityInfo extends BaseModel
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	
+    
+    /** 本活动组件（节点）的下一个活动组件 */
+    private List<ActivityInfo> nextActivitys;
     
 	/** 工作流活动ID */
     private String activityID;
@@ -75,7 +80,27 @@ public class ActivityInfo extends SerializableDef
     
 	
 	
-	/**
+    /**
+     * 获取：本活动组件（节点）的下一个活动组件
+     */
+    public List<ActivityInfo> getNextActivitys()
+    {
+        return nextActivitys;
+    }
+    
+    
+    /**
+     * 设置：本活动组件（节点）的下一个活动组件
+     * 
+     * @param nextActivitys 
+     */
+    public void setNextActivitys(List<ActivityInfo> nextActivitys)
+    {
+        this.nextActivitys = nextActivitys;
+    }
+
+
+    /**
      * 获取：工作流活动ID
      */
     public String getActivityID()

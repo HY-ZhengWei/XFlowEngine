@@ -1,7 +1,7 @@
 package org.hy.xflow.engine.bean;
 
 import org.hy.common.Date;
-import org.hy.common.xml.SerializableDef;
+import org.hy.xflow.engine.common.BaseModel;
 
 
 
@@ -14,10 +14,13 @@ import org.hy.common.xml.SerializableDef;
  * @createDate  2018-04-17
  * @version     v1.0
  */
-public class Template extends SerializableDef
+public class Template extends BaseModel
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	
+    
+    /** 活动路由树 */
+    private ActivityRouteTree activityRouteTree;
     
 	/** 模板ID */
     private String templateID;
@@ -57,7 +60,27 @@ public class Template extends SerializableDef
     
 	
 	
-	/**
+    /**
+     * 获取：活动路由树
+     */
+    public ActivityRouteTree getActivityRouteTree()
+    {
+        return activityRouteTree;
+    }
+    
+    
+    /**
+     * 设置：活动路由树
+     * 
+     * @param activityRouteTree 
+     */
+    public void setActivityRouteTree(ActivityRouteTree activityRouteTree)
+    {
+        this.activityRouteTree = activityRouteTree;
+    }
+    
+
+    /**
      * 获取：模板ID
      */
     public String getTemplateID()

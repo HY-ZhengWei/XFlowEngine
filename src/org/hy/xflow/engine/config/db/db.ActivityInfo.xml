@@ -38,12 +38,16 @@
 				       ,A.lastUser
 				       ,A.lastTime
 				  FROM  TActivityInfo  A
+				       ,TActivityType  B
 				 WHERE  A.activityTypeID = B.activityTypeID
 				   AND  A.templateID     = ':templateID'
+				 ORDER  BY B.orderNo ,A.activityID
 				]]>
 			</content>
 			
 			<result>
+				<table>java.util.LinkedHashMap</table>
+				<fill>put(row.activityID ,row)</fill>
 				<row>org.hy.xflow.engine.bean.ActivityInfo</row>
 				<cfill>setter(colValue)</cfill>
 			</result>

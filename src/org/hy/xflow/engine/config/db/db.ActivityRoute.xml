@@ -35,6 +35,7 @@
 				       ,A.lastTime
 				  FROM  TActivityRoute  A
 				 WHERE  A.templateID = ':templateID'
+				 ORDER  BY A.activityID ,A.nextActivityID
 				]]>
 			</content>
 			
