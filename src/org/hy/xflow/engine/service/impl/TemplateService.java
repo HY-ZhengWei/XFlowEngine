@@ -1,10 +1,7 @@
 package org.hy.xflow.engine.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import org.hy.common.Help;
 import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
@@ -43,9 +40,20 @@ public class TemplateService extends BaseService implements ITemplateService
     
     
     
+    /**
+     * 按模板ID查询模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-19
+     * @version     v1.0
+     *
+     * @param i_TemplateID
+     * @return
+     */
     public Template queryByID(String i_TemplateID)
     {
         Template v_Template = this.templateDAO.queryByID(i_TemplateID);
+        
         if ( v_Template == null )
         {
             return v_Template;
@@ -55,8 +63,26 @@ public class TemplateService extends BaseService implements ITemplateService
         PartitionMap<String ,ActivityRoute> v_AllRoutes    = this.activityRouteDAO.queryByTemplateID(v_Template);
         ActivityRouteTree                   v_ARouteTree   = new ActivityRouteTree(v_AllActivitys ,v_AllRoutes);
         
+        v_Template.setActivityRouteTree(v_ARouteTree);
+        
         return v_Template;
     }
     
+    
+    
+    /**
+     * 按模板ID查询模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-19
+     * @version     v1.0
+     *
+     * @param i_Template
+     * @return
+     */
+    public Template queryByID(Template i_Template)
+    {
+        return this.queryByID(i_Template.getTemplateID());
+    }
     
 }

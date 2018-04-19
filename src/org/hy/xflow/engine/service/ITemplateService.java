@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.service;
 
+import org.hy.xflow.engine.bean.Template;
+
 
 
 
@@ -13,4 +15,31 @@ package org.hy.xflow.engine.service;
  */
 public interface ITemplateService
 {
+    
+    /**
+     * 按模板ID查询模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-19
+     * @version     v1.0
+     *
+     * @param i_TemplateID
+     * @return
+     */
+    public Template queryByID(String i_TemplateID);
+    
+    
+    
+    /**
+     * 按模板ID查询模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-19
+     * @version     v1.0
+     *
+     * @param i_Template
+     * @return
+     */
+    public Template queryByID(Template i_Template);
+    
 }

@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org</groupId>
+  <artifactId>hy.xflow.engine</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>hy.xflow.engine</name>
+  <url>https://github.com/HY-ZhengWei/XFlowEngine</url>
+  
+  <developers>
+    <developer>
+        <id>hy</id>
+        <name>Wei Zheng</name>
+        <email>HY.ZhengWei@qq.com</email>
+        <url>https://github.com/hy-zhengwei</url>
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- https://github.com/HY-ZhengWei/XJava -->
+	<dependency>
+	    <groupId>org</groupId>
+	    <artifactId>hy.common.xjava</artifactId>
+	    <version>3.9.14</version>
+	</dependency>
+	
+  </dependencies>
+</project>
