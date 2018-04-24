@@ -21,7 +21,7 @@ public class ActivityInfo extends BaseModel
     private static final long serialVersionUID = -4724247321457107633L;
 	
     
-    /** 本活动组件（节点）的下一个活动组件 */
+    /** 本活动组件（节点）的下一个活动组件。通过路由信息组合生成。 */
     private List<ActivityInfo> nextActivitys;
     
 	/** 工作流活动ID */
@@ -81,7 +81,7 @@ public class ActivityInfo extends BaseModel
 	
 	
     /**
-     * 获取：本活动组件（节点）的下一个活动组件
+     * 获取：本活动组件（节点）的下一个活动组件。通过路由信息组合生成。
      */
     public List<ActivityInfo> getNextActivitys()
     {
@@ -90,7 +90,7 @@ public class ActivityInfo extends BaseModel
     
     
     /**
-     * 设置：本活动组件（节点）的下一个活动组件
+     * 设置：本活动组件（节点）的下一个活动组件。通过路由信息组合生成。
      * 
      * @param nextActivitys 
      */

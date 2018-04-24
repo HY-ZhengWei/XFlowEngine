@@ -1,0 +1,409 @@
+INSERT  INTO TTemplate
+       (
+        templateID
+       ,version
+       ,templateName
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       ,isValid
+       ,isDelete
+       )
+VALUES (
+        'T001'
+       ,'1.0.0'
+       ,'智能选型'
+       ,'智能选型的流程模板'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,1
+       ,0
+       )
+       
+       
+       
+ INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A001'
+       ,'T001'
+       ,'发起选型'
+       ,'AT001'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A002'
+       ,'T001'
+       ,'选型受理'
+       ,'AT002'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A003'
+       ,'T001'
+       ,'选型评审'
+       ,'AT002'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )
+       
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A004'
+       ,'T001'
+       ,'单人选型'
+       ,'AT002'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )
+       
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A005'
+       ,'T001'
+       ,'选型分包'
+       ,'AT003'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A006'
+       ,'T001'
+       ,'多人选型'
+       ,'AT002'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A007'
+       ,'T001'
+       ,'选型汇总'
+       ,'AT004'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A008'
+       ,'T001'
+       ,'选型结果确认'
+       ,'AT002'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A009'
+       ,'T001'
+       ,'选型结束'
+       ,'AT999'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       )

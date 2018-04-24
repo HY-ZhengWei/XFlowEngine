@@ -643,14 +643,14 @@
                 CREATE TABLE TActivityRoute
                 (
                  arID               VARCHAR2(64)                     NOT NULL
-                ,activityID         VARCHAR2(64)                     NOT NULL
+                ,arName             NVARCHAR2(128)                   NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL
+                ,activityID         VARCHAR2(64)                     NOT NULL
                 ,nextActivityID     VARCHAR2(64)                     NOT NULL
                 ,conditionXJavaID   VARCHAR2(128)
                 ,conditionMethod    VARCHAR2(64)
                 ,conditionValue     VARCHAR2(500)
                 ,conditionVType     NUMBER(2)
-                ,title              NVARCHAR2(128)
                 ,infoComment        NVARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
@@ -664,14 +664,14 @@
                 
                 COMMENT ON TABLE  TActivityRoute                          IS '工作流活动组件(节点)的路由表';/
                 COMMENT ON COLUMN TActivityRoute.arID                     IS '主键ID';/
-                COMMENT ON COLUMN TActivityRoute.activityID               IS '工作流活动ID';/
+                COMMENT ON COLUMN TActivityRoute.arName                   IS '活动路由名称';/
                 COMMENT ON COLUMN TActivityRoute.templateID               IS '工作流的模板ID';/
+                COMMENT ON COLUMN TActivityRoute.activityID               IS '工作流活动ID';/
                 COMMENT ON COLUMN TActivityRoute.nextActivityID           IS '下一活动ID。可以为不同工作流模板的活动。即支持子流程';/
                 COMMENT ON COLUMN TActivityRoute.conditionXJavaID         IS '有条件判定时，执行的XJava对象ID';/
                 COMMENT ON COLUMN TActivityRoute.conditionMethod          IS '有条件判定时，执行的对象方法名称';/
                 COMMENT ON COLUMN TActivityRoute.conditionValue           IS '有条件判定时，方法执行结果的对比值';/
                 COMMENT ON COLUMN TActivityRoute.conditionVType           IS '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
-                COMMENT ON COLUMN TActivityRoute.title                    IS '标题';/
                 COMMENT ON COLUMN TActivityRoute.infoComment              IS '备注说明';/
                 COMMENT ON COLUMN TActivityRoute.createrID                IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityRoute.creater                  IS '创建人员名称';/
@@ -687,14 +687,14 @@
                 CREATE TABLE TActivityRoute
                 (
                  arID               VARCHAR(64)                     NOT NULL
-                ,activityID         VARCHAR(64)                     NOT NULL
+                ,arName             NVARCHAR(128)                   NOT NULL
                 ,templateID         VARCHAR(64)                     NOT NULL
+                ,activityID         VARCHAR(64)                     NOT NULL
                 ,nextActivityID     VARCHAR(64)                     NOT NULL
                 ,conditionXJavaID   VARCHAR(128)
                 ,conditionMethod    VARCHAR(64)
                 ,conditionValue     VARCHAR(500)
                 ,conditionVType     INT
-                ,title              NVARCHAR(128)
                 ,infoComment        NVARCHAR(2000)
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            NVARCHAR(128)
@@ -708,14 +708,14 @@
                 
                 EXEC P_TableComment  TActivityRoute                           ,'工作流活动组件(节点)的路由表';/
                 EXEC P_ColumnComment TActivityRoute ,arID                     ,'主键ID';/
-                EXEC P_ColumnComment TActivityRoute ,activityID               ,'工作流活动ID';/
+                EXEC P_ColumnComment TActivityRoute ,arName                   ,'活动路由名称';/
                 EXEC P_ColumnComment TActivityRoute ,templateID               ,'工作流的模板ID';/
+                EXEC P_ColumnComment TActivityRoute ,activityID               ,'工作流活动ID';/
                 EXEC P_ColumnComment TActivityRoute ,nextActivityID           ,'下一活动ID。可以为不同工作流模板的活动。即支持子流程';/
                 EXEC P_ColumnComment TActivityRoute ,conditionXJavaID         ,'有条件判定时，执行的XJava对象ID';/
                 EXEC P_ColumnComment TActivityRoute ,conditionMethod          ,'有条件判定时，执行的对象方法名称';/
                 EXEC P_ColumnComment TActivityRoute ,conditionValue           ,'有条件判定时，方法执行结果的对比值';/
                 EXEC P_ColumnComment TActivityRoute ,conditionVType           ,'有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
-                EXEC P_ColumnComment TActivityRoute ,title                    ,'标题';/
                 EXEC P_ColumnComment TActivityRoute ,infoComment              ,'备注说明';/
                 EXEC P_ColumnComment TActivityRoute ,createrID                ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityRoute ,creater                  ,'创建人员名称';/

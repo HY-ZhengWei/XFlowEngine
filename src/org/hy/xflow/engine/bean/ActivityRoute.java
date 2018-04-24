@@ -22,11 +22,14 @@ public class ActivityRoute extends BaseModel
 	/** 主键ID */
     private String arID;
     
+    /** 活动路由名称 */
+    private String arName;
+    
+    /** 工作流的模板ID */
+    private String templateID;
+    
 	/** 工作流活动ID */
     private String activityID;
-    
-	/** 工作流的模板ID */
-    private String templateID;
     
 	/** 下一活动ID。可以为不同工作流模板的活动。即支持子流程 */
     private String nextActivityID;
@@ -42,9 +45,6 @@ public class ActivityRoute extends BaseModel
     
 	/** 有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本） */
     private Integer conditionVType;
-    
-	/** 标题 */
-    private String title;
     
 	/** 备注说明 */
     private String infoComment;
@@ -89,7 +89,27 @@ public class ActivityRoute extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：活动路由名称
+     */
+    public String getArName()
+    {
+        return arName;
+    }
+
+    
+    /**
+     * 设置：活动路由名称
+     * 
+     * @param arName 
+     */
+    public void setArName(String arName)
+    {
+        this.arName = arName;
+    }
+    
+
+    /**
      * 获取：工作流活动ID
      */
     public String getActivityID()
@@ -226,26 +246,6 @@ public class ActivityRoute extends BaseModel
     public void setConditionVType(Integer i_ConditionVType)
     {
         this.conditionVType = i_ConditionVType;
-    }
-	
-	
-	/**
-     * 获取：标题
-     */
-    public String getTitle()
-    {
-        return this.title;
-    }
-
-    
-    /**
-     * 设置：标题
-     * 
-     * @param i_Title
-     */
-    public void setTitle(String i_Title)
-    {
-        this.title = i_Title;
     }
 	
 	
