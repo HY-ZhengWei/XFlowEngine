@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流活动组件(节点)路由的参与人模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_ActivityRouteParticipants_QueryByTemplateID"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.arpID
+				       ,A.templateID
+				       ,A.arID
+				       ,A.objectType
+				       ,B.objectID 
+				       ,B.objectName
+				       ,B.objectNo
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createTime
+				  FROM  ActivityRouteParticipants  A
+				 WHERE  A.templateID = ':templateID'
+				 ORDER  BY A.arID ,A.objectNo
+				]]>
+			</content>
+			
+			<result>
+				<table>org.hy.common.TablePartition</table>
+				<fill>putRow(row.arID ,row)</fill>
+				<row>org.hy.xflow.engine.bean.Participants</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>

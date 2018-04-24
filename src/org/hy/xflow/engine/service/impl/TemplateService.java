@@ -6,11 +6,13 @@ import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
+import org.hy.xflow.engine.bean.Participants;
 import org.hy.xflow.engine.bean.ActivityRouteTree;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.common.BaseService;
 import org.hy.xflow.engine.dao.IActivityInfoDAO;
 import org.hy.xflow.engine.dao.IActivityRouteDAO;
+import org.hy.xflow.engine.dao.IActivityRouteParticipantsDAO;
 import org.hy.xflow.engine.dao.ITemplateDAO;
 import org.hy.xflow.engine.service.ITemplateService;
 
@@ -30,13 +32,16 @@ public class TemplateService extends BaseService implements ITemplateService
 {
     
     @Xjava
-    private ITemplateDAO      templateDAO;
+    private ITemplateDAO                  templateDAO;
     
     @Xjava
-    private IActivityInfoDAO  activityInfoDAO;
+    private IActivityInfoDAO              activityInfoDAO;
     
     @Xjava
-    private IActivityRouteDAO activityRouteDAO;
+    private IActivityRouteDAO             activityRouteDAO;
+    
+    @Xjava
+    private IActivityRouteParticipantsDAO participantsDAO;
     
     
     
@@ -59,9 +64,10 @@ public class TemplateService extends BaseService implements ITemplateService
             return v_Template;
         }
         
-        Map<String ,ActivityInfo>           v_AllActivitys = this.activityInfoDAO .queryByTemplateID(v_Template);
-        PartitionMap<String ,ActivityRoute> v_AllRoutes    = this.activityRouteDAO.queryByTemplateID(v_Template);
-        ActivityRouteTree                   v_ARouteTree   = new ActivityRouteTree(v_AllActivitys ,v_AllRoutes);
+        Map<String ,ActivityInfo>           v_AllActivitys    = this.activityInfoDAO .queryByTemplateID(v_Template);
+        PartitionMap<String ,ActivityRoute> v_AllRoutes       = this.activityRouteDAO.queryByTemplateID(v_Template);
+        PartitionMap<String ,Participants>  v_AllParticipants = this.participantsDAO .queryByTemplateID(v_Template);
+        ActivityRouteTree                   v_ARouteTree      = new ActivityRouteTree(v_AllActivitys ,v_AllRoutes ,v_AllParticipants);
         
         v_Template.setActivityRouteTree(v_ARouteTree);
         

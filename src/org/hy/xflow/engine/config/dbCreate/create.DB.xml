@@ -27,15 +27,15 @@
 				'TABLE', @TableName, 
 				NULL, NULL)) >= 1)
 					EXEC SP_UpdateExtendedProperty 'MS_Description' 
-				                                  ,@Comment
-				                                  ,'SCHEMA'
-				                                  ,'dbo'
-				                                  ,'TABLE'
-				                                  ,@TableName
-				                                  ,NULL
-				                                  ,NULL
+				                                   ,@Comment
+				                                   ,'SCHEMA'
+				                                   ,'dbo'
+				                                   ,'TABLE'
+				                                   ,@TableName
+				                                   ,NULL
+				                                   ,NULL
 				ELSE
-					EXEC SP_AddExtendedProperty  'MS_Description' 
+					EXEC SP_AddExtendedProperty 'MS_Description' 
 				                                ,@Comment
 				                                ,'SCHEMA'
 				                                ,'dbo'
@@ -72,15 +72,15 @@
 				'TABLE', @TableName, 
 				'COLUMN', @ColumnName)) >= 1)
 					EXEC SP_UpdateExtendedProperty 'MS_Description' 
-				                                ,@Comment
-				                                ,'SCHEMA'
-				                                ,'dbo'
-				                                ,'TABLE'
-				                                ,@TableName
-				                                ,'COLUMN'
-				                                ,@ColumnName
+				                                   ,@Comment
+				                                   ,'SCHEMA'
+				                                   ,'dbo'
+				                                   ,'TABLE'
+				                                   ,@TableName
+				                                   ,'COLUMN'
+				                                   ,@ColumnName
 				ELSE
-					EXEC SP_AddExtendedProperty    'MS_Description' 
+					EXEC SP_AddExtendedProperty 'MS_Description' 
 				                                ,@Comment
 				                                ,'SCHEMA'
 				                                ,'dbo'
@@ -633,7 +633,7 @@
 		</sql>
 		
 		
-		
+		 
 		<sql id="XSQL_Create_TActivityRoute">
 		
 			<dataSourceGroup ref="DSG_XFlow" />
@@ -732,6 +732,81 @@
 			
 			<comment>工作流活动组件(节点)的路由表</comment>
 			<create>TActivityRoute</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TActivityRouteParticipants">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TActivityRouteParticipants
+                (
+                 arpID              VARCHAR2(64)                     NOT NULL
+                ,templateID         VARCHAR2(64)                     NOT NULL
+                ,arID               VARCHAR2(64)                     NOT NULL
+                ,objectType         NUMBER(2)                        NOT NULL
+                ,objectID           VARCHAR2(64)                     NOT NULL
+                ,objectName         NVARCHAR2(128)
+                ,objectNo           NUMBER(10)                       NOT NULL
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            NVARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                );/
+                
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (arpID);/
+                
+                COMMENT ON TABLE  TActivityRouteParticipants                    IS '工作流过程的实际参与人';/
+                COMMENT ON COLUMN TActivityRouteParticipants.arpID              IS '主键ID';/
+                COMMENT ON COLUMN TActivityRouteParticipants.templateID         IS '工作流的模板ID';/
+                COMMENT ON COLUMN TActivityRouteParticipants.arID               IS '活动路由ID';/
+                COMMENT ON COLUMN TActivityRouteParticipants.objectType         IS '参与者类型（1:任务执行人；2:任务执行部门；3:任务执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                COMMENT ON COLUMN TActivityRouteParticipants.objectID           IS '参与者ID';/
+                COMMENT ON COLUMN TActivityRouteParticipants.objectName         IS '参与者名称';/
+                COMMENT ON COLUMN TActivityRouteParticipants.objectNo           IS '参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
+                COMMENT ON COLUMN TActivityRouteParticipants.createrID          IS '创建人员ID';/
+                COMMENT ON COLUMN TActivityRouteParticipants.creater            IS '创建人员名称';/
+                COMMENT ON COLUMN TActivityRouteParticipants.createTime         IS '创建时间';/
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TActivityRouteParticipants
+                (
+                 arpID              VARCHAR(64)                     NOT NULL
+                ,templateID         VARCHAR(64)                     NOT NULL
+                ,arID               VARCHAR(64)                     NOT NULL
+                ,objectType         INT                             NOT NULL
+                ,objectID           VARCHAR(64)                     NOT NULL
+                ,objectName         NVARCHAR(128)
+                ,objectNo           INT                             NOT NULL
+                ,createrID          VARCHAR(64)                     NOT NULL
+                ,creater            NVARCHAR(128)
+                ,createTime         DATETIME                        NOT NULL
+                );/
+                
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (arpID);/
+                
+                EXEC P_TableComment  TActivityRouteParticipants                     ,'工作流活动组件(节点)路由的参与人';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,arpID              ,'主键ID';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,templateID         ,'工作流的模板ID';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,arID               ,'活动路由ID';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,objectType         ,'参与者类型（1:任务执行人；2:任务执行部门；3:任务执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,objectID           ,'参与者ID';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,objectName         ,'参与者名称';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,objectNo           ,'参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,createrID          ,'创建人员ID';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,creater            ,'创建人员名称';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,createTime         ,'创建时间';/
+				]]>
+			</content>
+			
+			<comment>工作流活动组件(节点)路由的参与人</comment>
+			<create>TActivityRouteParticipants</create>
 			
 		</sql>
 		

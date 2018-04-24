@@ -32,6 +32,9 @@ public class ActivityRouteTree extends BaseModel
     /** 模板的所有路由 */
     private PartitionMap<String ,ActivityRoute> allRoutes;
     
+    /** 模板的所有参与人 */
+    private PartitionMap<String ,Participants>  allParticipants;
+    
     /** 整个活动路由树的 "开始" 活动节点 */
     private ActivityInfo                        startActivity;
     
@@ -40,10 +43,13 @@ public class ActivityRouteTree extends BaseModel
     
     
     
-    public ActivityRouteTree(Map<String ,ActivityInfo> i_AllActivitys ,PartitionMap<String ,ActivityRoute> i_AllRoutes)
+    public ActivityRouteTree(Map<String ,ActivityInfo>           i_AllActivitys 
+                            ,PartitionMap<String ,ActivityRoute> i_AllRoutes
+                            ,PartitionMap<String ,Participants>  i_AllParticipants)
     {
-        this.allActivitys  = i_AllActivitys;
-        this.allRoutes     = i_AllRoutes;
+        this.allActivitys    = i_AllActivitys;
+        this.allRoutes       = i_AllRoutes;
+        this.allParticipants = i_AllParticipants;
         
         if ( !Help.isNull(this.allActivitys) )
         {
@@ -118,7 +124,11 @@ public class ActivityRouteTree extends BaseModel
      */
     public void makeActivityRouteTree()
     {
-        if ( Help.isNull(allActivitys) || Help.isNull(allRoutes) || this.startActivity == null )
+        if ( Help.isNull(allActivitys) 
+          || Help.isNull(allRoutes) 
+          || Help.isNull(allParticipants)
+          || this.startActivity == null 
+          || this.endActivity   == null )
         {
             return;
         }
@@ -148,6 +158,7 @@ public class ActivityRouteTree extends BaseModel
             for (ActivityRoute v_CurrentARoute : v_CurrentARoutes)
             {
                 v_CurrentARoute.setActivity(io_CurrentActivity);
+                v_CurrentARoute.setParticipants(allParticipants.get(v_CurrentARoute.getArID()));
                 
                 if ( !Help.isNull(v_CurrentARoute.getNextActivityID()) )
                 {

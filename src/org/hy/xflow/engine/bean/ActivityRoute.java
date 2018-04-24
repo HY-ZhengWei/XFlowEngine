@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.bean;
 
+import java.util.List;
+
 import org.hy.common.Date;
 import org.hy.xflow.engine.common.BaseModel;
 
@@ -33,6 +35,9 @@ public class ActivityRoute extends BaseModel
     
     /** 工作流路由类型（内存合成） */
     private RouteType routeType;
+    
+    /** 工作流路由的参与人。谁从此路过。（内存合成） */
+    private List<Participants> participants;
     
 	/** 工作流活动ID */
     private String activityID;
@@ -219,6 +224,26 @@ public class ActivityRoute extends BaseModel
     }
     
     
+    /**
+     * 获取：工作流路由的参与人。谁从此路过。（内存合成）
+     */
+    public List<Participants> getParticipants()
+    {
+        return participants;
+    }
+
+    
+    /**
+     * 设置：工作流路由的参与人。谁从此路过。（内存合成）
+     * 
+     * @param participants 
+     */
+    public void setParticipants(List<Participants> participants)
+    {
+        this.participants = participants;
+    }
+    
+
     /**
      * 设置：工作流路由类型ID
      * 
