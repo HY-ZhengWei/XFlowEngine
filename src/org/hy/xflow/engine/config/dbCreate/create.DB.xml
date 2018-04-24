@@ -645,6 +645,7 @@
                  arID               VARCHAR2(64)                     NOT NULL
                 ,arName             NVARCHAR2(128)                   NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL
+                ,routeTypeID        VARCHAR2(64)                     NOT NULL
                 ,activityID         VARCHAR2(64)                     NOT NULL
                 ,nextActivityID     VARCHAR2(64)                     NOT NULL
                 ,conditionXJavaID   VARCHAR2(128)
@@ -666,6 +667,7 @@
                 COMMENT ON COLUMN TActivityRoute.arID                     IS '主键ID';/
                 COMMENT ON COLUMN TActivityRoute.arName                   IS '活动路由名称';/
                 COMMENT ON COLUMN TActivityRoute.templateID               IS '工作流的模板ID';/
+                COMMENT ON COLUMN TActivityRoute.routeTypeID              IS '路由类型ID';/
                 COMMENT ON COLUMN TActivityRoute.activityID               IS '工作流活动ID';/
                 COMMENT ON COLUMN TActivityRoute.nextActivityID           IS '下一活动ID。可以为不同工作流模板的活动。即支持子流程';/
                 COMMENT ON COLUMN TActivityRoute.conditionXJavaID         IS '有条件判定时，执行的XJava对象ID';/
@@ -689,6 +691,7 @@
                  arID               VARCHAR(64)                     NOT NULL
                 ,arName             NVARCHAR(128)                   NOT NULL
                 ,templateID         VARCHAR(64)                     NOT NULL
+                ,routeTypeID        VARCHAR(64)                     NOT NULL
                 ,activityID         VARCHAR(64)                     NOT NULL
                 ,nextActivityID     VARCHAR(64)                     NOT NULL
                 ,conditionXJavaID   VARCHAR(128)
@@ -710,6 +713,7 @@
                 EXEC P_ColumnComment TActivityRoute ,arID                     ,'主键ID';/
                 EXEC P_ColumnComment TActivityRoute ,arName                   ,'活动路由名称';/
                 EXEC P_ColumnComment TActivityRoute ,templateID               ,'工作流的模板ID';/
+                EXEC P_ColumnComment TActivityRoute ,routeTypeID              ,'工作流路由类型ID';/
                 EXEC P_ColumnComment TActivityRoute ,activityID               ,'工作流活动ID';/
                 EXEC P_ColumnComment TActivityRoute ,nextActivityID           ,'下一活动ID。可以为不同工作流模板的活动。即支持子流程';/
                 EXEC P_ColumnComment TActivityRoute ,conditionXJavaID         ,'有条件判定时，执行的XJava对象ID';/
@@ -739,17 +743,9 @@
 			
 			<content>
 				<![CDATA[
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT001' ,'开始'      ,1);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT002' ,'转派'      ,2);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT003' ,'分派'      ,3);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT004' ,'汇签'      ,4);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT020' ,'驳回'      ,20);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT021' ,'追回'      ,21);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT022' ,'回退'      ,22);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT030' ,'催办'      ,30);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT050' ,'限时自动流' ,50);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT051' ,'自由流'    ,51);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT999' ,'结束'      ,999);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT000' ,'开始' ,0);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT001' ,'常规' ,1);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT999' ,'结束' ,999);/
 				]]>
 			</content>
 			
@@ -810,6 +806,87 @@
 			
 			<comment>工作流活动(节点)类型</comment>
 			<create>TActivityType</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TRouteType_Init_Insert">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT001' ,'转派'      ,1);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT002' ,'分派'      ,2);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003' ,'汇签'      ,3);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020' ,'驳回'      ,20);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT021' ,'追回'      ,21);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT022' ,'回退'      ,22);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT030' ,'催办'      ,30);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT050' ,'限时自动流' ,50);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT051' ,'自由流'     ,51);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT999' ,'结束'      ,999);/
+				]]>
+			</content>
+			
+			<comment>工作流路由类型的初始化数据</comment>
+			
+		</sql>
+		
+		
+		
+		<!-- 路由类型有：转派、分派、汇签、驳回、追回、回退、催办、限时自动流、自由流 -->
+		<sql id="XSQL_Create_TRouteType">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TRouteType
+                (
+                 routeTypeID        VARCHAR2(64)                     NOT NULL
+                ,routeType          NVARCHAR2(128)                   NOT NULL
+                ,infoComment        NVARCHAR2(2000)
+                ,orderNo            NUMBER(10)
+                );/
+                
+                ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
+                
+                COMMENT ON TABLE  TRouteType                           IS '工作流路由类型';/
+                COMMENT ON COLUMN TRouteType.routeTypeID               IS '工作流路由类型ID';/
+                COMMENT ON COLUMN TRouteType.routeType                 IS '工作流路由类型名称';/
+                COMMENT ON COLUMN TRouteType.infoComment               IS '备注说明';/
+                COMMENT ON COLUMN TRouteType.orderNo                   IS '排列顺序';/
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TRouteType
+                (
+                 routeTypeID        VARCHAR(64)                     NOT NULL
+                ,routeType          NVARCHAR(128)                   NOT NULL
+                ,infoComment        NVARCHAR(2000)
+                ,orderNo            INT
+                );/
+                
+                ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
+                
+                EXEC P_TableComment  TRouteType                            ,'工作流路由类型';/
+                EXEC P_ColumnComment TRouteType ,routeTypeID               ,'工作流路由类型ID';/
+                EXEC P_ColumnComment TRouteType ,routeType                 ,'工作流路由类型名称';/
+                EXEC P_ColumnComment TRouteType ,infoComment               ,'备注说明';/
+                EXEC P_ColumnComment TRouteType ,orderNo                   ,'排列顺序';/
+				]]>
+			</content>
+			
+			<trigger>
+				<create ref="XSQL_Create_TRouteType_Init_Insert"/>
+			</trigger>
+			
+			<comment>工作流路由类型</comment>
+			<create>TRouteType</create>
 			
 		</sql>
 		

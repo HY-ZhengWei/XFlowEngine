@@ -1,11 +1,11 @@
 package org.hy.xflow.engine.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.hy.common.Help;
 import org.hy.common.PartitionMap;
+import org.hy.xflow.engine.common.BaseModel;
 
 
 
@@ -16,13 +16,11 @@ import org.hy.common.PartitionMap;
  * 
  * 通过活动表、路由表组合生成的。
  * 
- * 此类自身就是整个活动路由树的 “开始”活动节点。
- *
  * @author      ZhengWei(HY)
  * @createDate  2018-04-19
  * @version     v1.0
  */
-public class ActivityRouteTree extends ActivityInfo
+public class ActivityRouteTree extends BaseModel
 {
     
     private static final long serialVersionUID = 5366730038571520921L;
@@ -34,14 +32,61 @@ public class ActivityRouteTree extends ActivityInfo
     /** 模板的所有路由 */
     private PartitionMap<String ,ActivityRoute> allRoutes;
     
+    /** 整个活动路由树的 "开始" 活动节点 */
+    private ActivityInfo                        startActivity;
+    
+    /** 整个活动路由树的 "结束" 活动节点 */
+    private ActivityInfo                        endActivity;
+    
     
     
     public ActivityRouteTree(Map<String ,ActivityInfo> i_AllActivitys ,PartitionMap<String ,ActivityRoute> i_AllRoutes)
     {
-        this.allActivitys = i_AllActivitys;
-        this.allRoutes    = i_AllRoutes;
+        this.allActivitys  = i_AllActivitys;
+        this.allRoutes     = i_AllRoutes;
+        
+        if ( !Help.isNull(this.allActivitys) )
+        {
+            this.startActivity = this.allActivitys.values().iterator().next();
+            for (ActivityInfo v_Activity : this.allActivitys.values())
+            {
+                this.endActivity = v_Activity;
+            }
+        }
         
         this.makeActivityRouteTree();
+    }
+    
+    
+    
+    /**
+     * 整个活动路由树的 "开始" 活动节点
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-24
+     * @version     v1.0
+     *
+     * @return
+     */
+    public ActivityInfo getStartActivity()
+    {
+        return this.startActivity;
+    }
+    
+    
+    
+    /**
+     * 整个活动路由树的 "结束" 活动节点
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-24
+     * @version     v1.0
+     *
+     * @return
+     */
+    public ActivityInfo getEndActivity()
+    {
+        return this.endActivity;
     }
     
     
@@ -73,12 +118,12 @@ public class ActivityRouteTree extends ActivityInfo
      */
     public void makeActivityRouteTree()
     {
-        if ( Help.isNull(allActivitys) || Help.isNull(allRoutes) )
+        if ( Help.isNull(allActivitys) || Help.isNull(allRoutes) || this.startActivity == null )
         {
             return;
         }
         
-        this.makeActivityRouteTree(this);
+        this.makeActivityRouteTree(this.startActivity);
     }
     
     
@@ -98,23 +143,65 @@ public class ActivityRouteTree extends ActivityInfo
         
         if ( !Help.isNull(v_CurrentARoutes) )
         {
-            io_CurrentActivity.setNextActivitys(new ArrayList<ActivityInfo>());
+            io_CurrentActivity.setRoutes(v_CurrentARoutes);
             
             for (ActivityRoute v_CurrentARoute : v_CurrentARoutes)
             {
+                v_CurrentARoute.setActivity(io_CurrentActivity);
+                
                 if ( !Help.isNull(v_CurrentARoute.getNextActivityID()) )
                 {
                     ActivityInfo v_NextActivity = allActivitys.get(v_CurrentARoute.getNextActivityID());
                     
                     if ( v_NextActivity != null )
                     {
-                        io_CurrentActivity.getNextActivitys().add(v_NextActivity);
+                        v_CurrentARoute.setNextActivity(v_NextActivity);
                         
-                        makeActivityRouteTree(v_NextActivity);
+                        System.out.println(log(v_CurrentARoute));
+                        
+                        if ( !Help.isNull(v_NextActivity.getRoutes()) )
+                        {
+                            // 已经有路由信息的将不再递归，一般为自循环活动或驳回的活动。防止死循环。
+                        }
+                        else if ( v_NextActivity == this.startActivity )
+                        {
+                            // 不等于开始活动才递归。防止死循环
+                        }
+                        else if ( v_NextActivity == this.endActivity )
+                        {
+                            // 不等于结束活动才递归。防止死循环
+                        }
+                        else
+                        {
+                            makeActivityRouteTree(v_NextActivity);
+                        }
                     }
                 }
             }
         }
+    }
+    
+    
+    
+    /**
+     * 输出日志
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-24
+     * @version     v1.0
+     *
+     * @param i_CurrentARoute
+     * @return
+     */
+    private String log(ActivityRoute i_CurrentARoute)
+    {
+        StringBuilder v_Log = new StringBuilder();
+        
+        v_Log.append("【").append(i_CurrentARoute.getActivity().getActivityName()).append("】");
+        v_Log.append("  ---").append(i_CurrentARoute.getArName()).append("--->  ");
+        v_Log.append("【").append(i_CurrentARoute.getNextActivity().getActivityName()).append("】");
+        
+        return v_Log.toString();
     }
     
 }

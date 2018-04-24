@@ -21,8 +21,8 @@ public class ActivityInfo extends BaseModel
     private static final long serialVersionUID = -4724247321457107633L;
 	
     
-    /** 本活动组件（节点）的下一个活动组件。通过路由信息组合生成。 */
-    private List<ActivityInfo> nextActivitys;
+    /** 本活动组件（节点）的所有通过路由信息（内存合成） */
+    private List<ActivityRoute> routes;
     
 	/** 工作流活动ID */
     private String activityID;
@@ -36,7 +36,7 @@ public class ActivityInfo extends BaseModel
 	/** 活动类型ID */
     private String activityTypeID;
     
-    /** 活动类型 */
+    /** 活动类型（内存合成） */
     private ActivityType activityType;
     
 	/** 位置x坐标值 */
@@ -79,24 +79,24 @@ public class ActivityInfo extends BaseModel
     private Date lastTime;
     
 	
-	
+    
     /**
-     * 获取：本活动组件（节点）的下一个活动组件。通过路由信息组合生成。
+     * 获取：本活动组件（节点）的所有通过路由信息（内存合成）
      */
-    public List<ActivityInfo> getNextActivitys()
+    public List<ActivityRoute> getRoutes()
     {
-        return nextActivitys;
+        return routes;
     }
-    
+
     
     /**
-     * 设置：本活动组件（节点）的下一个活动组件。通过路由信息组合生成。
+     * 设置：本活动组件（节点）的所有通过路由信息（内存合成）
      * 
-     * @param nextActivitys 
+     * @param routes 
      */
-    public void setNextActivitys(List<ActivityInfo> nextActivitys)
+    public void setRoutes(List<ActivityRoute> routes)
     {
-        this.nextActivitys = nextActivitys;
+        this.routes = routes;
     }
 
 
@@ -181,7 +181,7 @@ public class ActivityInfo extends BaseModel
 	
 	
     /**
-     * 获取：活动类型
+     * 获取：活动类型（内存合成）
      */
     public ActivityType getActivityType()
     {
@@ -190,7 +190,7 @@ public class ActivityInfo extends BaseModel
     
     
     /**
-     * 设置：活动类型
+     * 设置：活动类型（内存合成）
      * 
      * @param activityType 
      */

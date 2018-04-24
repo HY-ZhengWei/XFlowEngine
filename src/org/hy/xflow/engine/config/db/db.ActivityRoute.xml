@@ -18,14 +18,18 @@
 			<content>
 				<![CDATA[
 				SELECT  A.arID
-				       ,A.activityID
+				       ,A.arName
 				       ,A.templateID
+				       ,A.routeTypeID
+				       ,B.routeTypeID   AS "routeType.routeTypeID"
+				       ,B.routeType     AS "routeType.routeType"
+				       ,B.infoComment   AS "routeType.infoComment"
+				       ,A.activityID
 				       ,A.nextActivityID
 				       ,A.conditionXJavaID
 				       ,A.conditionMethod
 				       ,A.conditionValue
 				       ,A.conditionVType
-				       ,A.title
 				       ,A.infoComment
 				       ,A.createrID
 				       ,A.creater
@@ -34,8 +38,10 @@
 				       ,A.lastUser
 				       ,A.lastTime
 				  FROM  TActivityRoute  A
-				 WHERE  A.templateID = ':templateID'
-				 ORDER  BY A.activityID ,A.nextActivityID
+				       ,TRouteType      B
+				 WHERE  A.routeTypeID = B.routeTypeID
+				   AND  A.templateID  = ':templateID'
+				 ORDER  BY A.activityID ,B.orderNo ,A.nextActivityID
 				]]>
 			</content>
 			

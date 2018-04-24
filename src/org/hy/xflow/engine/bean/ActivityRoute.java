@@ -28,11 +28,23 @@ public class ActivityRoute extends BaseModel
     /** 工作流的模板ID */
     private String templateID;
     
+    /** 工作流路由类型ID */
+    private String routeTypeID;
+    
+    /** 工作流路由类型（内存合成） */
+    private RouteType routeType;
+    
 	/** 工作流活动ID */
     private String activityID;
     
+    /** 路由A-B两端，从A到B的A端活动（内存合成） */
+    private ActivityInfo activity;
+    
 	/** 下一活动ID。可以为不同工作流模板的活动。即支持子流程 */
     private String nextActivityID;
+    
+    /** 下一活动（内存合成） */
+    private ActivityInfo nextActivity;
     
 	/** 有条件判定时，执行的XJava对象ID */
     private String conditionXJavaID;
@@ -69,7 +81,47 @@ public class ActivityRoute extends BaseModel
     
 	
 	
-	/**
+    /**
+     * 获取：路由A-B两端，从A到B的A端活动（内存合成）
+     */
+    public ActivityInfo getActivity()
+    {
+        return activity;
+    }
+    
+    
+    /**
+     * 获取：下一活动（内存合成）
+     */
+    public ActivityInfo getNextActivity()
+    {
+        return nextActivity;
+    }
+    
+    
+    /**
+     * 设置：路由A-B两端，从A到B的A端活动（内存合成）
+     * 
+     * @param activity 
+     */
+    public void setActivity(ActivityInfo activity)
+    {
+        this.activity = activity;
+    }
+    
+    
+    /**
+     * 设置：下一活动（内存合成）
+     * 
+     * @param nextActivity 
+     */
+    public void setNextActivity(ActivityInfo nextActivity)
+    {
+        this.nextActivity = nextActivity;
+    }
+    
+
+    /**
      * 获取：主键ID
      */
     public String getArID()
@@ -149,7 +201,47 @@ public class ActivityRoute extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：工作流路由类型ID
+     */
+    public String getRouteTypeID()
+    {
+        return routeTypeID;
+    }
+    
+    
+    /**
+     * 获取：工作流路由类型（内存合成）
+     */
+    public RouteType getRouteType()
+    {
+        return routeType;
+    }
+    
+    
+    /**
+     * 设置：工作流路由类型ID
+     * 
+     * @param routeTypeID 
+     */
+    public void setRouteTypeID(String routeTypeID)
+    {
+        this.routeTypeID = routeTypeID;
+    }
+
+    
+    /**
+     * 设置：工作流路由类型（内存合成）
+     * 
+     * @param routeType 
+     */
+    public void setRouteType(RouteType routeType)
+    {
+        this.routeType = routeType;
+    }
+
+
+    /**
      * 获取：下一活动ID。可以为不同工作流模板的活动。即支持子流程
      */
     public String getNextActivityID()
