@@ -28,7 +28,10 @@ public class Participants extends BaseModel
 	/** 活动路由ID */
     private String arID;
     
-	/** 参与者类型（1:任务执行人；2:任务执行部门；3:任务执行角色；11:抄送人；12:抄送部门；13:抄送角色） */
+    /** 参与者类型（内存合成） */
+    private ParticipantType participantType;
+    
+	/** 参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色） */
     private Integer objectType;
     
 	/** 参与者ID */
@@ -110,9 +113,29 @@ public class Participants extends BaseModel
         this.arID = arID;
     }
 
+    
+    /**
+     * 获取：参与者类型（内存合成）
+     */
+    public ParticipantType getParticipantType()
+    {
+        return participantType;
+    }
+
+    
+    /**
+     * 设置：参与者类型（内存合成）
+     * 
+     * @param participantType 
+     */
+    public void setParticipantType(ParticipantType participantType)
+    {
+        this.participantType = participantType;
+    }
+
 
     /**
-     * 获取：参与者类型（1:任务执行人；2:任务执行部门；3:任务执行角色；11:抄送人；12:抄送部门；13:抄送角色）
+     * 获取：参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
      */
     public Integer getObjectType()
     {
@@ -121,7 +144,7 @@ public class Participants extends BaseModel
 
     
     /**
-     * 设置：参与者类型（1:任务执行人；2:任务执行部门；3:任务执行角色；11:抄送人；12:抄送部门；13:抄送角色）
+     * 设置：参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
      * 
      * @param i_ObjectType
      */

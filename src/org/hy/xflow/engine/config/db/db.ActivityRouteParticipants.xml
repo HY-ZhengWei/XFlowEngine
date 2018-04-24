@@ -20,16 +20,21 @@
 				SELECT  A.arpID
 				       ,A.templateID
 				       ,A.arID
+				       ,B.participantTypeID  AS "participantType.participantTypeID"
+				       ,B.participantType    AS "participantType.participantType"
+				       ,B.infoComment        AS "participantType.infoComment"
 				       ,A.objectType
-				       ,B.objectID 
-				       ,B.objectName
-				       ,B.objectNo
+				       ,A.objectID 
+				       ,A.objectName
+				       ,A.objectNo
 				       ,A.createrID
 				       ,A.creater
 				       ,A.createTime
-				  FROM  ActivityRouteParticipants  A
-				 WHERE  A.templateID = ':templateID'
-				 ORDER  BY A.arID ,A.objectNo
+				  FROM  TActivityRouteParticipants  A
+				       ,TParticipantType            B
+				 WHERE  A.objectType = B.participantTypeID
+				   AND  A.templateID = ':templateID'
+				 ORDER  BY A.arID ,B.objectNo ,A.objectNo
 				]]>
 			</content>
 			

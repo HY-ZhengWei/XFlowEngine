@@ -795,7 +795,7 @@
                 EXEC P_ColumnComment TActivityRouteParticipants ,arpID              ,'主键ID';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,templateID         ,'工作流的模板ID';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,arID               ,'活动路由ID';/
-                EXEC P_ColumnComment TActivityRouteParticipants ,objectType         ,'参与者类型（1:任务执行人；2:任务执行部门；3:任务执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,objectType         ,'参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,objectID           ,'参与者ID';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,objectName         ,'参与者名称';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,objectNo           ,'参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
@@ -911,7 +911,6 @@
 		
 		
 		
-		<!-- 路由类型有：转派、分派、汇签、驳回、追回、回退、催办、限时自动流、自由流 -->
 		<sql id="XSQL_Create_TRouteType">
 		
 			<dataSourceGroup ref="DSG_XFlow" />
@@ -962,6 +961,82 @@
 			
 			<comment>工作流路由类型</comment>
 			<create>TRouteType</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TParticipantType_Init_Insert">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(1  ,'执行人'   ,1);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(2  ,'执行部门' ,2);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(3  ,'执行角色' ,3);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(11 ,'抄送人'   ,11);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(12 ,'抄送部门' ,12);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(13 ,'抄送角色' ,13);/
+				]]>
+			</content>
+			
+			<comment>参与人类型的初始化数据</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TParticipantType">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TParticipantType
+                (
+                 participantTypeID  NUMBER(2)                        NOT NULL
+                ,participantType    NVARCHAR2(128)                   NOT NULL
+                ,infoComment        NVARCHAR2(2000)
+                ,orderNo            NUMBER(10)
+                );/
+                
+                ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
+                
+                COMMENT ON TABLE  TParticipantType                     IS '参与人类型';/
+                COMMENT ON COLUMN TParticipantType.participantTypeID   IS '参与人类型ID';/
+                COMMENT ON COLUMN TParticipantType.participantType     IS '参与人类型名称';/
+                COMMENT ON COLUMN TParticipantType.infoComment         IS '备注说明';/
+                COMMENT ON COLUMN TParticipantType.orderNo             IS '排列顺序';/
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TParticipantType
+                (
+                 participantTypeID  INT                             NOT NULL
+                ,participantType    NVARCHAR(128)                   NOT NULL
+                ,infoComment        NVARCHAR(2000)
+                ,orderNo            INT
+                );/
+                
+                ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
+                
+                EXEC P_TableComment  TParticipantType                     ,'参与人类型';/
+                EXEC P_ColumnComment TParticipantType ,participantTypeID  ,'参与人类型ID';/
+                EXEC P_ColumnComment TParticipantType ,participantType    ,'参与人类型名称';/
+                EXEC P_ColumnComment TParticipantType ,infoComment        ,'备注说明';/
+                EXEC P_ColumnComment TParticipantType ,orderNo            ,'排列顺序';/
+				]]>
+			</content>
+			
+			<trigger>
+				<create ref="XSQL_Create_TParticipantType_Init_Insert"/>
+			</trigger>
+			
+			<comment>参与人类型</comment>
+			<create>TParticipantType</create>
 			
 		</sql>
 		

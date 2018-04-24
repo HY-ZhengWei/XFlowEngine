@@ -7,23 +7,23 @@ import org.hy.xflow.engine.common.BaseModel;
 
 
 /**
- * 工作流路由类型 
+ * 参与人类型 
  *
  * @author      ZhengWei(HY)
  * @createDate  2018-04-24
  * @version     v1.0
  */
-public class RouteType extends BaseModel
+public class ParticipantType extends BaseModel
 {
     
-    private static final long serialVersionUID = -5306021641900547743L;
+    private static final long serialVersionUID = -5096344239749759330L;
 
     
-    /** 工作流路由类型ID */
-    private String  routeTypeID;
+    /** 参与人类型ID */
+    private String  participantTypeID;
     
-	/** 工作流路由类型名称 */
-    private String  routeType;
+	/** 参与人类型名称 */
+    private String  participantType;
     
 	/** 备注说明 */
     private String  infoComment;
@@ -32,46 +32,46 @@ public class RouteType extends BaseModel
     private Integer orderNo;
     
 	
-	
-    /**
-     * 获取：工作流路由类型ID
-     */
-    public String getRouteTypeID()
-    {
-        return routeTypeID;
-    }
-
     
     /**
-     * 获取：工作流路由类型名称
+     * 获取：参与人类型ID
      */
-    public String getRouteType()
+    public String getParticipantTypeID()
     {
-        return routeType;
+        return participantTypeID;
     }
-
+    
     
     /**
-     * 设置：工作流路由类型ID
+     * 获取：参与人类型名称
+     */
+    public String getParticipantType()
+    {
+        return participantType;
+    }
+    
+    
+    /**
+     * 设置：参与人类型ID
      * 
-     * @param routeTypeID 
+     * @param participantTypeID 
      */
-    public void setRouteTypeID(String routeTypeID)
+    public void setParticipantTypeID(String participantTypeID)
     {
-        this.routeTypeID = routeTypeID;
+        this.participantTypeID = participantTypeID;
     }
 
     
     /**
-     * 设置：工作流路由类型名称
+     * 设置：参与人类型名称
      * 
-     * @param routeType 
+     * @param participantType 
      */
-    public void setRouteType(String routeType)
+    public void setParticipantType(String participantType)
     {
-        this.routeType = routeType;
+        this.participantType = participantType;
     }
-
+    
 
     /**
      * 获取：备注说明
