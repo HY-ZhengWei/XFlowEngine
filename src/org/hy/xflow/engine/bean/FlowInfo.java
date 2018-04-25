@@ -73,8 +73,22 @@ public class FlowInfo extends BaseModel
 	/** 是否删除标记(0:未删除；1:已删除) */
     private Integer isDelete;
     
+    
+    
+    public FlowInfo()
+    {
+        
+    }
+    
+    
+    
+    public FlowInfo(User i_User ,String i_ServiceDataID)
+    {
+        
+    }
 	
 	
+    
 	/**
      * 获取：工作流实例ID
      */

@@ -1,5 +1,6 @@
 package org.hy.xflow.engine.service.impl;
 
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.hy.common.PartitionMap;
@@ -32,6 +33,11 @@ import org.hy.xflow.engine.service.ITemplateService;
 public class TemplateService extends BaseService implements ITemplateService
 {
     
+    /** 已解释合成的模板实例的高速缓存。Map.key值是TemplateID */
+    private static Map<String ,Template>  $CacheTemplates = new Hashtable<String ,Template>();
+    
+    
+    
     @Xjava
     private ITemplateDAO                  templateDAO;
     
@@ -47,10 +53,25 @@ public class TemplateService extends BaseService implements ITemplateService
     @Xjava
     private IActivityRouteParticipantsDAO activityRouteParticipantsDAO;
     
+
+    
+    /**
+     * 清空已解释合成的模板实例的高速缓存。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     */
+    public static void clearCache()
+    {
+        $CacheTemplates.clear();
+    }
+    
     
     
     /**
-     * 按模板ID查询模板信息
+     * 按模板ID查询模板信息。内部组合生成关系数据网。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-04-19
@@ -59,10 +80,15 @@ public class TemplateService extends BaseService implements ITemplateService
      * @param i_TemplateID
      * @return
      */
-    public Template queryByID(String i_TemplateID)
+    public synchronized Template queryByID(String i_TemplateID)
     {
-        Template v_Template = this.templateDAO.queryByID(i_TemplateID);
+        Template v_Template = $CacheTemplates.get(i_TemplateID);
+        if ( v_Template != null )
+        {
+            return v_Template;
+        }
         
+        v_Template = this.templateDAO.queryByID(i_TemplateID);
         if ( v_Template == null )
         {
             return v_Template;
@@ -76,13 +102,15 @@ public class TemplateService extends BaseService implements ITemplateService
         
         v_Template.setActivityRouteTree(v_ARouteTree);
         
+        $CacheTemplates.put(v_Template.getTemplateID() ,v_Template);
+        
         return v_Template;
     }
     
     
     
     /**
-     * 按模板ID查询模板信息
+     * 按模板ID查询模板信息。内部组合生成关系数据网。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-04-19
@@ -94,6 +122,38 @@ public class TemplateService extends BaseService implements ITemplateService
     public Template queryByID(Template i_Template)
     {
         return this.queryByID(i_Template.getTemplateID());
+    }
+    
+    
+    
+    /**
+     * 按模板名称查询版本号最大的有效的模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @return
+     */
+    public Template queryByNameMaxVersionNo(String i_TemplateName)
+    {
+        return this.templateDAO.queryByNameMaxVersionNo(i_TemplateName);
+    }
+    
+    
+    
+    /**
+     * 按模板名称查询版本号最大的有效的模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @return
+     */
+    public Template queryByNameMaxVersionNo(Template i_Template)
+    {
+        return this.templateDAO.queryByNameMaxVersionNo(i_Template);
     }
     
 }

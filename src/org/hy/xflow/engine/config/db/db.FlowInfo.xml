@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流信息表模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_FlowInfo_QueryByServiceDataID"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.workID
+				       ,A.workFatherID
+				       ,A.flowTemplateID
+				       ,A.flowVersion
+				       ,A.serviceDataID
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.lastUserID
+				       ,A.lastUser
+				       ,A.lastTime
+				       ,A.lastOrgID
+				       ,A.lastOrg
+				       ,A.lastProcessID
+				       ,A.isValid
+				       ,A.isDelete
+				  FROM  TFlowInfo  A
+				 WHERE  A.serviceDataID = ':serviceDataID'
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.FlowInfo</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>

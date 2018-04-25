@@ -59,12 +59,12 @@ public interface ITemplateDAO
      * @version     v1.0
      *
      * @param i_TemplateID  模板ID
-     * @param i_Version     版本号
+     * @param i_VersionNo   模板版本号（数值递增型）
      * @return
      */
-    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersion" ,returnOne=true)
-    public Template queryByNameVersion(@Xparam(id="templateName" ,notNull=true) String i_TemplateID
-                                      ,@Xparam(id="version"      ,notNull=true) String i_Version);
+    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersionNo" ,returnOne=true)
+    public Template queryByNameVersion(@Xparam(id="templateName" ,notNull=true) String  i_TemplateID
+                                      ,@Xparam(id="versionNo"    ,notNull=true) Integer i_VersionNo);
     
     
     
@@ -78,7 +78,35 @@ public interface ITemplateDAO
      * @param i_Template  模板对象 
      * @return
      */
-    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersion" ,returnOne=true)
-    public Template queryByNameVersion(@Xparam(notNulls={"templateName" ,"version"}) Template i_Template);
+    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersionNo" ,returnOne=true)
+    public Template queryByNameVersion(@Xparam(notNulls={"templateName" ,"versionNo"}) Template i_Template);
+    
+    
+    
+    /**
+     * 按模板名称查询版本号最大的有效的模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @return
+     */
+    @Xsql(id="XSQL_XFlow_Template_QueryByName_MaxVersionNo" ,returnOne=true)
+    public Template queryByNameMaxVersionNo(@Xparam(id="templateName" ,notNull=true) String i_TemplateName);
+    
+    
+    
+    /**
+     * 按模板名称查询版本号最大的有效的模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @return
+     */
+    @Xsql(id="XSQL_XFlow_Template_QueryByName_MaxVersionNo" ,returnOne=true)
+    public Template queryByNameMaxVersionNo(@Xparam(notNulls={"templateName"}) Template i_Template);
     
 }

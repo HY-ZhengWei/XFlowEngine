@@ -42,4 +42,30 @@ public interface ITemplateService
      */
     public Template queryByID(Template i_Template);
     
+    
+    
+    /**
+     * 按模板名称查询版本号最大的有效的模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @return
+     */
+    public Template queryByNameMaxVersionNo(String i_TemplateName);
+    
+    
+    
+    /**
+     * 按模板名称查询版本号最大的有效的模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @return
+     */
+    public Template queryByNameMaxVersionNo(Template i_Template);
+    
 }

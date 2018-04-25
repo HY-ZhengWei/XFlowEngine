@@ -17,6 +17,26 @@ public class ParticipantType extends BaseModel
 {
     
     private static final long serialVersionUID = -5096344239749759330L;
+    
+    
+    /** 执行人 */
+    public static final int $User     = 1;
+    
+    /** 执行部门 */
+    public static final int $Org      = 2;
+    
+    /** 执行角色 */
+    public static final int $Role     = 3;
+    
+    /** 抄送人 */
+    public static final int $UserSend = 11;
+    
+    /** 抄送部门 */
+    public static final int $OrgSend  = 12;
+    
+    /** 抄送角色 */
+    public static final int $RoleSend = 13;
+    
 
     
     /** 参与人类型ID */

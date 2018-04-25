@@ -457,7 +457,8 @@
                 CREATE TABLE TTemplate
                 (
                  templateID         VARCHAR2(64)                     NOT NULL
-                ,version            VARCHAR2(32)                     NOT NULL
+                ,versionNo          NUMBER(10)                       NOT NULL
+                ,version            VARCHAR2(32)
                 ,templateName       NVARCHAR2(128)                   NOT NULL
                 ,infoComment        NVARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
@@ -474,6 +475,7 @@
                 
                 COMMENT ON TABLE  TTemplate                               IS '工作流模板表';/
                 COMMENT ON COLUMN TTemplate.templateID                    IS '模板ID';/
+                COMMENT ON COLUMN TTemplate.versionNo                     IS '模板版本号（数值递增型）';/
                 COMMENT ON COLUMN TTemplate.version                       IS '模板版本号';/
                 COMMENT ON COLUMN TTemplate.templateName                  IS '模板名称';/
                 COMMENT ON COLUMN TTemplate.infoComment                   IS '备注说明';/
@@ -493,7 +495,8 @@
                 CREATE TABLE TTemplate
                 (
                  templateID         VARCHAR(64)                      NOT NULL
-                ,version            VARCHAR(32)                      NOT NULL
+                ,versionNo          INT                              NOT NULL
+                ,version            VARCHAR(32)
                 ,templateName       NVARCHAR(128)                    NOT NULL
                 ,infoComment        NVARCHAR(2000)
                 ,createrID          VARCHAR(64)                      NOT NULL
@@ -510,6 +513,7 @@
                 
                 EXEC P_TableComment  TTemplate                                ,'工作流模板表';/
                 EXEC P_ColumnComment TTemplate ,templateID                    ,'模板ID';/
+                EXEC P_ColumnComment TTemplate ,versionNo                     ,'模板版本号（数值递增型）';/
                 EXEC P_ColumnComment TTemplate ,version                       ,'模板版本号';/
                 EXEC P_ColumnComment TTemplate ,templateName                  ,'模板名称';/
                 EXEC P_ColumnComment TTemplate ,infoComment                   ,'备注说明';/

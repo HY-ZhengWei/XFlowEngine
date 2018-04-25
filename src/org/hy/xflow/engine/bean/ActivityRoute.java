@@ -3,6 +3,7 @@ package org.hy.xflow.engine.bean;
 import java.util.List;
 
 import org.hy.common.Date;
+import org.hy.common.Help;
 import org.hy.xflow.engine.common.BaseModel;
 
 
@@ -85,6 +86,59 @@ public class ActivityRoute extends BaseModel
     private Date lastTime;
     
 	
+    
+    /**
+     * 判定用户信息是否当前活动路由的参与人之一
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public Participant isParticipant(User i_User)
+    {
+        if ( i_User == null )
+        {
+            return null;
+        }
+        if ( Help.isNull(this.participants) )
+        {
+            return null;
+        }
+        
+        for (Participant v_Participant : this.participants)
+        {
+            if ( ParticipantType.$User     == v_Participant.getObjectType().intValue()
+              || ParticipantType.$UserSend == v_Participant.getObjectType().intValue() )
+            {
+                if ( v_Participant.getObjectID().equals(i_User.getUserID()) )
+                {
+                    return v_Participant;
+                }
+            }
+            else if ( ParticipantType.$Org     == v_Participant.getObjectType().intValue()
+                   || ParticipantType.$OrgSend == v_Participant.getObjectType().intValue() )
+            {
+                if ( v_Participant.getObjectID().equals(i_User.getOrgID()) )
+                {
+                    return v_Participant;
+                } 
+            }
+            else if ( ParticipantType.$Role     == v_Participant.getObjectType().intValue()
+                   || ParticipantType.$RoleSend == v_Participant.getObjectType().intValue() )
+            {
+                if ( v_Participant.getObjectID().equals(i_User.getRoleID()) )
+                {
+                    return v_Participant;
+                } 
+            }
+        }
+        
+        return null;
+    }
+    
 	
     /**
      * 获取：路由A-B两端，从A到B的A端活动（内存合成）

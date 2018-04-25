@@ -11,13 +11,14 @@
     <!-- 工作流模板表模块的相关SQL -->
 	<sqls>
 	
-		<sql id="XSQL_XFlow_Template_QueryByID_NameVersion"> 
+		<sql id="XSQL_XFlow_Template_QueryByID_NameVersionNo"> 
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
 			<content>
 				<![CDATA[
 				SELECT  A.templateID
+				       ,A.versionNo
 				       ,A.version
 				       ,A.templateName
 				       ,A.infoComment
@@ -33,7 +34,49 @@
 				 WHERE  1 = 1
 			  <[   AND  A.templateID   = ':templateID'   ]>
 			  <[   AND  A.templateName = ':templateName'
-			       AND  A.version      = ':version'      ]>
+			       AND  A.versionNo    = ':versionNo'      ]>
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.Template</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Template_QueryByName_MaxVersionNo"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.templateID
+				       ,A.versionNo
+				       ,A.version
+				       ,A.templateName
+				       ,A.infoComment
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createTime
+				       ,A.lastUserID
+				       ,A.lastUser
+				       ,A.lastTime
+				       ,A.isValid
+				       ,A.isDelete
+					FROM  TTemplate  A
+				 WHERE  A.templateName = ':templateName'
+				   AND  A.isValid      = 1
+				   AND  A.isDelete     = 0
+				   AND  A.versionNo    = (
+				                          SELECT  MAX(A.versionNo)
+				                            FROM  TTemplate  WA
+				                           WHERE  WA.templateName = ':templateName'
+				                             AND  WA.isValid      = 1
+				                             AND  WA.isDelete     = 0
+				                         )
 				]]>
 			</content>
 			

@@ -8,7 +8,8 @@ import org.hy.xflow.engine.common.BaseModel;
 
 
 /**
- * 工作流活动组件(节点)路由的参与人
+ * 1. 工作流活动组件(节点)的参与人
+ * 2. 工作流活动组件(节点)路由的参与人
  *
  * @author      ZhengWei
  * @createDate  2018-04-24

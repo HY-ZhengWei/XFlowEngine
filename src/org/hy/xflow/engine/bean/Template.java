@@ -25,6 +25,9 @@ public class Template extends BaseModel
 	/** 模板ID */
     private String templateID;
     
+    /** 模板版本号（数值递增型） */
+    private Integer versionNo;
+    
 	/** 模板版本号 */
     private String version;
     
@@ -100,7 +103,27 @@ public class Template extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：模板版本号（数值递增型）
+     */
+    public Integer getVersionNo()
+    {
+        return versionNo;
+    }
+
+    
+    /**
+     * 设置：模板版本号（数值递增型）
+     * 
+     * @param versionNo 
+     */
+    public void setVersionNo(Integer versionNo)
+    {
+        this.versionNo = versionNo;
+    }
+
+
+    /**
      * 获取：模板版本号
      */
     public String getVersion()
