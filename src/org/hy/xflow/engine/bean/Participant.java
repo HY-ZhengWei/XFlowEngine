@@ -20,13 +20,16 @@ public class Participant extends BaseModel
 	
     
 	/** 主键ID */
-    private String arpID;
+    private String participantID;
     
 	/** 工作流的模板ID */
     private String templateID;
     
+    /** 活动ID */
+    private String activityID;
+    
 	/** 活动路由ID */
-    private String arID;
+    private String activityRouteID;
     
     /** 参与者类型（内存合成） */
     private ParticipantType participantType;
@@ -53,42 +56,73 @@ public class Participant extends BaseModel
     private Date createTime;
     
 	
-	
+    
     /**
      * 获取：主键ID
      */
-    public String getArpID()
+    public String getParticipantID()
     {
-        return arpID;
+        return participantID;
     }
     
     
+    /**
+     * 设置：主键ID
+     * 
+     * @param participantID 
+     */
+    public void setParticipantID(String participantID)
+    {
+        this.participantID = participantID;
+    }
+    
+    
+    /**
+     * 获取：活动ID
+     */
+    public String getActivityID()
+    {
+        return activityID;
+    }
+
+    
+    /**
+     * 设置：活动ID
+     * 
+     * @param activityID 
+     */
+    public void setActivityID(String activityID)
+    {
+        this.activityID = activityID;
+    }
+    
+
+    /**
+     * 获取：活动路由ID
+     */
+    public String getActivityRouteID()
+    {
+        return activityRouteID;
+    }
+
+    
+    /**
+     * 设置：活动路由ID
+     * 
+     * @param activityRouteID 
+     */
+    public void setActivityRouteID(String activityRouteID)
+    {
+        this.activityRouteID = activityRouteID;
+    }
+
+
     /**
      * 获取：工作流的模板ID
      */
     public String getTemplateID()
     {
         return templateID;
-    }
-
-    
-    /**
-     * 获取：活动路由ID
-     */
-    public String getArID()
-    {
-        return arID;
-    }
-
-    
-    /**
-     * 设置：主键ID
-     * 
-     * @param arpID 
-     */
-    public void setArpID(String arpID)
-    {
-        this.arpID = arpID;
     }
 
     
@@ -102,17 +136,6 @@ public class Participant extends BaseModel
         this.templateID = templateID;
     }
     
-    
-    /**
-     * 设置：活动路由ID
-     * 
-     * @param arID 
-     */
-    public void setArID(String arID)
-    {
-        this.arID = arID;
-    }
-
     
     /**
      * 获取：参与者类型（内存合成）

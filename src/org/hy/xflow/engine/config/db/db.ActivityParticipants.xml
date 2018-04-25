@@ -8,10 +8,10 @@
 
 
 
-    <!-- 工作流活动组件(节点)路由的参与人模块的相关SQL -->
+    <!-- 工作流活动组件(节点)的参与人模块的相关SQL -->
 	<sqls>
 	
-		<sql id="XSQL_XFlow_ActivityRouteParticipants_QueryByTemplateID"> 
+		<sql id="XSQL_XFlow_ActivityParticipants_QueryByTemplateID"> 
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
@@ -19,7 +19,7 @@
 				<![CDATA[
 				SELECT  A.participantID
 				       ,A.templateID
-				       ,A.activityRouteID
+				       ,A.activityID
 				       ,B.participantTypeID  AS "participantType.participantTypeID"
 				       ,B.participantType    AS "participantType.participantType"
 				       ,B.infoComment        AS "participantType.infoComment"
@@ -30,17 +30,17 @@
 				       ,A.createrID
 				       ,A.creater
 				       ,A.createTime
-				  FROM  TActivityRouteParticipants  A
-				       ,TParticipantType            B
+				  FROM  TActivityParticipants  A
+				       ,TParticipantType       B
 				 WHERE  A.objectType = B.participantTypeID
 				   AND  A.templateID = ':templateID'
-				 ORDER  BY A.activityRouteID ,B.orderNo ,A.objectNo
+				 ORDER  BY A.activityID ,B.orderNo ,A.objectNo
 				]]>
 			</content>
 			
 			<result>
 				<table>org.hy.common.TablePartition</table>
-				<fill>putRow(row.activityRouteID ,row)</fill>
+				<fill>putRow(row.activityID ,row)</fill>
 				<row>org.hy.xflow.engine.bean.Participant</row>
 				<cfill>setter(colValue)</cfill>
 			</result>

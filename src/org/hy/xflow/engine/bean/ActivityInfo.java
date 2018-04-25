@@ -21,6 +21,9 @@ public class ActivityInfo extends BaseModel
     private static final long serialVersionUID = -4724247321457107633L;
 	
     
+    /** 本活动组件（节点）的参与人。谁从此路过。（内存合成） */
+    private List<Participant> participants;
+    
     /** 本活动组件（节点）的所有通过路由信息（内存合成） */
     private List<ActivityRoute> routes;
     
@@ -78,8 +81,28 @@ public class ActivityInfo extends BaseModel
 	/** 最后修改时间 */
     private Date lastTime;
     
-	
     
+    
+    /**
+     * 获取：本活动组件（节点）的参与人。谁从此路过。（内存合成）
+     */
+    public List<Participant> getParticipants()
+    {
+        return participants;
+    }
+    
+    
+    /**
+     * 设置：本活动组件（节点）的参与人。谁从此路过。（内存合成）
+     * 
+     * @param participants 
+     */
+    public void setParticipants(List<Participant> participants)
+    {
+        this.participants = participants;
+    }
+
+
     /**
      * 获取：本活动组件（节点）的所有通过路由信息（内存合成）
      */

@@ -32,8 +32,11 @@ public class ActivityRouteTree extends BaseModel
     /** 模板的所有路由 */
     private PartitionMap<String ,ActivityRoute> allRoutes;
     
-    /** 模板的所有参与人 */
-    private PartitionMap<String ,Participant>   allParticipants;
+    /** 模板的活动路由的所有参与人 */
+    private PartitionMap<String ,Participant>   allActivityPs;
+    
+    /** 模板的活动路由的所有参与人 */
+    private PartitionMap<String ,Participant>   allActivityRoutePs;
     
     /** 整个活动路由树的 "开始" 活动节点 */
     private ActivityInfo                        startActivity;
@@ -45,11 +48,13 @@ public class ActivityRouteTree extends BaseModel
     
     public ActivityRouteTree(Map<String ,ActivityInfo>           i_AllActivitys 
                             ,PartitionMap<String ,ActivityRoute> i_AllRoutes
-                            ,PartitionMap<String ,Participant>   i_AllParticipants)
+                            ,PartitionMap<String ,Participant>   i_AllActivityPs
+                            ,PartitionMap<String ,Participant>   i_AllActivityRoutePs)
     {
-        this.allActivitys    = i_AllActivitys;
-        this.allRoutes       = i_AllRoutes;
-        this.allParticipants = i_AllParticipants;
+        this.allActivitys       = i_AllActivitys;
+        this.allRoutes          = i_AllRoutes;
+        this.allActivityPs      = i_AllActivityPs;
+        this.allActivityRoutePs = i_AllActivityRoutePs;
         
         if ( !Help.isNull(this.allActivitys) )
         {
@@ -126,7 +131,8 @@ public class ActivityRouteTree extends BaseModel
     {
         if ( Help.isNull(allActivitys) 
           || Help.isNull(allRoutes) 
-          || Help.isNull(allParticipants)
+          || Help.isNull(allActivityPs)
+          || Help.isNull(allActivityRoutePs)
           || this.startActivity == null 
           || this.endActivity   == null )
         {
@@ -149,6 +155,7 @@ public class ActivityRouteTree extends BaseModel
      */
     private void makeActivityRouteTree(ActivityInfo io_CurrentActivity)
     {
+        io_CurrentActivity.setParticipants(allActivityPs.get(io_CurrentActivity.getActivityID()));
         List<ActivityRoute> v_CurrentARoutes = allRoutes.get(io_CurrentActivity.getActivityID());
         
         if ( !Help.isNull(v_CurrentARoutes) )
@@ -158,7 +165,7 @@ public class ActivityRouteTree extends BaseModel
             for (ActivityRoute v_CurrentARoute : v_CurrentARoutes)
             {
                 v_CurrentARoute.setActivity(io_CurrentActivity);
-                v_CurrentARoute.setParticipants(allParticipants.get(v_CurrentARoute.getArID()));
+                v_CurrentARoute.setParticipants(allActivityRoutePs.get(v_CurrentARoute.getActivityRouteID()));
                 
                 if ( !Help.isNull(v_CurrentARoute.getNextActivityID()) )
                 {
@@ -209,7 +216,7 @@ public class ActivityRouteTree extends BaseModel
         StringBuilder v_Log = new StringBuilder();
         
         v_Log.append("【").append(i_CurrentARoute.getActivity().getActivityName()).append("】");
-        v_Log.append("  ---").append(i_CurrentARoute.getArName()).append("--->  ");
+        v_Log.append("  ---").append(i_CurrentARoute.getActivityRouteName()).append("--->  ");
         v_Log.append("【").append(i_CurrentARoute.getNextActivity().getActivityName()).append("】");
         
         if ( !Help.isNull(i_CurrentARoute.getParticipants()) )

@@ -22,10 +22,10 @@ public class ActivityRoute extends BaseModel
 	
     
 	/** 主键ID */
-    private String arID;
+    private String activityRouteID;
     
     /** 活动路由名称 */
-    private String arName;
+    private String activityRouteName;
     
     /** 工作流的模板ID */
     private String templateID;
@@ -125,46 +125,46 @@ public class ActivityRoute extends BaseModel
         this.nextActivity = nextActivity;
     }
     
-
+    
     /**
      * 获取：主键ID
      */
-    public String getArID()
+    public String getActivityRouteID()
     {
-        return this.arID;
+        return activityRouteID;
+    }
+    
+    
+    /**
+     * 获取：活动路由名称
+     */
+    public String getActivityRouteName()
+    {
+        return activityRouteName;
     }
 
     
     /**
      * 设置：主键ID
      * 
-     * @param i_ArID
+     * @param activityRouteID 
      */
-    public void setArID(String i_ArID)
+    public void setActivityRouteID(String activityRouteID)
     {
-        this.arID = i_ArID;
-    }
-	
-	
-    /**
-     * 获取：活动路由名称
-     */
-    public String getArName()
-    {
-        return arName;
+        this.activityRouteID = activityRouteID;
     }
 
     
     /**
      * 设置：活动路由名称
      * 
-     * @param arName 
+     * @param activityRouteName 
      */
-    public void setArName(String arName)
+    public void setActivityRouteName(String activityRouteName)
     {
-        this.arName = arName;
+        this.activityRouteName = activityRouteName;
     }
-    
+
 
     /**
      * 获取：工作流活动ID

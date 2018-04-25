@@ -1,7 +1,7 @@
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -42,8 +42,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -84,8 +84,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -127,8 +127,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -169,8 +169,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -211,8 +211,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -253,8 +253,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -295,8 +295,8 @@ VALUES (
       
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -338,8 +338,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -380,8 +380,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -422,8 +422,8 @@ VALUES (
        
  INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -464,8 +464,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -507,8 +507,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -549,8 +549,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID
@@ -591,8 +591,8 @@ VALUES (
        
 INSERT  INTO TActivityRoute
        (
-        arID
-       ,arName
+        activityRouteID
+       ,activityRouteName
        ,templateID
        ,routeTypeID
        ,activityID

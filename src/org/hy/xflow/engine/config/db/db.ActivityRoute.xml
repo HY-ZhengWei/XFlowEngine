@@ -17,8 +17,8 @@
 			
 			<content>
 				<![CDATA[
-				SELECT  A.arID
-				       ,A.arName
+				SELECT  A.activityRouteID
+				       ,A.activityRouteName
 				       ,A.templateID
 				       ,A.routeTypeID
 				       ,B.routeTypeID   AS "routeType.routeTypeID"
