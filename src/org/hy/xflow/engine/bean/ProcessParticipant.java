@@ -11,7 +11,7 @@ package org.hy.xflow.engine.bean;
  * @createDate  2018-04-17
  * @version     v1.0
  */
-public class ProcessParticipants extends Participants
+public class ProcessParticipant extends Participant
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	

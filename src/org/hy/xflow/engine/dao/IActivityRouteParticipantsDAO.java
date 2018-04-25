@@ -5,7 +5,7 @@ import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
 import org.hy.common.xml.annotation.Xsql;
-import org.hy.xflow.engine.bean.Participants;
+import org.hy.xflow.engine.bean.Participant;
 import org.hy.xflow.engine.bean.Template;
 
 
@@ -34,7 +34,7 @@ public interface IActivityRouteParticipantsDAO
      * @return
      */
     @Xsql("XSQL_XFlow_ActivityRouteParticipants_QueryByTemplateID")
-    public PartitionMap<String ,Participants> queryByTemplateID(@Xparam(id="templateID" ,notNull=true)String i_TemplateID);
+    public PartitionMap<String ,Participant> queryByTemplateID(@Xparam(id="templateID" ,notNull=true)String i_TemplateID);
     
     
     
@@ -49,6 +49,6 @@ public interface IActivityRouteParticipantsDAO
      * @return
      */
     @Xsql("XSQL_XFlow_ActivityRouteParticipants_QueryByTemplateID")
-    public PartitionMap<String ,Participants> queryByTemplateID(@Xparam(notNulls={"templateID"}) Template i_Template);
+    public PartitionMap<String ,Participant> queryByTemplateID(@Xparam(notNulls={"templateID"}) Template i_Template);
     
 }

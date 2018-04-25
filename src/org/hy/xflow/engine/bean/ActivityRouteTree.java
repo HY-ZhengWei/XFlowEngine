@@ -33,7 +33,7 @@ public class ActivityRouteTree extends BaseModel
     private PartitionMap<String ,ActivityRoute> allRoutes;
     
     /** 模板的所有参与人 */
-    private PartitionMap<String ,Participants>  allParticipants;
+    private PartitionMap<String ,Participant>   allParticipants;
     
     /** 整个活动路由树的 "开始" 活动节点 */
     private ActivityInfo                        startActivity;
@@ -45,7 +45,7 @@ public class ActivityRouteTree extends BaseModel
     
     public ActivityRouteTree(Map<String ,ActivityInfo>           i_AllActivitys 
                             ,PartitionMap<String ,ActivityRoute> i_AllRoutes
-                            ,PartitionMap<String ,Participants>  i_AllParticipants)
+                            ,PartitionMap<String ,Participant>   i_AllParticipants)
     {
         this.allActivitys    = i_AllActivitys;
         this.allRoutes       = i_AllRoutes;
@@ -211,6 +211,17 @@ public class ActivityRouteTree extends BaseModel
         v_Log.append("【").append(i_CurrentARoute.getActivity().getActivityName()).append("】");
         v_Log.append("  ---").append(i_CurrentARoute.getArName()).append("--->  ");
         v_Log.append("【").append(i_CurrentARoute.getNextActivity().getActivityName()).append("】");
+        
+        if ( !Help.isNull(i_CurrentARoute.getParticipants()) )
+        {
+            for (int i=0; i<i_CurrentARoute.getParticipants().size(); i++)
+            {
+                Participant v_Participant = i_CurrentARoute.getParticipants().get(i);
+                v_Log.append("\n\t参与人").append(i+1).append("  ").append(v_Participant.getParticipantType().getParticipantType()).append(":").append(v_Participant.getObjectName());
+            }
+            
+            v_Log.append("\n");
+        }
         
         return v_Log.toString();
     }

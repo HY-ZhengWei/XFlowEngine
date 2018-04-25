@@ -34,14 +34,14 @@
 				       ,TParticipantType            B
 				 WHERE  A.objectType = B.participantTypeID
 				   AND  A.templateID = ':templateID'
-				 ORDER  BY A.arID ,B.objectNo ,A.objectNo
+				 ORDER  BY A.arID ,B.orderNo ,A.objectNo
 				]]>
 			</content>
 			
 			<result>
 				<table>org.hy.common.TablePartition</table>
 				<fill>putRow(row.arID ,row)</fill>
-				<row>org.hy.xflow.engine.bean.Participants</row>
+				<row>org.hy.xflow.engine.bean.Participant</row>
 				<cfill>setter(colValue)</cfill>
 			</result>
 			

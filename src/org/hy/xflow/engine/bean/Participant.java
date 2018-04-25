@@ -14,7 +14,7 @@ import org.hy.xflow.engine.common.BaseModel;
  * @createDate  2018-04-24
  * @version     v1.0
  */
-public class Participants extends BaseModel
+public class Participant extends BaseModel
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	

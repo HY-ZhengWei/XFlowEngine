@@ -37,7 +37,7 @@ public class ActivityRoute extends BaseModel
     private RouteType routeType;
     
     /** 工作流路由的参与人。谁从此路过。（内存合成） */
-    private List<Participants> participants;
+    private List<Participant> participants;
     
 	/** 工作流活动ID */
     private String activityID;
@@ -227,7 +227,7 @@ public class ActivityRoute extends BaseModel
     /**
      * 获取：工作流路由的参与人。谁从此路过。（内存合成）
      */
-    public List<Participants> getParticipants()
+    public List<Participant> getParticipants()
     {
         return participants;
     }
@@ -238,7 +238,7 @@ public class ActivityRoute extends BaseModel
      * 
      * @param participants 
      */
-    public void setParticipants(List<Participants> participants)
+    public void setParticipants(List<Participant> participants)
     {
         this.participants = participants;
     }

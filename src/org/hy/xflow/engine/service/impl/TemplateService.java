@@ -6,7 +6,7 @@ import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
-import org.hy.xflow.engine.bean.Participants;
+import org.hy.xflow.engine.bean.Participant;
 import org.hy.xflow.engine.bean.ActivityRouteTree;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.common.BaseService;
@@ -66,7 +66,7 @@ public class TemplateService extends BaseService implements ITemplateService
         
         Map<String ,ActivityInfo>           v_AllActivitys    = this.activityInfoDAO .queryByTemplateID(v_Template);
         PartitionMap<String ,ActivityRoute> v_AllRoutes       = this.activityRouteDAO.queryByTemplateID(v_Template);
-        PartitionMap<String ,Participants>  v_AllParticipants = this.participantsDAO .queryByTemplateID(v_Template);
+        PartitionMap<String ,Participant>   v_AllParticipants = this.participantsDAO .queryByTemplateID(v_Template);
         ActivityRouteTree                   v_ARouteTree      = new ActivityRouteTree(v_AllActivitys ,v_AllRoutes ,v_AllParticipants);
         
         v_Template.setActivityRouteTree(v_ARouteTree);
