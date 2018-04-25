@@ -70,7 +70,7 @@ public class TemplateService extends BaseService implements ITemplateService
         
         Map<String ,ActivityInfo>           v_AllActivitys       = this.activityInfoDAO             .queryByTemplateID(v_Template);
         PartitionMap<String ,ActivityRoute> v_AllRoutes          = this.activityRouteDAO            .queryByTemplateID(v_Template);
-        PartitionMap<String ,Participant>   v_AllActivityPs      = this.activityRouteParticipantsDAO.queryByTemplateID(v_Template);
+        PartitionMap<String ,Participant>   v_AllActivityPs      = this.activityParticipantsDAO     .queryByTemplateID(v_Template);
         PartitionMap<String ,Participant>   v_AllActivityRoutePs = this.activityRouteParticipantsDAO.queryByTemplateID(v_Template);
         ActivityRouteTree                   v_ARouteTree         = new ActivityRouteTree(v_AllActivitys ,v_AllRoutes ,v_AllActivityPs ,v_AllActivityRoutePs);
         

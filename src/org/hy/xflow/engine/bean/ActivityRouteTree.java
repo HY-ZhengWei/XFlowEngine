@@ -158,6 +158,8 @@ public class ActivityRouteTree extends BaseModel
         io_CurrentActivity.setParticipants(allActivityPs.get(io_CurrentActivity.getActivityID()));
         List<ActivityRoute> v_CurrentARoutes = allRoutes.get(io_CurrentActivity.getActivityID());
         
+        System.out.println(log(io_CurrentActivity));
+        
         if ( !Help.isNull(v_CurrentARoutes) )
         {
             io_CurrentActivity.setRoutes(v_CurrentARoutes);
@@ -197,6 +199,38 @@ public class ActivityRouteTree extends BaseModel
                 }
             }
         }
+    }
+    
+    
+    
+    /**
+     * 输出日志
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @param i_Activity
+     * @return
+     */
+    private String log(ActivityInfo i_Activity)
+    {
+        StringBuilder v_Log = new StringBuilder();
+        
+        v_Log.append("\n").append(i_Activity.getActivityName());
+        
+        if ( !Help.isNull(i_Activity.getParticipants()) )
+        {
+            for (int i=0; i<i_Activity.getParticipants().size(); i++)
+            {
+                Participant v_Participant = i_Activity.getParticipants().get(i);
+                v_Log.append("\n\t参与人").append(i+1).append("  ").append(v_Participant.getParticipantType().getParticipantType()).append(":").append(v_Participant.getObjectName());
+            }
+            
+            v_Log.append("\n");
+        }
+        
+        return v_Log.toString();
     }
     
     
