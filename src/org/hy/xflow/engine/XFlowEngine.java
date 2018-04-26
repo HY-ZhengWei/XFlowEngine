@@ -103,6 +103,7 @@ public class XFlowEngine
         {
             throw new VerifyError("Template[" + i_TemplateName + "] is not exists.");
         }
+        v_Template = this.templateService.queryByID(v_Template);
         
         // 判定第三方使用系统的业务数据ID是否重复
         if ( !Help.isNull(i_ServiceDataID) )
@@ -158,8 +159,20 @@ public class XFlowEngine
         v_Template.getActivityRouteTree().getActivity("A008");  // 选型结果确认
         
         
-        User v_User = new User();
-        XFlowEngine.getInstance().createByName(v_User ,"智能选型");
+        
+        User v_Saler = new User();
+        v_Saler.setUserID("8a81b2b54b7b391b014b7d12b66400fc");
+        v_Saler.setUserName("公用销售人员");
+        v_Saler.setRoleID("004");
+        v_Saler.setRoleName("销售人员");
+        
+        User v_Manager = new User();
+        v_Manager.setUserID("E10ADC3949BA59ABBE56E057F20F922E");
+        v_Manager.setUserName("霍桂霞");
+        v_Manager.setRoleID("001");
+        v_Manager.setRoleName("选型主管");
+        
+        XFlowEngine.getInstance().createByName(v_Saler ,"智能选型");
     }
     
 }

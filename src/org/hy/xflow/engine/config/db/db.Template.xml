@@ -71,7 +71,7 @@
 				   AND  A.isValid      = 1
 				   AND  A.isDelete     = 0
 				   AND  A.versionNo    = (
-				                          SELECT  MAX(A.versionNo)
+				                          SELECT  MAX(WA.versionNo)
 				                            FROM  TTemplate  WA
 				                           WHERE  WA.templateName = ':templateName'
 				                             AND  WA.isValid      = 1

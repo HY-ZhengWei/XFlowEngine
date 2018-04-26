@@ -17,7 +17,7 @@
 			
 			<content>
 				<![CDATA[
-				INSERT  INTO Process
+				INSERT  INTO TProcess
 				       (
 				        processID
 				       ,workID

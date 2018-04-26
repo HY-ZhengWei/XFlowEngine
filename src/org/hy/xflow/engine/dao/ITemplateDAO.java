@@ -31,7 +31,7 @@ public interface ITemplateDAO
      * @param i_TemplateID  模板ID
      * @return
      */
-    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersion" ,returnOne=true)
+    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersionNo" ,returnOne=true)
     public Template queryByID(@Xparam("templateID") String i_TemplateID);
     
     
@@ -46,7 +46,7 @@ public interface ITemplateDAO
      * @param i_Template  模板对象
      * @return
      */
-    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersion" ,returnOne=true)
+    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersionNo" ,returnOne=true)
     public Template queryByID(@Xparam(notNulls={"templateID"}) Template i_Template);
     
     

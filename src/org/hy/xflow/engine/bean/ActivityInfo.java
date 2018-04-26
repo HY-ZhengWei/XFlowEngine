@@ -107,8 +107,16 @@ public class ActivityInfo extends BaseModel
         
         for (Participant v_Participant : this.participants)
         {
-            if ( ParticipantType.$User     == v_Participant.getObjectType().intValue()
-              || ParticipantType.$UserSend == v_Participant.getObjectType().intValue() )
+            if ( ParticipantType.$Role     == v_Participant.getObjectType().intValue()
+              || ParticipantType.$RoleSend == v_Participant.getObjectType().intValue() )
+            {
+                 if ( v_Participant.getObjectID().equals(i_User.getRoleID()) )
+                 {
+                     return v_Participant;
+                 } 
+            }
+            else if ( ParticipantType.$User     == v_Participant.getObjectType().intValue()
+                   || ParticipantType.$UserSend == v_Participant.getObjectType().intValue() )
             {
                 if ( v_Participant.getObjectID().equals(i_User.getUserID()) )
                 {
@@ -119,14 +127,6 @@ public class ActivityInfo extends BaseModel
                    || ParticipantType.$OrgSend == v_Participant.getObjectType().intValue() )
             {
                 if ( v_Participant.getObjectID().equals(i_User.getOrgID()) )
-                {
-                    return v_Participant;
-                } 
-            }
-            else if ( ParticipantType.$Role     == v_Participant.getObjectType().intValue()
-                   || ParticipantType.$RoleSend == v_Participant.getObjectType().intValue() )
-            {
-                if ( v_Participant.getObjectID().equals(i_User.getRoleID()) )
                 {
                     return v_Participant;
                 } 
