@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流过程表模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_Process_Insert"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO Process
+				       (
+				        processID
+				       ,workID
+				       ,splitProcessID
+				       ,processNo
+				       ,currentActivityID
+				       ,currentActivity
+				       ,previousProcessID
+				       ,previousActivityID
+				       ,previousActivity
+				       ,nextProcessID
+				       ,nextActivityID
+				       ,nextActivity
+				       ,createrID
+				       ,creater
+				       ,createOrgID
+				       ,createOrg
+				       ,createTime
+				       ,limitUserID
+				       ,limitOrgID
+				       ,limitTime
+				       ,operateTime
+				       ,operateTimeLen
+				       ,operateTypeID
+				       ,operateType
+				       ,operateUserID
+				       ,operateUser
+				       ,operateOrgID
+				       ,operateOrg
+				       ,operateFiles
+				       ,operateDatas
+				       ,infoComment
+				       )
+				VALUES (
+				        ':processID'
+				       ,':workID'
+				       ,':splitProcessID'
+				       , :processNo
+				       ,':currentActivityID'
+				       ,':currentActivity'
+				       ,':previousProcessID'
+				       ,':previousActivityID'
+				       ,':previousActivity'
+				       ,':nextProcessID'
+				       ,':nextActivityID'
+				       ,':nextActivity'
+				       ,':createrID'
+				       ,':creater'
+				       ,':createOrgID'
+				       ,':createOrg'
+				       ,':createTime'
+				       ,':limitUserID'
+				       ,':limitOrgID'
+				       ,':limitTime'
+				       ,':operateTime'
+				       , :operateTimeLen
+				       ,':operateTypeID'
+				       ,':operateType'
+				       ,':operateUserID'
+				       ,':operateUser'
+				       ,':operateOrgID'
+				       ,':operateOrg'
+				       ,':operateFiles'
+				       ,':operateDatas'
+				       ,':infoComment'
+				       )
+				]]>
+			</content>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>

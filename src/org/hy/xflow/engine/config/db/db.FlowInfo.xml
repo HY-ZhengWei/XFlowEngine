@@ -20,7 +20,6 @@
 				SELECT  A.workID
 				       ,A.workFatherID
 				       ,A.flowTemplateID
-				       ,A.flowVersion
 				       ,A.serviceDataID
 				       ,A.createrID
 				       ,A.creater
@@ -44,6 +43,58 @@
 				<row>org.hy.xflow.engine.bean.FlowInfo</row>
 				<cfill>setter(colValue)</cfill>
 			</result>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_FlowInfo_Insert"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO TFlowInfo
+				       (
+				        workID
+				       ,workFatherID
+				       ,flowTemplateID
+				       ,serviceDataID
+				       ,createrID
+				       ,creater
+				       ,createOrgID
+				       ,createOrg
+				       ,createTime
+				       ,lastUserID
+				       ,lastUser
+				       ,lastTime
+				       ,lastOrgID
+				       ,lastOrg
+				       ,lastProcessID
+				       ,isValid
+				       ,isDelete
+				       )
+                VALUES (
+                        ':workID'
+				       ,':workFatherID'
+				       ,':flowTemplateID'
+				       ,':serviceDataID'
+				       ,':createrID'
+				       ,':creater'
+				       ,':createOrgID'
+				       ,':createOrg'
+				       ,':createTime'
+				       ,':lastUserID'
+				       ,':lastUser'
+				       ,':lastTime'
+				       ,':lastOrgID'
+				       ,':lastOrg'
+				       ,':lastProcessID'
+				       , :isValid
+				       , :isDelete
+                       )
+				]]>
+			</content>
 			
 		</sql>
 		

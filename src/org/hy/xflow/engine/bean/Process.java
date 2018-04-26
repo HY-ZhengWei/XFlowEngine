@@ -35,7 +35,7 @@ public class Process extends BaseModel
     private String currentActivityID;
     
 	/** 当前活动名称 */
-    private String currentActivity;
+    private String currentActivityName;
     
 	/** 上一过程ID */
     private String previousProcessID;
@@ -44,7 +44,7 @@ public class Process extends BaseModel
     private String previousActivityID;
     
 	/** 上一活动名称 */
-    private String previousActivity;
+    private String previousActivityName;
     
 	/** 下一过程ID */
     private String nextProcessID;
@@ -53,7 +53,7 @@ public class Process extends BaseModel
     private String nextActivityID;
     
 	/** 下一活动名称 */
-    private String nextActivity;
+    private String nextActivityName;
     
 	/** 创建人员ID */
     private String createrID;
@@ -113,6 +113,50 @@ public class Process extends BaseModel
     private String infoComment;
     
 	
+    
+    public Process()
+    {
+        
+    }
+    
+    
+    
+    public Process(FlowInfo i_Flow ,ActivityInfo i_Activity ,ActivityRoute i_Route)
+    {
+        this.processID            = i_Flow.getLastProcessID();
+        this.workID               = i_Flow.getWorkID();
+        this.splitProcessID       = "";
+        this.processNo            = "";
+        this.currentActivityID    = i_Activity.getActivityID();
+        this.currentActivityName  = i_Activity.getActivityName();
+        this.previousProcessID    = "";
+        this.previousActivityID   = "";
+        this.previousActivityName = "";
+        this.nextProcessID        = "";
+        this.nextActivityID       = "";
+        this.nextActivityName     = "";
+        this.createrID            = "";
+        this.creater              = "";
+        this.createOrgID          = "";
+        this.createOrg            = "";
+        this.createTime           = "";
+        this.limitUserID          = "";
+        this.limitOrgID           = "";
+        this.limitTime            = "";
+        this.operateTime          = "";
+        this.operateTimeLen       = "";
+        this.operateTypeID        = "";
+        this.operateType          = "";
+        this.operateUserID        = "";
+        this.operateUser          = "";
+        this.operateOrgID         = "";
+        this.operateOrg           = "";
+        this.operateFiles         = "";
+        this.operateDatas         = "";
+        this.infoComment          = "";
+    }
+    
+    
 	
 	/**
      * 获取：工作流的过程ID
@@ -217,20 +261,20 @@ public class Process extends BaseModel
 	/**
      * 获取：当前活动名称
      */
-    public String getCurrentActivity()
+    public String getCurrentActivityName()
     {
-        return this.currentActivity;
+        return this.currentActivityName;
     }
 
     
     /**
      * 设置：当前活动名称
      * 
-     * @param i_CurrentActivity
+     * @param i_CurrentActivityName
      */
-    public void setCurrentActivity(String i_CurrentActivity)
+    public void setCurrentActivityName(String i_CurrentActivityName)
     {
-        this.currentActivity = i_CurrentActivity;
+        this.currentActivityName = i_CurrentActivityName;
     }
 	
 	
@@ -277,20 +321,20 @@ public class Process extends BaseModel
 	/**
      * 获取：上一活动名称
      */
-    public String getPreviousActivity()
+    public String getPreviousActivityName()
     {
-        return this.previousActivity;
+        return this.previousActivityName;
     }
 
     
     /**
      * 设置：上一活动名称
      * 
-     * @param i_PreviousActivity
+     * @param i_PreviousActivityName
      */
-    public void setPreviousActivity(String i_PreviousActivity)
+    public void setPreviousActivityName(String i_PreviousActivityName)
     {
-        this.previousActivity = i_PreviousActivity;
+        this.previousActivityName = i_PreviousActivityName;
     }
 	
 	
@@ -337,20 +381,20 @@ public class Process extends BaseModel
 	/**
      * 获取：下一活动名称
      */
-    public String getNextActivity()
+    public String getNextActivityName()
     {
-        return this.nextActivity;
+        return this.nextActivityName;
     }
 
     
     /**
      * 设置：下一活动名称
      * 
-     * @param i_NextActivity
+     * @param i_NextActivityName
      */
-    public void setNextActivity(String i_NextActivity)
+    public void setNextActivityName(String i_NextActivityName)
     {
-        this.nextActivity = i_NextActivity;
+        this.nextActivityName = i_NextActivityName;
     }
 	
 	

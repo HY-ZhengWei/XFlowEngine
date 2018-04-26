@@ -110,7 +110,6 @@
                  workID             VARCHAR2(64)                     NOT NULL
                 ,workFatherID       VARCHAR2(64)                     
                 ,flowTemplateID     VARCHAR2(64)                     NOT NULL
-                ,flowVersion        VARCHAR2(32)                     NOT NULL
                 ,serviceDataID      VARCHAR2(64)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
@@ -133,7 +132,6 @@
                 COMMENT ON COLUMN TFlowInfo.workID                        IS '工作流实例ID';/
                 COMMENT ON COLUMN TFlowInfo.workFatherID                  IS '工作流的父实例ID，可为空';/
                 COMMENT ON COLUMN TFlowInfo.flowTemplateID                IS '工作流的模板ID';/
-                COMMENT ON COLUMN TFlowInfo.flowVersion                   IS '工作流的模板版本号';/
                 COMMENT ON COLUMN TFlowInfo.serviceDataID                 IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 COMMENT ON COLUMN TFlowInfo.createrID                     IS '创建人员ID';/
                 COMMENT ON COLUMN TFlowInfo.creater                       IS '创建人员名称';/
@@ -158,7 +156,6 @@
                  workID             VARCHAR(64)                      NOT NULL
                 ,workFatherID       VARCHAR(64)                     
                 ,flowTemplateID     VARCHAR(64)                      NOT NULL
-                ,flowVersion        VARCHAR(32)                      NOT NULL
                 ,serviceDataID      VARCHAR(64)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            NVARCHAR(128)
@@ -181,7 +178,6 @@
                 EXEC P_ColumnComment TFlowInfo ,workID                    ,'工作流实例ID';/
                 EXEC P_ColumnComment TFlowInfo ,workFatherID              ,'工作流的父实例ID，可为空';/
                 EXEC P_ColumnComment TFlowInfo ,flowTemplateID            ,'工作流的模板ID';/
-                EXEC P_ColumnComment TFlowInfo ,flowVersion               ,'工作流的模板版本号';/
                 EXEC P_ColumnComment TFlowInfo ,serviceDataID             ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 EXEC P_ColumnComment TFlowInfo ,createrID                 ,'创建人员ID';/
                 EXEC P_ColumnComment TFlowInfo ,creater                   ,'创建人员名称';/

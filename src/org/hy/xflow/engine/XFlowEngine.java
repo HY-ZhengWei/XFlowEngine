@@ -1,13 +1,10 @@
 package org.hy.xflow.engine;
 
-import javax.xml.bind.ValidationException;
-
 import org.hy.common.Help;
-import org.hy.common.Return;
 import org.hy.common.xml.XJava;
-import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.Participant;
+import org.hy.xflow.engine.bean.Process;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.config.InitConfig;
@@ -40,10 +37,10 @@ public class XFlowEngine
      * @param i_TemplateName   工作流模板名称
      * @param i_User           创建人信息
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
-     * @return
-     * @throws ValidationException 
+     * @return                 成功时，返回工作流实例对象。
+     *                         异常时，抛出错误。
      */
-    public static FlowInfo createByName(String i_TemplateName ,User i_User ,String i_ServiceDataID) throws ValidationException
+    public static FlowInfo createByName(String i_TemplateName ,User i_User ,String i_ServiceDataID)
     {
         if ( Help.isNull(i_TemplateName) )
         {
@@ -63,7 +60,7 @@ public class XFlowEngine
         Template         v_Template        = v_TemplateService.queryByNameMaxVersionNo(i_TemplateName);
         if ( v_Template == null )
         {
-            throw new ValidationException("Template[" + i_TemplateName + "] is not exists.");
+            throw new VerifyError("Template[" + i_TemplateName + "] is not exists.");
         }
         
         // 判定第三方使用系统的业务数据ID是否重复
@@ -74,7 +71,7 @@ public class XFlowEngine
             
             if ( v_FlowInfo != null )
             {
-                throw new ValidationException("ServiceDataID[" + i_ServiceDataID + "] is exists.");
+                throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] is exists.");
             }
         }
         
@@ -82,16 +79,14 @@ public class XFlowEngine
         Participant v_Participant = v_Template.getActivityRouteTree().getStartActivity().isParticipant(i_User);
         if ( v_Participant == null )
         {
-            throw new ValidationException("User is not participants.");
+            throw new VerifyError("User is not participants.");
         }
         
-        FlowInfo v_Flow = new FlowInfo();
+        FlowInfo v_Flow = new FlowInfo(v_Template ,i_User ,i_ServiceDataID);
         
-        v_Flow.setServiceDataID(i_ServiceDataID);
         
         return v_Flow;
     }
-    
     
     
     
@@ -102,7 +97,7 @@ public class XFlowEngine
         ITemplateService v_TemplateService = (ITemplateService)XJava.getObject("TemplateService");
         Template         v_Template        = v_TemplateService.queryByID("T001");
         
-        System.out.println(Help.toSQLSelect(FlowInfo.class ,"A" ,false));
+        System.out.println(Help.toSQLInsert(Process.class ,false));
         
         v_Template.getActivityRouteTree().getStartActivity();
         v_Template.getActivityRouteTree().getActivity("A001");  // 发起选型
