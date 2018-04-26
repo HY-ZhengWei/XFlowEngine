@@ -14,7 +14,7 @@ import org.hy.xflow.engine.common.BaseModel;
  * @createDate  2018-04-17
  * @version     v1.0
  */
-public class Process extends BaseModel
+public class FlowProcess extends BaseModel
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	
@@ -114,43 +114,59 @@ public class Process extends BaseModel
     
 	
     
-    public Process()
+    public FlowProcess()
     {
         
     }
     
     
     
-    public Process(FlowInfo i_Flow ,ActivityInfo i_Activity ,ActivityRoute i_Route)
+    public FlowProcess(User i_User ,FlowInfo i_Flow ,FlowProcess i_Previous ,ActivityInfo i_Activity)
     {
         this.processID            = i_Flow.getLastProcessID();
         this.workID               = i_Flow.getWorkID();
         this.splitProcessID       = "";
-        this.processNo            = "";
         this.currentActivityID    = i_Activity.getActivityID();
         this.currentActivityName  = i_Activity.getActivityName();
-        this.previousProcessID    = "";
-        this.previousActivityID   = "";
-        this.previousActivityName = "";
+        
+        if ( i_Previous == null )
+        {
+            this.processNo              = 1;
+            this.previousProcessID      = "";
+            this.previousActivityID     = "";
+            this.previousActivityName   = "";
+        }
+        else
+        {
+            this.processNo              = -1;  //////////////////////////////////////
+            this.previousProcessID      = i_Previous.getProcessID();
+            this.previousActivityID     = i_Previous.getCurrentActivityID();
+            this.previousActivityName   = i_Previous.getCurrentActivityName();
+            
+            i_Previous.nextProcessID    = this.processID;
+            i_Previous.nextActivityID   = this.currentActivityID;
+            i_Previous.nextActivityName = this.currentActivityName;
+        }
+        
         this.nextProcessID        = "";
         this.nextActivityID       = "";
         this.nextActivityName     = "";
-        this.createrID            = "";
-        this.creater              = "";
-        this.createOrgID          = "";
-        this.createOrg            = "";
-        this.createTime           = "";
+        this.createrID            = i_User.getUserID();
+        this.creater              = i_User.getUserName();
+        this.createOrgID          = i_User.getOrgID();
+        this.createOrg            = i_User.getOrgName();
+        this.createTime           = new Date();
         this.limitUserID          = "";
         this.limitOrgID           = "";
-        this.limitTime            = "";
-        this.operateTime          = "";
-        this.operateTimeLen       = "";
+        this.limitTime            = new Date("2000-01-01 00:00:00");
+        this.operateTime          = this.createTime;
+        this.operateTimeLen       = 0;
         this.operateTypeID        = "";
         this.operateType          = "";
-        this.operateUserID        = "";
-        this.operateUser          = "";
-        this.operateOrgID         = "";
-        this.operateOrg           = "";
+        this.operateUserID        = this.createrID;
+        this.operateUser          = this.creater;
+        this.operateOrgID         = this.createOrgID;
+        this.operateOrg           = this.createOrg;
         this.operateFiles         = "";
         this.operateDatas         = "";
         this.infoComment          = "";

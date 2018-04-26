@@ -1,5 +1,6 @@
 package org.hy.xflow.engine.bean;
 
+import org.hy.common.Help;
 import org.hy.xflow.engine.common.BaseModel;
 
 
@@ -44,7 +45,7 @@ public class User extends BaseModel
      */
     public String getUserID()
     {
-        return userID;
+        return Help.NVL(userID);
     }
     
     
@@ -53,7 +54,7 @@ public class User extends BaseModel
      */
     public String getUserName()
     {
-        return userName;
+        return Help.NVL(userName);
     }
     
 
@@ -62,7 +63,7 @@ public class User extends BaseModel
      */
     public String getOrgID()
     {
-        return orgID;
+        return Help.NVL(orgID);
     }
 
     
@@ -71,7 +72,7 @@ public class User extends BaseModel
      */
     public String getOrgName()
     {
-        return orgName;
+        return Help.NVL(orgName);
     }
     
     
@@ -80,7 +81,7 @@ public class User extends BaseModel
      */
     public String getRoleID()
     {
-        return roleID;
+        return Help.NVL(roleID);
     }
     
     
@@ -89,7 +90,7 @@ public class User extends BaseModel
      */
     public String getRoleName()
     {
-        return roleName;
+        return Help.NVL(roleName);
     }
 
     

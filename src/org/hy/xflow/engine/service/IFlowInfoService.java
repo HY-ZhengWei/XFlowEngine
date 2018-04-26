@@ -1,6 +1,7 @@
 package org.hy.xflow.engine.service;
 
 import org.hy.xflow.engine.bean.FlowInfo;
+import org.hy.xflow.engine.bean.FlowProcess;
 
 
 
@@ -27,5 +28,20 @@ public interface IFlowInfoService
      * @return
      */
     public FlowInfo queryByServiceDataID(String i_ServiceDataID);
+    
+    
+    
+    /**
+     * 创建的工作流实例，当前活动节点为  "开始" 节点。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-26
+     * @version     v1.0
+     *
+     * @param i_FlowInfo
+     * @param i_Process
+     * @return
+     */
+    public boolean createFlow(FlowInfo i_FlowInfo ,FlowProcess i_Process);
     
 }

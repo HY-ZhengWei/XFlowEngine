@@ -2,9 +2,10 @@ package org.hy.xflow.engine;
 
 import org.hy.common.Help;
 import org.hy.common.xml.XJava;
+import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.Participant;
-import org.hy.xflow.engine.bean.Process;
+import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.config.InitConfig;
@@ -22,25 +23,66 @@ import org.hy.xflow.engine.service.ITemplateService;
  * @createDate  2017-03-10
  * @version     v1.0
  */
+@Xjava
 public class XFlowEngine
 {
+    
+    @Xjava
+    private ITemplateService templateService;
+    
+    @Xjava
+    private IFlowInfoService flowInfoService;
+    
+    
+    
+    public static XFlowEngine getInstance()
+    {
+        return (XFlowEngine)XJava.getObject("XFlowEngine");
+    }
+    
+    
     
     /**
      * 按工作流模板名称创建工作流实例。
      * 
-     * 将按模板名称查询版本号最大的有效的模板信息。
+     * 将按模板名称查询版本号最大的有效的工作流模板，用它来创建工作流实例。
+     * 
+     * 创建的工作流实例，当前活动节点为  "开始" 节点。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-26
+     * @version     v1.0
+     *
+     * @param i_User           创建人信息
+     * @param i_TemplateName   工作流模板名称
+     * @return                 成功时，返回工作流实例对象。
+     *                         异常时，抛出错误。
+     */
+    public FlowInfo createByName(User i_User ,String i_TemplateName)
+    {
+        return createByName(i_User ,i_TemplateName ,"");
+    }
+    
+    
+    
+    /**
+     * 按工作流模板名称创建工作流实例。
+     * 
+     * 将按模板名称查询版本号最大的有效的工作流模板，用它来创建工作流实例。
+     * 
+     * 创建的工作流实例，当前活动节点为  "开始" 节点。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-04-25
      * @version     v1.0
      *
-     * @param i_TemplateName   工作流模板名称
      * @param i_User           创建人信息
+     * @param i_TemplateName   工作流模板名称
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
      * @return                 成功时，返回工作流实例对象。
      *                         异常时，抛出错误。
      */
-    public static FlowInfo createByName(String i_TemplateName ,User i_User ,String i_ServiceDataID)
+    public FlowInfo createByName(User i_User ,String i_TemplateName ,String i_ServiceDataID)
     {
         if ( Help.isNull(i_TemplateName) )
         {
@@ -56,8 +98,7 @@ public class XFlowEngine
         }
         
         // 查询并判定工作流模板是否存在
-        ITemplateService v_TemplateService = (ITemplateService)XJava.getObject("TemplateService");
-        Template         v_Template        = v_TemplateService.queryByNameMaxVersionNo(i_TemplateName);
+        Template v_Template = this.templateService.queryByNameMaxVersionNo(i_TemplateName);
         if ( v_Template == null )
         {
             throw new VerifyError("Template[" + i_TemplateName + "] is not exists.");
@@ -66,8 +107,7 @@ public class XFlowEngine
         // 判定第三方使用系统的业务数据ID是否重复
         if ( !Help.isNull(i_ServiceDataID) )
         {
-            IFlowInfoService v_FlowInfoService = (IFlowInfoService)XJava.getObject("FlowInfoService");
-            FlowInfo         v_FlowInfo        = v_FlowInfoService.queryByServiceDataID(i_ServiceDataID);
+            FlowInfo v_FlowInfo = this.flowInfoService.queryByServiceDataID(i_ServiceDataID);
             
             if ( v_FlowInfo != null )
             {
@@ -82,10 +122,18 @@ public class XFlowEngine
             throw new VerifyError("User is not participants.");
         }
         
-        FlowInfo v_Flow = new FlowInfo(v_Template ,i_User ,i_ServiceDataID);
+        FlowInfo    v_Flow    = new FlowInfo(i_User ,v_Template ,i_ServiceDataID);
+        FlowProcess v_Process = new FlowProcess(i_User ,v_Flow ,null ,v_Template.getActivityRouteTree().getStartActivity());
+        boolean     v_Ret     = this.flowInfoService.createFlow(v_Flow ,v_Process);
         
-        
-        return v_Flow;
+        if ( v_Ret )
+        {
+            return v_Flow;
+        }
+        else
+        {
+            throw new RuntimeException("Create flow is error.");
+        }
     }
     
     
@@ -108,6 +156,10 @@ public class XFlowEngine
         v_Template.getActivityRouteTree().getActivity("A006");  // 多人选型
         v_Template.getActivityRouteTree().getActivity("A007");  // 选型汇总
         v_Template.getActivityRouteTree().getActivity("A008");  // 选型结果确认
+        
+        
+        User v_User = new User();
+        XFlowEngine.getInstance().createByName(v_User ,"智能选型");
     }
     
 }

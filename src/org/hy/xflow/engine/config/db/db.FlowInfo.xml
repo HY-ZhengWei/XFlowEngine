@@ -75,23 +75,23 @@
 				       ,isDelete
 				       )
                 VALUES (
-                        ':workID'
-				       ,':workFatherID'
-				       ,':flowTemplateID'
-				       ,':serviceDataID'
-				       ,':createrID'
-				       ,':creater'
-				       ,':createOrgID'
-				       ,':createOrg'
-				       ,':createTime'
-				       ,':lastUserID'
-				       ,':lastUser'
-				       ,':lastTime'
-				       ,':lastOrgID'
-				       ,':lastOrg'
-				       ,':lastProcessID'
-				       , :isValid
-				       , :isDelete
+                        ':flow.workID'
+				       ,':flow.workFatherID'
+				       ,':flow.flowTemplateID'
+				       ,':flow.serviceDataID'
+				       ,':flow.createrID'
+				       ,':flow.creater'
+				       ,':flow.createOrgID'
+				       ,':flow.createOrg'
+				       ,':flow.createTime'
+				       ,':flow.lastUserID'
+				       ,':flow.lastUser'
+				       ,':flow.lastTime'
+				       ,':flow.lastOrgID'
+				       ,':flow.lastOrg'
+				       ,':flow.lastProcessID'
+				       , :flow.isValid
+				       , :flow.isDelete
                        )
 				]]>
 			</content>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流实例与过程模块的相关SQL -->
+	<sqls>
+	
+		<sqlGroup id="GXSQL_Flow_Create">
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_FlowInfo_Insert" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_Process_Insert" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+		</sqlGroup>
+		
+	</sqls>
+	
+</config>

@@ -1,6 +1,7 @@
 package org.hy.xflow.engine.bean;
 
 import org.hy.common.Date;
+import org.hy.common.Help;
 import org.hy.xflow.engine.common.BaseModel;
 import org.hy.xflow.engine.common.IDHelp;
 
@@ -80,12 +81,12 @@ public class FlowInfo extends BaseModel
     
     
     
-    public FlowInfo(Template i_Template ,User i_User ,String i_ServiceDataID)
+    public FlowInfo(User i_User ,Template i_Template ,String i_ServiceDataID)
     {
         this.workID         = IDHelp.makeID();
         this.workFatherID   = "";
         this.flowTemplateID = i_Template.getTemplateID();
-        this.serviceDataID  = i_ServiceDataID;
+        this.serviceDataID  = Help.NVL(i_ServiceDataID);
         this.createrID      = i_User.getUserID();
         this.creater        = i_User.getUserName();
         this.createOrgID    = i_User.getOrgID();

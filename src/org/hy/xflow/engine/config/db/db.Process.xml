@@ -24,13 +24,13 @@
 				       ,splitProcessID
 				       ,processNo
 				       ,currentActivityID
-				       ,currentActivity
+				       ,currentActivityName
 				       ,previousProcessID
 				       ,previousActivityID
-				       ,previousActivity
+				       ,previousActivityName
 				       ,nextProcessID
 				       ,nextActivityID
-				       ,nextActivity
+				       ,nextActivityName
 				       ,createrID
 				       ,creater
 				       ,createOrgID
@@ -52,37 +52,37 @@
 				       ,infoComment
 				       )
 				VALUES (
-				        ':processID'
-				       ,':workID'
-				       ,':splitProcessID'
-				       , :processNo
-				       ,':currentActivityID'
-				       ,':currentActivity'
-				       ,':previousProcessID'
-				       ,':previousActivityID'
-				       ,':previousActivity'
-				       ,':nextProcessID'
-				       ,':nextActivityID'
-				       ,':nextActivity'
-				       ,':createrID'
-				       ,':creater'
-				       ,':createOrgID'
-				       ,':createOrg'
-				       ,':createTime'
-				       ,':limitUserID'
-				       ,':limitOrgID'
-				       ,':limitTime'
-				       ,':operateTime'
-				       , :operateTimeLen
-				       ,':operateTypeID'
-				       ,':operateType'
-				       ,':operateUserID'
-				       ,':operateUser'
-				       ,':operateOrgID'
-				       ,':operateOrg'
-				       ,':operateFiles'
-				       ,':operateDatas'
-				       ,':infoComment'
+				        ':process.processID'
+				       ,':process.workID'
+				       ,':process.splitProcessID'
+				       , :process.processNo
+				       ,':process.currentActivityID'
+				       ,':process.currentActivityName'
+				       ,':process.previousProcessID'
+				       ,':process.previousActivityID'
+				       ,':process.previousActivityName'
+				       ,':process.nextProcessID'
+				       ,':process.nextActivityID'
+				       ,':process.nextActivityName'
+				       ,':process.createrID'
+				       ,':process.creater'
+				       ,':process.createOrgID'
+				       ,':process.createOrg'
+				       ,':process.createTime'
+				       ,':process.limitUserID'
+				       ,':process.limitOrgID'
+				       ,':process.limitTime'
+				       ,':process.operateTime'
+				       , :process.operateTimeLen
+				       ,':process.operateTypeID'
+				       ,':process.operateType'
+				       ,':process.operateUserID'
+				       ,':process.operateUser'
+				       ,':process.operateOrgID'
+				       ,':process.operateOrg'
+				       ,':process.operateFiles'
+				       ,':process.operateDatas'
+				       ,':process.infoComment'
 				       )
 				]]>
 			</content>
