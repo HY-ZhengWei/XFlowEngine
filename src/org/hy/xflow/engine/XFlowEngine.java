@@ -1,14 +1,16 @@
 package org.hy.xflow.engine;
 
+import java.util.List;
+
 import org.hy.common.Help;
 import org.hy.common.xml.XJava;
 import org.hy.common.xml.annotation.Xjava;
+import org.hy.xflow.engine.bean.ActivityRoute;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.Participant;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
-import org.hy.xflow.engine.config.InitConfig;
 import org.hy.xflow.engine.service.IFlowInfoService;
 import org.hy.xflow.engine.service.ITemplateService;
 
@@ -139,40 +141,44 @@ public class XFlowEngine
     
     
     
-    public static void main(String [] args)
+    public List<ActivityRoute> queryNextRoutes(String i_WorkID)
     {
-        new InitConfig();
+        FlowInfo v_FlowInfo = this.flowInfoService.queryByWorkID(i_WorkID);
+        if ( v_FlowInfo == null || Help.isNull(v_FlowInfo.getWorkID()))
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] is not exists.");
+        }
         
-        ITemplateService v_TemplateService = (ITemplateService)XJava.getObject("TemplateService");
-        Template         v_Template        = v_TemplateService.queryByID("T001");
-        
-        System.out.println(Help.toSQLInsert(Process.class ,false));
-        
-        v_Template.getActivityRouteTree().getStartActivity();
-        v_Template.getActivityRouteTree().getActivity("A001");  // 发起选型
-        v_Template.getActivityRouteTree().getActivity("A002");  // 选型受理
-        v_Template.getActivityRouteTree().getActivity("A003");  // 选型评审
-        v_Template.getActivityRouteTree().getActivity("A004");  // 单人选型
-        v_Template.getActivityRouteTree().getActivity("A005");  // 选型分包
-        v_Template.getActivityRouteTree().getActivity("A006");  // 多人选型
-        v_Template.getActivityRouteTree().getActivity("A007");  // 选型汇总
-        v_Template.getActivityRouteTree().getActivity("A008");  // 选型结果确认
+        Template v_Template = this.templateService.queryByID(v_FlowInfo.getFlowTemplateID());
+        if ( v_Template == null )
+        {
+            throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not exists.");
+        }
         
         
         
-        User v_Saler = new User();
-        v_Saler.setUserID("8a81b2b54b7b391b014b7d12b66400fc");
-        v_Saler.setUserName("公用销售人员");
-        v_Saler.setRoleID("004");
-        v_Saler.setRoleName("销售人员");
-        
-        User v_Manager = new User();
-        v_Manager.setUserID("E10ADC3949BA59ABBE56E057F20F922E");
-        v_Manager.setUserName("霍桂霞");
-        v_Manager.setRoleID("001");
-        v_Manager.setRoleName("选型主管");
-        
-        XFlowEngine.getInstance().createByName(v_Saler ,"智能选型");
+        return null;
+    }
+    
+    
+    
+    public List<ActivityRoute> queryNextRoutesByServiceDataID(String i_ServiceDataID)
+    {
+        return null;
+    }
+    
+    
+    
+    public List<FlowProcess> queryProcess(String i_WorkID)
+    {
+        return null;
+    }
+    
+    
+    
+    public List<FlowProcess> queryProcessByServiceDataID(String iServiceDataID)
+    {
+        return null;
     }
     
 }

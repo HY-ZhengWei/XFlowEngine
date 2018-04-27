@@ -212,6 +212,7 @@
                 (
                  processID              VARCHAR2(64)                     NOT NULL
                 ,workID                 VARCHAR2(64)                     NOT NULL
+                ,serviceDataID          VARCHAR2(64)
                 ,splitProcessID         VARCHAR2(64)
                 ,processNo              NUMBER(10)                       NOT NULL
                 ,currentActivityID      VARCHAR2(64)                     NOT NULL
@@ -248,6 +249,7 @@
                 COMMENT ON TABLE  TProcess                               IS '工作流过程表';/
                 COMMENT ON COLUMN TProcess.processID                     IS '工作流的过程ID';/
                 COMMENT ON COLUMN TProcess.workID                        IS '工作流实例ID';/
+                COMMENT ON COLUMN TProcess.serviceDataID                 IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 COMMENT ON COLUMN TProcess.splitProcessID                IS '分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
                 COMMENT ON COLUMN TProcess.processNo                     IS '工作流的过程编号。下标从1开始';/
                 COMMENT ON COLUMN TProcess.currentActivityID             IS '当前活动ID';/
@@ -286,6 +288,7 @@
                 (
                  processID               VARCHAR(64)                      NOT NULL
                 ,workID                  VARCHAR(64)                      NOT NULL
+                ,serviceDataID           VARCHAR(64)
                 ,splitProcessID          VARCHAR(64)
                 ,processNo               INT                              NOT NULL
                 ,currentActivityID       VARCHAR(64)                      NOT NULL
@@ -322,6 +325,7 @@
                 EXEC P_TableComment  TProcess                               ,'工作流过程表';/
                 EXEC P_ColumnComment TProcess ,processID                    ,'工作流的过程ID';/
                 EXEC P_ColumnComment TProcess ,workID                       ,'工作流实例ID';/
+                EXEC P_ColumnComment TProcess ,serviceDataID                ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 EXEC P_ColumnComment TProcess ,splitProcessID               ,'分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
                 EXEC P_ColumnComment TProcess ,processNo                    ,'工作流的过程编号。下标从1开始';/
                 EXEC P_ColumnComment TProcess ,currentActivityID            ,'当前活动ID';/

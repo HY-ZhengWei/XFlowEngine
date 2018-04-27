@@ -11,7 +11,7 @@
     <!-- 工作流信息表模块的相关SQL -->
 	<sqls>
 	
-		<sql id="XSQL_XFlow_FlowInfo_QueryByServiceDataID"> 
+		<sql id="XSQL_XFlow_FlowInfo_QueryByWorkID_ServiceDataID"> 
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
@@ -35,7 +35,8 @@
 				       ,A.isValid
 				       ,A.isDelete
 				  FROM  TFlowInfo  A
-				 WHERE  A.serviceDataID = ':serviceDataID'
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  A.workID        = ':workID'          ]>
 				]]>
 			</content>
 			

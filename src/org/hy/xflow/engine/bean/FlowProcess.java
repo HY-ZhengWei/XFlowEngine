@@ -25,6 +25,9 @@ public class FlowProcess extends BaseModel
 	/** 工作流实例ID */
     private String workID;
     
+    /** 第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息 */
+    private String serviceDataID;
+    
 	/** 分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值 */
     private String splitProcessID;
     
@@ -124,6 +127,7 @@ public class FlowProcess extends BaseModel
     public FlowProcess(User i_User ,FlowInfo i_Flow ,FlowProcess i_Previous ,ActivityInfo i_Activity)
     {
         this.processID            = i_Flow.getLastProcessID();
+        this.serviceDataID        = i_Flow.getServiceDataID();
         this.workID               = i_Flow.getWorkID();
         this.splitProcessID       = "";
         this.currentActivityID    = i_Activity.getActivityID();
@@ -214,7 +218,27 @@ public class FlowProcess extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     */
+    public String getServiceDataID()
+    {
+        return serviceDataID;
+    }
+    
+    
+    /**
+     * 设置：第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * 
+     * @param serviceDataID 
+     */
+    public void setServiceDataID(String serviceDataID)
+    {
+        this.serviceDataID = serviceDataID;
+    }
+    
+
+    /**
      * 获取：分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值
      */
     public String getSplitProcessID()
