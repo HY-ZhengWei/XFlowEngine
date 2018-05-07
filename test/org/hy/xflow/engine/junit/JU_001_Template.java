@@ -1,10 +1,14 @@
 package org.hy.xflow.engine.junit;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.hy.common.Help;
 import org.hy.common.xml.XJava;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.common.BaseJunit;
+import org.hy.xflow.engine.dao.ITemplateDAO;
 import org.hy.xflow.engine.service.ITemplateService;
 import org.junit.Test;
 
@@ -37,6 +41,11 @@ public class JU_001_Template extends BaseJunit
         v_Template.getActivityRouteTree().getActivity("A006");  // 多人选型
         v_Template.getActivityRouteTree().getActivity("A007");  // 选型汇总
         v_Template.getActivityRouteTree().getActivity("A008");  // 选型结果确认
+        
+        
+        Map<String ,Long> v_Map = new HashMap<String ,Long>(); 
+        v_Map.put("templateID" ,1L);
+        v_Template = ((ITemplateDAO)XJava.getObject("TemplateDAO")).queryByID(v_Map);
     }
     
     

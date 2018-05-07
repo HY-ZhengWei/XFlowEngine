@@ -25,6 +25,9 @@ public class ProcessParticipant extends Participant
 	/** 工作流实例ID */
     private String workID;
     
+    /** 第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息 */
+    private String serviceDataID;
+    
 	/** 创建部门ID */
     private String createOrgID;
     
@@ -93,7 +96,27 @@ public class ProcessParticipant extends Participant
     }
 	
 	
-	/**
+    /**
+     * 获取：第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     */
+    public String getServiceDataID()
+    {
+        return serviceDataID;
+    }
+
+    
+    /**
+     * 设置：第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * 
+     * @param serviceDataID 
+     */
+    public void setServiceDataID(String serviceDataID)
+    {
+        this.serviceDataID = serviceDataID;
+    }
+
+
+    /**
      * 获取：创建部门ID
      */
     public String getCreateOrgID()

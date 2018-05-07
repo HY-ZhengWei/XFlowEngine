@@ -376,6 +376,7 @@
                  pwpID              VARCHAR2(64)                     NOT NULL
                 ,processID          VARCHAR2(64)                     NOT NULL
                 ,workID             VARCHAR2(64)                     NOT NULL
+                ,serviceDataID      VARCHAR2(64)
                 ,objectType         NUMBER(2)                        NOT NULL
                 ,objectID           VARCHAR2(64)                     NOT NULL
                 ,objectName         NVARCHAR2(128)
@@ -393,6 +394,7 @@
                 COMMENT ON COLUMN TProcessParticipants.pwpID              IS '主键ID';/
                 COMMENT ON COLUMN TProcessParticipants.processID          IS '工作流的过程ID';/
                 COMMENT ON COLUMN TProcessParticipants.workID             IS '工作流实例ID';/
+                COMMENT ON COLUMN TProcessParticipants.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 COMMENT ON COLUMN TProcessParticipants.objectType         IS '参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 COMMENT ON COLUMN TProcessParticipants.objectID           IS '参与者ID';/
                 COMMENT ON COLUMN TProcessParticipants.objectName         IS '参与者名称';/
@@ -412,6 +414,7 @@
                  pwpID              VARCHAR(64)                     NOT NULL
                 ,processID          VARCHAR(64)                     NOT NULL
                 ,workID             VARCHAR(64)                     NOT NULL
+                ,serviceDataID      VARCHAR(64)
                 ,objectType         INT                             NOT NULL
                 ,objectID           VARCHAR(64)                     NOT NULL
                 ,objectName         NVARCHAR(128)
@@ -429,6 +432,7 @@
                 EXEC P_ColumnComment TProcessParticipants ,pwpID              ,'主键ID';/
                 EXEC P_ColumnComment TProcessParticipants ,processID          ,'工作流的过程ID';/
                 EXEC P_ColumnComment TProcessParticipants ,workID             ,'工作流实例ID';/
+                EXEC P_ColumnComment TProcessParticipants ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 EXEC P_ColumnComment TProcessParticipants ,objectType         ,'参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 EXEC P_ColumnComment TProcessParticipants ,objectID           ,'参与者ID';/
                 EXEC P_ColumnComment TProcessParticipants ,objectName         ,'参与者名称';/

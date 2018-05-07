@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.bean;
 
+import java.util.List;
+
 import org.hy.common.Date;
 import org.hy.xflow.engine.common.BaseModel;
 
@@ -17,7 +19,10 @@ import org.hy.xflow.engine.common.BaseModel;
 public class FlowProcess extends BaseModel
 {
     private static final long serialVersionUID = -4724247321457107633L;
-	
+    
+    
+    /** 工作流的参与人 */
+	private List<ProcessParticipant> participants;
     
 	/** 工作流的过程ID */
     private String processID;
@@ -176,9 +181,29 @@ public class FlowProcess extends BaseModel
         this.infoComment          = "";
     }
     
-    
 	
-	/**
+	
+    /**
+     * 获取：工作流的参与人
+     */
+    public List<ProcessParticipant> getParticipants()
+    {
+        return participants;
+    }
+
+    
+    /**
+     * 设置：工作流的参与人
+     * 
+     * @param participants 
+     */
+    public void setParticipants(List<ProcessParticipant> participants)
+    {
+        this.participants = participants;
+    }
+
+
+    /**
      * 获取：工作流的过程ID
      */
     public String getProcessID()

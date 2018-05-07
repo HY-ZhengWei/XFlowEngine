@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.dao;
 
+import java.util.Map;
+
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
@@ -20,6 +22,22 @@ import org.hy.xflow.engine.bean.Template;
 @Xjava(id="TemplateDAO" ,value=XType.XSQL)
 public interface ITemplateDAO
 {
+    
+    
+    /**
+     * 按模板ID查询模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-18
+     * @version     v1.0
+     *
+     * @param i_TemplateID  模板ID
+     * @return
+     */
+    @Xsql(id="XSQL_XFlow_Template_QueryByID_NameVersionNo" ,returnOne=true)
+    public Template queryByID(Map<String ,Long> i_TemplateIDs);
+    
+    
     
     /**
      * 按模板ID查询模板信息

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.hy.common.Help;
 import org.hy.common.PartitionMap;
+import org.hy.common.TablePartitionRID;
 import org.hy.xflow.engine.common.BaseModel;
 
 
@@ -26,23 +27,26 @@ public class ActivityRouteTree extends BaseModel
     private static final long serialVersionUID = 5366730038571520921L;
     
 
-    /** 模板的所有活动 */
-    private Map<String ,ActivityInfo>           allActivitys;
+    /** 模板的所有活动。Map.key为活动ID */
+    private Map<String ,ActivityInfo>                allActivitys;
     
-    /** 模板的所有路由 */
-    private PartitionMap<String ,ActivityRoute> allRoutes;
+    /** 模板的所有路由。Map.key为活动ID */
+    private PartitionMap<String ,ActivityRoute>      allRoutes;
     
-    /** 模板的活动路由的所有参与人 */
-    private PartitionMap<String ,Participant>   allActivityPs;
+    /** 模板的所有路由。Map.key分区为活动ID ,Map主键索引为路由ID */
+    private TablePartitionRID<String ,ActivityRoute> allRoutesByARID;
     
-    /** 模板的活动路由的所有参与人 */
-    private PartitionMap<String ,Participant>   allActivityRoutePs;
+    /** 模板的活动的所有参与人。Map.key为路由ID */
+    private PartitionMap<String ,Participant>        allActivityPs;
+    
+    /** 模板的活动路由的所有参与人。Map.key为路由ID */
+    private PartitionMap<String ,Participant>        allActivityRoutePs;
     
     /** 整个活动路由树的 "开始" 活动节点 */
-    private ActivityInfo                        startActivity;
+    private ActivityInfo                             startActivity;
     
     /** 整个活动路由树的 "结束" 活动节点 */
-    private ActivityInfo                        endActivity;
+    private ActivityInfo                             endActivity;
     
     
     
@@ -53,6 +57,7 @@ public class ActivityRouteTree extends BaseModel
     {
         this.allActivitys       = i_AllActivitys;
         this.allRoutes          = i_AllRoutes;
+        this.allRoutesByARID    = new TablePartitionRID<String ,ActivityRoute>();
         this.allActivityPs      = i_AllActivityPs;
         this.allActivityRoutePs = i_AllActivityRoutePs;
         
@@ -120,6 +125,24 @@ public class ActivityRouteTree extends BaseModel
     
     
     /**
+     * 获取活动的具体的某一个路由信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-07
+     * @version     v1.0
+     *
+     * @param i_ActivityID     活动ID
+     * @param i_ActivityRoute  路由ID
+     * @return
+     */
+    public ActivityRoute getActivityRoute(String i_ActivityID ,String i_ActivityRoute)
+    {
+        return this.allRoutesByARID.get(i_ActivityID).get(i_ActivityRoute);
+    }
+    
+    
+    
+    /**
      * 按活动路由生成活动路由树
      * 
      * @author      ZhengWei(HY)
@@ -127,6 +150,7 @@ public class ActivityRouteTree extends BaseModel
      * @version     v1.0
      *
      */
+    @SuppressWarnings("unchecked")
     public void makeActivityRouteTree()
     {
         if ( Help.isNull(allActivitys) 
@@ -137,6 +161,11 @@ public class ActivityRouteTree extends BaseModel
           || this.endActivity   == null )
         {
             return;
+        }
+        
+        for (Map.Entry<String ,List<ActivityRoute>> v_Routes : this.allRoutes.entrySet())
+        {
+            this.allRoutesByARID.putRows(v_Routes.getKey() ,(Map<String ,ActivityRoute>)Help.toMap(v_Routes.getValue() ,"activityRouteID"));
         }
         
         this.makeActivityRouteTree(this.startActivity);
@@ -158,7 +187,7 @@ public class ActivityRouteTree extends BaseModel
         io_CurrentActivity.setParticipants(allActivityPs.get(io_CurrentActivity.getActivityID()));
         List<ActivityRoute> v_CurrentARoutes = allRoutes.get(io_CurrentActivity.getActivityID());
         
-        System.out.println(log(io_CurrentActivity));
+        // System.out.println(log(io_CurrentActivity));
         
         if ( !Help.isNull(v_CurrentARoutes) )
         {
@@ -177,7 +206,7 @@ public class ActivityRouteTree extends BaseModel
                     {
                         v_CurrentARoute.setNextActivity(v_NextActivity);
                         
-                        System.out.println(log(v_CurrentARoute));
+                        // System.out.println(log(v_CurrentARoute));
                         
                         if ( !Help.isNull(v_NextActivity.getRoutes()) )
                         {
