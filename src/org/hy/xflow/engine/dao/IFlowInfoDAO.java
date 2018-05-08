@@ -67,4 +67,21 @@ public interface IFlowInfoDAO
     public boolean createFlow(@Xparam("flow")    FlowInfo    i_FlowInfo 
                              ,@Xparam("process") FlowProcess i_Process);
     
+    
+    
+    /**
+     * 工作流流转，并更新前一个流转信息。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-07
+     * @version     v1.0
+     *
+     * @param i_Process   新流转的过程信息
+     * @param i_Previous  前一个流转的过程信息
+     * @return
+     */
+    @Xsql("GXSQL_Flow_ToNext")
+    public boolean toNext(@Xparam("process")  FlowProcess i_Process
+                         ,@Xparam("previous") FlowProcess i_Previous);
+    
 }

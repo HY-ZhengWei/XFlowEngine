@@ -51,6 +51,37 @@ public class XFlowEngine
     
     
     /**
+     * 判定用户参与人之一。
+     * 
+     * 联合活动节点、活动路由一起判定。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-08
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public static Participant isParticipant(User i_User ,ActivityRoute i_Route)
+    {
+        Participant v_Participant = null;
+        
+        if ( Help.isNull(i_Route.getParticipants()) )
+        {
+            v_Participant = i_Route.getActivity().isParticipant(i_User);
+        }
+        else
+        {
+            // 路由级别高于活动节点，当路由上有参与人要求时，按路由的要求走
+            v_Participant = i_Route.isParticipant(i_User);
+        }
+        
+        return v_Participant;
+    }
+    
+    
+    
+    /**
      * 按工作流模板名称创建工作流实例。
      * 
      * 将按模板名称查询版本号最大的有效的工作流模板，用它来创建工作流实例。
@@ -128,11 +159,11 @@ public class XFlowEngine
         Participant v_Participant = v_Template.getActivityRouteTree().getStartActivity().isParticipant(i_User);
         if ( v_Participant == null )
         {
-            throw new VerifyError("User is not participants.");
+            throw new VerifyError("User[" + i_User.getUserID() + "] is not participants for TemplateName[" + i_TemplateName + "].");
         }
         
         FlowInfo    v_Flow    = new FlowInfo(i_User ,v_Template ,i_ServiceDataID);
-        FlowProcess v_Process = new FlowProcess(i_User ,v_Flow ,null ,v_Template.getActivityRouteTree().getStartActivity());
+        FlowProcess v_Process = new FlowProcess().init_CreateFlow(i_User ,v_Flow ,v_Template.getActivityRouteTree().getStartActivity());
         boolean     v_Ret     = this.flowInfoService.createFlow(v_Flow ,v_Process);
         
         if ( v_Ret )
@@ -141,7 +172,7 @@ public class XFlowEngine
         }
         else
         {
-            throw new RuntimeException("Create flow is error.");
+            throw new RuntimeException("ServiceDataID[" + i_ServiceDataID + "] create flow is error. User[" + i_User.getUserID() + "] TemplateName[" + i_TemplateName + "]");
         }
     }
     
@@ -319,6 +350,19 @@ public class XFlowEngine
     
     
     
+    /**
+     * 向下一个活动节点流转
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-07
+     * @version     v1.0
+     *
+     * @param i_User              操作用户 
+     * @param i_WorkID            工作流ID
+     * @param i_ActivityID        当前活动节点ID。相对于下一个活动，即为前一个活动节点ID
+     * @param i_ActivityRouteID   走的路由
+     * @return
+     */
     public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityID ,String i_ActivityRouteID)
     {
         if ( i_User == null )
@@ -343,7 +387,7 @@ public class XFlowEngine
         }
         
         FlowInfo v_FlowInfo = this.flowInfoService.queryByWorkID(i_WorkID);
-        if ( v_FlowInfo == null || Help.isNull(v_FlowInfo.getWorkID()))
+        if ( v_FlowInfo == null || Help.isNull(v_FlowInfo.getWorkID()) )
         {
             throw new NullPointerException("WorkID[" + i_WorkID + "] is not exists.");
         }
@@ -360,9 +404,142 @@ public class XFlowEngine
             throw new NullPointerException("ActivityID[" + i_ActivityID + "] and ActivityRouteID[" + i_ActivityRouteID + "] is not exists.");
         }
         
-        FlowProcess v_Process = new FlowProcess();
+        // 判定是否为参与人
+        Participant v_Participant = isParticipant(i_User ,v_Route);
+        if ( v_Participant == null )
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
+        }
         
-        return v_Process;
+        List<FlowProcess> v_ProcessList = this.flowProcessService.queryByWorkID(i_WorkID);
+        if ( Help.isNull(v_ProcessList) )
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] ProcessList is not exists.");
+        }
+        
+        int         v_PIndex   = 0;
+        FlowProcess v_Previous = null;
+        for (; v_PIndex < v_ProcessList.size(); v_PIndex++)
+        {
+            v_Previous = v_ProcessList.get(v_PIndex);
+            
+            // 预留代码
+            break;
+        }
+        if ( v_Previous == null )
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
+        }
+        
+        FlowProcess v_Process = new FlowProcess();
+        v_Process.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_Route.getNextActivity());
+        
+        boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        if ( v_Ret )
+        {
+            return v_Process;
+        }
+        else
+        {
+            throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is error. ActivityID[" + i_ActivityID + "]  ActivityRouteID[" + i_ActivityRouteID + "] User[" + i_User.getUserID() + "]");
+        }
+    }
+    
+    
+    
+    /**
+     * 按第三方使用系统的业务数据ID，向下一个活动节点流转
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-07
+     * @version     v1.0
+     *
+     * @param i_User              操作用户 
+     * @param i_ServiceDataID     第三方使用系统的业务数据ID
+     * @param i_ActivityID        当前活动节点ID。相对于下一个活动，即为前一个活动节点ID
+     * @param i_ActivityRouteID   走的路由
+     * @return
+     */
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID)
+    {
+        if ( i_User == null )
+        {
+            throw new NullPointerException("User is null.");
+        }
+        else if ( Help.isNull(i_User.getUserID()) )
+        {
+            throw new NullPointerException("UserID is null.");
+        }
+        else if ( Help.isNull(i_ServiceDataID) )
+        {
+            throw new NullPointerException("ServiceDataID is null.");
+        }
+        else if ( Help.isNull(i_ActivityID) )
+        {
+            throw new NullPointerException("ActivityID is null.");
+        }
+        else if ( Help.isNull(i_ActivityRouteID) )
+        {
+            throw new NullPointerException("ActivityRouteID is null.");
+        }
+        
+        FlowInfo v_FlowInfo = this.flowInfoService.queryByServiceDataID(i_ServiceDataID);
+        if ( v_FlowInfo == null || Help.isNull(v_FlowInfo.getWorkID()) )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not exists.");
+        }
+        
+        Template v_Template = this.templateService.queryByID(v_FlowInfo.getFlowTemplateID());
+        if ( v_Template == null )
+        {
+            throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not exists.");
+        }
+        
+        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(i_ActivityID ,i_ActivityRouteID);
+        if ( v_Route == null )
+        {
+            throw new NullPointerException("ActivityID[" + i_ActivityID + "] and ActivityRouteID[" + i_ActivityRouteID + "] is not exists.");
+        }
+        
+        // 判定是否为参与人
+        Participant v_Participant = isParticipant(i_User ,v_Route);
+        if ( v_Participant == null )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not grant to User[" + i_User.getUserID() + "].");
+        }
+        
+        List<FlowProcess> v_ProcessList = this.flowProcessService.queryByServiceDataID(i_ServiceDataID);
+        if ( Help.isNull(v_ProcessList) )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] ProcessList is not exists.");
+        }
+        
+        int         v_PIndex   = 0;
+        FlowProcess v_Previous = null;
+        for (; v_PIndex < v_ProcessList.size(); v_PIndex++)
+        {
+            v_Previous = v_ProcessList.get(v_PIndex);
+            
+            // 预留代码
+            break;
+        }
+        if ( v_Previous == null )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not grant to User[" + i_User.getUserID() + "].");
+        }
+        
+        FlowProcess v_Process = new FlowProcess();
+        v_Process.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_Route.getNextActivity());
+        
+        boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        if ( v_Ret )
+        {
+            return v_Process;
+        }
+        else
+        {
+            throw new RuntimeException("ServiceDataID[" + i_ServiceDataID + "] to next process is error. ActivityID[" + i_ActivityID + "]  ActivityRouteID[" + i_ActivityRouteID + "] User[" + i_User.getUserID() + "]");
+        }
     }
     
 }

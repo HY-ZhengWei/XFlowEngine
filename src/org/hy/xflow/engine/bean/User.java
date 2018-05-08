@@ -1,5 +1,8 @@
 package org.hy.xflow.engine.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hy.common.Help;
 import org.hy.xflow.engine.common.BaseModel;
 
@@ -32,12 +35,31 @@ public class User extends BaseModel
     /** 部门名称 */
     private String orgName;
     
-    /** 角色ID */
-    private String roleID;
+    /** 用户角色。支持多角色功能 */
+    private List<UserRole> roles;
     
-    /** 角色名称 */
-    private String roleName;
-
+    
+    
+    /**
+     * 添加多角色
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-08
+     * @version     v1.0
+     *
+     * @param i_RoleID
+     * @param i_RoleName
+     */
+    public synchronized void addRole(String i_RoleID ,String i_RoleName)
+    {
+        if ( this.roles == null )
+        {
+            this.roles = new ArrayList<UserRole>();
+        }
+        
+        this.roles.add(new UserRole(i_RoleID ,i_RoleName));
+    }
+    
     
     
     /**
@@ -76,23 +98,6 @@ public class User extends BaseModel
     }
     
     
-    /**
-     * 获取：角色ID
-     */
-    public String getRoleID()
-    {
-        return Help.NVL(roleID);
-    }
-    
-    
-    /**
-     * 获取：角色名称
-     */
-    public String getRoleName()
-    {
-        return Help.NVL(roleName);
-    }
-
     
     /**
      * 设置：用户ID
@@ -137,26 +142,26 @@ public class User extends BaseModel
         this.orgName = orgName;
     }
 
-    
-    /**
-     * 设置：角色ID
-     * 
-     * @param roleID 
-     */
-    public void setRoleID(String roleID)
-    {
-        this.roleID = roleID;
-    }
 
     
     /**
-     * 设置：角色名称
-     * 
-     * @param roleName 
+     * 获取：用户角色。支持多角色功能
      */
-    public void setRoleName(String roleName)
+    public List<UserRole> getRoles()
     {
-        this.roleName = roleName;
+        return roles;
     }
     
+    
+    
+    /**
+     * 设置：用户角色。支持多角色功能
+     * 
+     * @param roles 
+     */
+    public void setRoles(List<UserRole> roles)
+    {
+        this.roles = roles;
+    }
+
 }

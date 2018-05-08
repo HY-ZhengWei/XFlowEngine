@@ -21,6 +21,24 @@
 				<sql  ref="XSQL_XFlow_Process_Insert" />
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
+			
+			<comment>创建工作流实例</comment>
+		</sqlGroup>
+		
+		
+		
+		<sqlGroup id="GXSQL_Flow_ToNext">
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_Process_Insert" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_Process_UpdatePrevious" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<comment>工作流流转，并更新前一个流转信息。</comment>
 		</sqlGroup>
 		
 	</sqls>

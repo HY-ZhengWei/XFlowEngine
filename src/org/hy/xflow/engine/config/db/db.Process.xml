@@ -89,6 +89,35 @@
 				]]>
 			</content>
 			
+			<comment>新增工作流流转过程</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_UpdatePrevious"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				UPDATE  TProcess
+				   SET  nextProcessID    = ':previous.nextProcessID'       
+				       ,nextActivityID   = ':previous.nextActivityID'      
+				       ,nextActivityName = ':previous.nextActivityName'    
+				       ,operateTime      = ':previous.operateTime'         
+				       ,operateTimeLen   =  :previous.operateTimeLen       
+				       ,operateTypeID    = ':previous.operateTypeID'       
+				       ,operateType      = ':previous.operateType'         
+				       ,operateUserID    = ':previous.operateUserID'       
+				       ,operateUser      = ':previous.operateUser'         
+				       ,operateOrgID     = ':previous.operateOrgID'        
+				       ,operateOrg       = ':previous.operateOrg'                   
+				 WHERE  processID        = ':previous.processID'
+				]]>
+			</content>
+			
+			<comment>更新前一个工作流流转过程</comment>
 		</sql>
 		
 		

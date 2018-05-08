@@ -129,10 +129,18 @@ public class ActivityRoute extends BaseModel
             else if ( ParticipantType.$Role     == v_Participant.getObjectType().intValue()
                    || ParticipantType.$RoleSend == v_Participant.getObjectType().intValue() )
             {
-                if ( v_Participant.getObjectID().equals(i_User.getRoleID()) )
+                if ( Help.isNull(i_User.getRoles()) )
                 {
-                    return v_Participant;
-                } 
+                    return null;
+                }
+                
+                for (UserRole v_Role : i_User.getRoles())
+                {
+                    if ( v_Participant.getObjectID().equals(v_Role.getRoleID()) )
+                    {
+                        return v_Participant;
+                    } 
+                }
             }
         }
         

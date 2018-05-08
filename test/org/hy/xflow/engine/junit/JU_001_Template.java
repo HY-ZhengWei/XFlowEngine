@@ -56,7 +56,7 @@ public class JU_001_Template extends BaseJunit
     @Test
     public void test002()
     {
-        System.out.println(Help.toSQLSelect(FlowProcess.class ,"A" ,false));
+        System.out.println(Help.toSQLUpdate(FlowProcess.class ,false));
     }
     
 }

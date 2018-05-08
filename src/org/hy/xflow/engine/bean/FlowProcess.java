@@ -3,6 +3,7 @@ package org.hy.xflow.engine.bean;
 import java.util.List;
 
 import org.hy.common.Date;
+import org.hy.common.StringHelp;
 import org.hy.xflow.engine.common.BaseModel;
 
 
@@ -122,14 +123,7 @@ public class FlowProcess extends BaseModel
     
 	
     
-    public FlowProcess()
-    {
-        
-    }
-    
-    
-    
-    public FlowProcess(User i_User ,FlowInfo i_Flow ,FlowProcess i_Previous ,ActivityInfo i_Activity)
+    public FlowProcess init_CreateFlow(User i_User ,FlowInfo i_Flow ,ActivityInfo i_Activity)
     {
         this.processID            = i_Flow.getLastProcessID();
         this.serviceDataID        = i_Flow.getServiceDataID();
@@ -137,26 +131,10 @@ public class FlowProcess extends BaseModel
         this.splitProcessID       = "";
         this.currentActivityID    = i_Activity.getActivityID();
         this.currentActivityName  = i_Activity.getActivityName();
-        
-        if ( i_Previous == null )
-        {
-            this.processNo              = 1;
-            this.previousProcessID      = "";
-            this.previousActivityID     = "";
-            this.previousActivityName   = "";
-        }
-        else
-        {
-            this.processNo              = -1;  //////////////////////////////////////
-            this.previousProcessID      = i_Previous.getProcessID();
-            this.previousActivityID     = i_Previous.getCurrentActivityID();
-            this.previousActivityName   = i_Previous.getCurrentActivityName();
-            
-            i_Previous.nextProcessID    = this.processID;
-            i_Previous.nextActivityID   = this.currentActivityID;
-            i_Previous.nextActivityName = this.currentActivityName;
-        }
-        
+        this.processNo            = 1;
+        this.previousProcessID    = "";
+        this.previousActivityID   = "";
+        this.previousActivityName = "";
         this.nextProcessID        = "";
         this.nextActivityID       = "";
         this.nextActivityName     = "";
@@ -179,6 +157,64 @@ public class FlowProcess extends BaseModel
         this.operateFiles         = "";
         this.operateDatas         = "";
         this.infoComment          = "";
+        
+        return this;
+    }
+    
+    
+    
+    public FlowProcess init_ToNext(User i_User ,FlowInfo i_Flow ,FlowProcess io_Previous ,ActivityInfo i_Activity)
+    {
+        this.processID               = StringHelp.getUUID();
+        this.serviceDataID           = i_Flow.getServiceDataID();
+        this.workID                  = i_Flow.getWorkID();
+        this.splitProcessID          = "";
+        this.currentActivityID       = i_Activity.getActivityID();
+        this.currentActivityName     = i_Activity.getActivityName();
+        
+        this.processNo               = -1;  //////////////////////////////////////
+        this.previousProcessID       = io_Previous.getProcessID();
+        this.previousActivityID      = io_Previous.getCurrentActivityID();
+        this.previousActivityName    = io_Previous.getCurrentActivityName();
+        
+        io_Previous.nextProcessID    = this.processID;
+        io_Previous.nextActivityID   = this.currentActivityID;
+        io_Previous.nextActivityName = this.currentActivityName;
+        
+        this.nextProcessID           = "";
+        this.nextActivityID          = "";
+        this.nextActivityName        = "";
+        this.createrID               = i_User.getUserID();
+        this.creater                 = i_User.getUserName();
+        this.createOrgID             = i_User.getOrgID();
+        this.createOrg               = i_User.getOrgName();
+        this.createTime              = new Date();
+        this.limitUserID             = "";
+        this.limitOrgID              = "";
+        this.limitTime               = new Date("2000-01-01 00:00:00");
+        this.operateTime             = this.createTime;
+        this.operateTimeLen          = 0;
+        this.operateTypeID           = "";
+        this.operateType              = "";
+        this.operateUserID           = this.createrID;
+        this.operateUser             = this.creater;
+        this.operateOrgID            = this.createOrgID;
+        this.operateOrg              = this.createOrg;
+        
+        io_Previous.operateTime      = this.createTime;
+        io_Previous.operateTimeLen   = 0;
+        io_Previous.operateTypeID    = "";
+        io_Previous.operateType      = "";
+        io_Previous.operateUserID    = this.createrID;
+        io_Previous.operateUser      = this.creater;
+        io_Previous.operateOrgID     = this.createOrgID;
+        io_Previous.operateOrg       = this.createOrg;
+        
+        this.operateFiles            = "";
+        this.operateDatas            = "";
+        this.infoComment             = "";
+        
+        return this;
     }
     
 	

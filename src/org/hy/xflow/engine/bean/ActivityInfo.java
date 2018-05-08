@@ -110,10 +110,18 @@ public class ActivityInfo extends BaseModel
             if ( ParticipantType.$Role     == v_Participant.getObjectType().intValue()
               || ParticipantType.$RoleSend == v_Participant.getObjectType().intValue() )
             {
-                 if ( v_Participant.getObjectID().equals(i_User.getRoleID()) )
-                 {
-                     return v_Participant;
-                 } 
+                if ( Help.isNull(i_User.getRoles()) )
+                {
+                    return null;
+                }
+                
+                for (UserRole v_Role : i_User.getRoles())
+                {
+                    if ( v_Participant.getObjectID().equals(v_Role.getRoleID()) )
+                    {
+                        return v_Participant;
+                    } 
+                }
             }
             else if ( ParticipantType.$User     == v_Participant.getObjectType().intValue()
                    || ParticipantType.$UserSend == v_Participant.getObjectType().intValue() )
