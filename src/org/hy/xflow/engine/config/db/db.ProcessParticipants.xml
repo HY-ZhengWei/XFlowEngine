@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流过程参与人表模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_ProcessParticipants_Insert"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO TProcessParticipants
+				       (
+				        pwpID
+				       ,processID
+				       ,workID
+				       ,serviceDataID
+				       ,objectID
+				       ,objectName
+				       ,objectNo
+				       ,objectType
+				       ,createOrgID
+				       ,createOrg
+				       ,createTime
+				       ,createrID
+				       ,creater
+				       )
+				VALUES (
+				        :pwpID
+				       ,:processID
+				       ,:workID
+				       ,:serviceDataID
+				       ,:objectID
+				       ,:objectName
+				       ,:objectNo
+				       ,:objectType.value
+				       ,:createOrgID
+				       ,:createOrg
+				       ,:createTime
+				       ,:createrID
+				       ,:creater
+				       )
+				]]>
+			</content>
+			
+			<comment>新增工作流流转过程的动态参与人信息</comment>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>

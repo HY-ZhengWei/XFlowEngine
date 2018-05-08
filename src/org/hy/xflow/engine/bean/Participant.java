@@ -1,8 +1,6 @@
 package org.hy.xflow.engine.bean;
 
 import org.hy.common.Date;
-import org.hy.xflow.engine.common.BaseModel;
-import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
 
@@ -16,46 +14,34 @@ import org.hy.xflow.engine.enums.ParticipantTypeEnum;
  * @createDate  2018-04-24
  * @version     v1.0
  */
-public class Participant extends BaseModel
+public class Participant extends UserParticipant
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	
     
 	/** 主键ID */
-    private String participantID;
+    protected String participantID;
     
 	/** 工作流的模板ID */
-    private String templateID;
+    protected String templateID;
     
     /** 活动ID */
-    private String activityID;
+    protected String activityID;
     
 	/** 活动路由ID */
-    private String activityRouteID;
+    protected String activityRouteID;
     
     /** 参与者类型（内存合成） */
-    private ParticipantType participantType;
-    
-	/** 参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色） */
-    private ParticipantTypeEnum objectType;
-    
-	/** 参与者ID */
-    private String objectID;
-    
-	/** 参与者名称 */
-    private String objectName;
-    
-	/** 参与者序号，表示前后顺序。系统自动生成，下标从1开始 */
-    private Integer objectNo;
+    protected ParticipantType participantType;
     
 	/** 创建人员ID */
-    private String createrID;
+    protected String createrID;
     
 	/** 创建人员名称 */
-    private String creater;
+    protected String creater;
     
 	/** 创建时间 */
-    private Date createTime;
+    protected Date createTime;
     
 	
     
@@ -159,86 +145,6 @@ public class Participant extends BaseModel
     }
 
 
-    /**
-     * 获取：参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
-     */
-    public ParticipantTypeEnum getObjectType()
-    {
-        return this.objectType;
-    }
-
-    
-    /**
-     * 设置：参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
-     * 
-     * @param i_ObjectType
-     */
-    public void setObjectType(ParticipantTypeEnum i_ObjectType)
-    {
-        this.objectType = i_ObjectType;
-    }
-    
-    
-	/**
-     * 获取：参与者ID
-     */
-    public String getObjectID()
-    {
-        return this.objectID;
-    }
-
-    
-    /**
-     * 设置：参与者ID
-     * 
-     * @param i_ObjectID
-     */
-    public void setObjectID(String i_ObjectID)
-    {
-        this.objectID = i_ObjectID;
-    }
-	
-	
-	/**
-     * 获取：参与者名称
-     */
-    public String getObjectName()
-    {
-        return this.objectName;
-    }
-
-    
-    /**
-     * 设置：参与者名称
-     * 
-     * @param i_ObjectName
-     */
-    public void setObjectName(String i_ObjectName)
-    {
-        this.objectName = i_ObjectName;
-    }
-	
-	
-	/**
-     * 获取：参与者序号，表示前后顺序。系统自动生成，下标从1开始
-     */
-    public Integer getObjectNo()
-    {
-        return this.objectNo;
-    }
-
-    
-    /**
-     * 设置：参与者序号，表示前后顺序。系统自动生成，下标从1开始
-     * 
-     * @param i_ObjectNo
-     */
-    public void setObjectNo(Integer i_ObjectNo)
-    {
-        this.objectNo = i_ObjectNo;
-    }
-	
-	
 	/**
      * 获取：创建人员ID
      */

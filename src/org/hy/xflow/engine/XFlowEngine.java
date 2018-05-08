@@ -10,9 +10,11 @@ import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.Participant;
+import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
+import org.hy.xflow.engine.bean.UserParticipant;
 import org.hy.xflow.engine.service.IFlowInfoService;
 import org.hy.xflow.engine.service.IFlowProcessService;
 import org.hy.xflow.engine.service.ITemplateService;
@@ -365,7 +367,36 @@ public class XFlowEngine
      */
     public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityID ,String i_ActivityRouteID)
     {
-        return this.toNext(i_User ,i_WorkID ,i_ActivityID ,i_ActivityRouteID ,null);
+        return this.toNext(i_User ,i_WorkID ,i_ActivityID ,i_ActivityRouteID ,(List<UserParticipant>)null);
+    }
+    
+    
+    
+    /**
+     * 向下一个活动节点流转
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-08
+     * @version     v1.0
+     *
+     * @param i_User              操作用户 
+     * @param i_WorkID            工作流ID
+     * @param i_ActivityID        当前活动节点ID。相对于下一个活动，即为前一个活动节点ID
+     * @param i_ActivityRouteID   走的路由
+     * @param i_Participant       指定下一活动的参与人，可选项。
+     * @return
+     */
+    public FlowProcess toNext(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID ,UserParticipant i_Participant)
+    {
+        List<UserParticipant> v_Participants = null;
+        
+        if ( i_Participant != null )
+        {
+            v_Participants = new ArrayList<UserParticipant>();
+            v_Participants.add(i_Participant);
+        }
+        
+        return this.toNext(i_User ,i_ServiceDataID ,i_ActivityID ,i_ActivityRouteID ,v_Participants);
     }
     
     
@@ -385,7 +416,7 @@ public class XFlowEngine
      *                            当指定参与人时，其级别高于活动的参与人，也高于路由的参与人。
      * @return
      */
-    public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityID ,String i_ActivityRouteID ,List<Participant> i_Participants)
+    public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityID ,String i_ActivityRouteID ,List<UserParticipant> i_Participants)
     {
         if ( i_User == null )
         {
@@ -456,6 +487,39 @@ public class XFlowEngine
         FlowProcess v_Process = new FlowProcess();
         v_Process.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_Route.getNextActivity());
         
+        // 生成参与人信息
+        if ( !Help.isNull(i_Participants) )
+        {
+            v_Process.setParticipants(new ArrayList<ProcessParticipant>());
+            for (int v_Index=0; v_Index<i_Participants.size(); v_Index++)
+            {
+                UserParticipant v_UserPart = i_Participants.get(v_Index);
+                if ( v_UserPart == null )
+                {
+                    throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] is null to User[" + i_User.getUserID() + "].");
+                }
+                else if ( Help.isNull(v_UserPart.getObjectID()) )
+                {
+                    throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] ObjectID is null to User[" + i_User.getUserID() + "].");
+                }
+                else if ( v_UserPart.getObjectType() == null )
+                {
+                    throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] ObjectType is null to User[" + i_User.getUserID() + "].");
+                }
+                
+                if ( v_UserPart.getObjectNo() == null )
+                {
+                    v_UserPart.setObjectNo(v_Index + 1);
+                }
+                
+                ProcessParticipant v_PartTemp = new ProcessParticipant();
+                
+                v_PartTemp.init(i_User ,v_Process ,i_Participants.get(v_Index));
+                
+                v_Process.getParticipants().add(v_PartTemp);
+            }
+        }
+        
         boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
         if ( v_Ret )
         {
@@ -480,12 +544,40 @@ public class XFlowEngine
      * @param i_ServiceDataID     第三方使用系统的业务数据ID
      * @param i_ActivityID        当前活动节点ID。相对于下一个活动，即为前一个活动节点ID
      * @param i_ActivityRouteID   走的路由
-     * @param i_Participants      指定下一活动的参与人，可选项。
      * @return
      */
     public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID)
     {
-        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityID ,i_ActivityRouteID ,null);
+        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityID ,i_ActivityRouteID ,(List<UserParticipant>)null);
+    }
+    
+    
+    
+    /**
+     * 按第三方使用系统的业务数据ID，向下一个活动节点流转
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-08
+     * @version     v1.0
+     *
+     * @param i_User              操作用户 
+     * @param i_ServiceDataID     第三方使用系统的业务数据ID
+     * @param i_ActivityID        当前活动节点ID。相对于下一个活动，即为前一个活动节点ID
+     * @param i_ActivityRouteID   走的路由
+     * @param i_Participant       指定下一活动的参与人，可选项。
+     * @return
+     */
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID ,UserParticipant i_Participant)
+    {
+        List<UserParticipant> v_Participants = null;
+        
+        if ( i_Participant != null )
+        {
+            v_Participants = new ArrayList<UserParticipant>();
+            v_Participants.add(i_Participant);
+        }
+        
+        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityID ,i_ActivityRouteID ,v_Participants);
     }
     
     
@@ -505,7 +597,7 @@ public class XFlowEngine
      *                            当指定参与人时，其级别高于活动的参与人，也高于路由的参与人。
      * @return
      */
-    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID ,List<Participant> i_Participants)
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID ,List<UserParticipant> i_Participants)
     {
         if ( i_User == null )
         {
@@ -575,6 +667,39 @@ public class XFlowEngine
         
         FlowProcess v_Process = new FlowProcess();
         v_Process.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_Route.getNextActivity());
+        
+        // 生成参与人信息
+        if ( !Help.isNull(i_Participants) )
+        {
+            v_Process.setParticipants(new ArrayList<ProcessParticipant>());
+            for (int v_Index=0; v_Index<i_Participants.size(); v_Index++)
+            {
+                UserParticipant v_UserPart = i_Participants.get(v_Index);
+                if ( v_UserPart == null )
+                {
+                    throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] participant[" + v_Index + "] is null to User[" + i_User.getUserID() + "].");
+                }
+                else if ( Help.isNull(v_UserPart.getObjectID()) )
+                {
+                    throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] participant[" + v_Index + "] ObjectID is null to User[" + i_User.getUserID() + "].");
+                }
+                else if ( v_UserPart.getObjectType() == null )
+                {
+                    throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] participant[" + v_Index + "] ObjectType is null to User[" + i_User.getUserID() + "].");
+                }
+                
+                if ( v_UserPart.getObjectNo() == null )
+                {
+                    v_UserPart.setObjectNo(v_Index + 1);
+                }
+                
+                ProcessParticipant v_PartTemp = new ProcessParticipant();
+                
+                v_PartTemp.init(i_User ,v_Process ,i_Participants.get(v_Index));
+                
+                v_Process.getParticipants().add(v_PartTemp);
+            }
+        }
         
         boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
         if ( v_Ret )

@@ -70,11 +70,11 @@
 				       ,':process.creater'
 				       ,':process.createOrgID'
 				       ,':process.createOrg'
-				       ,':process.createTime'
+				       ,':process.createTime.fullMilli'
 				       ,':process.limitUserID'
 				       ,':process.limitOrgID'
 				       ,':process.limitTime'
-				       ,':process.operateTime'
+				       ,':process.operateTime.fullMilli'
 				       , :process.operateTimeLen
 				       ,':process.operateTypeID'
 				       ,':process.operateType'
@@ -105,7 +105,7 @@
 				   SET  nextProcessID    = ':previous.nextProcessID'       
 				       ,nextActivityID   = ':previous.nextActivityID'      
 				       ,nextActivityName = ':previous.nextActivityName'    
-				       ,operateTime      = ':previous.operateTime'         
+				       ,operateTime      = ':previous.operateTime.fullMilli'         
 				       ,operateTimeLen   =  :previous.operateTimeLen       
 				       ,operateTypeID    = ':previous.operateTypeID'       
 				       ,operateType      = ':previous.operateType'         

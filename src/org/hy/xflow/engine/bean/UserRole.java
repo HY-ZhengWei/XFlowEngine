@@ -8,7 +8,7 @@ import org.hy.xflow.engine.common.BaseModel;
 
 
 /**
- * 用户的角色。支持一位用户多重角色。
+ * 与外界对接的用户角色。支持一位用户多重角色。
  *
  * @author      ZhengWei(HY)
  * @createDate  2018-05-08

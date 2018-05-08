@@ -1,11 +1,9 @@
 package org.hy.xflow.engine.bean;
 
-
-
-
+import org.hy.common.StringHelp;
 
 /**
- * 工作流过程的实际参与人
+ * 工作流过程的动态参与人
  *
  * @author      ZhengWei
  * @createDate  2018-04-17
@@ -33,6 +31,36 @@ public class ProcessParticipant extends Participant
     
 	/** 创建部门名称 */
     private String createOrg;
+    
+    
+    
+    /**
+     * 初始化本类。用于工作流过程流转时
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-08
+     * @version     v1.0
+     *
+     * @param i_User
+     * @param i_Process
+     * @param i_UserPart
+     */
+    public void init(User i_User ,FlowProcess i_Process ,UserParticipant i_UserPart)
+    {
+        this.pwpID         = StringHelp.getUUID();
+        this.processID     = i_Process.getProcessID();
+        this.workID        = i_Process.getWorkID();
+        this.serviceDataID = i_Process.getServiceDataID();
+        this.createTime    = i_Process.getCreateTime();
+        this.createrID     = i_User.getUserID();
+        this.creater       = i_User.getUserName();
+        this.createOrgID   = i_User.getOrgID();
+        this.createOrg     = i_User.getOrgName();
+        this.objectID      = i_UserPart.getObjectID();
+        this.objectName    = i_UserPart.getObjectName();
+        this.objectType    = i_UserPart.getObjectType();
+        this.objectNo      = i_UserPart.getObjectNo();
+    }
     
 	
 	

@@ -67,27 +67,6 @@ public class JU_004_NextRoutes extends BaseJunit
             
             System.out.println("-- 转评审成功");
         }
-        
-        
-        
-        User v_Review  = new User();
-        v_Review.setUserID("8a81b2b54b7b391b014b7d14a00409ff");
-        v_Review.setUserName("公用主管");
-        v_Review.addRole("001" ,"选型主管");
-        
-        v_Routes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(v_Review ,v_ServiceDataID);
-        if ( Help.isNull(v_Routes) )
-        {
-            System.out.println("-- [" + v_Review.getUserName()+ "]没有任何可操作的路由");
-        }
-        else
-        {
-            ActivityRoute v_Route = v_Routes.get(0);
-            
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Review ,v_ServiceDataID ,v_Route.getActivityID() ,v_Route.getActivityRouteID());
-            
-            System.out.println("-- 评审后转向单人选型");
-        }
     }
     
 }

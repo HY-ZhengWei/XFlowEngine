@@ -29,13 +29,19 @@
 		
 		<sqlGroup id="GXSQL_Flow_ToNext">
 			<sqlNode>
+				<sql  ref="XSQL_XFlow_Process_UpdatePrevious" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
 				<sql  ref="XSQL_XFlow_Process_Insert" />
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
 			<sqlNode>
-				<sql  ref="XSQL_XFlow_Process_UpdatePrevious" />
-				<type ref="this.$Type_ExecuteUpdate" />
+				<sql  ref="XSQL_XFlow_ProcessParticipants_Insert" />
+				<type ref="this.$Type_CollectionToExecuteUpdate" />
+				<collectionID>process.participants</collectionID>
 			</sqlNode>
 			
 			<comment>工作流流转，并更新前一个流转信息。</comment>

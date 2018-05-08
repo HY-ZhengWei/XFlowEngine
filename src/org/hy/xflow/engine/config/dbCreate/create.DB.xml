@@ -445,7 +445,7 @@
 				]]>
 			</content>
 			
-			<comment>工作流过程的实际参与人</comment>
+			<comment>工作流过程的动态参与人</comment>
 			<create>TProcessParticipants</create>
 			
 		</sql>

@@ -24,7 +24,7 @@ public class FlowProcess extends BaseModel
     
     /** 工作流的参与人 */
 	private List<ProcessParticipant> participants;
-    
+	
 	/** 工作流的过程ID */
     private String processID;
     
