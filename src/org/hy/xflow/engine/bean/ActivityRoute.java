@@ -139,7 +139,7 @@ public class ActivityRoute extends BaseModel
                     if ( v_Participant.getObjectID().equals(v_Role.getRoleID()) )
                     {
                         return v_Participant;
-                    } 
+                    }
                 }
             }
         }

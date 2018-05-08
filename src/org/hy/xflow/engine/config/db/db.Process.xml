@@ -163,7 +163,8 @@
 				  FROM  TProcess  A
 			<[   WHERE  A.workID        = ':workID'          ]>
 			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-				 ORDER  BY A.createTime DESC
+				 ORDER  BY A.operateTime DESC
+				          ,A.createTime  DESC
 				]]>
 			</content>
 			<!-- 先按CreateTime倒排，之后将要改为按processNo倒排的 -->

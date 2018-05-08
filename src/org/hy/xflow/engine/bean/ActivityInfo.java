@@ -120,7 +120,7 @@ public class ActivityInfo extends BaseModel
                     if ( v_Participant.getObjectID().equals(v_Role.getRoleID()) )
                     {
                         return v_Participant;
-                    } 
+                    }
                 }
             }
             else if ( ParticipantType.$User     == v_Participant.getObjectType().intValue()
