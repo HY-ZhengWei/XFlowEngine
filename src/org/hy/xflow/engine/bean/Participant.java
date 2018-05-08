@@ -2,6 +2,7 @@ package org.hy.xflow.engine.bean;
 
 import org.hy.common.Date;
 import org.hy.xflow.engine.common.BaseModel;
+import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
 
@@ -36,7 +37,7 @@ public class Participant extends BaseModel
     private ParticipantType participantType;
     
 	/** 参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色） */
-    private Integer objectType;
+    private ParticipantTypeEnum objectType;
     
 	/** 参与者ID */
     private String objectID;
@@ -161,7 +162,7 @@ public class Participant extends BaseModel
     /**
      * 获取：参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
      */
-    public Integer getObjectType()
+    public ParticipantTypeEnum getObjectType()
     {
         return this.objectType;
     }
@@ -172,12 +173,12 @@ public class Participant extends BaseModel
      * 
      * @param i_ObjectType
      */
-    public void setObjectType(Integer i_ObjectType)
+    public void setObjectType(ParticipantTypeEnum i_ObjectType)
     {
         this.objectType = i_ObjectType;
     }
-	
-	
+    
+    
 	/**
      * 获取：参与者ID
      */

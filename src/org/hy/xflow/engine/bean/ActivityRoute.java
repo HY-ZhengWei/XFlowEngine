@@ -5,6 +5,7 @@ import java.util.List;
 import org.hy.common.Date;
 import org.hy.common.Help;
 import org.hy.xflow.engine.common.BaseModel;
+import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
 
@@ -110,24 +111,24 @@ public class ActivityRoute extends BaseModel
         
         for (Participant v_Participant : this.participants)
         {
-            if ( ParticipantType.$User     == v_Participant.getObjectType().intValue()
-              || ParticipantType.$UserSend == v_Participant.getObjectType().intValue() )
+            if ( ParticipantTypeEnum.$User     == v_Participant.getObjectType()
+              || ParticipantTypeEnum.$UserSend == v_Participant.getObjectType() )
             {
                 if ( v_Participant.getObjectID().equals(i_User.getUserID()) )
                 {
                     return v_Participant;
                 }
             }
-            else if ( ParticipantType.$Org     == v_Participant.getObjectType().intValue()
-                   || ParticipantType.$OrgSend == v_Participant.getObjectType().intValue() )
+            else if ( ParticipantTypeEnum.$Org     == v_Participant.getObjectType()
+                   || ParticipantTypeEnum.$OrgSend == v_Participant.getObjectType() )
             {
                 if ( v_Participant.getObjectID().equals(i_User.getOrgID()) )
                 {
                     return v_Participant;
                 } 
             }
-            else if ( ParticipantType.$Role     == v_Participant.getObjectType().intValue()
-                   || ParticipantType.$RoleSend == v_Participant.getObjectType().intValue() )
+            else if ( ParticipantTypeEnum.$Role     == v_Participant.getObjectType()
+                   || ParticipantTypeEnum.$RoleSend == v_Participant.getObjectType() )
             {
                 if ( Help.isNull(i_User.getRoles()) )
                 {

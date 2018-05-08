@@ -354,7 +354,7 @@ public class XFlowEngine
      * 向下一个活动节点流转
      * 
      * @author      ZhengWei(HY)
-     * @createDate  2018-05-07
+     * @createDate  2018-05-08
      * @version     v1.0
      *
      * @param i_User              操作用户 
@@ -364,6 +364,28 @@ public class XFlowEngine
      * @return
      */
     public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityID ,String i_ActivityRouteID)
+    {
+        return this.toNext(i_User ,i_WorkID ,i_ActivityID ,i_ActivityRouteID ,null);
+    }
+    
+    
+    
+    /**
+     * 向下一个活动节点流转
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-07
+     * @version     v1.0
+     *
+     * @param i_User              操作用户 
+     * @param i_WorkID            工作流ID
+     * @param i_ActivityID        当前活动节点ID。相对于下一个活动，即为前一个活动节点ID
+     * @param i_ActivityRouteID   走的路由
+     * @param i_Participants      指定下一活动的参与人，可选项。
+     *                            当指定参与人时，其级别高于活动的参与人，也高于路由的参与人。
+     * @return
+     */
+    public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityID ,String i_ActivityRouteID ,List<Participant> i_Participants)
     {
         if ( i_User == null )
         {
@@ -451,6 +473,27 @@ public class XFlowEngine
      * 按第三方使用系统的业务数据ID，向下一个活动节点流转
      * 
      * @author      ZhengWei(HY)
+     * @createDate  2018-05-08
+     * @version     v1.0
+     *
+     * @param i_User              操作用户 
+     * @param i_ServiceDataID     第三方使用系统的业务数据ID
+     * @param i_ActivityID        当前活动节点ID。相对于下一个活动，即为前一个活动节点ID
+     * @param i_ActivityRouteID   走的路由
+     * @param i_Participants      指定下一活动的参与人，可选项。
+     * @return
+     */
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID)
+    {
+        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityID ,i_ActivityRouteID ,null);
+    }
+    
+    
+    
+    /**
+     * 按第三方使用系统的业务数据ID，向下一个活动节点流转
+     * 
+     * @author      ZhengWei(HY)
      * @createDate  2018-05-07
      * @version     v1.0
      *
@@ -458,9 +501,11 @@ public class XFlowEngine
      * @param i_ServiceDataID     第三方使用系统的业务数据ID
      * @param i_ActivityID        当前活动节点ID。相对于下一个活动，即为前一个活动节点ID
      * @param i_ActivityRouteID   走的路由
+     * @param i_Participants      指定下一活动的参与人，可选项。
+     *                            当指定参与人时，其级别高于活动的参与人，也高于路由的参与人。
      * @return
      */
-    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID)
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityID ,String i_ActivityRouteID ,List<Participant> i_Participants)
     {
         if ( i_User == null )
         {
