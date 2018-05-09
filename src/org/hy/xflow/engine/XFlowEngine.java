@@ -60,7 +60,12 @@ public class XFlowEngine
     /**
      * 判定用户参与人之一。
      * 
-     * 联合活动节点、活动路由一起判定。
+     * 联合动态参与人、发起人、活动节点、活动路由一起判定。
+     * 
+     * 各种参与人在活动节点上的级别划分如下：
+     *   指定动态参与人  》  发起人 》 活动参与人
+     *  
+     * 路由可以不设定参与人的要求，但当路由设定参与人要求时，无论哪种参与人类型，均要符合路由对参与人的要求。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-08
@@ -69,21 +74,134 @@ public class XFlowEngine
      * @param i_User
      * @return
      */
-    public static Participant isParticipant(User i_User ,ActivityRoute i_Route)
+    public static Participant isParticipant(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityRoute i_Route)
     {
+        boolean     v_IsCreater   = i_User.getUserID().equals(i_Flow.getCreaterID());
         Participant v_Participant = null;
         
         if ( Help.isNull(i_Route.getParticipants()) )
         {
-            v_Participant = i_Route.getActivity().isParticipant(i_User);
+            // 为发起人时
+            if ( i_Route.getActivity().getParticipantByCreater() != null && v_IsCreater )
+            {
+                v_Participant = i_Route.getActivity().getParticipantByCreater();
+            }
+            else
+            {
+                v_Participant = i_Route.getActivity().isParticipant(i_User);
+            }
         }
+        // 路由级别高于活动节点，当路由上有参与人要求时，按路由的要求走
         else
         {
-            // 路由级别高于活动节点，当路由上有参与人要求时，按路由的要求走
-            v_Participant = i_Route.isParticipant(i_User);
+            // 为发起人时
+            if ( i_Route.getParticipantByCreater() != null && v_IsCreater )
+            {
+                v_Participant = i_Route.getParticipantByCreater();
+            }
+            else
+            {
+                v_Participant = i_Route.isParticipant(i_User);
+            }
         }
         
         return v_Participant;
+    }
+    
+    
+    
+    /**
+     * 去哪？当前流转活动节点下、当前模板的活动节点下，允许当前用户走的路由。
+     * 
+     * 各种参与人在活动节点上的级别划分如下：
+     *   指定动态参与人  》  发起人 》 活动参与人
+     *  
+     * 路由可以不设定参与人的要求，但当路由设定参与人要求时，无论哪种参与人类型，均要符合路由对参与人的要求。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-09
+     * @version     v1.0
+     *
+     * @param i_User      用户
+     * @param i_Flow      工作流实例
+     * @param io_Process  流转过程。它上可指定动态参与人。
+     * @param i_Activity  模板的活动
+     * @return
+     */
+    public static List<ActivityRoute> whereTo(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityInfo i_Activity)
+    {
+        List<ActivityRoute> v_Routes    = i_Activity.getRoutes();
+        List<ActivityRoute> v_RetRoutes = new ArrayList<ActivityRoute>();
+        boolean             v_IsCreater = i_User.getUserID().equals(i_Flow.getCreaterID());
+        
+        // 指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
+        // 指定动态参与人时，同时也受限于路由上设定的参与人。
+        //                 但当路由上没有设定参与人时，动态参与人将畅通无阻
+        if ( !Help.isNull(io_Process.getParticipants()) )
+        {
+            if ( io_Process.isParticipant(i_User) == null )
+            {
+                return v_RetRoutes;
+            }
+            
+            for (ActivityRoute v_Route : v_Routes)
+            {
+                // 当路由上没有要求时，默认认为参与人可以走此路由
+                if ( Help.isNull(v_Route.getParticipants()) )
+                {
+                    v_RetRoutes.add(v_Route);
+                }
+                else
+                {
+                    // 是发起人时
+                    if ( v_IsCreater && v_Route.getParticipantByCreater() != null )
+                    {
+                        v_RetRoutes.add(v_Route);
+                    }
+                    // 是否是路由上要求的参与人
+                    else if ( v_Route.isParticipant(i_User) != null )
+                    {
+                        v_RetRoutes.add(v_Route);
+                    }
+                }
+            }
+        }
+        // 情况1. 活动节点的参与人有发起人的情况
+        // 情况2. 常规工作流模板定义的参与人
+        else
+        {
+            for (ActivityRoute v_Route : v_Routes)
+            {
+                // 当路由上没有要求时，取活动节点上要求的参与人
+                if ( Help.isNull(v_Route.getParticipants()) )
+                {
+                    // 是发起人时
+                    if ( i_Activity.getParticipantByCreater() != null && v_IsCreater )
+                    {
+                        v_RetRoutes.add(v_Route);
+                    }
+                    else if ( i_Activity.isParticipant(i_User) != null )
+                    {
+                        v_RetRoutes.add(v_Route);
+                    }
+                }
+                else
+                {
+                    // 是发起人时
+                    if ( v_Route.getParticipantByCreater() != null && v_IsCreater )
+                    {
+                        v_RetRoutes.add(v_Route);
+                    }
+                    // 是否是路由上要求的参与人
+                    else if ( v_Route.isParticipant(i_User) != null )
+                    {
+                        v_RetRoutes.add(v_Route);
+                    }
+                }
+            }
+        }
+        
+        return v_RetRoutes;
     }
     
     
@@ -244,62 +362,13 @@ public class XFlowEngine
         }
         
         
-        ActivityInfo        v_Activity  = v_Template.getActivityRouteTree().getActivity(v_Process.getCurrentActivityID());
-        List<ActivityRoute> v_Routes    = v_Activity.getRoutes();
-        List<ActivityRoute> v_RetRoutes = new ArrayList<ActivityRoute>();
+        ActivityInfo v_Activity = v_Template.getActivityRouteTree().getActivity(v_Process.getCurrentActivityID());
         
         // 查询动态参与人
         PartitionMap<String ,ProcessParticipant> v_AllProcessParts = processParticipantsService.queryByWorkID(i_WorkID);
-        List<ProcessParticipant>                 v_ProcessParts    = v_AllProcessParts.get(v_Process.getProcessID());
-        if ( !Help.isNull(v_ProcessParts) )
-        {
-            v_Process.setParticipants(v_ProcessParts);
-            if ( v_Process.isParticipant(i_User) == null )
-            {
-                return v_RetRoutes;
-            }
-            
-            for (ActivityRoute v_Route : v_Routes)
-            {
-                // 当路由上没有要求时，默认认为参与人可以走此路由
-                if ( Help.isNull(v_Route.getParticipants()) )
-                {
-                    v_RetRoutes.add(v_Route);
-                }
-                else
-                {
-                    // 是否是路由上要求的参与人
-                    if ( v_Route.isParticipant(i_User) != null )
-                    {
-                        v_RetRoutes.add(v_Route);
-                    }
-                }
-            }
-        }
-        else
-        {
-            for (ActivityRoute v_Route : v_Routes)
-            {
-                // 当路由上没有要求时，取活动节点上要求的参与人
-                if ( Help.isNull(v_Route.getParticipants()) )
-                {
-                    if ( v_Activity.isParticipant(i_User) != null )
-                    {
-                        v_RetRoutes.add(v_Route);
-                    }
-                }
-                else
-                {
-                    // 是否是路由上要求的参与人
-                    if ( v_Route.isParticipant(i_User) != null )
-                    {
-                        v_RetRoutes.add(v_Route);
-                    }
-                }
-            }
-        }
+        v_Process.setParticipants(v_AllProcessParts.get(v_Process.getProcessID()));
         
-        return v_RetRoutes;
+        return whereTo(i_User ,v_FlowInfo ,v_Process ,v_Activity);
     }
     
     
@@ -362,62 +431,13 @@ public class XFlowEngine
             throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not grant to User[" + i_User.getUserID() + "].");
         }
         
-        ActivityInfo        v_Activity  = v_Template.getActivityRouteTree().getActivity(v_Process.getCurrentActivityID());
-        List<ActivityRoute> v_Routes    = v_Activity.getRoutes();
-        List<ActivityRoute> v_RetRoutes = new ArrayList<ActivityRoute>();
+        ActivityInfo v_Activity = v_Template.getActivityRouteTree().getActivity(v_Process.getCurrentActivityID());
         
         // 查询动态参与人
         PartitionMap<String ,ProcessParticipant> v_AllProcessParts = processParticipantsService.queryByServiceDataID(i_ServiceDataID);
-        List<ProcessParticipant>                 v_ProcessParts    = v_AllProcessParts.get(v_Process.getProcessID());
-        if ( !Help.isNull(v_ProcessParts) )
-        {
-            v_Process.setParticipants(v_ProcessParts);
-            if ( v_Process.isParticipant(i_User) == null )
-            {
-                return v_RetRoutes;
-            }
-            
-            for (ActivityRoute v_Route : v_Routes)
-            {
-                // 当路由上没有要求时，默认认为参与人可以走此路由
-                if ( Help.isNull(v_Route.getParticipants()) )
-                {
-                    v_RetRoutes.add(v_Route);
-                }
-                else
-                {
-                    // 是否是路由上要求的参与人
-                    if ( v_Route.isParticipant(i_User) != null )
-                    {
-                        v_RetRoutes.add(v_Route);
-                    }
-                }
-            }
-        }
-        else
-        {
-            for (ActivityRoute v_Route : v_Routes)
-            {
-                // 当路由上没有要求时，取活动节点上要求的参与人
-                if ( Help.isNull(v_Route.getParticipants()) )
-                {
-                    if ( v_Activity.isParticipant(i_User) != null )
-                    {
-                        v_RetRoutes.add(v_Route);
-                    }
-                }
-                else
-                {
-                    // 是否是路由上要求的参与人
-                    if ( v_Route.isParticipant(i_User) != null )
-                    {
-                        v_RetRoutes.add(v_Route);
-                    }
-                }
-            }
-        }
+        v_Process.setParticipants(v_AllProcessParts.get(v_Process.getProcessID()));
         
-        return v_RetRoutes;
+        return whereTo(i_User ,v_FlowInfo ,v_Process ,v_Activity);
     }
     
     
@@ -532,13 +552,6 @@ public class XFlowEngine
             throw new NullPointerException("ActivityID[" + i_ActivityID + "] and ActivityRouteID[" + i_ActivityRouteID + "] is not exists.");
         }
         
-        // 判定是否为参与人
-        Participant v_Participant = isParticipant(i_User ,v_Route);
-        if ( v_Participant == null )
-        {
-            throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
-        }
-        
         List<FlowProcess> v_ProcessList = this.flowProcessService.queryByWorkID(i_WorkID);
         if ( Help.isNull(v_ProcessList) )
         {
@@ -555,6 +568,17 @@ public class XFlowEngine
             break;
         }
         if ( v_Previous == null )
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
+        }
+        
+        // 查询动态参与人
+        PartitionMap<String ,ProcessParticipant> v_AllProcessParts = processParticipantsService.queryByWorkID(i_WorkID);
+        v_Previous.setParticipants(v_AllProcessParts.get(v_Previous.getProcessID()));
+        
+        // 判定是否为参与人
+        Participant v_Participant = isParticipant(i_User ,v_FlowInfo ,v_Previous ,v_Route);
+        if ( v_Participant == null )
         {
             throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
         }
@@ -718,13 +742,6 @@ public class XFlowEngine
             throw new NullPointerException("ActivityID[" + i_ActivityID + "] and ActivityRouteID[" + i_ActivityRouteID + "] is not exists.");
         }
         
-        // 判定是否为参与人
-        Participant v_Participant = isParticipant(i_User ,v_Route);
-        if ( v_Participant == null )
-        {
-            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not grant to User[" + i_User.getUserID() + "].");
-        }
-        
         List<FlowProcess> v_ProcessList = this.flowProcessService.queryByServiceDataID(i_ServiceDataID);
         if ( Help.isNull(v_ProcessList) )
         {
@@ -741,6 +758,17 @@ public class XFlowEngine
             break;
         }
         if ( v_Previous == null )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not grant to User[" + i_User.getUserID() + "].");
+        }
+        
+        // 查询动态参与人
+        PartitionMap<String ,ProcessParticipant> v_AllProcessParts = processParticipantsService.queryByServiceDataID(i_ServiceDataID);
+        v_Previous.setParticipants(v_AllProcessParts.get(v_Previous.getProcessID()));
+        
+        // 判定是否为参与人
+        Participant v_Participant = isParticipant(i_User ,v_FlowInfo ,v_Previous ,v_Route);
+        if ( v_Participant == null )
         {
             throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not grant to User[" + i_User.getUserID() + "].");
         }

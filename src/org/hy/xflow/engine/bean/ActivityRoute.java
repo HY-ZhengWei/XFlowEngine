@@ -41,6 +41,9 @@ public class ActivityRoute extends BaseModel
     /** 工作流路由的参与人。谁从此路过。（内存合成） */
     private List<Participant> participants;
     
+    /** 本活动组件（节点）的参与人，是否为流程发起人。（内存合成） */
+    private Participant participantByCreater;
+    
 	/** 工作流活动ID */
     private String activityID;
     
@@ -146,6 +149,32 @@ public class ActivityRoute extends BaseModel
         }
         
         return null;
+    }
+    
+    
+    /**
+     * 初始化合成：工作流路由的参与人，是否为流程发起人。（内存合成）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-09
+     * @version     v1.0
+     *
+     */
+    public void initParticipantIsCreate()
+    {
+        if ( !Help.isNull(this.participants) )
+        {
+            for (Participant v_Part : this.participants)
+            {
+                if ( v_Part.getObjectType() == ParticipantTypeEnum.$CreateUser )
+                {
+                    this.participantByCreater = v_Part;
+                    return;
+                }
+            }
+        }
+        
+        this.participantByCreater = null;
     }
     
 	
@@ -304,8 +333,30 @@ public class ActivityRoute extends BaseModel
     public void setParticipants(List<Participant> participants)
     {
         this.participants = participants;
+        
+        this.initParticipantIsCreate();
     }
     
+    
+    /**
+     * 获取：本活动组件（节点）的参与人，是否为流程发起人。（内存合成）
+     */
+    public Participant getParticipantByCreater()
+    {
+        return participantByCreater;
+    }
+
+    
+    /**
+     * 设置：本活动组件（节点）的参与人，是否为流程发起人。（内存合成）
+     * 
+     * @param participantByCreater 
+     */
+    public void setParticipantByCreater(Participant participantByCreater)
+    {
+        this.participantByCreater = participantByCreater;
+    }
+
 
     /**
      * 设置：工作流路由类型ID

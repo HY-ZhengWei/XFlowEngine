@@ -26,6 +26,9 @@ public class ActivityInfo extends BaseModel
     /** 本活动组件（节点）的参与人。谁从此路过。（内存合成） */
     private List<Participant> participants;
     
+    /** 本活动组件（节点）的参与人，是否为流程发起人。（内存合成） */
+    private Participant participantByCreater;
+    
     /** 本活动组件（节点）的所有通过路由信息（内存合成） */
     private List<ActivityRoute> routes;
     
@@ -108,6 +111,7 @@ public class ActivityInfo extends BaseModel
         
         for (Participant v_Participant : this.participants)
         {
+            
             if ( ParticipantTypeEnum.$Role     == v_Participant.getObjectType()
               || ParticipantTypeEnum.$RoleSend == v_Participant.getObjectType() )
             {
@@ -148,6 +152,33 @@ public class ActivityInfo extends BaseModel
     
     
     /**
+     * 初始化合成：工作流路由的参与人，是否为流程发起人。（内存合成）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-09
+     * @version     v1.0
+     *
+     */
+    public void initParticipantIsCreate()
+    {
+        if ( !Help.isNull(this.participants) )
+        {
+            for (Participant v_Part : this.participants)
+            {
+                if ( v_Part.getObjectType() == ParticipantTypeEnum.$CreateUser )
+                {
+                    this.participantByCreater = v_Part;
+                    return;
+                }
+            }
+        }
+        
+        this.participantByCreater = null;
+    }
+    
+    
+    
+    /**
      * 获取：本活动组件（节点）的参与人。谁从此路过。（内存合成）
      */
     public List<Participant> getParticipants()
@@ -164,6 +195,28 @@ public class ActivityInfo extends BaseModel
     public void setParticipants(List<Participant> participants)
     {
         this.participants = participants;
+        
+        initParticipantIsCreate();
+    }
+
+    
+    /**
+     * 获取：本活动组件（节点）的参与人，是否为流程发起人。（内存合成）
+     */
+    public Participant getParticipantByCreater()
+    {
+        return participantByCreater;
+    }
+    
+    
+    /**
+     * 设置：本活动组件（节点）的参与人，是否为流程发起人。（内存合成）
+     * 
+     * @param participantByCreater 
+     */
+    public void setParticipantByCreater(Participant participantByCreater)
+    {
+        this.participantByCreater = participantByCreater;
     }
 
 
