@@ -2,6 +2,10 @@ package org.hy.xflow.engine.bean;
 
 import org.hy.common.StringHelp;
 
+
+
+
+
 /**
  * 工作流过程的动态参与人
  *

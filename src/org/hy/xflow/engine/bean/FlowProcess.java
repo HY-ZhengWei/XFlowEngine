@@ -3,8 +3,10 @@ package org.hy.xflow.engine.bean;
 import java.util.List;
 
 import org.hy.common.Date;
+import org.hy.common.Help;
 import org.hy.common.StringHelp;
 import org.hy.xflow.engine.common.BaseModel;
+import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
 
@@ -215,6 +217,68 @@ public class FlowProcess extends BaseModel
         this.infoComment             = "";
         
         return this;
+    }
+    
+    
+    
+    /**
+     * 判定用户信息是否当前动态的参与人之一
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-09
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public Participant isParticipant(User i_User)
+    {
+        if ( i_User == null )
+        {
+            return null;
+        }
+        if ( Help.isNull(this.participants) )
+        {
+            return null;
+        }
+        
+        for (Participant v_Participant : this.participants)
+        {
+            if ( ParticipantTypeEnum.$User     == v_Participant.getObjectType()
+              || ParticipantTypeEnum.$UserSend == v_Participant.getObjectType() )
+            {
+                if ( v_Participant.getObjectID().equals(i_User.getUserID()) )
+                {
+                    return v_Participant;
+                }
+            }
+            else if ( ParticipantTypeEnum.$Org     == v_Participant.getObjectType()
+                   || ParticipantTypeEnum.$OrgSend == v_Participant.getObjectType() )
+            {
+                if ( v_Participant.getObjectID().equals(i_User.getOrgID()) )
+                {
+                    return v_Participant;
+                } 
+            }
+            else if ( ParticipantTypeEnum.$Role     == v_Participant.getObjectType()
+                   || ParticipantTypeEnum.$RoleSend == v_Participant.getObjectType() )
+            {
+                if ( Help.isNull(i_User.getRoles()) )
+                {
+                    return null;
+                }
+                
+                for (UserRole v_Role : i_User.getRoles())
+                {
+                    if ( v_Participant.getObjectID().equals(v_Role.getRoleID()) )
+                    {
+                        return v_Participant;
+                    }
+                }
+            }
+        }
+        
+        return null;
     }
     
 	

@@ -1,7 +1,6 @@
 package org.hy.xflow.engine.service.impl;
 
-import java.util.List;
-
+import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.common.BaseService;
@@ -29,18 +28,35 @@ public class ProcessParticipantsService extends BaseService implements IProcessP
     
     
     /**
-     * 动态添加流转过程中的参与人
+     * 工作流实例ID，查询工作流流转过程的动态参与人信息
      * 
      * @author      ZhengWei(HY)
-     * @createDate  2018-05-08
+     * @createDate  2018-05-09
      * @version     v1.0
      *
-     * @param i_Participants
+     * @param i_WorkID  工作流实例ID
      * @return
      */
-    public boolean add(List<ProcessParticipant> i_Participants)
+    public PartitionMap<String ,ProcessParticipant> queryByWorkID(String i_WorkID)
     {
-        return this.processParticipantsDAO.add(i_Participants) == i_Participants.size();
+        return this.processParticipantsDAO.queryByWorkID(i_WorkID);
+    }
+    
+    
+    
+    /**
+     * 三方使用系统的业务数据ID，查询工作流流转过程的动态参与人信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-09
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return
+     */
+    public PartitionMap<String ,ProcessParticipant> queryByServiceDataID(String i_ServiceDataID)
+    {
+        return this.processParticipantsDAO.queryByServiceDataID(i_ServiceDataID);
     }
     
 }

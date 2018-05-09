@@ -16,17 +16,19 @@ import org.hy.xflow.engine.common.BaseEnum;
 public enum ParticipantTypeEnum implements BaseEnum<Integer>
 {
     
-    $User(     1 ,"执行人"),
+    $CreateUser(0 ,"发起人"),
     
-    $Org(      2 ,"执行部门"),
+    $User(      1 ,"执行人"),
     
-    $Role(     3 ,"执行角色"),
+    $Org(       2 ,"执行部门"),
     
-    $UserSend(11 ,"抄送人"),
+    $Role(      3 ,"执行角色"),
     
-    $OrgSend( 12 ,"抄送部门"),
+    $UserSend( 11 ,"抄送人"),
     
-    $RoleSend(13 ,"抄送角色"),;
+    $OrgSend(  12 ,"抄送部门"),
+    
+    $RoleSend( 13 ,"抄送角色"),;
     
     
     

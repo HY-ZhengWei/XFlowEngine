@@ -395,7 +395,7 @@
                 COMMENT ON COLUMN TProcessParticipants.processID          IS '工作流的过程ID';/
                 COMMENT ON COLUMN TProcessParticipants.workID             IS '工作流实例ID';/
                 COMMENT ON COLUMN TProcessParticipants.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
-                COMMENT ON COLUMN TProcessParticipants.objectType         IS '参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                COMMENT ON COLUMN TProcessParticipants.objectType         IS '参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 COMMENT ON COLUMN TProcessParticipants.objectID           IS '参与者ID';/
                 COMMENT ON COLUMN TProcessParticipants.objectName         IS '参与者名称';/
                 COMMENT ON COLUMN TProcessParticipants.objectNo           IS '参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
@@ -433,7 +433,7 @@
                 EXEC P_ColumnComment TProcessParticipants ,processID          ,'工作流的过程ID';/
                 EXEC P_ColumnComment TProcessParticipants ,workID             ,'工作流实例ID';/
                 EXEC P_ColumnComment TProcessParticipants ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
-                EXEC P_ColumnComment TProcessParticipants ,objectType         ,'参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                EXEC P_ColumnComment TProcessParticipants ,objectType         ,'参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 EXEC P_ColumnComment TProcessParticipants ,objectID           ,'参与者ID';/
                 EXEC P_ColumnComment TProcessParticipants ,objectName         ,'参与者名称';/
                 EXEC P_ColumnComment TProcessParticipants ,objectNo           ,'参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
@@ -771,7 +771,7 @@
                 COMMENT ON COLUMN TActivityParticipants.participantID      IS '主键ID';/
                 COMMENT ON COLUMN TActivityParticipants.templateID         IS '工作流的模板ID';/
                 COMMENT ON COLUMN TActivityParticipants.activityID         IS '活动（节点）ID';/
-                COMMENT ON COLUMN TActivityParticipants.objectType         IS '参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                COMMENT ON COLUMN TActivityParticipants.objectType         IS '参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 COMMENT ON COLUMN TActivityParticipants.objectID           IS '参与者ID';/
                 COMMENT ON COLUMN TActivityParticipants.objectName         IS '参与者名称';/
                 COMMENT ON COLUMN TActivityParticipants.objectNo           IS '参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
@@ -803,7 +803,7 @@
                 EXEC P_ColumnComment TActivityParticipants ,participantID      ,'主键ID';/
                 EXEC P_ColumnComment TActivityParticipants ,templateID         ,'工作流的模板ID';/
                 EXEC P_ColumnComment TActivityParticipants ,activityID         ,'活动（节点）ID';/
-                EXEC P_ColumnComment TActivityParticipants ,objectType         ,'参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                EXEC P_ColumnComment TActivityParticipants ,objectType         ,'参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 EXEC P_ColumnComment TActivityParticipants ,objectID           ,'参与者ID';/
                 EXEC P_ColumnComment TActivityParticipants ,objectName         ,'参与者名称';/
                 EXEC P_ColumnComment TActivityParticipants ,objectNo           ,'参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
@@ -846,7 +846,7 @@
                 COMMENT ON COLUMN TActivityRouteParticipants.participantID      IS '主键ID';/
                 COMMENT ON COLUMN TActivityRouteParticipants.templateID         IS '工作流的模板ID';/
                 COMMENT ON COLUMN TActivityRouteParticipants.activityRouteID    IS '活动路由ID';/
-                COMMENT ON COLUMN TActivityRouteParticipants.objectType         IS '参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                COMMENT ON COLUMN TActivityRouteParticipants.objectType         IS '参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 COMMENT ON COLUMN TActivityRouteParticipants.objectID           IS '参与者ID';/
                 COMMENT ON COLUMN TActivityRouteParticipants.objectName         IS '参与者名称';/
                 COMMENT ON COLUMN TActivityRouteParticipants.objectNo           IS '参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
@@ -878,7 +878,7 @@
                 EXEC P_ColumnComment TActivityRouteParticipants ,participantID      ,'主键ID';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,templateID         ,'工作流的模板ID';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,activityRouteID    ,'活动路由ID';/
-                EXEC P_ColumnComment TActivityRouteParticipants ,objectType         ,'参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
+                EXEC P_ColumnComment TActivityRouteParticipants ,objectType         ,'参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,objectID           ,'参与者ID';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,objectName         ,'参与者名称';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,objectNo           ,'参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
@@ -1055,6 +1055,7 @@
 			
 			<content>
 				<![CDATA[
+				INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(0  ,'发起人'   ,0);/
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(1  ,'执行人'   ,1);/
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(2  ,'执行部门' ,2);/
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(3  ,'执行角色' ,3);/

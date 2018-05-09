@@ -1,9 +1,9 @@
 package org.hy.xflow.engine.dao;
 
-import java.util.List;
-
+import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
+import org.hy.common.xml.annotation.Xparam;
 import org.hy.common.xml.annotation.Xsql;
 import org.hy.xflow.engine.bean.ProcessParticipant;
 
@@ -23,16 +23,31 @@ public interface IProcessParticipantsDAO
 {
     
     /**
-     * 动态添加流转过程中的参与人
+     * 工作流实例ID，查询工作流流转过程的动态参与人信息
      * 
      * @author      ZhengWei(HY)
-     * @createDate  2018-05-08
+     * @createDate  2018-05-09
      * @version     v1.0
      *
-     * @param i_Participants
+     * @param i_WorkID  工作流实例ID
      * @return
      */
-    @Xsql(id="XSQL_XFlow_ProcessParticipants_Insert")
-    public int add(List<ProcessParticipant> i_Participants);
+    @Xsql("XSQL_XFlow_ProcessParticipants_QueryByWorkID_ServiceDataID")
+    public PartitionMap<String ,ProcessParticipant> queryByWorkID(@Xparam(id="workID" ,notNull=true) String i_WorkID);
+    
+    
+    
+    /**
+     * 三方使用系统的业务数据ID，查询工作流流转过程的动态参与人信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-09
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return
+     */
+    @Xsql("XSQL_XFlow_ProcessParticipants_QueryByWorkID_ServiceDataID")
+    public PartitionMap<String ,ProcessParticipant> queryByServiceDataID(@Xparam(id="serviceDataID" ,notNull=true) String i_ServiceDataID);
     
 }

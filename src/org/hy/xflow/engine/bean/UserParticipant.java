@@ -21,7 +21,7 @@ public class UserParticipant extends BaseModel
     private static final long serialVersionUID = -7249360500488445049L;
     
     
-    /** 参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色） */
+    /** 参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色） */
     protected ParticipantTypeEnum objectType;
     
     /** 参与者ID */
@@ -32,11 +32,11 @@ public class UserParticipant extends BaseModel
     
     /** 参与者序号，表示前后顺序。系统自动生成，下标从1开始。当外界指定时，系统不在生成。 */
     protected Integer             objectNo;
-
+    
     
     
     /**
-     * 获取：参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
+     * 获取：参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
      */
     public ParticipantTypeEnum getObjectType()
     {
@@ -66,7 +66,7 @@ public class UserParticipant extends BaseModel
 
     
     /**
-     * 设置：参与者类型（1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
+     * 设置：参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
      * 
      * @param objectType 
      */
