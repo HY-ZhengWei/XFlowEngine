@@ -16,6 +16,7 @@ import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.bean.UserParticipant;
+import org.hy.xflow.engine.enums.RouteTypeEnum;
 import org.hy.xflow.engine.service.IFlowInfoService;
 import org.hy.xflow.engine.service.IFlowProcessService;
 import org.hy.xflow.engine.service.IProcessParticipantsService;
@@ -709,14 +710,38 @@ public class XFlowEngine
                 }
                 
                 ProcessParticipant v_PartTemp = new ProcessParticipant();
-                
                 v_PartTemp.init(i_User ,v_Process ,i_Participants.get(v_Index));
-                
                 v_Process.getParticipants().add(v_PartTemp);
             }
         }
         
-        boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        boolean v_Ret = false;
+        // 驳回的路由
+        if ( v_Route.getRouteTypeID() == RouteTypeEnum.$Reject )
+        {
+            List<FlowProcess> v_OldProcesses = v_FlowInfo.getProcessActivityMap().get(v_Route.getNextActivityID());
+            if ( Help.isNull(v_OldProcesses) )
+            {
+                throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not reject. ActivityID[" + i_ActivityID + "]  ActivityRouteID[" + i_ActivityRouteID + "] User[" + i_User.getUserID() + "]");
+            }
+            
+            if ( Help.isNull(v_Process.getParticipants()) )
+            {
+                v_Process.setParticipants(new ArrayList<ProcessParticipant>());
+            }
+            
+            // 指定原操作人，为驳回后的操作人
+            ProcessParticipant v_RejectPart = new ProcessParticipant();
+            v_RejectPart.init_ToReject(i_User ,v_Process ,v_OldProcesses.get(0));
+            v_Process.getParticipants().add(v_RejectPart);
+            
+            v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        }
+        // 正常流转的路由
+        else
+        {
+            v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        }
         if ( v_Ret )
         {
             return v_Process;
@@ -899,14 +924,39 @@ public class XFlowEngine
                 }
                 
                 ProcessParticipant v_PartTemp = new ProcessParticipant();
-                
                 v_PartTemp.init(i_User ,v_Process ,i_Participants.get(v_Index));
-                
                 v_Process.getParticipants().add(v_PartTemp);
             }
         }
         
-        boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        boolean v_Ret = false;
+        // 驳回的路由
+        if ( v_Route.getRouteTypeID() == RouteTypeEnum.$Reject )
+        {
+            List<FlowProcess> v_OldProcesses = v_FlowInfo.getProcessActivityMap().get(v_Route.getNextActivityID());
+            if ( Help.isNull(v_OldProcesses) )
+            {
+                throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not reject. ActivityID[" + i_ActivityID + "]  ActivityRouteID[" + i_ActivityRouteID + "] User[" + i_User.getUserID() + "]");
+            }
+            
+            if ( Help.isNull(v_Process.getParticipants()) )
+            {
+                v_Process.setParticipants(new ArrayList<ProcessParticipant>());
+            }
+            
+            // 指定原操作人，为驳回后的操作人
+            ProcessParticipant v_RejectPart = new ProcessParticipant();
+            v_RejectPart.init_ToReject(i_User ,v_Process ,v_OldProcesses.get(0));
+            v_Process.getParticipants().add(v_RejectPart);
+            
+            v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        }
+        // 正常流转的路由
+        else
+        {
+            v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        }
+        
         if ( v_Ret )
         {
             return v_Process;

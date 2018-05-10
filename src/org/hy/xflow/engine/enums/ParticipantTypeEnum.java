@@ -89,6 +89,7 @@ public enum ParticipantTypeEnum implements BaseEnum<Integer>
     }
     
     
+    
     ParticipantTypeEnum(Integer i_Value ,String i_Desc)
     {
         this.value = i_Value;

@@ -1,6 +1,7 @@
 package org.hy.xflow.engine.bean;
 
 import org.hy.common.StringHelp;
+import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
 
@@ -64,6 +65,36 @@ public class ProcessParticipant extends Participant
         this.objectName    = i_UserPart.getObjectName();
         this.objectType    = i_UserPart.getObjectType();
         this.objectNo      = i_UserPart.getObjectNo();
+    }
+    
+    
+    
+    /**
+     * 初始化本类。用于工作流驳回时的流转
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-10
+     * @version     v1.0
+     *
+     * @param i_User
+     * @param i_Process
+     * @param i_ToRejectProcess
+     */
+    public void init_ToReject(User i_User ,FlowProcess i_Process ,FlowProcess i_ToRejectProcess)
+    {
+        this.pwpID         = StringHelp.getUUID();
+        this.processID     = i_Process.getProcessID();
+        this.workID        = i_Process.getWorkID();
+        this.serviceDataID = i_Process.getServiceDataID();
+        this.createTime    = i_Process.getCreateTime();
+        this.createrID     = i_User.getUserID();
+        this.creater       = i_User.getUserName();
+        this.createOrgID   = i_User.getOrgID();
+        this.createOrg     = i_User.getOrgName();
+        this.objectID      = i_ToRejectProcess.getOperateUserID();
+        this.objectName    = i_ToRejectProcess.getOperateUser();
+        this.objectType    = ParticipantTypeEnum.$User;
+        this.objectNo      = 0;
     }
     
 	

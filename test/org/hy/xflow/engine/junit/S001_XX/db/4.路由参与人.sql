@@ -15,9 +15,9 @@ VALUES (
         'ARP001'
        ,'T001'
        ,'AR014'
-       ,3
-       ,'004'
-       ,'销售角色'
+       ,21
+       ,''
+       ,'发起人'
        ,1
        ,'8a81b2aa4e4865b4014e535c6c900115'
        ,'郑伟'
@@ -43,10 +43,38 @@ VALUES (
         'ARP002'
        ,'T001'
        ,'AR014'
-       ,3
-       ,'001'
-       ,'主管角色'
+       ,22
+       ,'A002'
+       ,'活动实际操作人_主管角色'
        ,2
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       );
+       
+       
+       
+INSERT  INTO TActivityRouteParticipants
+       (
+        participantID
+       ,templateID
+       ,activityRouteID
+       ,objectType
+       ,objectID
+       ,objectName
+       ,objectNo
+       ,createrID
+       ,creater
+       ,createTime
+       )
+VALUES (
+        'ARP003'
+       ,'T001'
+       ,'AR014'
+       ,22
+       ,'A003'
+       ,'活动实际操作人_主管角色'
+       ,3
        ,'8a81b2aa4e4865b4014e535c6c900115'
        ,'郑伟'
        ,'2018-04-24 01:01:01'
@@ -68,12 +96,12 @@ INSERT  INTO TActivityRouteParticipants
        ,createTime
        )
 VALUES (
-        'ARP003'
+        'ARP004'
        ,'T001'
        ,'AR015'
-       ,3
-       ,'004'
-       ,'销售角色'
+       ,21
+       ,''
+       ,'发起人'
        ,1
        ,'8a81b2aa4e4865b4014e535c6c900115'
        ,'郑伟'
@@ -96,13 +124,41 @@ INSERT  INTO TActivityRouteParticipants
        ,createTime
        )
 VALUES (
-        'ARP004'
+        'ARP005'
        ,'T001'
        ,'AR015'
-       ,3
-       ,'001'
-       ,'主管角色'
+       ,22
+       ,'A002'
+       ,'活动实际操作人_主管角色'
        ,2
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       );
+       
+       
+       
+INSERT  INTO TActivityRouteParticipants
+       (
+        participantID
+       ,templateID
+       ,activityRouteID
+       ,objectType
+       ,objectID
+       ,objectName
+       ,objectNo
+       ,createrID
+       ,creater
+       ,createTime
+       )
+VALUES (
+        'ARP006'
+       ,'T001'
+       ,'AR015'
+       ,22
+       ,'A003'
+       ,'活动实际操作人_主管角色'
+       ,3
        ,'8a81b2aa4e4865b4014e535c6c900115'
        ,'郑伟'
        ,'2018-04-24 01:01:01'

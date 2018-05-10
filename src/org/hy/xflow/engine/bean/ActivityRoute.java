@@ -8,6 +8,7 @@ import org.hy.common.Date;
 import org.hy.common.Help;
 import org.hy.xflow.engine.common.BaseModel;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
+import org.hy.xflow.engine.enums.RouteTypeEnum;
 
 
 
@@ -35,7 +36,7 @@ public class ActivityRoute extends BaseModel
     private String templateID;
     
     /** 工作流路由类型ID */
-    private String routeTypeID;
+    private RouteTypeEnum routeTypeID;
     
     /** 工作流路由类型（内存合成） */
     private RouteType routeType;
@@ -320,7 +321,7 @@ public class ActivityRoute extends BaseModel
     /**
      * 获取：工作流路由类型ID
      */
-    public String getRouteTypeID()
+    public RouteTypeEnum getRouteTypeID()
     {
         return routeTypeID;
     }
@@ -406,7 +407,7 @@ public class ActivityRoute extends BaseModel
      * 
      * @param routeTypeID 
      */
-    public void setRouteTypeID(String routeTypeID)
+    public void setRouteTypeID(RouteTypeEnum routeTypeID)
     {
         this.routeTypeID = routeTypeID;
     }

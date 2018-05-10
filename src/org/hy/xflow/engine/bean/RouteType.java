@@ -1,6 +1,7 @@
 package org.hy.xflow.engine.bean;
 
 import org.hy.xflow.engine.common.BaseModel;
+import org.hy.xflow.engine.enums.RouteTypeEnum;
 
 
 
@@ -20,7 +21,7 @@ public class RouteType extends BaseModel
 
     
     /** 工作流路由类型ID */
-    private String  routeTypeID;
+    private RouteTypeEnum routeTypeID;
     
 	/** 工作流路由类型名称 */
     private String  routeType;
@@ -36,7 +37,7 @@ public class RouteType extends BaseModel
     /**
      * 获取：工作流路由类型ID
      */
-    public String getRouteTypeID()
+    public RouteTypeEnum getRouteTypeID()
     {
         return routeTypeID;
     }
@@ -56,7 +57,7 @@ public class RouteType extends BaseModel
      * 
      * @param routeTypeID 
      */
-    public void setRouteTypeID(String routeTypeID)
+    public void setRouteTypeID(RouteTypeEnum routeTypeID)
     {
         this.routeTypeID = routeTypeID;
     }

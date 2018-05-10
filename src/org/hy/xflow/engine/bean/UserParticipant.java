@@ -30,7 +30,13 @@ public class UserParticipant extends BaseModel
     /** 参与者名称 */
     protected String              objectName;
     
-    /** 参与者序号，表示前后顺序。系统自动生成，下标从1开始。当外界指定时，系统不在生成。 */
+    /** 
+     * 参与者序号，表示前后顺序。系统自动生成，下标从1开始。
+     * 
+     * 当外界指定时，系统不在生成。
+     * 
+     * 当驳回时此值为 0 ，表示原操作者有优先处理权。 
+     */
     protected Integer             objectNo;
     
     
@@ -102,9 +108,11 @@ public class UserParticipant extends BaseModel
 
     
     /**
-     * 获取：参与者序号，表示前后顺序。系统自动生成，下标从1开始
+     * 获取：参与者序号，表示前后顺序。系统自动生成，下标从1开始。
      * 
-     *      当外界指定时，系统不在生成。
+     * 当外界指定时，系统不在生成。
+     * 
+     * 当驳回时此值为 0 ，表示原操作者有优先处理权。 
      */
     public Integer getObjectNo()
     {
@@ -116,7 +124,9 @@ public class UserParticipant extends BaseModel
     /**
      * 设置：参与者序号，表示前后顺序。系统自动生成，下标从1开始。
      * 
-     *      当外界指定时，系统不在生成。
+     * 当外界指定时，系统不在生成。
+     * 
+     * 当驳回时此值为 0 ，表示原操作者有优先处理权。 
      * 
      * @param objectNo 
      */
