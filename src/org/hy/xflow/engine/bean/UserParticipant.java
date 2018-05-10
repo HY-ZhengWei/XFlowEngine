@@ -21,7 +21,7 @@ public class UserParticipant extends BaseModel
     private static final long serialVersionUID = -7249360500488445049L;
     
     
-    /** 参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色） */
+    /** 参与者类型  */
     protected ParticipantTypeEnum objectType;
     
     /** 参与者ID */
@@ -36,7 +36,7 @@ public class UserParticipant extends BaseModel
     
     
     /**
-     * 获取：参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
+     * 获取：参与者类型
      */
     public ParticipantTypeEnum getObjectType()
     {
@@ -66,7 +66,7 @@ public class UserParticipant extends BaseModel
 
     
     /**
-     * 设置：参与者类型（0:发起人；1:执行人；2:执行部门；3:执行角色；11:抄送人；12:抄送部门；13:抄送角色）
+     * 设置：参与者类型
      * 
      * @param objectType 
      */

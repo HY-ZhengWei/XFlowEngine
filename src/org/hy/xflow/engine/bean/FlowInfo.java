@@ -1,7 +1,11 @@
 package org.hy.xflow.engine.bean;
 
+import java.util.List;
+
 import org.hy.common.Date;
 import org.hy.common.Help;
+import org.hy.common.PartitionMap;
+import org.hy.common.TablePartition;
 import org.hy.xflow.engine.common.BaseModel;
 import org.hy.xflow.engine.common.IDHelp;
 
@@ -20,6 +24,9 @@ public class FlowInfo extends BaseModel
 {
     private static final long serialVersionUID = -4724247321457107633L;
 	
+    
+    /** 流转过程。（内存合成） */
+    private List<FlowProcess> processes;
     
 	/** 工作流实例ID */
     private String workID;
@@ -101,10 +108,58 @@ public class FlowInfo extends BaseModel
         this.isValid        = 1;
         this.isDelete       = 0;
     }
-	
+    
+    
+    
+    /**
+     * 获取按当时流转过程的当前活动ID为Map分区结构的流转信息。
+     * 
+     * 因流转信息是倒排的，所以同一活动ID的多次流转时，小分区中的首个元素即是最新的流转信息。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-10
+     * @version     v1.0
+     *
+     * @return
+     */
+    public PartitionMap<String ,FlowProcess> getProcessActivityMap()
+    {
+        PartitionMap<String ,FlowProcess> v_Ret = new TablePartition<String ,FlowProcess>();
+        
+        if ( !Help.isNull(this.processes) )
+        {
+            for (FlowProcess v_Process : this.processes)
+            {
+                v_Ret.putRow(v_Process.getCurrentActivityID() ,v_Process);
+            }
+        }
+        
+        return v_Ret;
+    }
 	
     
-	/**
+	
+    /**
+     * 获取：流转过程。（内存合成）
+     */
+    public List<FlowProcess> getProcesses()
+    {
+        return processes;
+    }
+
+    
+    /**
+     * 设置：流转过程。（内存合成）
+     * 
+     * @param processes 
+     */
+    public void setProcesses(List<FlowProcess> processes)
+    {
+        this.processes = processes;
+    }
+
+
+    /**
      * 获取：工作流实例ID
      */
     public String getWorkID()

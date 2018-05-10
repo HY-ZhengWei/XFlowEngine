@@ -60,10 +60,10 @@ public class XFlowEngine
     /**
      * 判定用户参与人之一。
      * 
-     * 联合动态参与人、发起人、活动节点、活动路由一起判定。
+     * 联合动态参与人、活动实际操作人、发起人、活动节点、活动路由一起判定。
      * 
      * 各种参与人在活动节点上的级别划分如下：
-     *   指定动态参与人  》  发起人 》 活动参与人
+     *   指定动态参与人 》 活动实际操作人  》  发起人 》 活动参与人
      *  
      * 路由可以不设定参与人的要求，但当路由设定参与人要求时，无论哪种参与人类型，均要符合路由对参与人的要求。
      * 
@@ -71,37 +71,51 @@ public class XFlowEngine
      * @createDate  2018-05-08
      * @version     v1.0
      *
-     * @param i_User
+     * @param i_User      用户
+     * @param i_Flow      工作流实例。内部有此实例的所有流转信息
+     * @param io_Process  流转过程。它上可指定动态参与人。
+     * @param i_Activity  模板的活动
      * @return
      */
     public static Participant isParticipant(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityRoute i_Route)
     {
-        boolean     v_IsCreater   = i_User.getUserID().equals(i_Flow.getCreaterID());
-        Participant v_Participant = null;
+        boolean                           v_IsCreater     = i_User.getUserID().equals(i_Flow.getCreaterID());
+        PartitionMap<String ,FlowProcess> v_OldProcessMap = i_Flow.getProcessActivityMap();
+        Participant                       v_Participant   = null;
         
         if ( Help.isNull(i_Route.getParticipants()) )
         {
-            // 为发起人时
-            if ( i_Route.getActivity().getParticipantByCreater() != null && v_IsCreater )
+            // 是之前工作流流转过程的活动实际操作人时
+            v_Participant = whereTo_ParticipantTypeEnum_ActivityUser(i_User ,i_Route.getActivity() ,v_OldProcessMap);
+            if ( v_Participant == null )
             {
-                v_Participant = i_Route.getActivity().getParticipantByCreater();
-            }
-            else
-            {
-                v_Participant = i_Route.getActivity().isParticipant(i_User);
+                // 为发起人时
+                if ( i_Route.getActivity().getParticipantByCreater() != null && v_IsCreater )
+                {
+                    v_Participant = i_Route.getActivity().getParticipantByCreater();
+                }
+                else
+                {
+                    v_Participant = i_Route.getActivity().isParticipant(i_User);
+                }
             }
         }
         // 路由级别高于活动节点，当路由上有参与人要求时，按路由的要求走
         else
         {
-            // 为发起人时
-            if ( i_Route.getParticipantByCreater() != null && v_IsCreater )
+            // 是之前工作流流转过程的活动实际操作人时
+            v_Participant = whereTo_ParticipantTypeEnum_ActivityUser(i_User ,i_Route ,v_OldProcessMap);
+            if ( v_Participant == null )
             {
-                v_Participant = i_Route.getParticipantByCreater();
-            }
-            else
-            {
-                v_Participant = i_Route.isParticipant(i_User);
+                // 为发起人时
+                if ( i_Route.getParticipantByCreater() != null && v_IsCreater )
+                {
+                    v_Participant = i_Route.getParticipantByCreater();
+                }
+                else
+                {
+                    v_Participant = i_Route.isParticipant(i_User);
+                }
             }
         }
         
@@ -114,7 +128,7 @@ public class XFlowEngine
      * 去哪？当前流转活动节点下、当前模板的活动节点下，允许当前用户走的路由。
      * 
      * 各种参与人在活动节点上的级别划分如下：
-     *   指定动态参与人  》  发起人 》 活动参与人
+     *   指定动态参与人 》 活动实际操作人  》  发起人 》 活动参与人
      *  
      * 路由可以不设定参与人的要求，但当路由设定参与人要求时，无论哪种参与人类型，均要符合路由对参与人的要求。
      * 
@@ -123,9 +137,9 @@ public class XFlowEngine
      * @version     v1.0
      *
      * @param i_User      用户
-     * @param i_Flow      工作流实例
+     * @param i_Flow      工作流实例。内部有此实例的所有流转信息
      * @param io_Process  流转过程。它上可指定动态参与人。
-     * @param i_Activity  模板的活动
+     * @param i_Activity  当前活动
      * @return
      */
     public static List<ActivityRoute> whereTo(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityInfo i_Activity)
@@ -166,17 +180,25 @@ public class XFlowEngine
                 }
             }
         }
-        // 情况1. 活动节点的参与人有发起人的情况
-        // 情况2. 常规工作流模板定义的参与人
+        // 情况1. 活动节点的参与人是之前另一个活动的实际操作人 
+        // 情况2. 活动节点的参与人有发起人的情况
+        // 情况3. 常规工作流模板定义的参与人
         else
         {
+            PartitionMap<String ,FlowProcess> v_OldProcessMap = i_Flow.getProcessActivityMap();
+            
             for (ActivityRoute v_Route : v_Routes)
             {
                 // 当路由上没有要求时，取活动节点上要求的参与人
                 if ( Help.isNull(v_Route.getParticipants()) )
                 {
+                    // 是之前工作流流转过程的活动实际操作人时
+                    if ( whereTo_ParticipantTypeEnum_ActivityUser(i_User ,i_Activity ,v_OldProcessMap) != null )
+                    {
+                        v_RetRoutes.add(v_Route);
+                    }
                     // 是发起人时
-                    if ( i_Activity.getParticipantByCreater() != null && v_IsCreater )
+                    else if ( i_Activity.getParticipantByCreater() != null && v_IsCreater )
                     {
                         v_RetRoutes.add(v_Route);
                     }
@@ -187,8 +209,13 @@ public class XFlowEngine
                 }
                 else
                 {
+                    // 是之前工作流流转过程的活动实际操作人时
+                    if ( whereTo_ParticipantTypeEnum_ActivityUser(i_User ,v_Route ,v_OldProcessMap) != null )
+                    {
+                        v_RetRoutes.add(v_Route);
+                    }
                     // 是发起人时
-                    if ( v_Route.getParticipantByCreater() != null && v_IsCreater )
+                    else if ( v_Route.getParticipantByCreater() != null && v_IsCreater )
                     {
                         v_RetRoutes.add(v_Route);
                     }
@@ -202,6 +229,76 @@ public class XFlowEngine
         }
         
         return v_RetRoutes;
+    }
+    
+    
+    
+    /**
+     * 判定用户是否为之前工作流流转过程的活动实际操作人
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-10
+     * @version     v1.0
+     *
+     * @param i_User           用户
+     * @param i_Activity       当前活动
+     * @param i_OldProcessMap  按当时流转过程的当前活动ID为Map分区结构的流转信息
+     * @return
+     */
+    private static Participant whereTo_ParticipantTypeEnum_ActivityUser(User i_User ,ActivityInfo i_Activity ,PartitionMap<String ,FlowProcess> i_OldProcessMap)
+    {
+        if ( !Help.isNull(i_Activity.getParticipantByActivitys()) )
+        {
+            for (Participant v_ActivityPart : i_Activity.getParticipantByActivitys().values())
+            {
+                List<FlowProcess> v_OldProcesses = i_OldProcessMap.get(v_ActivityPart.getObjectID());
+                
+                if ( !Help.isNull(v_OldProcesses) )
+                {
+                    if ( i_User.getUserID().equals(v_OldProcesses.get(0).getOperateUserID()) )
+                    {
+                        return v_ActivityPart;
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    
+    
+    /**
+     * 判定用户是否为之前工作流流转过程的活动实际操作人
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-10
+     * @version     v1.0
+     *
+     * @param i_User           用户
+     * @param i_Route          准备判定要走的路由
+     * @param i_OldProcessMap  按当时流转过程的当前活动ID为Map分区结构的流转信息
+     * @return
+     */
+    private static Participant whereTo_ParticipantTypeEnum_ActivityUser(User i_User ,ActivityRoute i_Route ,PartitionMap<String ,FlowProcess> i_OldProcessMap)
+    {
+        if ( !Help.isNull(i_Route.getParticipantByActivitys()) )
+        {
+            for (Participant v_ActivityPart : i_Route.getParticipantByActivitys().values())
+            {
+                List<FlowProcess> v_OldProcesses = i_OldProcessMap.get(v_ActivityPart.getObjectID());
+                
+                if ( !Help.isNull(v_OldProcesses) )
+                {
+                    if ( i_User.getUserID().equals(v_OldProcesses.get(0).getOperateUserID()) )
+                    {
+                        return v_ActivityPart;
+                    }
+                }
+            }
+        }
+        
+        return null;
     }
     
     
@@ -341,17 +438,17 @@ public class XFlowEngine
             throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not exists.");
         }
         
-        List<FlowProcess> v_ProcessList = this.flowProcessService.queryByWorkID(i_WorkID);
-        if ( Help.isNull(v_ProcessList) )
+        v_FlowInfo.setProcesses(this.flowProcessService.queryByWorkID(i_WorkID));
+        if ( Help.isNull(v_FlowInfo.getProcesses()) )
         {
             throw new NullPointerException("WorkID[" + i_WorkID + "] ProcessList is not exists.");
         }
         
         int         v_PIndex  = 0;
         FlowProcess v_Process = null;
-        for (; v_PIndex < v_ProcessList.size(); v_PIndex++)
+        for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
-            v_Process = v_ProcessList.get(v_PIndex);
+            v_Process = v_FlowInfo.getProcesses().get(v_PIndex);
             
             // 预留代码
             break;
@@ -411,17 +508,17 @@ public class XFlowEngine
             throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not exists.");
         }
         
-        List<FlowProcess> v_ProcessList = this.flowProcessService.queryByServiceDataID(i_ServiceDataID);
-        if ( Help.isNull(v_ProcessList) )
+        v_FlowInfo.setProcesses(this.flowProcessService.queryByServiceDataID(i_ServiceDataID));
+        if ( Help.isNull(v_FlowInfo.getProcesses()) )
         {
             throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] ProcessList is not exists.");
         }
         
         int         v_PIndex  = 0;
         FlowProcess v_Process = null;
-        for (; v_PIndex < v_ProcessList.size(); v_PIndex++)
+        for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
-            v_Process = v_ProcessList.get(v_PIndex);
+            v_Process = v_FlowInfo.getProcesses().get(v_PIndex);
             
             // 预留代码
             break;
@@ -552,17 +649,17 @@ public class XFlowEngine
             throw new NullPointerException("ActivityID[" + i_ActivityID + "] and ActivityRouteID[" + i_ActivityRouteID + "] is not exists.");
         }
         
-        List<FlowProcess> v_ProcessList = this.flowProcessService.queryByWorkID(i_WorkID);
-        if ( Help.isNull(v_ProcessList) )
+        v_FlowInfo.setProcesses(this.flowProcessService.queryByWorkID(i_WorkID));
+        if ( Help.isNull(v_FlowInfo.getProcesses()) )
         {
             throw new NullPointerException("WorkID[" + i_WorkID + "] ProcessList is not exists.");
         }
         
         int         v_PIndex   = 0;
         FlowProcess v_Previous = null;
-        for (; v_PIndex < v_ProcessList.size(); v_PIndex++)
+        for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
-            v_Previous = v_ProcessList.get(v_PIndex);
+            v_Previous = v_FlowInfo.getProcesses().get(v_PIndex);
             
             // 预留代码
             break;
@@ -742,17 +839,17 @@ public class XFlowEngine
             throw new NullPointerException("ActivityID[" + i_ActivityID + "] and ActivityRouteID[" + i_ActivityRouteID + "] is not exists.");
         }
         
-        List<FlowProcess> v_ProcessList = this.flowProcessService.queryByServiceDataID(i_ServiceDataID);
-        if ( Help.isNull(v_ProcessList) )
+        v_FlowInfo.setProcesses(this.flowProcessService.queryByServiceDataID(i_ServiceDataID));
+        if ( Help.isNull(v_FlowInfo.getProcesses()) )
         {
             throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] ProcessList is not exists.");
         }
         
         int         v_PIndex   = 0;
         FlowProcess v_Previous = null;
-        for (; v_PIndex < v_ProcessList.size(); v_PIndex++)
+        for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
-            v_Previous = v_ProcessList.get(v_PIndex);
+            v_Previous = v_FlowInfo.getProcesses().get(v_PIndex);
             
             // 预留代码
             break;

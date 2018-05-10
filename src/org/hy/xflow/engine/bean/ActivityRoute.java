@@ -1,6 +1,8 @@
 package org.hy.xflow.engine.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hy.common.Date;
 import org.hy.common.Help;
@@ -41,8 +43,15 @@ public class ActivityRoute extends BaseModel
     /** 工作流路由的参与人。谁从此路过。（内存合成） */
     private List<Participant> participants;
     
-    /** 本活动组件（节点）的参与人，是否为流程发起人。（内存合成） */
+    /** 本路由的参与人，是否为流程发起人。（内存合成） */
     private Participant participantByCreater;
+    
+    /** 
+     * 本路由的参与人，是否为另一个活动的实际操作人。（内存合成）
+     * 
+     * Map.key为Participant.objectID，即另一个活动的ActivityID
+     */
+    private Map<String ,Participant> participantByActivitys;
     
 	/** 工作流活动ID */
     private String activityID;
@@ -152,16 +161,23 @@ public class ActivityRoute extends BaseModel
     }
     
     
+    
     /**
-     * 初始化合成：工作流路由的参与人，是否为流程发起人。（内存合成）
+     * 初始化合成1：工作流路由的参与人，是否为流程发起人。（内存合成）
+     * 初始化合成2：工作流路由的参与人，是否为另一个活动的实际操作人。（内存合成）
+     * 
+     * 自动提前合成的原因是：一次合成多次使用，提高查询速度
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-09
      * @version     v1.0
      *
      */
-    public void initParticipantIsCreate()
+    public void initParticipants()
     {
+        this.participantByCreater   = null;
+        this.participantByActivitys = new HashMap<String ,Participant>();
+        
         if ( !Help.isNull(this.participants) )
         {
             for (Participant v_Part : this.participants)
@@ -169,13 +185,16 @@ public class ActivityRoute extends BaseModel
                 if ( v_Part.getObjectType() == ParticipantTypeEnum.$CreateUser )
                 {
                     this.participantByCreater = v_Part;
-                    return;
+                }
+                
+                if ( v_Part.getObjectType() == ParticipantTypeEnum.$ActivityUser )
+                {
+                    this.participantByActivitys.put(v_Part.getObjectID() ,v_Part);
                 }
             }
         }
-        
-        this.participantByCreater = null;
     }
+    
     
 	
     /**
@@ -334,7 +353,7 @@ public class ActivityRoute extends BaseModel
     {
         this.participants = participants;
         
-        this.initParticipantIsCreate();
+        this.initParticipants();
     }
     
     
@@ -355,6 +374,30 @@ public class ActivityRoute extends BaseModel
     public void setParticipantByCreater(Participant participantByCreater)
     {
         this.participantByCreater = participantByCreater;
+    }
+
+
+    /**
+     * 获取：* 本路由的参与人，是否为另一个活动的实际操作人。（内存合成）
+     * 
+     * Map.key为Participant.objectID，即另一个活动的ActivityID
+     */
+    public Map<String ,Participant> getParticipantByActivitys()
+    {
+        return participantByActivitys;
+    }
+
+    
+    /**
+     * 设置：* 本路由的参与人，是否为另一个活动的实际操作人。（内存合成）
+     * 
+     * Map.key为Participant.objectID，即另一个活动的ActivityID
+     * 
+     * @param participantByActivitys 
+     */
+    public void setParticipantByActivitys(Map<String ,Participant> participantByActivitys)
+    {
+        this.participantByActivitys = participantByActivitys;
     }
 
 

@@ -13,7 +13,7 @@ import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
 /**
- * 工作流过程表
+ * 工作流流转过程表
  *
  * @author      ZhengWei(HY)
  * @createDate  2018-04-17
@@ -281,7 +281,7 @@ public class FlowProcess extends BaseModel
         return null;
     }
     
-	
+    
 	
     /**
      * 获取：工作流的参与人
