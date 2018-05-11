@@ -132,7 +132,7 @@
 				       ,A.createTime
 				       ,A.createrID
 				       ,A.creater
-                  FROM  TProcessParticipants
+                  FROM  TProcessParticipants  A
 			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
 			<[   WHERE  A.workID        = ':workID'          ]>
 				]]>
@@ -151,8 +151,8 @@
 			<content>
 				<![CDATA[
 				DELETE  TProcessParticipants
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  A.workID        = ':workID'          ]>
+			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  workID        = ':workID'          ]>
 				]]>
 			</content>
 			

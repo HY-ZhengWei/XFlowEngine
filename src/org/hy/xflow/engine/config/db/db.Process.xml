@@ -184,7 +184,7 @@
 			
 			<content>
 				<![CDATA[
-				INSERT  INTO TFlowInfo_History
+				INSERT  INTO TProcess_History
 				       (
 				        processID
 				       ,workID
@@ -251,7 +251,7 @@
 				       ,A.operateFiles
 				       ,A.operateDatas
 				       ,A.infoComment
-                  FROM  TProcess
+                  FROM  TProcess  A
 			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
 			<[   WHERE  A.workID        = ':workID'          ]>
 				]]>
@@ -270,8 +270,8 @@
 			<content>
 				<![CDATA[
 				DELETE  TProcess
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  A.workID        = ':workID'          ]>
+			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  workID        = ':workID'          ]>
 				]]>
 			</content>
 			

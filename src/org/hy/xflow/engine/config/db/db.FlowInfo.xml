@@ -84,10 +84,10 @@
 				       ,':flow.creater'
 				       ,':flow.createOrgID'
 				       ,':flow.createOrg'
-				       ,':flow.createTime'
+				       ,':flow.createTime.fullMilli'
 				       ,':flow.lastUserID'
 				       ,':flow.lastUser'
-				       ,':flow.lastTime'
+				       ,':flow.lastTime.fullMilli'
 				       ,':flow.lastOrgID'
 				       ,':flow.lastOrg'
 				       ,':flow.lastProcessID'
@@ -107,15 +107,15 @@
 			
 			<content>
 				<![CDATA[
-				UPDATE  FlowInfo
+				UPDATE  TFlowInfo
 				   SET  lastTime      = ':process.operateTime.fullMilli'
 				       ,lastUserID    = ':process.operateUserID'
 				       ,lastUser      = ':process.operateUser'
 				       ,lastOrgID     = ':process.operateOrgID'
 				       ,lastOrg       = ':process.operateOrg'
 				       ,lastProcessID = ':process.processID'
-			<[   WHERE  serviceDataID = ':process.serviceDataID'   ]>
-			<[   WHERE  workID        = ':process.workID'          ]>
+			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  workID        = ':workID'          ]>
 				]]>
 			</content>
 			
@@ -168,7 +168,7 @@
 				       ,A.lastProcessID
 				       ,A.isValid
 				       ,A.isDelete
-                  FROM  TFlowInfo
+                  FROM  TFlowInfo  A
 			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
 			<[   WHERE  A.workID        = ':workID'          ]>
 				]]>
@@ -187,8 +187,8 @@
 			<content>
 				<![CDATA[
 				DELETE  TFlowInfo
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  A.workID        = ':workID'          ]>
+			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  workID        = ':workID'          ]>
 				]]>
 			</content>
 			

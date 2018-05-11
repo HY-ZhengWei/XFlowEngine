@@ -150,6 +150,11 @@ public class XFlowEngine
         List<ActivityRoute> v_RetRoutes = new ArrayList<ActivityRoute>();
         boolean             v_IsCreater = i_User.getUserID().equals(i_Flow.getCreaterID());
         
+        if ( Help.isNull(v_Routes) )
+        {
+            return v_RetRoutes;
+        }
+        
         // 指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
         // 指定动态参与人时，同时也受限于路由上设定的参与人。
         //                 但当路由上没有设定参与人时，动态参与人将畅通无阻
@@ -966,6 +971,12 @@ public class XFlowEngine
         
         if ( v_Ret )
         {
+            if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
+              || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
+            {
+                this.flowInfoService.toHistoryByServiceDataID(i_ServiceDataID);
+            }
+            
             return v_Process;
         }
         else
