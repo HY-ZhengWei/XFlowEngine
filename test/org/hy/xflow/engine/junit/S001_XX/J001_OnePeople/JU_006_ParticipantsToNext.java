@@ -44,7 +44,7 @@ public class JU_006_ParticipantsToNext extends BaseJunit
             
             XFlowEngine.getInstance().toNextByServiceDataID(v_User ,v_ServiceDataID ,v_Route.getActivityID() ,v_Route.getActivityRouteID());
             
-            System.out.println("-- 转评审成功");
+            System.out.println("-- 单人选型转向选型结果确认");
         }
     }
     
