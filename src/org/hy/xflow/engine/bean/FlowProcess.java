@@ -165,14 +165,14 @@ public class FlowProcess extends BaseModel
     
     
     
-    public FlowProcess init_ToNext(User i_User ,FlowInfo i_Flow ,FlowProcess io_Previous ,ActivityInfo i_Activity)
+    public FlowProcess init_ToNext(User i_User ,FlowInfo i_Flow ,FlowProcess io_Previous ,ActivityRoute i_Route)
     {
         this.processID               = StringHelp.getUUID();
         this.serviceDataID           = i_Flow.getServiceDataID();
         this.workID                  = i_Flow.getWorkID();
         this.splitProcessID          = "";
-        this.currentActivityID       = i_Activity.getActivityID();
-        this.currentActivityName     = i_Activity.getActivityName();
+        this.currentActivityID       = i_Route.getNextActivity().getActivityID();
+        this.currentActivityName     = i_Route.getNextActivity().getActivityName();
         
         this.processNo               = -1;  //////////////////////////////////////
         this.previousProcessID       = io_Previous.getProcessID();
@@ -197,7 +197,7 @@ public class FlowProcess extends BaseModel
         this.operateTime             = this.createTime;
         this.operateTimeLen          = 0;
         this.operateTypeID           = "";
-        this.operateType              = "";
+        this.operateType             = "";
         this.operateUserID           = this.createrID;
         this.operateUser             = this.creater;
         this.operateOrgID            = this.createOrgID;
@@ -205,8 +205,8 @@ public class FlowProcess extends BaseModel
         
         io_Previous.operateTime      = this.createTime;
         io_Previous.operateTimeLen   = 0;
-        io_Previous.operateTypeID    = "";
-        io_Previous.operateType      = "";
+        io_Previous.operateTypeID    = i_Route.getRouteType().getRouteTypeID().getValue();
+        io_Previous.operateType      = i_Route.getRouteType().getRouteType();
         io_Previous.operateUserID    = this.createrID;
         io_Previous.operateUser      = this.creater;
         io_Previous.operateOrgID     = this.createOrgID;

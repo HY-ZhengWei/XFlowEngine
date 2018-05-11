@@ -682,7 +682,7 @@ public class XFlowEngine
         }
         
         FlowProcess v_Process = new FlowProcess();
-        v_Process.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_Route.getNextActivity());
+        v_Process.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_Route);
         
         // 生成参与人信息
         if ( !Help.isNull(i_Participants) )
@@ -896,7 +896,7 @@ public class XFlowEngine
         }
         
         FlowProcess v_Process = new FlowProcess();
-        v_Process.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_Route.getNextActivity());
+        v_Process.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_Route);
         
         // 生成参与人信息
         if ( !Help.isNull(i_Participants) )
