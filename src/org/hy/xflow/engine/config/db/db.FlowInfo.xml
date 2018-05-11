@@ -99,6 +99,103 @@
 			
 		</sql>
 		
+		
+		
+		<sql id="XSQL_XFlow_FlowInfo_UpdateLast"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				UPDATE  FlowInfo
+				   SET  lastTime      = ':process.operateTime.fullMilli'
+				       ,lastUserID    = ':process.operateUserID'
+				       ,lastUser      = ':process.operateUser'
+				       ,lastOrgID     = ':process.operateOrgID'
+				       ,lastOrg       = ':process.operateOrg'
+				       ,lastProcessID = ':process.processID'
+			<[   WHERE  serviceDataID = ':process.serviceDataID'   ]>
+			<[   WHERE  workID        = ':process.workID'          ]>
+				]]>
+			</content>
+			
+			<comment>更新最后操作信息</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_FlowInfo_ToHistory"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO TFlowInfo_History
+				       (
+				        workID
+				       ,workFatherID
+				       ,flowTemplateID
+				       ,serviceDataID
+				       ,createrID
+				       ,creater
+				       ,createOrgID
+				       ,createOrg
+				       ,createTime
+				       ,lastUserID
+				       ,lastUser
+				       ,lastTime
+				       ,lastOrgID
+				       ,lastOrg
+				       ,lastProcessID
+				       ,isValid
+				       ,isDelete
+				       )
+                SELECT  A.workID
+				       ,A.workFatherID
+				       ,A.flowTemplateID
+				       ,A.serviceDataID
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.lastUserID
+				       ,A.lastUser
+				       ,A.lastTime
+				       ,A.lastOrgID
+				       ,A.lastOrg
+				       ,A.lastProcessID
+				       ,A.isValid
+				       ,A.isDelete
+                  FROM  TFlowInfo
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  A.workID        = ':workID'          ]>
+				]]>
+			</content>
+			
+			<comment>全流转结束后转历史</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_FlowInfo_ToHistory_Del"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				DELETE  TFlowInfo
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  A.workID        = ':workID'          ]>
+				]]>
+			</content>
+			
+			<comment>删除前转历史</comment>
+			
+		</sql>
+		
 	</sqls>
 	
 </config>

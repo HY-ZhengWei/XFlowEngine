@@ -176,6 +176,109 @@
 			
 		</sql>
 		
+		
+		
+		<sql id="XSQL_XFlow_Process_ToHistory"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO TFlowInfo_History
+				       (
+				        processID
+				       ,workID
+				       ,serviceDataID
+				       ,splitProcessID
+				       ,processNo
+				       ,currentActivityID
+				       ,currentActivityName
+				       ,previousProcessID
+				       ,previousActivityID
+				       ,previousActivityName
+				       ,nextProcessID
+				       ,nextActivityID
+				       ,nextActivityName
+				       ,createrID
+				       ,creater
+				       ,createOrgID
+				       ,createOrg
+				       ,createTime
+				       ,limitUserID
+				       ,limitOrgID
+				       ,limitTime
+				       ,operateTime
+				       ,operateTimeLen
+				       ,operateTypeID
+				       ,operateType
+				       ,operateUserID
+				       ,operateUser
+				       ,operateOrgID
+				       ,operateOrg
+				       ,operateFiles
+				       ,operateDatas
+				       ,infoComment
+				       )
+                SELECT  A.processID
+				       ,A.workID
+				       ,A.serviceDataID
+				       ,A.splitProcessID
+				       ,A.processNo
+				       ,A.currentActivityID
+				       ,A.currentActivityName
+				       ,A.previousProcessID
+				       ,A.previousActivityID
+				       ,A.previousActivityName
+				       ,A.nextProcessID
+				       ,A.nextActivityID
+				       ,A.nextActivityName
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.limitUserID
+				       ,A.limitOrgID
+				       ,A.limitTime
+				       ,A.operateTime
+				       ,A.operateTimeLen
+				       ,A.operateTypeID
+				       ,A.operateType
+				       ,A.operateUserID
+				       ,A.operateUser
+				       ,A.operateOrgID
+				       ,A.operateOrg
+				       ,A.operateFiles
+				       ,A.operateDatas
+				       ,A.infoComment
+                  FROM  TProcess
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  A.workID        = ':workID'          ]>
+				]]>
+			</content>
+			
+			<comment>全流转结束后转历史</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_ToHistory_Del"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				DELETE  TProcess
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  A.workID        = ':workID'          ]>
+				]]>
+			</content>
+			
+			<comment>删除前转历史</comment>
+			
+		</sql>
+		
 	</sqls>
 	
 </config>

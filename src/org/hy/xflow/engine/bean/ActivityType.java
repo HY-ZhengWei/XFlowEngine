@@ -1,6 +1,7 @@
 package org.hy.xflow.engine.bean;
 
 import org.hy.xflow.engine.common.BaseModel;
+import org.hy.xflow.engine.enums.ActivityTypeEnum;
 
 
 
@@ -19,23 +20,23 @@ public class ActivityType extends BaseModel
 	
     
 	/** 工作流活动类型ID */
-    private String  activityTypeID;
+    private ActivityTypeEnum activityTypeID;
     
 	/** 工作流活动类型名称 */
-    private String  activityType;
+    private String           activityType;
     
 	/** 备注说明 */
-    private String  infoComment;
+    private String           infoComment;
     
     /** 排列顺序 */
-    private Integer orderNo;
+    private Integer          orderNo;
     
 	
 	
 	/**
      * 获取：工作流活动类型ID
      */
-    public String getActivityTypeID()
+    public ActivityTypeEnum getActivityTypeID()
     {
         return this.activityTypeID;
     }
@@ -46,7 +47,7 @@ public class ActivityType extends BaseModel
      * 
      * @param i_ActivityTypeID
      */
-    public void setActivityTypeID(String i_ActivityTypeID)
+    public void setActivityTypeID(ActivityTypeEnum i_ActivityTypeID)
     {
         this.activityTypeID = i_ActivityTypeID;
     }

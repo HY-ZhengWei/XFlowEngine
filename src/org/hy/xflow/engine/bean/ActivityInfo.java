@@ -7,6 +7,7 @@ import java.util.Map;
 import org.hy.common.Date;
 import org.hy.common.Help;
 import org.hy.xflow.engine.common.BaseModel;
+import org.hy.xflow.engine.enums.ActivityTypeEnum;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
@@ -51,7 +52,7 @@ public class ActivityInfo extends BaseModel
     private String activityName;
     
 	/** 活动类型ID */
-    private String activityTypeID;
+    private ActivityTypeEnum activityTypeID;
     
     /** 活动类型（内存合成） */
     private ActivityType activityType;
@@ -344,7 +345,7 @@ public class ActivityInfo extends BaseModel
 	/**
      * 获取：活动类型ID
      */
-    public String getActivityTypeID()
+    public ActivityTypeEnum getActivityTypeID()
     {
         return this.activityTypeID;
     }
@@ -355,7 +356,7 @@ public class ActivityInfo extends BaseModel
      * 
      * @param i_ActivityTypeID
      */
-    public void setActivityTypeID(String i_ActivityTypeID)
+    public void setActivityTypeID(ActivityTypeEnum i_ActivityTypeID)
     {
         this.activityTypeID = i_ActivityTypeID;
     }

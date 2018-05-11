@@ -1,6 +1,7 @@
 package org.hy.xflow.engine.service.impl;
 
 import org.hy.common.xml.annotation.Xjava;
+import org.hy.common.xml.annotation.Xsql;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.common.BaseService;
@@ -93,6 +94,42 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
     public boolean toNext(FlowProcess i_Process ,FlowProcess i_Previous)
     {
         return this.flowInfoDAO.toNext(i_Process ,i_Previous);
+    }
+    
+    
+    
+    /**
+     * 工作流实例ID，全流转结束后转历史
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-11
+     * @version     v1.0
+     *
+     * @param i_WorkID  工作流实例ID
+     * @return
+     */
+    @Xsql("GXSQL_Flow_ToHistory")
+    public boolean toHistory(String i_WorkID)
+    {
+        return this.flowInfoDAO.toHistory(i_WorkID);
+    }
+    
+    
+    
+    /**
+     * 按第三方使用系统的业务数据ID，全流转结束后转历史
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-11
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return
+     */
+    @Xsql("GXSQL_Flow_ToHistory")
+    public boolean toHistoryByServiceDataID(String i_ServiceDataID)
+    {
+        return this.flowInfoDAO.toHistoryByServiceDataID(i_ServiceDataID);
     }
     
 }

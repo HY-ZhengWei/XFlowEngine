@@ -95,6 +95,71 @@
 			
 		</sql>
 		
+		
+		
+		<sql id="XSQL_XFlow_ProcessParticipants_ToHistory"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO TProcessParticipants_History
+				       (
+				        pwpID
+				       ,processID
+				       ,workID
+				       ,serviceDataID
+				       ,objectID
+				       ,objectName
+				       ,objectNo
+				       ,objectType
+				       ,createOrgID
+				       ,createOrg
+				       ,createTime
+				       ,createrID
+				       ,creater
+				       )
+                SELECT  A.pwpID
+				       ,A.processID
+				       ,A.workID
+				       ,A.serviceDataID
+				       ,A.objectID
+				       ,A.objectName
+				       ,A.objectNo
+				       ,A.objectType
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.createrID
+				       ,A.creater
+                  FROM  TProcessParticipants
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  A.workID        = ':workID'          ]>
+				]]>
+			</content>
+			
+			<comment>全流转结束后转历史</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_ProcessParticipants_ToHistory_Del"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				DELETE  TProcessParticipants
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  A.workID        = ':workID'          ]>
+				]]>
+			</content>
+			
+			<comment>删除前转历史</comment>
+			
+		</sql>
+		
 	</sqls>
 	
 </config>

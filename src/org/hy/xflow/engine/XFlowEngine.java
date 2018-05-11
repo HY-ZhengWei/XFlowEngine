@@ -16,6 +16,7 @@ import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.bean.UserParticipant;
+import org.hy.xflow.engine.enums.ActivityTypeEnum;
 import org.hy.xflow.engine.enums.RouteTypeEnum;
 import org.hy.xflow.engine.service.IFlowInfoService;
 import org.hy.xflow.engine.service.IFlowProcessService;
@@ -744,6 +745,12 @@ public class XFlowEngine
         }
         if ( v_Ret )
         {
+            if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
+              || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
+            {
+                this.flowInfoService.toHistory(i_WorkID);
+            }
+            
             return v_Process;
         }
         else

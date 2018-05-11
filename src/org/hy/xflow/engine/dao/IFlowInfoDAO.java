@@ -84,4 +84,34 @@ public interface IFlowInfoDAO
     public boolean toNext(@Xparam("process")  FlowProcess i_Process
                          ,@Xparam("previous") FlowProcess i_Previous);
     
+    
+    
+    /**
+     * 工作流实例ID，全流转结束后转历史
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-11
+     * @version     v1.0
+     *
+     * @param i_WorkID  工作流实例ID
+     * @return
+     */
+    @Xsql("GXSQL_Flow_ToHistory")
+    public boolean toHistory(@Xparam(id="workID" ,notNull=true) String i_WorkID);
+    
+    
+    
+    /**
+     * 按第三方使用系统的业务数据ID，全流转结束后转历史
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-11
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return
+     */
+    @Xsql("GXSQL_Flow_ToHistory")
+    public boolean toHistoryByServiceDataID(@Xparam(id="serviceDataID" ,notNull=true) String i_ServiceDataID);
+    
 }

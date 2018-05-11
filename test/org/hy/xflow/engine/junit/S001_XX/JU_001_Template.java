@@ -3,9 +3,7 @@ package org.hy.xflow.engine.junit.S001_XX;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hy.common.Help;
 import org.hy.common.xml.XJava;
-import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.common.BaseJunit;
 import org.hy.xflow.engine.dao.ITemplateDAO;
@@ -46,17 +44,6 @@ public class JU_001_Template extends BaseJunit
         Map<String ,Long> v_Map = new HashMap<String ,Long>(); 
         v_Map.put("templateID" ,1L);
         v_Template = ((ITemplateDAO)XJava.getObject("TemplateDAO")).queryByID(v_Map);
-    }
-    
-    
-    
-    /**
-     * 自动生成SQL语句
-     */
-    @Test
-    public void test002()
-    {
-        System.out.println(Help.toSQLInsert(ProcessParticipant.class ,false));
     }
     
 }
