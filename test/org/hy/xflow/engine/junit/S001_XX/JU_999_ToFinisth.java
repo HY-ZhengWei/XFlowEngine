@@ -1,4 +1,4 @@
-package org.hy.xflow.engine.junit.S001_XX.J001_OnePeople;
+package org.hy.xflow.engine.junit.S001_XX;
 
 import java.util.List;
 
@@ -14,13 +14,13 @@ import org.junit.Test;
 
 
 /**
- * 测试单元：驳回
+ * 测试单元：流转到完成
  *
  * @author      ZhengWei(HY)
- * @createDate  2018-05-10
+ * @createDate  2018-05-09
  * @version     v1.0
  */
-public class JU_008_GoBack extends BaseJunit
+public class JU_999_ToFinisth extends BaseJunit
 {
     
     @Test
@@ -40,11 +40,11 @@ public class JU_008_GoBack extends BaseJunit
         }
         else
         {
-            ActivityRoute v_Route = v_Routes.get(0);
+            ActivityRoute v_Route = v_Routes.get(2);
             
             XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityID() ,v_Route.getActivityRouteID());
             
-            System.out.println("-- 选型结果确认未通过转单人选型");
+            System.out.println("-- 选型结果确认转结束");
         }
     }
     
