@@ -7,7 +7,7 @@
 	
 	
 	
-	<!-- 数据库历史数据的初始化对象创建（自动创建）的相关SQL -->
+	<!-- 工作流实例历史数据的初始化对象创建（自动创建）的相关SQL -->
 	<sqls>
 	
 		<sql id="XSQL_Create_TFlowInfo_History">

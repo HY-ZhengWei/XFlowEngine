@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流实例活动数据的初始化对象创建（自动创建）的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_Create_TFlowInfo">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TFlowInfo
+                (
+                 workID             VARCHAR2(64)                     NOT NULL
+                ,workFatherID       VARCHAR2(64)                     
+                ,flowTemplateID     VARCHAR2(64)                     NOT NULL
+                ,serviceDataID      VARCHAR2(64)
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            NVARCHAR2(128)
+                ,createOrgID        VARCHAR2(64)
+                ,createOrg          NVARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                ,lastUserID         VARCHAR2(64)                     NOT NULL
+                ,lastUser           NVARCHAR2(128)
+                ,lastTime           DATE
+                ,lastOrgID          VARCHAR2(64)
+                ,lastOrg            NVARCHAR2(128)
+                ,lastProcessID      VARCHAR2(64)                     NOT NULL
+                ,isValid            NUMBER(1)                        NOT NULL
+                ,isDelete           NUMBER(1)                        NOT NULL
+                );/
+                
+                ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
+                
+                COMMENT ON TABLE  TFlowInfo                               IS '工作流信息表';/
+                COMMENT ON COLUMN TFlowInfo.workID                        IS '工作流实例ID';/
+                COMMENT ON COLUMN TFlowInfo.workFatherID                  IS '工作流的父实例ID，可为空';/
+                COMMENT ON COLUMN TFlowInfo.flowTemplateID                IS '工作流的模板ID';/
+                COMMENT ON COLUMN TFlowInfo.serviceDataID                 IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                COMMENT ON COLUMN TFlowInfo.createrID                     IS '创建人员ID';/
+                COMMENT ON COLUMN TFlowInfo.creater                       IS '创建人员名称';/
+                COMMENT ON COLUMN TFlowInfo.createOrgID                   IS '创建部门ID';/
+                COMMENT ON COLUMN TFlowInfo.createOrg                     IS '创建部门名称';/
+                COMMENT ON COLUMN TFlowInfo.createTime                    IS '创建时间';/
+                COMMENT ON COLUMN TFlowInfo.lastUserID                    IS '最后修改人员ID';/
+                COMMENT ON COLUMN TFlowInfo.lastUser                      IS '最后修改人员名称';/
+                COMMENT ON COLUMN TFlowInfo.lastTime                      IS '最后修改时间';/
+                COMMENT ON COLUMN TFlowInfo.lastOrgID                     IS '最后修改部门ID';/
+                COMMENT ON COLUMN TFlowInfo.lastOrg                       IS '最后修改部门名称';/
+                COMMENT ON COLUMN TFlowInfo.lastProcessID                 IS '最后修改的过程ID';/
+                COMMENT ON COLUMN TFlowInfo.isValid                       IS '是否有效标记(0:无效；1:有效)';/
+                COMMENT ON COLUMN TFlowInfo.isDelete                      IS '是否删除标记(0:未删除；1:已删除)';/
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TFlowInfo
+                (
+                 workID             VARCHAR(64)                      NOT NULL
+                ,workFatherID       VARCHAR(64)                     
+                ,flowTemplateID     VARCHAR(64)                      NOT NULL
+                ,serviceDataID      VARCHAR(64)
+                ,createrID          VARCHAR(64)                      NOT NULL
+                ,creater            NVARCHAR(128)
+                ,createOrgID        VARCHAR(64)
+                ,createOrg          NVARCHAR(128)
+                ,createTime         DATETIME                         NOT NULL
+                ,lastUserID         VARCHAR(64)                      NOT NULL
+                ,lastUser           NVARCHAR(128)
+                ,lastTime           DATETIME
+                ,lastOrgID          VARCHAR(64)
+                ,lastOrg            NVARCHAR(128)
+                ,lastProcessID      VARCHAR(64)                      NOT NULL
+                ,isValid            INT                              NOT NULL
+                ,isDelete           INT                              NOT NULL
+                );/
+                
+                ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
+                
+                EXEC P_TableComment  TFlowInfo                            ,'工作流信息表';/
+                EXEC P_ColumnComment TFlowInfo ,workID                    ,'工作流实例ID';/
+                EXEC P_ColumnComment TFlowInfo ,workFatherID              ,'工作流的父实例ID，可为空';/
+                EXEC P_ColumnComment TFlowInfo ,flowTemplateID            ,'工作流的模板ID';/
+                EXEC P_ColumnComment TFlowInfo ,serviceDataID             ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                EXEC P_ColumnComment TFlowInfo ,createrID                 ,'创建人员ID';/
+                EXEC P_ColumnComment TFlowInfo ,creater                   ,'创建人员名称';/
+                EXEC P_ColumnComment TFlowInfo ,createOrgID               ,'创建部门ID';/
+                EXEC P_ColumnComment TFlowInfo ,createOrg                 ,'创建部门名称';/
+                EXEC P_ColumnComment TFlowInfo ,createTime                ,'创建时间';/
+                EXEC P_ColumnComment TFlowInfo ,lastUserID                ,'最后修改人员ID';/
+                EXEC P_ColumnComment TFlowInfo ,lastUser                  ,'最后修改人员名称';/
+                EXEC P_ColumnComment TFlowInfo ,lastTime                  ,'最后修改时间';/
+                EXEC P_ColumnComment TFlowInfo ,lastOrgID                 ,'最后修改部门ID';/
+                EXEC P_ColumnComment TFlowInfo ,lastOrg                   ,'最后修改部门名称';/
+                EXEC P_ColumnComment TFlowInfo ,lastProcessID             ,'最后修改的过程ID';/
+                EXEC P_ColumnComment TFlowInfo ,isValid                   ,'是否有效标记(0:无效；1:有效)';/
+                EXEC P_ColumnComment TFlowInfo ,isDelete                  ,'是否删除标记(0:未删除；1:已删除)';/
+				]]>
+			</content>
+			
+			<comment>工作流信息表</comment>
+			<create>TFlowInfo</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TProcess">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TProcess
+                (
+                 processID              VARCHAR2(64)                     NOT NULL
+                ,workID                 VARCHAR2(64)                     NOT NULL
+                ,serviceDataID          VARCHAR2(64)
+                ,splitProcessID         VARCHAR2(64)
+                ,processNo              NUMBER(10)                       NOT NULL
+                ,currentActivityID      VARCHAR2(64)                     NOT NULL
+                ,currentActivityName    NVARCHAR2(64)                    NOT NULL
+                ,previousProcessID      VARCHAR2(64)
+                ,previousActivityID     VARCHAR2(64)                     NOT NULL
+                ,previousActivityName   NVARCHAR2(64)                    NOT NULL
+                ,nextProcessID          VARCHAR2(64)
+                ,nextActivityID         VARCHAR2(64)
+                ,nextActivityName       NVARCHAR2(64)
+                ,createrID              VARCHAR2(64)                     NOT NULL
+                ,creater                NVARCHAR2(128)
+                ,createOrgID            VARCHAR2(64)
+                ,createOrg              NVARCHAR2(128)
+                ,createTime             DATE                             NOT NULL
+                ,limitUserID            VARCHAR2(64)
+                ,limitOrgID             VARCHAR2(64)
+                ,limitTime              DATE
+                ,operateTime            DATE
+                ,operateTimeLen         NUMBER(10)
+                ,operateTypeID          VARCHAR2(64)
+                ,operateType            NVARCHAR2(128)
+                ,operateUserID          VARCHAR2(64)
+                ,operateUser            NVARCHAR2(128)
+                ,operateOrgID           VARCHAR2(64)
+                ,operateOrg             NVARCHAR2(128)
+                ,operateFiles           VARCHAR2(2000)
+                ,operateDatas           VARCHAR2(2000)
+                ,infoComment            NVARCHAR2(2000)
+                );/
+                
+                ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
+                
+                COMMENT ON TABLE  TProcess                               IS '工作流过程表';/
+                COMMENT ON COLUMN TProcess.processID                     IS '工作流的过程ID';/
+                COMMENT ON COLUMN TProcess.workID                        IS '工作流实例ID';/
+                COMMENT ON COLUMN TProcess.serviceDataID                 IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                COMMENT ON COLUMN TProcess.splitProcessID                IS '分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
+                COMMENT ON COLUMN TProcess.processNo                     IS '工作流的过程编号。下标从1开始';/
+                COMMENT ON COLUMN TProcess.currentActivityID             IS '当前活动ID';/
+                COMMENT ON COLUMN TProcess.currentActivityName           IS '当前活动名称';/
+                COMMENT ON COLUMN TProcess.previousProcessID             IS '上一过程ID';/
+                COMMENT ON COLUMN TProcess.previousActivityID            IS '上一活动ID';/
+                COMMENT ON COLUMN TProcess.previousActivityName          IS '上一活动名称';/
+                COMMENT ON COLUMN TProcess.nextProcessID                 IS '下一过程ID';/
+                COMMENT ON COLUMN TProcess.nextActivityID                IS '下一活动ID';/
+                COMMENT ON COLUMN TProcess.nextActivityName              IS '下一活动名称';/
+                COMMENT ON COLUMN TProcess.createrID                     IS '创建人员ID';/
+                COMMENT ON COLUMN TProcess.creater                       IS '创建人员名称';/
+                COMMENT ON COLUMN TProcess.createOrgID                   IS '创建部门ID';/
+                COMMENT ON COLUMN TProcess.createOrg                     IS '创建部门名称';/
+                COMMENT ON COLUMN TProcess.createTime                    IS '创建时间';/
+                COMMENT ON COLUMN TProcess.limitUserID                   IS '限制操作人员ID';/
+                COMMENT ON COLUMN TProcess.limitOrgID                    IS '限制操作部门ID';/
+                COMMENT ON COLUMN TProcess.limitTime                     IS '限制操作时间';/
+                COMMENT ON COLUMN TProcess.operateTime                   IS '操作时间';/
+                COMMENT ON COLUMN TProcess.operateTimeLen                IS '操作时长（单位：秒）';/
+                COMMENT ON COLUMN TProcess.operateTypeID                 IS '操作类型ID';/
+                COMMENT ON COLUMN TProcess.operateType                   IS '操作类型名称';/
+                COMMENT ON COLUMN TProcess.operateUserID                 IS '操作人员ID';/
+                COMMENT ON COLUMN TProcess.operateUser                   IS '操作人员名称';/
+                COMMENT ON COLUMN TProcess.operateOrgID                  IS '操作部门ID';/
+                COMMENT ON COLUMN TProcess.operateOrg                    IS '操作部门名称';/
+                COMMENT ON COLUMN TProcess.operateFiles                  IS '操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
+                COMMENT ON COLUMN TProcess.operateDatas                  IS '操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
+                COMMENT ON COLUMN TProcess.infoComment                   IS '备注说明';/
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TProcess
+                (
+                 processID               VARCHAR(64)                      NOT NULL
+                ,workID                  VARCHAR(64)                      NOT NULL
+                ,serviceDataID           VARCHAR(64)
+                ,splitProcessID          VARCHAR(64)
+                ,processNo               INT                              NOT NULL
+                ,currentActivityID       VARCHAR(64)                      NOT NULL
+                ,currentActivityName     NVARCHAR(64)                     NOT NULL
+                ,previousProcessID       VARCHAR(64)
+                ,previousActivityID      VARCHAR(64)                      NOT NULL
+                ,previousActivityName    NVARCHAR(64)                     NOT NULL
+                ,nextProcessID           VARCHAR(64)
+                ,nextActivityID          VARCHAR(64)
+                ,nextActivityName        NVARCHAR(64)
+                ,createrID               VARCHAR(64)                      NOT NULL
+                ,creater                 NVARCHAR(128)
+                ,createOrgID             VARCHAR(64)
+                ,createOrg               NVARCHAR(128)
+                ,createTime              DATETIME                         NOT NULL
+                ,limitUserID             VARCHAR(64)
+                ,limitOrgID              VARCHAR(64)
+                ,limitTime               DATETIME
+                ,operateTime             DATETIME
+                ,operateTimeLen          INT
+                ,operateTypeID           VARCHAR(64)
+                ,operateType             NVARCHAR(128)
+                ,operateUserID           VARCHAR(64)
+                ,operateUser             NVARCHAR(128)
+                ,operateOrgID            VARCHAR(64)
+                ,operateOrg              NVARCHAR(128)
+                ,operateFiles            VARCHAR(2000)
+                ,operateDatas            VARCHAR(2000)
+                ,infoComment             NVARCHAR(2000)
+                );/
+                
+                ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
+                
+                EXEC P_TableComment  TProcess                               ,'工作流过程表';/
+                EXEC P_ColumnComment TProcess ,processID                    ,'工作流的过程ID';/
+                EXEC P_ColumnComment TProcess ,workID                       ,'工作流实例ID';/
+                EXEC P_ColumnComment TProcess ,serviceDataID                ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                EXEC P_ColumnComment TProcess ,splitProcessID               ,'分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
+                EXEC P_ColumnComment TProcess ,processNo                    ,'工作流的过程编号。下标从1开始';/
+                EXEC P_ColumnComment TProcess ,currentActivityID            ,'当前活动ID';/
+                EXEC P_ColumnComment TProcess ,currentActivityName          ,'当前活动名称';/
+                EXEC P_ColumnComment TProcess ,previousProcessID            ,'上一过程ID';/
+                EXEC P_ColumnComment TProcess ,previousActivityID           ,'上一活动ID';/
+                EXEC P_ColumnComment TProcess ,previousActivityName         ,'上一活动名称';/
+                EXEC P_ColumnComment TProcess ,nextProcessID                ,'下一过程ID';/
+                EXEC P_ColumnComment TProcess ,nextActivityID               ,'下一活动ID';/
+                EXEC P_ColumnComment TProcess ,nextActivityName             ,'下一活动名称';/
+                EXEC P_ColumnComment TProcess ,createrID                    ,'创建人员ID';/
+                EXEC P_ColumnComment TProcess ,creater                      ,'创建人员名称';/
+                EXEC P_ColumnComment TProcess ,createOrgID                  ,'创建部门ID';/
+                EXEC P_ColumnComment TProcess ,createOrg                    ,'创建部门名称';/
+                EXEC P_ColumnComment TProcess ,createTime                   ,'创建时间';/
+                EXEC P_ColumnComment TProcess ,limitUserID                  ,'限制操作人员ID';/
+                EXEC P_ColumnComment TProcess ,limitOrgID                   ,'限制操作部门ID';/
+                EXEC P_ColumnComment TProcess ,limitTime                    ,'限制操作时间';/
+                EXEC P_ColumnComment TProcess ,operateTime                  ,'操作时间';/
+                EXEC P_ColumnComment TProcess ,operateTimeLen               ,'操作时长（单位：秒）';/
+                EXEC P_ColumnComment TProcess ,operateTypeID                ,'操作类型ID';/
+                EXEC P_ColumnComment TProcess ,operateType                  ,'操作类型名称';/
+                EXEC P_ColumnComment TProcess ,operateUserID                ,'操作人员ID';/
+                EXEC P_ColumnComment TProcess ,operateUser                  ,'操作人员名称';/
+                EXEC P_ColumnComment TProcess ,operateOrgID                 ,'操作部门ID';/
+                EXEC P_ColumnComment TProcess ,operateOrg                   ,'操作部门名称';/
+                EXEC P_ColumnComment TProcess ,operateFiles                 ,'操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
+                EXEC P_ColumnComment TProcess ,operateDatas                 ,'操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
+                EXEC P_ColumnComment TProcess ,infoComment                  ,'备注说明';/
+				]]>
+			</content>
+			
+			<comment>工作流过程表</comment>
+			<create>TProcess</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TProcessParticipants">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TProcessParticipants
+                (
+                 pwpID              VARCHAR2(64)                     NOT NULL
+                ,processID          VARCHAR2(64)                     NOT NULL
+                ,workID             VARCHAR2(64)                     NOT NULL
+                ,serviceDataID      VARCHAR2(64)
+                ,objectType         NUMBER(2)                        NOT NULL
+                ,objectID           VARCHAR2(64)                     NOT NULL
+                ,objectName         NVARCHAR2(128)
+                ,objectNo           NUMBER(10)                       NOT NULL
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            NVARCHAR2(128)
+                ,createOrgID        VARCHAR2(64)
+                ,createOrg          NVARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                );/
+                
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT PK_TProcessParticipants PRIMARY KEY (pwpID);/
+                
+                COMMENT ON TABLE  TProcessParticipants                    IS '工作流过程的实际参与人';/
+                COMMENT ON COLUMN TProcessParticipants.pwpID              IS '主键ID';/
+                COMMENT ON COLUMN TProcessParticipants.processID          IS '工作流的过程ID';/
+                COMMENT ON COLUMN TProcessParticipants.workID             IS '工作流实例ID';/
+                COMMENT ON COLUMN TProcessParticipants.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                COMMENT ON COLUMN TProcessParticipants.objectType         IS '参与者类型';/
+                COMMENT ON COLUMN TProcessParticipants.objectID           IS '参与者ID';/
+                COMMENT ON COLUMN TProcessParticipants.objectName         IS '参与者名称';/
+                COMMENT ON COLUMN TProcessParticipants.objectNo           IS '参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
+                COMMENT ON COLUMN TProcessParticipants.createrID          IS '创建人员ID';/
+                COMMENT ON COLUMN TProcessParticipants.creater            IS '创建人员名称';/
+                COMMENT ON COLUMN TProcessParticipants.createOrgID        IS '创建部门ID';/
+                COMMENT ON COLUMN TProcessParticipants.createOrg          IS '创建部门名称';/
+                COMMENT ON COLUMN TProcessParticipants.createTime         IS '创建时间';/
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TProcessParticipants
+                (
+                 pwpID              VARCHAR(64)                     NOT NULL
+                ,processID          VARCHAR(64)                     NOT NULL
+                ,workID             VARCHAR(64)                     NOT NULL
+                ,serviceDataID      VARCHAR(64)
+                ,objectType         INT                             NOT NULL
+                ,objectID           VARCHAR(64)                     NOT NULL
+                ,objectName         NVARCHAR(128)
+                ,objectNo           INT                             NOT NULL
+                ,createrID          VARCHAR(64)                     NOT NULL
+                ,creater            NVARCHAR(128)
+                ,createOrgID        VARCHAR(64)
+                ,createOrg          NVARCHAR(128)
+                ,createTime         DATETIME                        NOT NULL
+                );/
+                
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT PK_TProcessParticipants PRIMARY KEY (pwpID);/
+                
+                EXEC P_TableComment  TProcessParticipants                     ,'工作流过程的实际参与人';/
+                EXEC P_ColumnComment TProcessParticipants ,pwpID              ,'主键ID';/
+                EXEC P_ColumnComment TProcessParticipants ,processID          ,'工作流的过程ID';/
+                EXEC P_ColumnComment TProcessParticipants ,workID             ,'工作流实例ID';/
+                EXEC P_ColumnComment TProcessParticipants ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                EXEC P_ColumnComment TProcessParticipants ,objectType         ,'参与者类型';/
+                EXEC P_ColumnComment TProcessParticipants ,objectID           ,'参与者ID';/
+                EXEC P_ColumnComment TProcessParticipants ,objectName         ,'参与者名称';/
+                EXEC P_ColumnComment TProcessParticipants ,objectNo           ,'参与者序号，表示前后顺序。系统自动生成，下标从1开始';/
+                EXEC P_ColumnComment TProcessParticipants ,createrID          ,'创建人员ID';/
+                EXEC P_ColumnComment TProcessParticipants ,creater            ,'创建人员名称';/
+                EXEC P_ColumnComment TProcessParticipants ,createOrgID        ,'创建部门ID';/
+                EXEC P_ColumnComment TProcessParticipants ,createOrg          ,'创建部门名称';/
+                EXEC P_ColumnComment TProcessParticipants ,createTime         ,'创建时间';/
+				]]>
+			</content>
+			
+			<comment>工作流过程的动态参与人</comment>
+			<create>TProcessParticipants</create>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_Create_TFlowCurrentOperator">
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TFlowCurrentOperator
+                (
+                 workID             VARCHAR2(64)                     NOT NULL
+                ,serviceDataID      VARCHAR2(64)
+                ,operateTime        DATE                             NOT NULL
+                ,operateUserID      NVARCHAR2(64)                    NOT NULL
+                ,operateUser        NVARCHAR2(128)
+                ,operateOrgID       VARCHAR2(64)
+                ,operateOrg         NVARCHAR2(128)
+                );/
+                
+                
+                COMMENT ON TABLE  TFlowCurrentOperator                    IS '工作流当前操作人(实时数据)';/
+                COMMENT ON COLUMN TFlowCurrentOperator.workID             IS '工作流实例ID';/
+                COMMENT ON COLUMN TFlowCurrentOperator.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                COMMENT ON COLUMN TFlowCurrentOperator.operateTime        IS '操作时间';/
+                COMMENT ON COLUMN TFlowCurrentOperator.operateUserID      IS '操作人员ID';/
+                COMMENT ON COLUMN TFlowCurrentOperator.operateUser        IS '操作人员名称';/
+                COMMENT ON COLUMN TFlowCurrentOperator.operateOrgID       IS '操作部门ID';/
+                COMMENT ON COLUMN TFlowCurrentOperator.operateOrg         IS '操作部门名称';/
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TFlowCurrentOperator
+                (
+                 workID             VARCHAR(64)                      NOT NULL
+                ,serviceDataID      VARCHAR(64)
+                ,operateTime        DATETIME                         NOT NULL
+                ,operateUserID      NVARCHAR(64)                     NOT NULL
+                ,operateUser        NVARCHAR(128)
+                ,operateOrgID       VARCHAR(64)
+                ,operateOrg         NVARCHAR(128)
+                );/
+                
+                
+                EXEC P_TableComment  TFlowCurrentOperator                     ,'工作流当前操作人(实时数据)';/
+                EXEC P_ColumnComment TFlowCurrentOperator ,workID             ,'工作流实例ID';/
+                EXEC P_ColumnComment TFlowCurrentOperator ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                EXEC P_ColumnComment TFlowCurrentOperator ,operateTime        ,'操作时间';/
+                EXEC P_ColumnComment TFlowCurrentOperator ,operateUserID      ,'操作人员ID';/
+                EXEC P_ColumnComment TFlowCurrentOperator ,operateUser        ,'操作人员名称';/
+                EXEC P_ColumnComment TFlowCurrentOperator ,operateOrgID       ,'操作部门ID';/
+                EXEC P_ColumnComment TFlowCurrentOperator ,operateOrg         ,'操作部门名称';/
+				]]>
+			</content>
+			
+			<comment>工作流当前操作人(实时数据)</comment>
+			<create>TFlowCurrentOperator</create>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>

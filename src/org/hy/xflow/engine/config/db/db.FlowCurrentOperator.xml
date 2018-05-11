@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流当前操作人(实时数据)模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_TFlowCurrentOperator_Del"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				DELETE  TFlowCurrentOperator
+			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  workID        = ':workID'          ]>
+			<[     AND  operateUserID = ':operateUserID'   ]>
+				]]>
+			</content>
+			
+			<comment>删除工作流实例的当前操作人</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_TFlowCurrentOperator_Insert"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO TFlowCurrentOperator
+				       (
+				        workID       
+				       ,serviceDataID
+				       ,operateTime  
+				       ,operateUserID
+				       ,operateUser  
+				       ,operateOrgID 
+				       ,operateOrg   
+				       )
+                VALUES (
+				        ':workID'
+				       ,':serviceDataID'
+				       ,':operateTime.fullMilli'
+				       ,':operateUserID'
+				       ,':operateUser'
+				       ,':operateOrgID' 
+				       ,':operateOrg'
+                       )
+				]]>
+			</content>
+			
+			<comment>添加当前操作人</comment>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>

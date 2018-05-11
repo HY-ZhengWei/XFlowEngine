@@ -85,6 +85,11 @@
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Del" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
 			<comment>全流转结束后转历史</comment>
 		</sqlGroup>
 		
