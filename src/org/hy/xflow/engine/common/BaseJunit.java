@@ -1,6 +1,7 @@
 package org.hy.xflow.engine.common;
 
 import org.hy.xflow.engine.config.InitConfig;
+import org.hy.xflow.engine.config.InitConfigDB;
 
 
 
@@ -27,6 +28,7 @@ public class BaseJunit extends Base
             {
                 $IsInit = true;
                 
+                new InitConfigDB();
                 new InitConfig(false);
             }
         }
