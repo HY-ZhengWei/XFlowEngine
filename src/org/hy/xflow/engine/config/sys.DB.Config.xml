@@ -10,11 +10,11 @@
 
 
 
-	<!-- 数据库配置信息 -->
+	<!-- 数据库配置信息（本配置应交由外界初始化并提供，这里只做测试用） -->
 	<sqls>
 	
 		<!-- Oracle数据库 -->
-		<dataSource id="DS_XFlow_01" if="ORACLE == DataSourceType.getValue">
+		<dataSource id="DS_XFlow_01" if="ORACLE == XFlow_DataSourceType.getValue">
 			<driverClass>oracle.jdbc.driver.OracleDriver</driverClass>
 			<jdbcUrl>jdbc:oracle:thin:@127.0.0.1:1521:orcl</jdbcUrl>
 			<user>XFlow</user>
@@ -26,7 +26,7 @@
 		
 	
 		<!-- MySQL数据库 -->
-		<dataSource id="DS_XFlow_01" if="MYSQL == DataSourceType.getValue">
+		<dataSource id="DS_XFlow_01" if="MYSQL == XFlow_DataSourceType.getValue">
 			<driverClass>com.mysql.jdbc.Driver</driverClass>
 			<jdbcUrl>jdbc:mysql://127.0.0.1:3306/XFlow?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
 			<user>root</user>
@@ -38,7 +38,7 @@
 		
 		
 		<!-- SQL Server数据库 -->
-		<dataSource id="DS_XFlow_01" if="SQLSERVER == DataSourceType.getValue">
+		<dataSource id="DS_XFlow_01" if="SQLSERVER == XFlow_DataSourceType.getValue">
 			<driverClass>net.sourceforge.jtds.jdbc.Driver</driverClass>
 			<jdbcUrl>jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=XFlow</jdbcUrl>
 			<user>sa</user>
