@@ -18,6 +18,7 @@
 			<content>
 				<![CDATA[
 				SELECT  A.activityRouteID
+				       ,A.activityRouteCode
 				       ,A.activityRouteName
 				       ,A.templateID
 				       ,A.routeTypeID
@@ -25,7 +26,9 @@
 				       ,B.routeType     AS "routeType.routeType"
 				       ,B.infoComment   AS "routeType.infoComment"
 				       ,A.activityID
+				       ,C.activityCode
 				       ,A.nextActivityID
+				       ,D.activityCode  AS "nextActivityCode"
 				       ,A.conditionXJavaID
 				       ,A.conditionMethod
 				       ,A.conditionValue
@@ -39,15 +42,21 @@
 				       ,A.lastTime
 				  FROM  TActivityRoute  A
 				       ,TRouteType      B
-				 WHERE  A.routeTypeID = B.routeTypeID
-				   AND  A.templateID  = ':templateID'
+				       ,TActivityInfo   C
+				       ,TActivityInfo   D
+				 WHERE  A.nextActivityID = D.activityID
+				   AND  A.templateID     = D.templateID
+				   AND  A.activityID     = C.activityID
+				   AND  A.templateID     = C.templateID
+				   AND  A.routeTypeID    = B.routeTypeID
+				   AND  A.templateID     = ':templateID'
 				 ORDER  BY A.activityID ,B.orderNo ,A.nextActivityID
 				]]>
 			</content>
 			
 			<result>
 				<table>org.hy.common.TablePartition</table>
-				<fill>putRow(row.activityID ,row)</fill>
+				<fill>putRow(row.activityCode ,row)</fill>
 				<row>org.hy.xflow.engine.bean.ActivityRoute</row>
 				<cfill>setter(colValue)</cfill>
 			</result>

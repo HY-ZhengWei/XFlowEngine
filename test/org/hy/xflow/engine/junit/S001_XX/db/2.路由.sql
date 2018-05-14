@@ -1,6 +1,7 @@
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -20,6 +21,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR001'
+       ,'选型申请-选型受理'
        ,'转向选型受理'
        ,'T001'
        ,'RT001'
@@ -43,6 +45,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -62,6 +65,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR002'
+       ,'选型受理-单人选型'
        ,'受理后转向单人选型'
        ,'T001'
        ,'RT001'
@@ -85,6 +89,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -104,6 +109,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR003'
+       ,'选型受理-选型分包'
        ,'受理后转向选型分包'
        ,'T001'
        ,'RT001'
@@ -128,6 +134,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -147,6 +154,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR004'
+       ,'选型受理-选型评审'
        ,'受理后转向评审'
        ,'T001'
        ,'RT001'
@@ -170,6 +178,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -189,6 +198,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR005'
+       ,'选型受理-选型申请'
        ,'受理未通过'
        ,'T001'
        ,'RT020'
@@ -212,6 +222,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -231,6 +242,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR006'
+       ,'单人选型-选型结果确认'
        ,'单人选型转向选型结果确认'
        ,'T001'
        ,'RT001'
@@ -254,6 +266,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -273,6 +286,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR007'
+       ,'单人评审-单人选型'
        ,'评审后转向单人选型'
        ,'T001'
        ,'RT001'
@@ -296,6 +310,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -315,6 +330,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR008'
+       ,'单人评审-选型分包'
        ,'评审后转向选型分包'
        ,'T001'
        ,'RT001'
@@ -339,6 +355,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -358,6 +375,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR009'
+       ,'单人评审-选型申请'
        ,'评审未通过'
        ,'T001'
        ,'RT020'
@@ -381,6 +399,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -400,6 +419,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR010'
+       ,'选型分包-多人选型'
        ,'选型分包转多人选型'
        ,'T001'
        ,'RT002'
@@ -423,6 +443,7 @@ VALUES (
  INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -442,6 +463,7 @@ VALUES (
        )
 VALUES (
         'AR011'
+       ,'多人选型-选型汇总'
        ,'多人选型转选型汇总'
        ,'T001'
        ,'RT003'
@@ -465,6 +487,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -484,6 +507,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR012'
+       ,'选型汇总-选型结果确认'
        ,'选型汇总转选型结果确认'
        ,'T001'
        ,'RT001'
@@ -508,6 +532,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -527,7 +552,8 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR013'
-       ,'选型结果确认转选型结束'
+       ,'选型结果确认-选型完成'
+       ,'选型结果确认转选型完成'
        ,'T001'
        ,'RT999'
        ,'A008'
@@ -550,6 +576,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -569,6 +596,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR014'
+       ,'选型结果确认-单人选型'
        ,'选型结果确认未通过转单人选型'
        ,'T001'
        ,'RT020'
@@ -592,6 +620,7 @@ VALUES (
 INSERT  INTO TActivityRoute
        (
         activityRouteID
+       ,activityRouteCode
        ,activityRouteName
        ,templateID
        ,routeTypeID
@@ -611,6 +640,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR015'
+       ,'选型结果确认-选型分包'
        ,'选型结果确认未通过转选型分包'
        ,'T001'
        ,'RT020'

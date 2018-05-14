@@ -29,6 +29,9 @@ public class ActivityRoute extends BaseModel
 	/** 主键ID */
     private String activityRouteID;
     
+    /** 活动路由Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同。 */
+    private String activityRouteCode;
+    
     /** 活动路由名称 */
     private String activityRouteName;
     
@@ -57,11 +60,17 @@ public class ActivityRoute extends BaseModel
 	/** 工作流活动ID */
     private String activityID;
     
+    /** 工作流活动编码 */
+    private String activityCode;
+    
     /** 路由A-B两端，从A到B的A端活动（内存合成） */
     private ActivityInfo activity;
     
 	/** 下一活动ID。可以为不同工作流模板的活动。即支持子流程 */
     private String nextActivityID;
+    
+    /** 下一活动编码 */
+    private String nextActivityCode;
     
     /** 下一活动（内存合成） */
     private ActivityInfo nextActivity;
@@ -248,15 +257,6 @@ public class ActivityRoute extends BaseModel
     
     
     /**
-     * 获取：活动路由名称
-     */
-    public String getActivityRouteName()
-    {
-        return activityRouteName;
-    }
-
-    
-    /**
      * 设置：主键ID
      * 
      * @param activityRouteID 
@@ -264,6 +264,35 @@ public class ActivityRoute extends BaseModel
     public void setActivityRouteID(String activityRouteID)
     {
         this.activityRouteID = activityRouteID;
+    }
+    
+    
+    /**
+     * 获取：活动路由Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同。
+     */
+    public String getActivityRouteCode()
+    {
+        return activityRouteCode;
+    }
+
+    
+    /**
+     * 设置：活动路由Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同。
+     * 
+     * @param activityRouteCode 
+     */
+    public void setActivityRouteCode(String activityRouteCode)
+    {
+        this.activityRouteCode = activityRouteCode;
+    }
+
+
+    /**
+     * 获取：活动路由名称
+     */
+    public String getActivityRouteName()
+    {
+        return activityRouteName;
     }
 
     
@@ -298,7 +327,27 @@ public class ActivityRoute extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：工作流活动编码
+     */
+    public String getActivityCode()
+    {
+        return activityCode;
+    }
+
+    
+    /**
+     * 设置：工作流活动编码
+     * 
+     * @param activityCode 
+     */
+    public void setActivityCode(String activityCode)
+    {
+        this.activityCode = activityCode;
+    }
+
+
+    /**
      * 获取：工作流的模板ID
      */
     public String getTemplateID()
@@ -444,7 +493,27 @@ public class ActivityRoute extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：下一活动编码
+     */
+    public String getNextActivityCode()
+    {
+        return nextActivityCode;
+    }
+
+    
+    /**
+     * 设置：下一活动编码
+     * 
+     * @param nextActivityCode 
+     */
+    public void setNextActivityCode(String nextActivityCode)
+    {
+        this.nextActivityCode = nextActivityCode;
+    }
+
+
+    /**
      * 获取：有条件判定时，执行的XJava对象ID
      */
     public String getConditionXJavaID()

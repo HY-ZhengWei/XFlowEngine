@@ -127,12 +127,15 @@
                 ,splitProcessID         VARCHAR2(64)
                 ,processNo              NUMBER(10)                       NOT NULL
                 ,currentActivityID      VARCHAR2(64)                     NOT NULL
+                ,currentActivityCode    VARCHAR2(64)                     NOT NULL
                 ,currentActivityName    NVARCHAR2(64)                    NOT NULL
                 ,previousProcessID      VARCHAR2(64)
-                ,previousActivityID     VARCHAR2(64)                     NOT NULL
-                ,previousActivityName   NVARCHAR2(64)                    NOT NULL
+                ,previousActivityID     VARCHAR2(64)
+                ,previousActivityCode   VARCHAR2(64)
+                ,previousActivityName   NVARCHAR2(64)
                 ,nextProcessID          VARCHAR2(64)
                 ,nextActivityID         VARCHAR2(64)
+                ,nextActivityCode       VARCHAR2(64)
                 ,nextActivityName       NVARCHAR2(64)
                 ,createrID              VARCHAR2(64)                     NOT NULL
                 ,creater                NVARCHAR2(128)
@@ -164,12 +167,15 @@
                 COMMENT ON COLUMN TProcess_History.splitProcessID        IS '分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
                 COMMENT ON COLUMN TProcess_History.processNo             IS '工作流的过程编号。下标从1开始';/
                 COMMENT ON COLUMN TProcess_History.currentActivityID     IS '当前活动ID';/
+                COMMENT ON COLUMN TProcess_History.currentActivityCode   IS '当前活动编码';/
                 COMMENT ON COLUMN TProcess_History.currentActivityName   IS '当前活动名称';/
                 COMMENT ON COLUMN TProcess_History.previousProcessID     IS '上一过程ID';/
                 COMMENT ON COLUMN TProcess_History.previousActivityID    IS '上一活动ID';/
+                COMMENT ON COLUMN TProcess_History.previousActivityCode  IS '上一活动编码';/
                 COMMENT ON COLUMN TProcess_History.previousActivityName  IS '上一活动名称';/
                 COMMENT ON COLUMN TProcess_History.nextProcessID         IS '下一过程ID';/
                 COMMENT ON COLUMN TProcess_History.nextActivityID        IS '下一活动ID';/
+                COMMENT ON COLUMN TProcess_History.nextActivityCode      IS '下一活动编码';/
                 COMMENT ON COLUMN TProcess_History.nextActivityName      IS '下一活动名称';/
                 COMMENT ON COLUMN TProcess_History.createrID             IS '创建人员ID';/
                 COMMENT ON COLUMN TProcess_History.creater               IS '创建人员名称';/
@@ -203,12 +209,15 @@
                 ,splitProcessID          VARCHAR(64)
                 ,processNo               INT                              NOT NULL
                 ,currentActivityID       VARCHAR(64)                      NOT NULL
+                ,currentActivityCode     VARCHAR(64)                      NOT NULL
                 ,currentActivityName     NVARCHAR(64)                     NOT NULL
                 ,previousProcessID       VARCHAR(64)
-                ,previousActivityID      VARCHAR(64)                      NOT NULL
-                ,previousActivityName    NVARCHAR(64)                     NOT NULL
+                ,previousActivityID      VARCHAR(64)
+                ,previousActivityCode    VARCHAR(64)
+                ,previousActivityName    NVARCHAR(64)
                 ,nextProcessID           VARCHAR(64)
                 ,nextActivityID          VARCHAR(64)
+                ,nextActivityCode        VARCHAR(64)
                 ,nextActivityName        NVARCHAR(64)
                 ,createrID               VARCHAR(64)                      NOT NULL
                 ,creater                 NVARCHAR(128)
@@ -240,12 +249,15 @@
                 EXEC P_ColumnComment TProcess_History ,splitProcessID       ,'分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
                 EXEC P_ColumnComment TProcess_History ,processNo            ,'工作流的过程编号。下标从1开始';/
                 EXEC P_ColumnComment TProcess_History ,currentActivityID    ,'当前活动ID';/
+                EXEC P_ColumnComment TProcess_History ,currentActivityCode  ,'当前活动编码';/
                 EXEC P_ColumnComment TProcess_History ,currentActivityName  ,'当前活动名称';/
                 EXEC P_ColumnComment TProcess_History ,previousProcessID    ,'上一过程ID';/
                 EXEC P_ColumnComment TProcess_History ,previousActivityID   ,'上一活动ID';/
+                EXEC P_ColumnComment TProcess_History ,previousActivityCode ,'上一活动编码';/
                 EXEC P_ColumnComment TProcess_History ,previousActivityName ,'上一活动名称';/
                 EXEC P_ColumnComment TProcess_History ,nextProcessID        ,'下一过程ID';/
                 EXEC P_ColumnComment TProcess_History ,nextActivityID       ,'下一活动ID';/
+                EXEC P_ColumnComment TProcess_History ,nextActivityCode     ,'下一活动编码';/
                 EXEC P_ColumnComment TProcess_History ,nextActivityName     ,'下一活动名称';/
                 EXEC P_ColumnComment TProcess_History ,createrID            ,'创建人员ID';/
                 EXEC P_ColumnComment TProcess_History ,creater              ,'创建人员名称';/

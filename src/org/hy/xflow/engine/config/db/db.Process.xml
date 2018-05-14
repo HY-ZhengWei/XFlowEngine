@@ -25,12 +25,15 @@
 				       ,splitProcessID
 				       ,processNo
 				       ,currentActivityID
+				       ,currentActivityCode
 				       ,currentActivityName
 				       ,previousProcessID
 				       ,previousActivityID
+				       ,previousActivityCode
 				       ,previousActivityName
 				       ,nextProcessID
 				       ,nextActivityID
+				       ,nextActivityCode
 				       ,nextActivityName
 				       ,createrID
 				       ,creater
@@ -59,12 +62,15 @@
 				       ,':process.splitProcessID'
 				       , :process.processNo
 				       ,':process.currentActivityID'
+				       ,':process.currentActivityCode'
 				       ,':process.currentActivityName'
 				       ,':process.previousProcessID'
 				       ,':process.previousActivityID'
+				       ,':process.previousActivityCode'
 				       ,':process.previousActivityName'
 				       ,':process.nextProcessID'
 				       ,':process.nextActivityID'
+				       ,':process.nextActivityCode'
 				       ,':process.nextActivityName'
 				       ,':process.createrID'
 				       ,':process.creater'
@@ -103,7 +109,8 @@
 				<![CDATA[
 				UPDATE  TProcess
 				   SET  nextProcessID    = ':previous.nextProcessID'       
-				       ,nextActivityID   = ':previous.nextActivityID'      
+				       ,nextActivityID   = ':previous.nextActivityID'
+				       ,nextActivityCode = ':previous.nextActivityCode'
 				       ,nextActivityName = ':previous.nextActivityName'    
 				       ,operateTime      = ':previous.operateTime.fullMilli'         
 				       ,operateTimeLen   =  :previous.operateTimeLen       
@@ -134,12 +141,15 @@
 				       ,A.splitProcessID
 				       ,A.processNo
 				       ,A.currentActivityID
+				       ,A.currentActivityCode
 				       ,A.currentActivityName
 				       ,A.previousProcessID
 				       ,A.previousActivityID
+				       ,A.previousActivityCode
 				       ,A.previousActivityName
 				       ,A.nextProcessID
 				       ,A.nextActivityID
+				       ,A.nextActivityCode
 				       ,A.nextActivityName
 				       ,A.createrID
 				       ,A.creater
@@ -192,12 +202,15 @@
 				       ,splitProcessID
 				       ,processNo
 				       ,currentActivityID
+				       ,currentActivityCode
 				       ,currentActivityName
 				       ,previousProcessID
 				       ,previousActivityID
+				       ,previousActivityCode
 				       ,previousActivityName
 				       ,nextProcessID
 				       ,nextActivityID
+				       ,nextActivityCode
 				       ,nextActivityName
 				       ,createrID
 				       ,creater
@@ -225,12 +238,15 @@
 				       ,A.splitProcessID
 				       ,A.processNo
 				       ,A.currentActivityID
+				       ,A.currentActivityCode
 				       ,A.currentActivityName
 				       ,A.previousProcessID
 				       ,A.previousActivityID
+				       ,A.previousActivityCode
 				       ,A.previousActivityName
 				       ,A.nextProcessID
 				       ,A.nextActivityID
+				       ,A.nextActivityCode
 				       ,A.nextActivityName
 				       ,A.createrID
 				       ,A.creater

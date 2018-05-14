@@ -45,6 +45,9 @@ public class FlowProcess extends BaseModel
 	/** 当前活动ID */
     private String currentActivityID;
     
+    /** 当前活动编码 */
+    private String currentActivityCode;
+    
 	/** 当前活动名称 */
     private String currentActivityName;
     
@@ -54,6 +57,9 @@ public class FlowProcess extends BaseModel
 	/** 上一活动ID */
     private String previousActivityID;
     
+    /** 上一活动编码 */
+    private String previousActivityCode;
+    
 	/** 上一活动名称 */
     private String previousActivityName;
     
@@ -62,6 +68,9 @@ public class FlowProcess extends BaseModel
     
 	/** 下一活动ID */
     private String nextActivityID;
+    
+    /** 下一活动编码 */
+    private String nextActivityCode;
     
 	/** 下一活动名称 */
     private String nextActivityName;
@@ -132,13 +141,16 @@ public class FlowProcess extends BaseModel
         this.workID               = i_Flow.getWorkID();
         this.splitProcessID       = "";
         this.currentActivityID    = i_Activity.getActivityID();
+        this.currentActivityCode  = i_Activity.getActivityCode();
         this.currentActivityName  = i_Activity.getActivityName();
         this.processNo            = 1;
         this.previousProcessID    = "";
         this.previousActivityID   = "";
+        this.previousActivityCode = "";
         this.previousActivityName = "";
         this.nextProcessID        = "";
         this.nextActivityID       = "";
+        this.nextActivityCode     = "";
         this.nextActivityName     = "";
         this.createrID            = i_User.getUserID();
         this.creater              = i_User.getUserName();
@@ -172,15 +184,18 @@ public class FlowProcess extends BaseModel
         this.workID                  = i_Flow.getWorkID();
         this.splitProcessID          = "";
         this.currentActivityID       = i_Route.getNextActivity().getActivityID();
+        this.currentActivityCode     = i_Route.getNextActivity().getActivityCode();
         this.currentActivityName     = i_Route.getNextActivity().getActivityName();
         
         this.processNo               = -1;  //////////////////////////////////////
         this.previousProcessID       = io_Previous.getProcessID();
         this.previousActivityID      = io_Previous.getCurrentActivityID();
+        this.previousActivityCode    = io_Previous.getCurrentActivityCode();
         this.previousActivityName    = io_Previous.getCurrentActivityName();
         
         io_Previous.nextProcessID    = this.processID;
         io_Previous.nextActivityID   = this.currentActivityID;
+        io_Previous.nextActivityCode = this.currentActivityCode;
         io_Previous.nextActivityName = this.currentActivityName;
         
         this.nextProcessID           = "";
@@ -423,7 +438,27 @@ public class FlowProcess extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：当前活动编码
+     */
+    public String getCurrentActivityCode()
+    {
+        return currentActivityCode;
+    }
+    
+    
+    /**
+     * 设置：当前活动编码
+     * 
+     * @param currentActivityCode 
+     */
+    public void setCurrentActivityCode(String currentActivityCode)
+    {
+        this.currentActivityCode = currentActivityCode;
+    }
+
+
+    /**
      * 获取：当前活动名称
      */
     public String getCurrentActivityName()
@@ -483,7 +518,27 @@ public class FlowProcess extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：下一活动编码
+     */
+    public String getNextActivityCode()
+    {
+        return nextActivityCode;
+    }
+    
+    
+    /**
+     * 设置：下一活动编码
+     * 
+     * @param nextActivityCode 
+     */
+    public void setNextActivityCode(String nextActivityCode)
+    {
+        this.nextActivityCode = nextActivityCode;
+    }
+
+
+    /**
      * 获取：上一活动名称
      */
     public String getPreviousActivityName()
@@ -543,7 +598,27 @@ public class FlowProcess extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：上一活动编码
+     */
+    public String getPreviousActivityCode()
+    {
+        return previousActivityCode;
+    }
+
+    
+    /**
+     * 设置：上一活动编码
+     * 
+     * @param previousActivityCode 
+     */
+    public void setPreviousActivityCode(String previousActivityCode)
+    {
+        this.previousActivityCode = previousActivityCode;
+    }
+
+
+    /**
      * 获取：下一活动名称
      */
     public String getNextActivityName()

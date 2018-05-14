@@ -35,6 +35,7 @@ VALUES (
  INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -54,8 +55,9 @@ VALUES (
        )
 VALUES (
         'A001'
+       ,'选型申请'
        ,'T001'
-       ,'发起选型'
+       ,'选型申请'
        ,'AT000'
        ,0
        ,0
@@ -77,6 +79,7 @@ VALUES (
 INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -96,6 +99,7 @@ INSERT  INTO TActivityInfo
        )
 VALUES (
         'A002'
+       ,'选型受理'
        ,'T001'
        ,'选型受理'
        ,'AT001'
@@ -119,6 +123,7 @@ VALUES (
 INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -138,6 +143,7 @@ INSERT  INTO TActivityInfo
        )
 VALUES (
         'A003'
+       ,'选型评审'
        ,'T001'
        ,'选型评审'
        ,'AT001'
@@ -162,6 +168,7 @@ VALUES (
 INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -181,6 +188,7 @@ INSERT  INTO TActivityInfo
        )
 VALUES (
         'A004'
+       ,'单人选型'
        ,'T001'
        ,'单人选型'
        ,'AT001'
@@ -205,6 +213,7 @@ VALUES (
 INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -224,6 +233,7 @@ INSERT  INTO TActivityInfo
        )
 VALUES (
         'A005'
+       ,'选型分包'
        ,'T001'
        ,'选型分包'
        ,'AT001'
@@ -247,6 +257,7 @@ VALUES (
 INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -266,6 +277,7 @@ INSERT  INTO TActivityInfo
        )
 VALUES (
         'A006'
+       ,'多人选型'
        ,'T001'
        ,'多人选型'
        ,'AT001'
@@ -289,6 +301,7 @@ VALUES (
 INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -308,6 +321,7 @@ INSERT  INTO TActivityInfo
        )
 VALUES (
         'A007'
+       ,'选型汇总'
        ,'T001'
        ,'选型汇总'
        ,'AT001'
@@ -331,6 +345,7 @@ VALUES (
 INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -350,6 +365,7 @@ INSERT  INTO TActivityInfo
        )
 VALUES (
         'A008'
+       ,'选型结果确认'
        ,'T001'
        ,'选型结果确认'
        ,'AT001'
@@ -373,6 +389,7 @@ VALUES (
 INSERT  INTO TActivityInfo
        (
         activityID
+       ,activityCode
        ,templateID
        ,activityName
        ,activityTypeID
@@ -392,8 +409,9 @@ INSERT  INTO TActivityInfo
        )
 VALUES (
         'A009'
+       ,'选型完成'
        ,'T001'
-       ,'选型结束'
+       ,'选型完成'
        ,'AT999'
        ,0
        ,0

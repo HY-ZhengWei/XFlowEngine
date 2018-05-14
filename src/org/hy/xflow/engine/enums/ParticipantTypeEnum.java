@@ -40,7 +40,7 @@ public enum ParticipantTypeEnum implements BaseEnum<Integer>
     /** 
      * 只用于模板定义阶段。工作流实例不能动态指定此类型的。
      * 
-     * 此类型的参与人.objecttID为活动节点ID。
+     * 此类型的参与人.objecttID为活动节点编码。
      * 
      * 可用于活动、路由的定义中。
      */

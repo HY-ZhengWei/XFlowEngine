@@ -18,6 +18,7 @@
 			<content>
 				<![CDATA[
 				SELECT  A.activityID
+				       ,A.activityCode
 				       ,A.templateID
 				       ,A.activityName
 				       ,A.activityTypeID
@@ -47,7 +48,7 @@
 			
 			<result>
 				<table>java.util.LinkedHashMap</table>
-				<fill>put(row.activityID ,row)</fill>
+				<fill>put(row.activityCode ,row)</fill>
 				<row>org.hy.xflow.engine.bean.ActivityInfo</row>
 				<cfill>setter(colValue)</cfill>
 			</result>

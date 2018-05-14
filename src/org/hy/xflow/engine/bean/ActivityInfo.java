@@ -45,6 +45,9 @@ public class ActivityInfo extends BaseModel
 	/** 工作流活动ID */
     private String activityID;
     
+    /** 工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同。 */
+    private String activityCode;
+    
 	/** 工作流的模板ID */
     private String templateID;
     
@@ -302,7 +305,27 @@ public class ActivityInfo extends BaseModel
     }
 	
 	
-	/**
+    /**
+     * 获取：工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同。
+     */
+    public String getActivityCode()
+    {
+        return activityCode;
+    }
+
+    
+    /**
+     * 设置：工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同。
+     * 
+     * @param activityCode 
+     */
+    public void setActivityCode(String activityCode)
+    {
+        this.activityCode = activityCode;
+    }
+
+
+    /**
      * 获取：工作流的模板ID
      */
     public String getTemplateID()

@@ -27,16 +27,16 @@ public class ActivityRouteTree extends BaseModel
     private static final long serialVersionUID = 5366730038571520921L;
     
 
-    /** 模板的所有活动。Map.key为活动ID */
+    /** 模板的所有活动。Map.key为活动Code */
     private Map<String ,ActivityInfo>                allActivitys;
     
-    /** 模板的所有路由。Map.key为活动ID */
+    /** 模板的所有路由。Map.key为活动Code */
     private PartitionMap<String ,ActivityRoute>      allRoutes;
     
-    /** 模板的所有路由。Map.key分区为活动ID ,Map主键索引为路由ID */
+    /** 模板的所有路由。Map.key分区为活动Code ,Map主键索引为路由Code */
     private TablePartitionRID<String ,ActivityRoute> allRoutesByARID;
     
-    /** 模板的活动的所有参与人。Map.key为路由ID */
+    /** 模板的活动的所有参与人。Map.key为活动ID */
     private PartitionMap<String ,Participant>        allActivityPs;
     
     /** 模板的活动路由的所有参与人。Map.key为路由ID */
@@ -114,12 +114,12 @@ public class ActivityRouteTree extends BaseModel
      * @createDate  2018-04-19
      * @version     v1.0
      *
-     * @param i_ActivityID
+     * @param i_ActivityCode  活动编码
      * @return
      */
-    public ActivityInfo getActivity(String i_ActivityID)
+    public ActivityInfo getActivity(String i_ActivityCode)
     {
-        return this.allActivitys.get(i_ActivityID);
+        return this.allActivitys.get(i_ActivityCode);
     }
     
     
@@ -131,13 +131,13 @@ public class ActivityRouteTree extends BaseModel
      * @createDate  2018-05-07
      * @version     v1.0
      *
-     * @param i_ActivityID     活动ID
-     * @param i_ActivityRoute  路由ID
+     * @param i_ActivityCode       活动编码
+     * @param i_ActivityRouteCode  路由编码
      * @return
      */
-    public ActivityRoute getActivityRoute(String i_ActivityID ,String i_ActivityRoute)
+    public ActivityRoute getActivityRoute(String i_ActivityCode ,String i_ActivityRouteCode)
     {
-        return this.allRoutesByARID.get(i_ActivityID).get(i_ActivityRoute);
+        return this.allRoutesByARID.get(i_ActivityCode).get(i_ActivityRouteCode);
     }
     
     
@@ -165,7 +165,7 @@ public class ActivityRouteTree extends BaseModel
         
         for (Map.Entry<String ,List<ActivityRoute>> v_Routes : this.allRoutes.entrySet())
         {
-            this.allRoutesByARID.putRows(v_Routes.getKey() ,(Map<String ,ActivityRoute>)Help.toMap(v_Routes.getValue() ,"activityRouteID"));
+            this.allRoutesByARID.putRows(v_Routes.getKey() ,(Map<String ,ActivityRoute>)Help.toMap(v_Routes.getValue() ,"activityRouteCode"));
         }
         
         this.makeActivityRouteTree(this.startActivity);
@@ -185,7 +185,7 @@ public class ActivityRouteTree extends BaseModel
     private void makeActivityRouteTree(ActivityInfo io_CurrentActivity)
     {
         io_CurrentActivity.setParticipants(allActivityPs.get(io_CurrentActivity.getActivityID()));
-        List<ActivityRoute> v_CurrentARoutes = allRoutes.get(io_CurrentActivity.getActivityID());
+        List<ActivityRoute> v_CurrentARoutes = allRoutes.get(io_CurrentActivity.getActivityCode());
         
         // System.out.println(log(io_CurrentActivity));
         
@@ -200,7 +200,7 @@ public class ActivityRouteTree extends BaseModel
                 
                 if ( !Help.isNull(v_CurrentARoute.getNextActivityID()) )
                 {
-                    ActivityInfo v_NextActivity = allActivitys.get(v_CurrentARoute.getNextActivityID());
+                    ActivityInfo v_NextActivity = allActivitys.get(v_CurrentARoute.getNextActivityCode());
                     
                     if ( v_NextActivity != null )
                     {

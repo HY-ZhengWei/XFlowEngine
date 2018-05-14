@@ -42,9 +42,9 @@ public class JU_999_ToFinisth extends BaseJunit
         {
             ActivityRoute v_Route = v_Routes.get(2);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityID() ,v_Route.getActivityRouteID());
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityCode() ,v_Route.getActivityRouteCode());
             
-            System.out.println("-- 选型结果确认转结束");
+            System.out.println("-- 选型结果确认转选型完成");
         }
     }
     

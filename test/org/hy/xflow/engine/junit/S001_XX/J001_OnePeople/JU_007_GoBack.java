@@ -42,7 +42,7 @@ public class JU_007_GoBack extends BaseJunit
         {
             ActivityRoute v_Route = v_Routes.get(0);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityID() ,v_Route.getActivityRouteID());
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityCode() ,v_Route.getActivityRouteCode());
             
             System.out.println("-- 选型结果确认未通过转单人选型");
         }

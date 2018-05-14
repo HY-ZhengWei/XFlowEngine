@@ -106,6 +106,7 @@
                 CREATE TABLE TActivityInfo
                 (
                  activityID         VARCHAR2(64)                     NOT NULL
+                ,activityCode       VARCHAR2(64)                     NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL                   
                 ,activityName       NVARCHAR2(128)                   NOT NULL
                 ,activityTypeID     VARCHAR2(64)                     NOT NULL
@@ -128,6 +129,7 @@
                 
                 COMMENT ON TABLE  TActivityInfo                           IS '工作流活动组件(节点)信息表';/
                 COMMENT ON COLUMN TActivityInfo.activityID                IS '工作流活动ID';/
+                COMMENT ON COLUMN TActivityInfo.activityCode              IS '工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同';/
                 COMMENT ON COLUMN TActivityInfo.templateID                IS '工作流的模板ID';/
                 COMMENT ON COLUMN TActivityInfo.activityName              IS '活动名称';/
                 COMMENT ON COLUMN TActivityInfo.activityTypeID            IS '活动类型ID';/
@@ -152,6 +154,7 @@
                 CREATE TABLE TActivityInfo
                 (
                  activityID         VARCHAR(64)                      NOT NULL
+                ,activityCode       VARCHAR(64)                      NOT NULL
                 ,templateID         VARCHAR(64)                      NOT NULL                   
                 ,activityName       NVARCHAR(128)                    NOT NULL
                 ,activityTypeID     VARCHAR(64)                      NOT NULL
@@ -174,6 +177,7 @@
                 
                 EXEC P_TableComment  TActivityInfo                            ,'工作流活动组件(节点)信息表';/
                 EXEC P_ColumnComment TActivityInfo ,activityID                ,'工作流活动ID';/
+                EXEC P_ColumnComment TActivityInfo ,activityCode              ,'工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同';/
                 EXEC P_ColumnComment TActivityInfo ,templateID                ,'工作流的模板ID';/
                 EXEC P_ColumnComment TActivityInfo ,activityName              ,'活动名称';/
                 EXEC P_ColumnComment TActivityInfo ,activityTypeID            ,'活动类型ID';/
@@ -209,6 +213,7 @@
                 CREATE TABLE TActivityRoute
                 (
                  activityRouteID    VARCHAR2(64)                     NOT NULL
+                ,activityRouteCode  VARCHAR2(64)                     NOT NULL
                 ,activityRouteName  NVARCHAR2(128)                   NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL
                 ,routeTypeID        VARCHAR2(64)                     NOT NULL
@@ -231,6 +236,7 @@
                 
                 COMMENT ON TABLE  TActivityRoute                          IS '工作流活动组件(节点)的路由表';/
                 COMMENT ON COLUMN TActivityRoute.activityRouteID          IS '主键ID';/
+                COMMENT ON COLUMN TActivityRoute.activityRouteCode        IS '活动路由Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同';/
                 COMMENT ON COLUMN TActivityRoute.activityRouteName        IS '活动路由名称';/
                 COMMENT ON COLUMN TActivityRoute.templateID               IS '工作流的模板ID';/
                 COMMENT ON COLUMN TActivityRoute.routeTypeID              IS '路由类型ID';/
@@ -255,6 +261,7 @@
                 CREATE TABLE TActivityRoute
                 (
                  activityRouteID    VARCHAR(64)                     NOT NULL
+                ,activityRouteCode  VARCHAR(64)                     NOT NULL
                 ,activityRouteName  NVARCHAR(128)                   NOT NULL
                 ,templateID         VARCHAR(64)                     NOT NULL
                 ,routeTypeID        VARCHAR(64)                     NOT NULL
@@ -277,6 +284,7 @@
                 
                 EXEC P_TableComment  TActivityRoute                           ,'工作流活动组件(节点)的路由表';/
                 EXEC P_ColumnComment TActivityRoute ,activityRouteID          ,'主键ID';/
+                EXEC P_ColumnComment TActivityRoute ,activityRouteCode        ,'活动路由Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同';/
                 EXEC P_ColumnComment TActivityRoute ,activityRouteName        ,'活动路由名称';/
                 EXEC P_ColumnComment TActivityRoute ,templateID               ,'工作流的模板ID';/
                 EXEC P_ColumnComment TActivityRoute ,routeTypeID              ,'工作流路由类型ID';/

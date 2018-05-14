@@ -112,7 +112,7 @@ public class FlowInfo extends BaseModel
     
     
     /**
-     * 获取按当时流转过程的当前活动ID为Map分区结构的流转信息。
+     * 获取按当时流转过程的当前活动Code为Map分区结构的流转信息。
      * 
      * 因流转信息是倒排的，所以同一活动ID的多次流转时，小分区中的首个元素即是最新的流转信息。
      * 
@@ -130,7 +130,7 @@ public class FlowInfo extends BaseModel
         {
             for (FlowProcess v_Process : this.processes)
             {
-                v_Ret.putRow(v_Process.getCurrentActivityID() ,v_Process);
+                v_Ret.putRow(v_Process.getCurrentActivityCode() ,v_Process);
             }
         }
         
