@@ -23,12 +23,12 @@
 			</sqlNode>
 			
 			<sqlNode>
-				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Del" />
+				<sql  ref="XSQL_XFlow_TFlowLastOperator_Del" />
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
 			<sqlNode>
-				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Insert" />
+				<sql  ref="XSQL_XFlow_TFlowLastOperator_Insert" />
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
@@ -60,13 +60,24 @@
 			</sqlNode>
 			
 			<sqlNode>
-				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Del" />
+				<sql  ref="XSQL_XFlow_TFlowLastOperator_Del" />
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
 			<sqlNode>
-				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Insert" />
+				<sql  ref="XSQL_XFlow_TFlowLastOperator_Insert" />
 				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowFutureOperator_Del" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowFutureOperator_Insert" />
+				<type ref="this.$Type_CollectionToExecuteUpdate" />
+				<collectionID>process.participants</collectionID>
 			</sqlNode>
 			
 			<comment>工作流流转，并更新前一个流转信息</comment>
@@ -106,7 +117,12 @@
 			</sqlNode>
 			
 			<sqlNode>
-				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Del" />
+				<sql  ref="XSQL_XFlow_TFlowLastOperator_Del" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowFutureOperator_Del" />
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			

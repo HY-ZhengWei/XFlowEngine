@@ -11,7 +11,7 @@
     <!-- 工作流最后操作人(实时数据)模块的相关SQL -->
 	<sqls>
 	
-		<sql id="XSQL_XFlow_TFlowCurrentOperator_Del"> 
+		<sql id="XSQL_XFlow_TFlowLastOperator_Del"> 
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
@@ -28,7 +28,7 @@
 		
 		
 		
-		<sql id="XSQL_XFlow_TFlowCurrentOperator_Insert"> 
+		<sql id="XSQL_XFlow_TFlowLastOperator_Insert"> 
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			

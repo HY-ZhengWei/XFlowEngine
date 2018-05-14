@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流未来操作人(实时数据)模块的相关SQL -->
+	<sqls>
+	
+		<sql id="XSQL_XFlow_TFlowFutureOperator_Del"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				DELETE  TFlowFutureOperator
+			     WHERE  workID = ':process.workID'
+				]]>
+			</content>
+			
+			<comment>删除工作流实例的未来操作人</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_TFlowFutureOperator_Insert"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO TFlowFutureOperator
+				       (
+						workID
+					   ,serviceDataID
+					   ,processID
+					   ,objectType
+				       ,objectID
+				       ,objectName
+				       ,objectNo
+				       ,createrID
+				       ,creater
+				       ,createOrgID
+				       ,createOrg
+				       ,createTime
+				       )
+                VALUES (
+						:workID     
+					   ,:serviceDataID
+					   ,:processID
+					   ,:objectType.value
+				       ,:objectID
+				       ,:objectName
+				       ,:objectNo
+				       ,:createrID
+				       ,:creater
+				       ,:createOrgID
+				       ,:createOrg
+				       ,:createTime.fullMilli
+                       )
+				]]>
+			</content>
+			
+			<comment>添加未来操作人</comment>
+			
+		</sql>
+		
+	</sqls>
+	
+</config>
