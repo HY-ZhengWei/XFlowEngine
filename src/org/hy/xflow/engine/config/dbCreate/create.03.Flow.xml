@@ -375,16 +375,17 @@
 		
 		
 		
-		<sql id="XSQL_Create_TFlowCurrentOperator">
+		<sql id="XSQL_Create_TFlowLastOperator">
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
 			<content if="ORACLE == DSG_XFlow.getDbProductType">
 				<![CDATA[
-                CREATE TABLE TFlowCurrentOperator
+                CREATE TABLE TFlowLastOperator
                 (
                  workID             VARCHAR2(64)                     NOT NULL
                 ,serviceDataID      VARCHAR2(64)
+                ,processID          VARCHAR2(64)                     NOT NULL
                 ,operateTime        DATE                             NOT NULL
                 ,operateUserID      NVARCHAR2(64)                    NOT NULL
                 ,operateUser        NVARCHAR2(128)
@@ -393,23 +394,25 @@
                 );/
                 
                 
-                COMMENT ON TABLE  TFlowCurrentOperator                    IS '工作流当前操作人(实时数据)';/
-                COMMENT ON COLUMN TFlowCurrentOperator.workID             IS '工作流实例ID';/
-                COMMENT ON COLUMN TFlowCurrentOperator.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
-                COMMENT ON COLUMN TFlowCurrentOperator.operateTime        IS '操作时间';/
-                COMMENT ON COLUMN TFlowCurrentOperator.operateUserID      IS '操作人员ID';/
-                COMMENT ON COLUMN TFlowCurrentOperator.operateUser        IS '操作人员名称';/
-                COMMENT ON COLUMN TFlowCurrentOperator.operateOrgID       IS '操作部门ID';/
-                COMMENT ON COLUMN TFlowCurrentOperator.operateOrg         IS '操作部门名称';/
+                COMMENT ON TABLE  TFlowLastOperator                    IS '工作流最后操作人(实时数据)';/
+                COMMENT ON COLUMN TFlowLastOperator.workID             IS '工作流实例ID';/
+                COMMENT ON COLUMN TFlowLastOperator.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                COMMENT ON COLUMN TFlowLastOperator.processID          IS '工作流的过程ID'
+                COMMENT ON COLUMN TFlowLastOperator.operateTime        IS '操作时间';/
+                COMMENT ON COLUMN TFlowLastOperator.operateUserID      IS '操作人员ID';/
+                COMMENT ON COLUMN TFlowLastOperator.operateUser        IS '操作人员名称';/
+                COMMENT ON COLUMN TFlowLastOperator.operateOrgID       IS '操作部门ID';/
+                COMMENT ON COLUMN TFlowLastOperator.operateOrg         IS '操作部门名称';/
 				]]>
 			</content>
 			
 			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
-                CREATE TABLE TFlowCurrentOperator
+                CREATE TABLE TFlowLastOperator
                 (
                  workID             VARCHAR(64)                      NOT NULL
                 ,serviceDataID      VARCHAR(64)
+                ,processID          VARCHAR(64)                      NOT NULL
                 ,operateTime        DATETIME                         NOT NULL
                 ,operateUserID      NVARCHAR(64)                     NOT NULL
                 ,operateUser        NVARCHAR(128)
@@ -418,19 +421,20 @@
                 );/
                 
                 
-                EXEC P_TableComment  TFlowCurrentOperator                     ,'工作流当前操作人(实时数据)';/
-                EXEC P_ColumnComment TFlowCurrentOperator ,workID             ,'工作流实例ID';/
-                EXEC P_ColumnComment TFlowCurrentOperator ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
-                EXEC P_ColumnComment TFlowCurrentOperator ,operateTime        ,'操作时间';/
-                EXEC P_ColumnComment TFlowCurrentOperator ,operateUserID      ,'操作人员ID';/
-                EXEC P_ColumnComment TFlowCurrentOperator ,operateUser        ,'操作人员名称';/
-                EXEC P_ColumnComment TFlowCurrentOperator ,operateOrgID       ,'操作部门ID';/
-                EXEC P_ColumnComment TFlowCurrentOperator ,operateOrg         ,'操作部门名称';/
+                EXEC P_TableComment  TFlowLastOperator                     ,'工作流最后操作人(实时数据)';/
+                EXEC P_ColumnComment TFlowLastOperator ,workID             ,'工作流实例ID';/
+                EXEC P_ColumnComment TFlowLastOperator ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                EXEC P_ColumnComment TFlowLastOperator ,processID          ,'工作流的过程ID';/
+                EXEC P_ColumnComment TFlowLastOperator ,operateTime        ,'操作时间';/
+                EXEC P_ColumnComment TFlowLastOperator ,operateUserID      ,'操作人员ID';/
+                EXEC P_ColumnComment TFlowLastOperator ,operateUser        ,'操作人员名称';/
+                EXEC P_ColumnComment TFlowLastOperator ,operateOrgID       ,'操作部门ID';/
+                EXEC P_ColumnComment TFlowLastOperator ,operateOrg         ,'操作部门名称';/
 				]]>
 			</content>
 			
-			<comment>工作流当前操作人(实时数据)</comment>
-			<create>TFlowCurrentOperator</create>
+			<comment>工作流最后操作人(实时数据)</comment>
+			<create>TFlowLastOperator</create>
 			
 		</sql>
 		

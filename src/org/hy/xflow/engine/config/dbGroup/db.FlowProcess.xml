@@ -22,6 +22,16 @@
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Del" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Insert" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
 			<comment>创建工作流实例</comment>
 		</sqlGroup>
 		
@@ -47,6 +57,16 @@
 				<sql  ref="XSQL_XFlow_ProcessParticipants_Insert" />
 				<type ref="this.$Type_CollectionToExecuteUpdate" />
 				<collectionID>process.participants</collectionID>
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Del" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowCurrentOperator_Insert" />
+				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
 			<comment>工作流流转，并更新前一个流转信息</comment>

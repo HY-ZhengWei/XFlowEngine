@@ -8,7 +8,7 @@
 
 
 
-    <!-- 工作流当前操作人(实时数据)模块的相关SQL -->
+    <!-- 工作流最后操作人(实时数据)模块的相关SQL -->
 	<sqls>
 	
 		<sql id="XSQL_XFlow_TFlowCurrentOperator_Del"> 
@@ -17,14 +17,12 @@
 			
 			<content>
 				<![CDATA[
-				DELETE  TFlowCurrentOperator
-			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  workID        = ':workID'          ]>
-			<[     AND  operateUserID = ':operateUserID'   ]>
+				DELETE  TFlowLastOperator
+			     WHERE  workID = ':process.workID'
 				]]>
 			</content>
 			
-			<comment>删除工作流实例的当前操作人</comment>
+			<comment>删除工作流实例的最后操作人</comment>
 			
 		</sql>
 		
@@ -36,10 +34,11 @@
 			
 			<content>
 				<![CDATA[
-				INSERT  INTO TFlowCurrentOperator
+				INSERT  INTO TFlowLastOperator
 				       (
 				        workID       
 				       ,serviceDataID
+				       ,processID
 				       ,operateTime  
 				       ,operateUserID
 				       ,operateUser  
@@ -47,18 +46,19 @@
 				       ,operateOrg   
 				       )
                 VALUES (
-				        ':workID'
-				       ,':serviceDataID'
-				       ,':operateTime.fullMilli'
-				       ,':operateUserID'
-				       ,':operateUser'
-				       ,':operateOrgID' 
-				       ,':operateOrg'
+				        ':process.workID'
+				       ,':process.serviceDataID'
+				       ,':process.processID'
+				       ,':process.operateTime.fullMilli'
+				       ,':process.operateUserID'
+				       ,':process.operateUser'
+				       ,':process.operateOrgID' 
+				       ,':process.operateOrg'
                        )
 				]]>
 			</content>
 			
-			<comment>添加当前操作人</comment>
+			<comment>添加最后操作人</comment>
 			
 		</sql>
 		
