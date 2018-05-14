@@ -42,7 +42,7 @@ public class JU_004_NextRoutes extends BaseJunit
         {
             ActivityRoute v_Route  = v_Routes.get(0);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityCode() ,v_Route.getActivityRouteCode());
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityRouteCode());
             
             System.out.println("-- 转受理成功");
         }
@@ -63,7 +63,7 @@ public class JU_004_NextRoutes extends BaseJunit
         {
             ActivityRoute v_Route = v_Routes.get(0);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Manager ,v_ServiceDataID ,v_Route.getActivityCode() ,v_Route.getActivityRouteCode());
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Manager ,v_ServiceDataID ,v_Route.getActivityRouteCode());
             
             System.out.println("-- 转评审成功");
         }

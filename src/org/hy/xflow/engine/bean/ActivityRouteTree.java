@@ -1,5 +1,6 @@
 package org.hy.xflow.engine.bean;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +33,12 @@ public class ActivityRouteTree extends BaseModel
     
     /** 模板的所有路由。Map.key为活动Code */
     private PartitionMap<String ,ActivityRoute>      allRoutes;
+     
+    /** 模板的所有路由。Map.key为路由Code */
+    private Map<String ,ActivityRoute>               allRoutesByCode;
     
     /** 模板的所有路由。Map.key分区为活动Code ,Map主键索引为路由Code */
-    private TablePartitionRID<String ,ActivityRoute> allRoutesByARID;
+    private TablePartitionRID<String ,ActivityRoute> allRoutesByARCode;
     
     /** 模板的活动的所有参与人。Map.key为活动ID */
     private PartitionMap<String ,Participant>        allActivityPs;
@@ -57,7 +61,8 @@ public class ActivityRouteTree extends BaseModel
     {
         this.allActivitys       = i_AllActivitys;
         this.allRoutes          = i_AllRoutes;
-        this.allRoutesByARID    = new TablePartitionRID<String ,ActivityRoute>();
+        this.allRoutesByCode    = new HashMap<String ,ActivityRoute>();
+        this.allRoutesByARCode  = new TablePartitionRID<String ,ActivityRoute>();
         this.allActivityPs      = i_AllActivityPs;
         this.allActivityRoutePs = i_AllActivityRoutePs;
         
@@ -137,7 +142,24 @@ public class ActivityRouteTree extends BaseModel
      */
     public ActivityRoute getActivityRoute(String i_ActivityCode ,String i_ActivityRouteCode)
     {
-        return this.allRoutesByARID.get(i_ActivityCode).get(i_ActivityRouteCode);
+        return this.allRoutesByARCode.get(i_ActivityCode).get(i_ActivityRouteCode);
+    }
+    
+    
+    
+    /**
+     * 获取某一个路由信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-14
+     * @version     v1.0
+     *
+     * @param i_ActivityRouteCode  路由编码
+     * @return
+     */
+    public ActivityRoute getActivityRoute(String i_ActivityRouteCode)
+    {
+        return this.allRoutesByCode.get(i_ActivityRouteCode);
     }
     
     
@@ -165,7 +187,12 @@ public class ActivityRouteTree extends BaseModel
         
         for (Map.Entry<String ,List<ActivityRoute>> v_Routes : this.allRoutes.entrySet())
         {
-            this.allRoutesByARID.putRows(v_Routes.getKey() ,(Map<String ,ActivityRoute>)Help.toMap(v_Routes.getValue() ,"activityRouteCode"));
+            this.allRoutesByARCode.putRows(v_Routes.getKey() ,(Map<String ,ActivityRoute>)Help.toMap(v_Routes.getValue() ,"activityRouteCode"));
+            
+            for (ActivityRoute v_Route : v_Routes.getValue())
+            {
+                this.allRoutesByCode.put(v_Route.getActivityRouteCode() ,v_Route);
+            }
         }
         
         this.makeActivityRouteTree(this.startActivity);
@@ -242,6 +269,7 @@ public class ActivityRouteTree extends BaseModel
      * @param i_Activity
      * @return
      */
+    @SuppressWarnings("unused")
     private String log(ActivityInfo i_Activity)
     {
         StringBuilder v_Log = new StringBuilder();
@@ -274,6 +302,7 @@ public class ActivityRouteTree extends BaseModel
      * @param i_CurrentARoute
      * @return
      */
+    @SuppressWarnings("unused")
     private String log(ActivityRoute i_CurrentARoute)
     {
         StringBuilder v_Log = new StringBuilder();

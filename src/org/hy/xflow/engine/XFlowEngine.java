@@ -555,13 +555,12 @@ public class XFlowEngine
      *
      * @param i_User               操作用户 
      * @param i_WorkID             工作流ID
-     * @param i_ActivityCode       当前活动节点编码。相对于下一个活动，即为前一个活动节点编码
      * @param i_ActivityRouteCode  走的路由编码
      * @return
      */
-    public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityCode ,String i_ActivityRouteCode)
+    public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityRouteCode)
     {
-        return this.toNext(i_User ,i_WorkID ,i_ActivityCode ,i_ActivityRouteCode ,(List<UserParticipant>)null);
+        return this.toNext(i_User ,i_WorkID ,i_ActivityRouteCode ,(List<UserParticipant>)null);
     }
     
     
@@ -575,7 +574,6 @@ public class XFlowEngine
      *
      * @param i_User                操作用户 
      * @param i_WorkID              工作流ID
-     * @param i_ActivityCode        当前活动节点编码。相对于下一个活动，即为前一个活动节点编码
      * @param i_ActivityRouteCode   走的路由编码
      * @param i_Participant         指定下一活动的动态参与人，可选项。
      *                              指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
@@ -583,7 +581,7 @@ public class XFlowEngine
      *                                             但当路由上没有设定参与人时，动态参与人将畅通无阻
      * @return
      */
-    public FlowProcess toNext(User i_User ,String i_ServiceDataID ,String i_ActivityCode ,String i_ActivityRouteCode ,UserParticipant i_Participant)
+    public FlowProcess toNext(User i_User ,String i_ServiceDataID ,String i_ActivityRouteCode ,UserParticipant i_Participant)
     {
         List<UserParticipant> v_Participants = null;
         
@@ -593,7 +591,7 @@ public class XFlowEngine
             v_Participants.add(i_Participant);
         }
         
-        return this.toNext(i_User ,i_ServiceDataID ,i_ActivityCode ,i_ActivityRouteCode ,v_Participants);
+        return this.toNext(i_User ,i_ServiceDataID ,i_ActivityRouteCode ,v_Participants);
     }
     
     
@@ -607,7 +605,6 @@ public class XFlowEngine
      *
      * @param i_User                操作用户 
      * @param i_WorkID              工作流ID
-     * @param i_ActivityCode        当前活动节点编码。相对于下一个活动，即为前一个活动节点编码
      * @param i_ActivityRouteCode   走的路由编码
      * @param i_Participants        指定下一活动的动态参与人，可选项。
      *                              指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
@@ -615,7 +612,7 @@ public class XFlowEngine
      *                                             但当路由上没有设定参与人时，动态参与人将畅通无阻
      * @return
      */
-    public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityCode ,String i_ActivityRouteCode ,List<UserParticipant> i_Participants)
+    public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityRouteCode ,List<UserParticipant> i_Participants)
     {
         if ( i_User == null )
         {
@@ -628,10 +625,6 @@ public class XFlowEngine
         else if ( Help.isNull(i_WorkID) )
         {
             throw new NullPointerException("WorkID is null.");
-        }
-        else if ( Help.isNull(i_ActivityCode) )
-        {
-            throw new NullPointerException("ActivityCode is null.");
         }
         else if ( Help.isNull(i_ActivityRouteCode) )
         {
@@ -650,10 +643,10 @@ public class XFlowEngine
             throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not exists.");
         }
         
-        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(i_ActivityCode ,i_ActivityRouteCode);
+        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(i_ActivityRouteCode);
         if ( v_Route == null )
         {
-            throw new NullPointerException("ActivityCode[" + i_ActivityCode + "] and ActivityRouteCode[" + i_ActivityRouteCode + "] is not exists.");
+            throw new NullPointerException("ActivityCode[" + v_Route.getActivityCode() + "] and ActivityRouteCode[" + i_ActivityRouteCode + "] is not exists.");
         }
         
         v_FlowInfo.setProcesses(this.flowProcessService.queryByWorkID(i_WorkID));
@@ -728,7 +721,7 @@ public class XFlowEngine
             List<FlowProcess> v_OldProcesses = v_FlowInfo.getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
             if ( Help.isNull(v_OldProcesses) )
             {
-                throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not reject. ActivityCode[" + i_ActivityCode + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
             }
             
             if ( Help.isNull(v_Process.getParticipants()) )
@@ -760,7 +753,7 @@ public class XFlowEngine
         }
         else
         {
-            throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is error. ActivityCode[" + i_ActivityCode + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+            throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is error. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
         }
     }
     
@@ -775,13 +768,12 @@ public class XFlowEngine
      *
      * @param i_User                操作用户 
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
-     * @param i_ActivityCode        当前活动节点编码。相对于下一个活动，即为前一个活动节点编码
      * @param i_ActivityRouteCode   走的路由编码
      * @return
      */
-    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityCode ,String i_ActivityRouteCode)
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityRouteCode)
     {
-        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityCode ,i_ActivityRouteCode ,(List<UserParticipant>)null);
+        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityRouteCode ,(List<UserParticipant>)null);
     }
     
     
@@ -795,7 +787,6 @@ public class XFlowEngine
      *
      * @param i_User                操作用户 
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
-     * @param i_ActivityCode        当前活动节点编码。相对于下一个活动，即为前一个活动节点编码
      * @param i_ActivityRouteCode   走的路由编码
      * @param i_Participant         指定下一活动的动态参与人，可选项。
      *                              指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
@@ -803,7 +794,7 @@ public class XFlowEngine
      *                                             但当路由上没有设定参与人时，动态参与人将畅通无阻
      * @return
      */
-    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityCode ,String i_ActivityRouteCode ,UserParticipant i_Participant)
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityRouteCode ,UserParticipant i_Participant)
     {
         List<UserParticipant> v_Participants = null;
         
@@ -813,7 +804,7 @@ public class XFlowEngine
             v_Participants.add(i_Participant);
         }
         
-        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityCode ,i_ActivityRouteCode ,v_Participants);
+        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityRouteCode ,v_Participants);
     }
     
     
@@ -827,7 +818,6 @@ public class XFlowEngine
      *
      * @param i_User                操作用户 
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
-     * @param i_ActivityCode        当前活动节点编码。相对于下一个活动，即为前一个活动节点编码
      * @param i_ActivityRouteCode   走的路由编码
      * @param i_Participants        指定下一活动的动态参与人，可选项。
      *                              指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
@@ -835,7 +825,7 @@ public class XFlowEngine
      *                                             但当路由上没有设定参与人时，动态参与人将畅通无阻。
      * @return
      */
-    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityCode ,String i_ActivityRouteCode ,List<UserParticipant> i_Participants)
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityRouteCode ,List<UserParticipant> i_Participants)
     {
         if ( i_User == null )
         {
@@ -848,10 +838,6 @@ public class XFlowEngine
         else if ( Help.isNull(i_ServiceDataID) )
         {
             throw new NullPointerException("ServiceDataID is null.");
-        }
-        else if ( Help.isNull(i_ActivityCode) )
-        {
-            throw new NullPointerException("ActivityCode is null.");
         }
         else if ( Help.isNull(i_ActivityRouteCode) )
         {
@@ -870,10 +856,10 @@ public class XFlowEngine
             throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not exists.");
         }
         
-        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(i_ActivityCode ,i_ActivityRouteCode);
+        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(i_ActivityRouteCode);
         if ( v_Route == null )
         {
-            throw new NullPointerException("ActivityCode[" + i_ActivityCode + "] and ActivityRouteCode[" + i_ActivityRouteCode + "] is not exists.");
+            throw new NullPointerException("ActivityCode[" + v_Route.getActivityCode() + "] and ActivityRouteCode[" + i_ActivityRouteCode + "] is not exists.");
         }
         
         v_FlowInfo.setProcesses(this.flowProcessService.queryByServiceDataID(i_ServiceDataID));
@@ -948,7 +934,7 @@ public class XFlowEngine
             List<FlowProcess> v_OldProcesses = v_FlowInfo.getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
             if ( Help.isNull(v_OldProcesses) )
             {
-                throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not reject. ActivityCode[" + i_ActivityCode + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
             }
             
             if ( Help.isNull(v_Process.getParticipants()) )
@@ -981,7 +967,7 @@ public class XFlowEngine
         }
         else
         {
-            throw new RuntimeException("ServiceDataID[" + i_ServiceDataID + "] to next process is error. ActivityCode[" + i_ActivityCode + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+            throw new RuntimeException("ServiceDataID[" + i_ServiceDataID + "] to next process is error. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
         }
     }
     
