@@ -17,6 +17,7 @@ import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.bean.UserParticipant;
 import org.hy.xflow.engine.enums.ActivityTypeEnum;
+import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 import org.hy.xflow.engine.enums.RouteTypeEnum;
 import org.hy.xflow.engine.service.IFlowInfoService;
 import org.hy.xflow.engine.service.IFlowProcessService;
@@ -714,11 +715,11 @@ public class XFlowEngine
             }
         }
         
-        boolean v_Ret = false;
+        List<FlowProcess> v_OldProcesses = v_FlowInfo.getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
+        
         // 驳回的路由
         if ( v_Route.getRouteTypeID() == RouteTypeEnum.$Reject )
         {
-            List<FlowProcess> v_OldProcesses = v_FlowInfo.getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
             if ( Help.isNull(v_OldProcesses) )
             {
                 throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
@@ -733,14 +734,49 @@ public class XFlowEngine
             ProcessParticipant v_RejectPart = new ProcessParticipant();
             v_RejectPart.init_ToReject(i_User ,v_Process ,v_OldProcesses.get(0));
             v_Process.getParticipants().add(v_RejectPart);
-            
-            v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
         }
-        // 正常流转的路由
+        
+        
+        // 未来操作人：是工作流模板中定义的参与人
+        if ( Help.isNull(v_Process.getParticipants()) )
+        {
+            v_Process.setFutureParticipants(new ArrayList<ProcessParticipant>());
+            
+            for (Participant v_PartItem : v_Route.getNextActivity().getParticipants())
+            {
+                ProcessParticipant v_FuturePart = new ProcessParticipant();
+                
+                if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$CreateUser )
+                {
+                    v_FuturePart.init(i_User ,v_Process ,v_PartItem.toCreater(v_FlowInfo));
+                }
+                else if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$ActivityUser )
+                {
+                    if ( !Help.isNull(v_OldProcesses) )
+                    {
+                        v_FuturePart.init(i_User ,v_Process ,v_PartItem.toOperater(v_OldProcesses.get(0)));
+                    }
+                    else
+                    {
+                        throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                    }
+                }
+                else
+                {
+                    v_FuturePart.init(i_User ,v_Process ,v_PartItem);
+                }
+                
+                v_Process.getFutureParticipants().add(v_FuturePart);
+            }
+        }
+        // 未来操作人：是动态参与人
         else
         {
-            v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+            v_Process.setFutureParticipants(v_Process.getParticipants());
         }
+        
+        boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        
         if ( v_Ret )
         {
             if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
@@ -927,11 +963,11 @@ public class XFlowEngine
             }
         }
         
-        boolean v_Ret = false;
+        List<FlowProcess> v_OldProcesses = v_FlowInfo.getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
+        
         // 驳回的路由
         if ( v_Route.getRouteTypeID() == RouteTypeEnum.$Reject )
         {
-            List<FlowProcess> v_OldProcesses = v_FlowInfo.getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
             if ( Help.isNull(v_OldProcesses) )
             {
                 throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
@@ -946,14 +982,48 @@ public class XFlowEngine
             ProcessParticipant v_RejectPart = new ProcessParticipant();
             v_RejectPart.init_ToReject(i_User ,v_Process ,v_OldProcesses.get(0));
             v_Process.getParticipants().add(v_RejectPart);
-            
-            v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
         }
-        // 正常流转的路由
+        
+        
+        // 未来操作人：是工作流模板中定义的参与人
+        if ( Help.isNull(v_Process.getParticipants()) )
+        {
+            v_Process.setFutureParticipants(new ArrayList<ProcessParticipant>());
+            
+            for (Participant v_PartItem : v_Route.getNextActivity().getParticipants())
+            {
+                ProcessParticipant v_FuturePart = new ProcessParticipant();
+                
+                if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$CreateUser )
+                {
+                    v_FuturePart.init(i_User ,v_Process ,v_PartItem.toCreater(v_FlowInfo));
+                }
+                else if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$ActivityUser )
+                {
+                    if ( !Help.isNull(v_OldProcesses) )
+                    {
+                        v_FuturePart.init(i_User ,v_Process ,v_PartItem.toOperater(v_OldProcesses.get(0)));
+                    }
+                    else
+                    {
+                        throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                    }
+                }
+                else
+                {
+                    v_FuturePart.init(i_User ,v_Process ,v_PartItem);
+                }
+                
+                v_Process.getFutureParticipants().add(v_FuturePart);
+            }
+        }
+        // 未来操作人：是动态参与人
         else
         {
-            v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+            v_Process.setFutureParticipants(v_Process.getParticipants());
         }
+        
+        boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
         
         if ( v_Ret )
         {

@@ -24,8 +24,11 @@ public class FlowProcess extends BaseModel
     private static final long serialVersionUID = -4724247321457107633L;
     
     
-    /** 工作流的参与人 */
+    /** 工作流的动态参与人 */
 	private List<ProcessParticipant> participants;
+	
+	/** 工作流的未来参与人（当有动态参与人时，取动态参与人。其它情况取工作流流程模板中定义的参与人） */
+	private List<ProcessParticipant> futureParticipants;
 	
 	/** 工作流的过程ID */
     private String processID;
@@ -299,7 +302,7 @@ public class FlowProcess extends BaseModel
     
 	
     /**
-     * 获取：工作流的参与人
+     * 获取：工作流的动态参与人
      */
     public List<ProcessParticipant> getParticipants()
     {
@@ -308,7 +311,7 @@ public class FlowProcess extends BaseModel
 
     
     /**
-     * 设置：工作流的参与人
+     * 设置：工作流的动态参与人
      * 
      * @param participants 
      */
@@ -317,6 +320,26 @@ public class FlowProcess extends BaseModel
         this.participants = participants;
     }
 
+    
+    /**
+     * 获取：工作流的未来参与人（当有动态参与人时，取动态参与人。其它情况取工作流流程模板中定义的参与人）
+     */
+    public List<ProcessParticipant> getFutureParticipants()
+    {
+        return futureParticipants;
+    }
+    
+    
+    /**
+     * 设置：工作流的未来参与人（当有动态参与人时，取动态参与人。其它情况取工作流流程模板中定义的参与人）
+     * 
+     * @param futureParticipants 
+     */
+    public void setFutureParticipants(List<ProcessParticipant> futureParticipants)
+    {
+        this.futureParticipants = futureParticipants;
+    }
+    
 
     /**
      * 获取：工作流的过程ID

@@ -77,7 +77,7 @@
 			<sqlNode>
 				<sql  ref="XSQL_XFlow_TFlowFutureOperator_Insert" />
 				<type ref="this.$Type_CollectionToExecuteUpdate" />
-				<collectionID>process.participants</collectionID>
+				<collectionID>process.futureParticipants</collectionID>
 			</sqlNode>
 			
 			<comment>工作流流转，并更新前一个流转信息</comment>
