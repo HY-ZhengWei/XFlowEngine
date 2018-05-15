@@ -52,7 +52,7 @@ public final class InitConfig extends AppInitConfig
                 this.init("sys.Config.xml");
                 this.init("startup.Config.xml");
                 this.init((List<Param>)XJava.getObject("StartupConfig") ,Help.getClassPath(this));
-                this.init(((Param)XJava.getObject("RootPackageName_XFlow")).getValue());
+                this.init(((Param)XJava.getObject("XFlow_RootPackageName")).getValue());
                 
                 if ( i_IsStartJobs )
                 {

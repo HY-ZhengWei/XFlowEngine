@@ -70,6 +70,118 @@
 			
 		</sql>
 		
+		
+		
+		<sql id="XSQL_XFlow_TFlowFutureOperator_QueryAllByWorkID"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
+				       ,A.workID
+				  FROM  TFlowFutureOperator  A
+				 GROUP  BY A.objectID
+				          ,A.objectType
+				          ,A.workID
+				]]>
+			</content>
+			
+			<result>
+				<table>org.hy.common.TablePartition</table>
+				<fill>putRow(row.objectID ,row.workID)</fill>
+				<row>org.hy.xflow.engine.bean.ProcessParticipant</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+			<comment>查询所有未来操作人，并分区保存，用于高速缓存查询</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_TFlowFutureOperator_QueryAllByServiceDataID"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
+				       ,A.serviceDataID
+				  FROM  TFlowFutureOperator  A
+				 GROUP  BY A.objectID
+				          ,A.objectType
+				          ,A.serviceDataID
+				]]>
+			</content>
+			
+			<result>
+				<table>org.hy.common.TablePartition</table>
+				<fill>putRow(row.objectID ,row.serviceDataID)</fill>
+				<row>org.hy.xflow.engine.bean.ProcessParticipant</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+			<comment>查询所有未来操作人，并分区保存，用于高速缓存查询</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_TFlowFutureOperator_QueryAll_KeyWorkID"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.workID
+				       ,CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
+				  FROM  TFlowFutureOperator  A
+				 GROUP  BY A.workID
+				          ,A.objectID
+				          ,A.objectType
+				]]>
+			</content>
+			
+			<result>
+				<table>org.hy.common.TablePartition</table>
+				<fill>putRow(row.workID ,row.objectID)</fill>
+				<row>org.hy.xflow.engine.bean.ProcessParticipant</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+			<comment>查询所有未来操作人，并分区保存，用于高速缓存查询</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_TFlowFutureOperator_QueryAll_KeyServiceDataID"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.serviceDataID
+				       ,CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
+				  FROM  TFlowFutureOperator  A
+				 GROUP  BY A.serviceDataID
+				          ,A.objectID
+				          ,A.objectType
+				]]>
+			</content>
+			
+			<result>
+				<table>org.hy.common.TablePartition</table>
+				<fill>putRow(row.serviceDataID ,row.objectID)</fill>
+				<row>org.hy.xflow.engine.bean.ProcessParticipant</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+			<comment>查询所有未来操作人，并分区保存，用于高速缓存查询</comment>
+			
+		</sql>
+		
 	</sqls>
 	
 </config>

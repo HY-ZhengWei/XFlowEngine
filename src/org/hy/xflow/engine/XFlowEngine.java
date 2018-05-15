@@ -19,6 +19,7 @@ import org.hy.xflow.engine.bean.UserParticipant;
 import org.hy.xflow.engine.enums.ActivityTypeEnum;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 import org.hy.xflow.engine.enums.RouteTypeEnum;
+import org.hy.xflow.engine.service.IFlowFutureOperatorService;
 import org.hy.xflow.engine.service.IFlowInfoService;
 import org.hy.xflow.engine.service.IFlowProcessService;
 import org.hy.xflow.engine.service.IProcessParticipantsService;
@@ -51,11 +52,18 @@ public class XFlowEngine
     @Xjava
     private IProcessParticipantsService processParticipantsService;
     
+    @Xjava
+    private IFlowFutureOperatorService  futureOperatorService;
+    
     
     
     public static XFlowEngine getInstance()
     {
-        return (XFlowEngine)XJava.getObject("XFlowEngine");
+        XFlowEngine v_XFlowEngine = (XFlowEngine)XJava.getObject("XFlowEngine");
+        
+        v_XFlowEngine.futureOperatorService.initCaches();
+        
+        return v_XFlowEngine;
     }
     
     
@@ -783,6 +791,11 @@ public class XFlowEngine
               || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
             {
                 this.flowInfoService.toHistory(i_WorkID);
+                this.futureOperatorService.delCache(v_Process);
+            }
+            else
+            {
+                this.futureOperatorService.updateCache(v_Process);
             }
             
             return v_Process;
@@ -1031,6 +1044,11 @@ public class XFlowEngine
               || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
             {
                 this.flowInfoService.toHistoryByServiceDataID(i_ServiceDataID);
+                this.futureOperatorService.delCache(v_Process);
+            }
+            else
+            {
+                this.futureOperatorService.updateCache(v_Process);
             }
             
             return v_Process;
@@ -1039,6 +1057,48 @@ public class XFlowEngine
         {
             throw new RuntimeException("ServiceDataID[" + i_ServiceDataID + "] to next process is error. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
         }
+    }
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-15
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<String> queryWorkIDs(User i_User)
+    {
+        return this.futureOperatorService.queryWorkIDs(i_User);
+    }
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-15
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<String> queryServiceDataIDs(User i_User)
+    {
+        return this.futureOperatorService.queryServiceDataIDs(i_User);
     }
     
 }
