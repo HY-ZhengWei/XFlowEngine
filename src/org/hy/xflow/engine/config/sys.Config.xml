@@ -19,12 +19,6 @@
 				<comment>顶级包的路径。用于初始化。一般不修改</comment>
 	        </item>
 	        
-			<item id="XFlow_DataSourceType">
-	            <name>XFlow_DataSourceType</name>
-				<value>SQLSERVER</value>
-				<comment>配置数据库是什么类型的。详见：org.hy.common.db.DataSourceGroup</comment>
-	        </item>
-	        
 		</xparam>
 		
 	</xconfig>

@@ -35,7 +35,6 @@ public final class InitConfigDB extends AppInitConfig
             
             try
             {
-                this.init("sys.Config.xml");
                 this.init("sys.DB.Config.xml");
             }
             catch (Exception exce)
