@@ -13,10 +13,6 @@
 		
 	    <startupConfig id="StartupConfig">
 	    
-	    	<item>
-	    		<value>sys.ServerConfig.xml</value>
-	    	</item>
-	    
 	    	<!-- 数据库配置交由外界初始化提供，此处所以注释 -->
 	    	<!--  
 	    	<item>
@@ -24,19 +20,72 @@
 			</item>
 			-->
 			
-			<!-- 加载目录中所有的配置文件 -->
 			<item>
-				<value>dbCreate/</value>
+				<value>dbCreate/create.01.Common.xml</value>
 			</item>
 			
-			<!-- 加载目录中所有的配置文件 -->
 			<item>
-				<value>db/</value>
+				<value>dbCreate/create.02.Template.xml</value>
 			</item>
 			
-			<!-- 加载目录中所有的配置文件 -->
 			<item>
-				<value>dbGroup/</value>
+				<value>dbCreate/create.03.Flow.xml</value>
+			</item>
+			
+			<item>
+				<value>dbCreate/create.03.FlowHistory.xml</value>
+			</item>
+			
+			
+			
+			<item>
+				<value>db/db.ActivityInfo.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.ActivityParticipants.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.ActivityRoute.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.ActivityRouteParticipants.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.ActivityType.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.FlowFutureOperator.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.FlowInfo.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.FlowLastOperator.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.Process.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.ProcessParticipants.xml</value>
+			</item>
+			
+			<item>
+				<value>db/db.Template.xml</value>
+			</item>
+			
+			
+			
+			<item>
+				<value>dbGroup/db.FlowProcess.xml</value>
 			</item>
 			
 		</startupConfig>
