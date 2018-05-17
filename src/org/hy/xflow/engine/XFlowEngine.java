@@ -16,6 +16,7 @@ import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.bean.UserParticipant;
+import org.hy.xflow.engine.config.InitConfig;
 import org.hy.xflow.engine.enums.ActivityTypeEnum;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 import org.hy.xflow.engine.enums.RouteTypeEnum;
@@ -54,6 +55,21 @@ public class XFlowEngine
     
     @Xjava
     private IFlowFutureOperatorService  futureOperatorService;
+    
+    
+    
+    /**
+     * 在执行任何操作前，应当初始配置
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-17
+     * @version     v1.0
+     *
+     */
+    public static void init()
+    {
+        new InitConfig();
+    }
     
     
     
