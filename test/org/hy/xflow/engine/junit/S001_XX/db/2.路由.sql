@@ -286,7 +286,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR007'
-       ,'单人评审-单人选型'
+       ,'选型评审-单人选型'
        ,'评审后转向单人选型'
        ,'T001'
        ,'RT001'
@@ -330,7 +330,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR008'
-       ,'单人评审-选型分包'
+       ,'选型评审-选型分包'
        ,'评审后转向选型分包'
        ,'T001'
        ,'RT001'
@@ -375,7 +375,7 @@ INSERT  INTO TActivityRoute
        )
 VALUES (
         'AR009'
-       ,'单人评审-选型申请'
+       ,'选型评审-选型申请'
        ,'评审未通过'
        ,'T001'
        ,'RT020'
