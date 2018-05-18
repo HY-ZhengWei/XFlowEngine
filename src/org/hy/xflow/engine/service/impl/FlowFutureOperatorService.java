@@ -222,7 +222,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             {
                 String v_ID = v_Part.getObjectType().getValue() + ":" + v_Part.getObjectID();
                 $FutureOperators_KeyWorkID.putRow(i_Process.getWorkID() ,v_ID);
-                $FutureOperatorsByWorkID  .putRow(i_Process.getWorkID() ,v_ID);
+                $FutureOperatorsByWorkID  .putRow(v_ID                  ,i_Process.getWorkID());
             }
         }
         else
@@ -232,8 +232,8 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 String v_ID = v_Part.getObjectType().getValue() + ":" + v_Part.getObjectID();
                 $FutureOperators_KeyWorkID       .putRow(i_Process.getWorkID()        ,v_ID);
                 $FutureOperators_KeyServiceDataID.putRow(i_Process.getServiceDataID() ,v_ID);
-                $FutureOperatorsByWorkID         .putRow(i_Process.getWorkID()        ,v_ID);
-                $FutureOperatorsByServiceDataID  .putRow(i_Process.getServiceDataID() ,v_ID);
+                $FutureOperatorsByWorkID         .putRow(v_ID                         ,i_Process.getWorkID());
+                $FutureOperatorsByServiceDataID  .putRow(v_ID                         ,i_Process.getServiceDataID());
             }
         }
     }
