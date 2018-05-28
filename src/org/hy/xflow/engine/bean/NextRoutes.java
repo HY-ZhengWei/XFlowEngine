@@ -2,6 +2,7 @@ package org.hy.xflow.engine.bean;
 
 import java.util.List;
 
+import org.hy.common.PartitionMap;
 import org.hy.xflow.engine.common.BaseModel;
 
 
@@ -22,16 +23,22 @@ public class NextRoutes extends BaseModel
     
     
     /** 工作流实例。应包含所有流转信息，即flow.processes有值 */
-    private FlowInfo            flow;
+    private FlowInfo                                 flow;
     
     /** 当前流转信息 */
-    private FlowProcess         currentProcess;
+    private FlowProcess                              currentProcess;
     
     /** 当前活动节点 */
-    private ActivityInfo        currentActivity;
+    private ActivityInfo                             currentActivity;
+    
+    /** 
+     * 工作流流转过程的动态参与人信息（所有流转过程的所有动态参与人）
+     * Map.key 是流转ID
+     */
+    private PartitionMap<String ,ProcessParticipant> flowParticipants;
     
     /** 查询用户可以走的路由 */
-    private List<ActivityRoute> routes;
+    private List<ActivityRoute>                      routes;
     
     
     
@@ -42,12 +49,17 @@ public class NextRoutes extends BaseModel
     
     
     
-    public NextRoutes(FlowInfo i_Flow ,FlowProcess i_CurrentProcess ,ActivityInfo i_CurrentActivity ,List<ActivityRoute> i_Routes)
+    public NextRoutes(FlowInfo                                 i_Flow 
+                     ,FlowProcess                              i_CurrentProcess 
+                     ,ActivityInfo                             i_CurrentActivity 
+                     ,PartitionMap<String ,ProcessParticipant> i_FlowParticipants
+                     ,List<ActivityRoute>                      i_Routes)
     {
-        this.flow            = i_Flow;
-        this.currentProcess  = i_CurrentProcess;
-        this.currentActivity = i_CurrentActivity;
-        this.routes          = i_Routes;
+        this.flow             = i_Flow;
+        this.currentProcess   = i_CurrentProcess;
+        this.currentActivity  = i_CurrentActivity;
+        this.flowParticipants = i_FlowParticipants;
+        this.routes           = i_Routes;
     }
     
 
@@ -136,6 +148,30 @@ public class NextRoutes extends BaseModel
     public void setRoutes(List<ActivityRoute> routes)
     {
         this.routes = routes;
+    }
+
+
+    
+    /**
+     * 获取：工作流流转过程的动态参与人信息（所有流转过程的所有动态参与人）
+     *      Map.key 是流转ID
+     */
+    public PartitionMap<String ,ProcessParticipant> getFlowParticipants()
+    {
+        return flowParticipants;
+    }
+    
+
+    
+    /**
+     * 设置：工作流流转过程的动态参与人信息（所有流转过程的所有动态参与人）
+     *      Map.key 是流转ID
+     * 
+     * @param flowParticipants 
+     */
+    public void setFlowParticipants(PartitionMap<String ,ProcessParticipant> flowParticipants)
+    {
+        this.flowParticipants = flowParticipants;
     }
     
 }
