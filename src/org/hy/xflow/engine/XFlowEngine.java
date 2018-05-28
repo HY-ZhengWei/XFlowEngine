@@ -13,6 +13,7 @@ import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.Participant;
 import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.FlowProcess;
+import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.bean.UserParticipant;
@@ -443,7 +444,7 @@ public class XFlowEngine
      * @param i_WorkID  工作流ID
      * @return
      */
-    public List<ActivityRoute> queryNextRoutes(User i_User ,String i_WorkID)
+    public NextRoutes queryNextRoutes(User i_User ,String i_WorkID)
     {
         if ( i_User == null )
         {
@@ -497,7 +498,10 @@ public class XFlowEngine
         PartitionMap<String ,ProcessParticipant> v_AllProcessParts = processParticipantsService.queryByWorkID(i_WorkID);
         v_Process.setParticipants(v_AllProcessParts.get(v_Process.getProcessID()));
         
-        return whereTo(i_User ,v_FlowInfo ,v_Process ,v_Activity);
+        return new NextRoutes(v_FlowInfo
+                             ,v_Process
+                             ,v_Activity
+                             ,whereTo(i_User ,v_FlowInfo ,v_Process ,v_Activity));
     }
     
     
@@ -513,7 +517,7 @@ public class XFlowEngine
      * @param i_ServiceDataID
      * @return
      */
-    public List<ActivityRoute> queryNextRoutesByServiceDataID(User i_User ,String i_ServiceDataID)
+    public NextRoutes queryNextRoutesByServiceDataID(User i_User ,String i_ServiceDataID)
     {
         if ( i_User == null )
         {
@@ -566,7 +570,10 @@ public class XFlowEngine
         PartitionMap<String ,ProcessParticipant> v_AllProcessParts = processParticipantsService.queryByServiceDataID(i_ServiceDataID);
         v_Process.setParticipants(v_AllProcessParts.get(v_Process.getProcessID()));
         
-        return whereTo(i_User ,v_FlowInfo ,v_Process ,v_Activity);
+        return new NextRoutes(v_FlowInfo 
+                             ,v_Process 
+                             ,v_Activity 
+                             ,whereTo(i_User ,v_FlowInfo ,v_Process ,v_Activity));
     }
     
     

@@ -1,10 +1,9 @@
 package org.hy.xflow.engine.junit.S001_XX;
 
-import java.util.List;
-
 import org.hy.common.Help;
 import org.hy.xflow.engine.XFlowEngine;
 import org.hy.xflow.engine.bean.ActivityRoute;
+import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseJunit;
 import org.junit.Test;
@@ -33,14 +32,14 @@ public class JU_999_ToFinisth extends BaseJunit
         
         String v_ServiceDataID = "SID001";
         
-        List<ActivityRoute> v_Routes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(v_Saler ,v_ServiceDataID);
-        if ( Help.isNull(v_Routes) )
+        NextRoutes v_NextRoutes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(v_Saler ,v_ServiceDataID);
+        if ( Help.isNull(v_NextRoutes.getRoutes()) )
         {
             System.out.println("-- [" + v_Saler.getUserName()+ "]没有任何可操作的路由");
         }
         else
         {
-            ActivityRoute v_Route = v_Routes.get(2);
+            ActivityRoute v_Route = v_NextRoutes.getRoutes().get(2);
             
             XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityRouteCode());
             
