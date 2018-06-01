@@ -18,7 +18,7 @@ public class IDHelp
     
     public static String makeID()
     {
-        return StringHelp.getUUID();
+        return "XF" + StringHelp.getUUID();
     }
     
 }

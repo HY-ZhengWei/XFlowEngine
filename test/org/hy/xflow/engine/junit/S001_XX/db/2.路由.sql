@@ -658,3 +658,48 @@ VALUES (
        ,'郑伟'
        ,'2018-04-24 01:01:01'
        );
+       
+       
+       
+       
+INSERT  INTO TActivityRoute
+       (
+        activityRouteID
+       ,activityRouteCode
+       ,activityRouteName
+       ,templateID
+       ,routeTypeID
+       ,activityID
+       ,nextActivityID
+       ,conditionXJavaID
+       ,conditionMethod
+       ,conditionValue
+       ,conditionVType
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'AR021'
+       ,'选型分包-选型汇总'
+       ,'临时的，直接跳汇总'
+       ,'T001'
+       ,'RT001'
+       ,'A005'
+       ,'A007'
+       ,''
+       ,''
+       ,''
+       ,''
+       ,''
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-04-24 01:01:01'
+       );
