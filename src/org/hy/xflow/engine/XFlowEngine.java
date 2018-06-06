@@ -1016,31 +1016,38 @@ public class XFlowEngine
         {
             v_Process.setFutureParticipants(new ArrayList<ProcessParticipant>());
             
-            for (Participant v_PartItem : v_Route.getNextActivity().getParticipants())
+            if ( !Help.isNull(v_Route.getNextActivity().getParticipants()) )
             {
-                ProcessParticipant v_FuturePart = new ProcessParticipant();
-                
-                if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$CreateUser )
+                for (Participant v_PartItem : v_Route.getNextActivity().getParticipants())
                 {
-                    v_FuturePart.init(i_User ,v_Process ,v_PartItem.toCreater(v_NextRoutes.getFlow()));
-                }
-                else if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$ActivityUser )
-                {
-                    if ( !Help.isNull(v_OldProcesses) )
+                    ProcessParticipant v_FuturePart = new ProcessParticipant();
+                    
+                    if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$CreateUser )
                     {
-                        v_FuturePart.init(i_User ,v_Process ,v_PartItem.toOperater(v_OldProcesses.get(0)));
+                        v_FuturePart.init(i_User ,v_Process ,v_PartItem.toCreater(v_NextRoutes.getFlow()));
+                    }
+                    else if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$ActivityUser )
+                    {
+                        if ( !Help.isNull(v_OldProcesses) )
+                        {
+                            v_FuturePart.init(i_User ,v_Process ,v_PartItem.toOperater(v_OldProcesses.get(0)));
+                        }
+                        else
+                        {
+                            throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                        }
                     }
                     else
                     {
-                        throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                        v_FuturePart.init(i_User ,v_Process ,v_PartItem);
                     }
+                    
+                    v_Process.getFutureParticipants().add(v_FuturePart);
                 }
-                else
-                {
-                    v_FuturePart.init(i_User ,v_Process ,v_PartItem);
-                }
-                
-                v_Process.getFutureParticipants().add(v_FuturePart);
+            }
+            else
+            {
+                // 走到最后的结束节点，会执行此。
             }
         }
         // 未来操作人：是动态参与人
