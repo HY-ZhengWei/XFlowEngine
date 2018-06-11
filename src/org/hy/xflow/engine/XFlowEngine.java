@@ -1121,4 +1121,42 @@ public class XFlowEngine
         return this.futureOperatorService.queryServiceDataIDs(i_User);
     }
     
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<String> queryWorkIDsByDone(User i_User)
+    {
+        return this.flowProcessService.queryWorkIDsByDone(i_User);
+    }
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<String> queryServiceDataIDsByDone(User i_User)
+    {
+        return this.flowProcessService.queryServiceDataIDsByDone(i_User);
+    }
+    
 }

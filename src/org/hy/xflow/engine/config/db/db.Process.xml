@@ -295,6 +295,60 @@
 			
 		</sql>
 		
+		
+		
+		<sql id="XSQL_XFlow_Process_queryWorkIDsByDone"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  DISTINCT A.workID
+				  FROM  TProcess  A
+				 WHERE  A.operateUserID = ':userID'
+				 UNION  ALL
+				SELECT  DISTINCT A.workID
+				  FROM  TProcess_History  A
+				 WHERE  A.operateUserID = ':userID'
+				]]>
+			</content>
+			
+			<result>
+				<table>java.util.ArrayList</table>
+				<fill>add(row.workID)</fill>
+				<row>org.hy.xflow.engine.bean.FlowProcess</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_queryServiceDataIDsByDone"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  DISTINCT A.serviceDataID
+				  FROM  TProcess  A
+				 WHERE  A.operateUserID = ':userID'
+				 UNION  ALL
+				SELECT  DISTINCT A.serviceDataID
+				  FROM  TProcess_History  A
+				 WHERE  A.operateUserID = ':userID'
+				]]>
+			</content>
+			
+			<result>
+				<table>java.util.ArrayList</table>
+				<fill>add(row.serviceDataID)</fill>
+				<row>org.hy.xflow.engine.bean.FlowProcess</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
 	</sqls>
 	
 </config>

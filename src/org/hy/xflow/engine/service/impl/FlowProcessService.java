@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.FlowProcess;
+import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseService;
 import org.hy.xflow.engine.dao.IFlowProcessDAO;
 import org.hy.xflow.engine.service.IFlowProcessService;
@@ -62,6 +63,40 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
     public List<FlowProcess> queryByServiceDataID(String i_ServiceDataID)
     {
         return this.flowProcessDAO.queryByServiceDataID(i_ServiceDataID);
+    }
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例ID。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<String> queryWorkIDsByDone(User i_User)
+    {
+        return this.flowProcessDAO.queryWorkIDsByDone(i_User);
+    }
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<String> queryServiceDataIDsByDone(User i_User)
+    {
+        return this.flowProcessDAO.queryServiceDataIDsByDone(i_User);
     }
     
 }

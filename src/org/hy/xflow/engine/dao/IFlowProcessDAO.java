@@ -7,6 +7,7 @@ import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
 import org.hy.common.xml.annotation.Xsql;
 import org.hy.xflow.engine.bean.FlowProcess;
+import org.hy.xflow.engine.bean.User;
 
 
 
@@ -54,5 +55,35 @@ public interface IFlowProcessDAO
      */
     @Xsql("XSQL_XFlow_Process_QueryByWorkID_ServiceDataID")
     public List<FlowProcess> queryByServiceDataID(@Xparam(id="serviceDataID" ,notNull=true) String i_ServiceDataID);
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例ID。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    @Xsql("XSQL_XFlow_Process_queryWorkIDsByDone")
+    public List<String> queryWorkIDsByDone(User i_User);
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    @Xsql("XSQL_XFlow_Process_queryServiceDataIDsByDone")
+    public List<String> queryServiceDataIDsByDone(User i_User);
     
 }

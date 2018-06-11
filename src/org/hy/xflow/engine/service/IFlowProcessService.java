@@ -3,6 +3,7 @@ package org.hy.xflow.engine.service;
 import java.util.List;
 
 import org.hy.xflow.engine.bean.FlowProcess;
+import org.hy.xflow.engine.bean.User;
 
 
 
@@ -47,5 +48,33 @@ public interface IFlowProcessService
      * @return
      */
     public List<FlowProcess> queryByServiceDataID(String i_ServiceDataID);
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例ID。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<String> queryWorkIDsByDone(User i_User);
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<String> queryServiceDataIDsByDone(User i_User);
     
 }

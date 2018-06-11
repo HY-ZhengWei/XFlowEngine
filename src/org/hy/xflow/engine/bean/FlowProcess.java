@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.hy.common.Date;
 import org.hy.common.Help;
-import org.hy.common.StringHelp;
 import org.hy.xflow.engine.common.BaseModel;
+import org.hy.xflow.engine.common.IDHelp;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
@@ -182,7 +182,7 @@ public class FlowProcess extends BaseModel
     
     public FlowProcess init_ToNext(User i_User ,FlowInfo i_Flow ,FlowProcess io_Previous ,ActivityRoute i_Route)
     {
-        this.processID               = StringHelp.getUUID();
+        this.processID               = IDHelp.makeID();
         this.serviceDataID           = i_Flow.getServiceDataID();
         this.workID                  = i_Flow.getWorkID();
         this.splitProcessID          = "";
