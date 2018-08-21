@@ -2,13 +2,13 @@
 
 
 
-实战流程模板案例：v1.0.0版本
+实战流程模板案例：智能选型v1.0.0版本
 ------
 ![image](test/org/hy/xflow/engine/junit/S001_XX/db/流程模板v1.0.0/选型工作流.png)
 
 
 
-实战流程模板案例：v2.0.0版本
+实战流程模板案例：智能选型v2.0.0版本
 ------
 ![image](test/org/hy/xflow/engine/junit/S001_XX/db/流程模板v2.0.0/选型工作流.png)
 
