@@ -43,7 +43,7 @@
 				                                ,@TableName
 				                                ,NULL
 				                                ,NULL
-				END;/
+				END
 				]]>
 			</content>
 			
@@ -88,7 +88,7 @@
 				                                ,@TableName
 				                                ,'COLUMN'
 				                                ,@ColumnName
-				END;/
+				END
 				]]>
 			</content>
 			
