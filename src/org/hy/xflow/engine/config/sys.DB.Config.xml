@@ -47,7 +47,7 @@
 		<!-- SQL Server数据库 -->
 		<dataSource id="DS_XFlow_01" if="SQLSERVER == XFlow_DataSourceType.getValue">
 			<driverClass>net.sourceforge.jtds.jdbc.Driver</driverClass>
-			<jdbcUrl>jdbc:jtds:sqlserver://10.1.1.18:1433;DatabaseName=XFlow</jdbcUrl>
+			<jdbcUrl>jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=XFlow</jdbcUrl>
 			<user>sa</user>
 			<password>sa123</password>
 			<maxPoolSize>100</maxPoolSize>
