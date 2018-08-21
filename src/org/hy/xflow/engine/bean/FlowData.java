@@ -30,6 +30,9 @@ public class FlowData extends BaseModel
     /** 工作流模板名称 */
     private String                templateName;
     
+    /** 模板版本号 */
+    private Integer               versionNo;
+    
     /** 第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息 */
     private String                serviceDataID;
     
@@ -172,6 +175,28 @@ public class FlowData extends BaseModel
     public void setParticipants(List<UserParticipant> participants)
     {
         this.participants = participants;
+    }
+
+
+    
+    /**
+     * 获取：模板版本号
+     */
+    public Integer getVersionNo()
+    {
+        return versionNo;
+    }
+    
+
+    
+    /**
+     * 设置：模板版本号
+     * 
+     * @param versionNo 
+     */
+    public void setVersionNo(Integer versionNo)
+    {
+        this.versionNo = versionNo;
     }
     
 }
