@@ -12,6 +12,8 @@ import org.junit.Test;
 
 /**
  * 测试单元：获取用户可以处理（或叫待办）的工作流实例对应的第三方使用系统的业务数据ID。
+ * 
+ * 可以同时查询出多个流程版本的所有"待办"
  *
  * @author      ZhengWei(HY)
  * @createDate  2018-05-15
@@ -24,9 +26,9 @@ public class JU_009_QueryFuture extends BaseJunit
     public void test_001()
     {
         User v_User  = new User();
-        v_User.setUserID("8a81b2b54b7b391b014b7d143a7400fe");
-        v_User.setUserName("公用选型负责人");
-        v_User.addRole("002" ,"选型负责人");
+        v_User.setUserID("E10ADC3949BA59ABBE56E057F20F922E");
+        v_User.setUserName("霍桂霞");
+        v_User.addRole("001" ,"选型主管");
         
         XFlowEngine v_XFlowEngine = XFlowEngine.getInstance();
         

@@ -25,7 +25,7 @@ public class JU_003_QueryActivity extends BaseJunit
     {
         IFlowInfoService v_FlowInfoService = (IFlowInfoService)XJava.getObject("FlowInfoService");
         
-        FlowInfo v_Flow = v_FlowInfoService.queryByWorkID("26882ED15CF043579666814312043D8B");
+        FlowInfo v_Flow = v_FlowInfoService.queryByWorkID("XFA117B5368FE84675B7E23FE2CE724B0F");
         v_Flow = v_FlowInfoService.queryByServiceDataID("SID001");
         
         System.out.println("工作流ID：" + v_Flow.getWorkID());
