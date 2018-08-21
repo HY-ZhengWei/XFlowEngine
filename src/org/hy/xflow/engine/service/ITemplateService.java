@@ -50,10 +50,13 @@ public interface ITemplateService
      * @author      ZhengWei(HY)
      * @createDate  2018-04-25
      * @version     v1.0
-     *
+     * 
+     * @param i_TemplateName  模板名称
+     * @param i_VersionNo     模板版本号（其数值是递增型）（可选的）
+     * 
      * @return
      */
-    public Template queryByNameMaxVersionNo(String i_TemplateName);
+    public Template queryByNameMaxVersionNo(String i_TemplateName ,Integer i_VersionNo);
     
     
     
@@ -63,6 +66,8 @@ public interface ITemplateService
      * @author      ZhengWei(HY)
      * @createDate  2018-04-25
      * @version     v1.0
+     *
+     * @param i_Template  模板对象
      *
      * @return
      */

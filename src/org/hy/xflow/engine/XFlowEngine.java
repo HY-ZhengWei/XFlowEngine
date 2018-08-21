@@ -37,6 +37,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  * @author      ZhengWei(HY)
  * @createDate  2017-03-10
  * @version     v1.0
+ *              v1.1  2018-08-21  添加：1.指定流程模板版本号情况下，创建流程实例的createByName()方法。
  */
 @Xjava
 public class XFlowEngine
@@ -354,7 +355,31 @@ public class XFlowEngine
      */
     public FlowInfo createByName(User i_User ,String i_TemplateName)
     {
-        return createByName(i_User ,i_TemplateName ,"");
+        return createByName(i_User ,i_TemplateName ,"" ,null);
+    }
+    
+    
+    
+    /**
+     * 按工作流模板名称创建工作流实例。
+     * 
+     * 将按模板名称查询版本号最大的有效的工作流模板，用它来创建工作流实例。
+     * 
+     * 创建的工作流实例，当前活动节点为  "开始" 节点。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-08-21
+     * @version     v1.0
+     *
+     * @param i_User           创建人信息
+     * @param i_TemplateName   工作流模板名称
+     * @param i_VersionNo      模板版本号（其数值是递增型）
+     * @return                 成功时，返回工作流实例对象。
+     *                         异常时，抛出错误。
+     */
+    public FlowInfo createByName(User i_User ,String i_TemplateName ,Integer i_VersionNo)
+    {
+        return createByName(i_User ,i_TemplateName ,"" ,i_VersionNo);
     }
     
     
@@ -378,6 +403,31 @@ public class XFlowEngine
      */
     public FlowInfo createByName(User i_User ,String i_TemplateName ,String i_ServiceDataID)
     {
+        return createByName(i_User ,i_TemplateName ,i_ServiceDataID ,null);
+    }
+    
+    
+    
+    /**
+     * 按工作流模板名称创建工作流实例。
+     * 
+     * 将按模板名称查询版本号最大的有效的工作流模板，用它来创建工作流实例。
+     * 
+     * 创建的工作流实例，当前活动节点为  "开始" 节点。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-25
+     * @version     v1.0
+     *
+     * @param i_User           创建人信息
+     * @param i_TemplateName   工作流模板名称
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @param i_VersionNo      模板版本号（其数值是递增型）
+     * @return                 成功时，返回工作流实例对象。
+     *                         异常时，抛出错误。
+     */
+    public FlowInfo createByName(User i_User ,String i_TemplateName ,String i_ServiceDataID ,Integer i_VersionNo)
+    {
         if ( i_User == null )
         {
             throw new NullPointerException("User is null.");
@@ -392,7 +442,7 @@ public class XFlowEngine
         }
         
         // 查询并判定工作流模板是否存在
-        Template v_Template = this.templateService.queryByNameMaxVersionNo(i_TemplateName);
+        Template v_Template = this.templateService.queryByNameMaxVersionNo(i_TemplateName ,i_VersionNo);
         if ( v_Template == null )
         {
             throw new VerifyError("Template[" + i_TemplateName + "] is not exists.");

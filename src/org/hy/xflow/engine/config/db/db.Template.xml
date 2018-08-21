@@ -68,12 +68,14 @@
 				       ,A.isDelete
 					FROM  TTemplate  A
 				 WHERE  A.templateName = ':templateName'
+			  <[   AND  A.versionNo    =  :versionNo      ]>
 				   AND  A.isValid      = 1
 				   AND  A.isDelete     = 0
 				   AND  A.versionNo    = (
 				                          SELECT  MAX(WA.versionNo)
 				                            FROM  TTemplate  WA
 				                           WHERE  WA.templateName = ':templateName'
+				                        <[   AND  WA.versionNo    =  :versionNo      ]>
 				                             AND  WA.isValid      = 1
 				                             AND  WA.isDelete     = 0
 				                         )
