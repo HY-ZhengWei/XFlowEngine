@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="lib/antlr-runtime-3.4.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="lib/jtds-1.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/XFlowEngineClient"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

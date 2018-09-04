@@ -38,5 +38,12 @@
 	    <version>3.9.23</version>
 	</dependency>
 	
+	<!-- https://github.com/HY-ZhengWei/XFlowEngineClient -->
+	<dependency>
+	    <groupId>org</groupId>
+	    <artifactId>hy.xflow.engine-client</artifactId>
+	    <version>1.0.1</version>
+	</dependency>
+	
   </dependencies>
 </project>
