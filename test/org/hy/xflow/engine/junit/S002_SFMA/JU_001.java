@@ -1,7 +1,11 @@
 package org.hy.xflow.engine.junit.S002_SFMA;
 
+import org.hy.common.Date;
+import org.hy.common.StringHelp;
 import org.hy.xflow.engine.XFlowEngine;
+import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
+import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseJunit;
@@ -26,7 +30,7 @@ public class JU_001 extends BaseJunit
     
     private User   doctor;
     
-    private String serviceDataID = "检查者本次测试的ID-001";
+    private String serviceDataID = "检查者本次测试的ID-002";
     
     
     
@@ -92,6 +96,43 @@ public class JU_001 extends BaseJunit
     public void test_003_ToNext()
     {
         XFlowEngine.getInstance().toNextByServiceDataID(doctor ,serviceDataID ,"FN");
+    }
+    
+    
+    
+    /**
+     * 全流程流转测试
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-09-05
+     * @version     v1.0
+     *
+     */
+    @Test
+    public void test_004_ToFinish()
+    {
+        String [][] v_Routes = {{"DN" ,"DN" ,"DN"} 
+                               ,{"DP" ,"DP" ,"DP"}
+                               ,{"FP" ,"FP" ,"FP"}
+                               ,{"DN" ,"FN"}
+                               ,{"FN"}};
+        
+        for (int i=0; i<v_Routes.length; i++)
+        {
+            this.serviceDataID = Date.getNowTime().getFullMilli_ID();
+            
+            XFlowEngine.getInstance().createByName(doctor ,"主动颈椎屈曲" ,serviceDataID);
+            
+            FlowProcess v_LastProcess = null;
+            for (String v_Route : v_Routes[i])
+            {
+                v_LastProcess = XFlowEngine.getInstance().toNextByServiceDataID(doctor ,serviceDataID ,v_Route);
+            }
+            
+            ActivityInfo v_Activity = XFlowEngine.getInstance().getCurrentActivity(v_LastProcess);
+            
+            System.out.println("检测" + (i+1) + "：" + StringHelp.toString(v_Routes[i]) + " 的结果是：" + v_Activity.getInfoComment());
+        }
     }
     
 }

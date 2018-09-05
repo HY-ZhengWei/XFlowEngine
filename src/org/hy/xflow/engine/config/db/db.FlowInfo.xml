@@ -37,6 +37,27 @@
 				  FROM  TFlowInfo  A
 			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
 			<[   WHERE  A.workID        = ':workID'          ]>
+			     UNION
+				SELECT  A.workID
+				       ,A.workFatherID
+				       ,A.flowTemplateID
+				       ,A.serviceDataID
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.lastUserID
+				       ,A.lastUser
+				       ,A.lastTime
+				       ,A.lastOrgID
+				       ,A.lastOrg
+				       ,A.lastProcessID
+				       ,A.isValid
+				       ,A.isDelete
+				  FROM  TFlowInfo_History  A
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  A.workID        = ':workID'          ]>
 				]]>
 			</content>
 			

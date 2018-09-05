@@ -38,6 +38,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  * @createDate  2017-03-10
  * @version     v1.0
  *              v1.1  2018-08-21  添加：1.指定流程模板版本号情况下，创建流程实例的createByName()方法。
+ *              v1.2  2018-09-05  添加：1.通过工作流流转信息，获取当前活动节点的信息
  */
 @Xjava
 public class XFlowEngine
@@ -333,6 +334,44 @@ public class XFlowEngine
         }
         
         return null;
+    }
+    
+    
+    
+    /**
+     * 通过工作流流转信息，获取当前活动节点的信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-09-05
+     * @version     v1.0
+     *
+     * @param i_Process  工作流流转信息
+     * @return
+     */
+    public ActivityInfo getCurrentActivity(FlowProcess i_Process)
+    {
+        if ( i_Process == null )
+        {
+            throw new NullPointerException("FlowProcess is null.");
+        }
+        if ( Help.isNull(i_Process.getTemplateID()) )
+        {
+            throw new VerifyError("TemplateID is null.");
+        }
+        if ( Help.isNull(i_Process.getCurrentActivityCode()) )
+        {
+            throw new VerifyError("CurrentActivityCode is null.");
+        }
+        
+        Template v_Template = this.templateService.queryByID(i_Process.getTemplateID());
+        if ( v_Template == null )
+        {
+            throw new VerifyError("TemplateID[" + i_Process.getTemplateID() + "] is not exists.");
+        }
+        
+        ActivityInfo v_Activity = v_Template.getActivityRouteTree().getActivity(i_Process.getCurrentActivityCode());
+        
+        return v_Activity;
     }
     
     
