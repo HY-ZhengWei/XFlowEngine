@@ -35,6 +35,8 @@
                 
                 ALTER TABLE TTemplate ADD CONSTRAINT PK_TTemplate PRIMARY KEY (templateID);/
                 
+                ALTER TABLE TTemplate ADD CONSTRAINT IDX_Template_Name_Version UNIQUE (templateName ,versionNo);/
+                
                 COMMENT ON TABLE  TTemplate                               IS '工作流模板表';/
                 COMMENT ON COLUMN TTemplate.templateID                    IS '模板ID';/
                 COMMENT ON COLUMN TTemplate.versionNo                     IS '模板版本号（数值递增型）';/
@@ -72,6 +74,8 @@
                 );/
                 
                 ALTER TABLE TTemplate ADD CONSTRAINT PK_TTemplate PRIMARY KEY (templateID);/
+                
+                ALTER TABLE TTemplate ADD CONSTRAINT IDX_Template_Name_Version UNIQUE (templateName ,versionNo);/
                 
                 EXEC P_TableComment  TTemplate                                ,'工作流模板表';/
                 EXEC P_ColumnComment TTemplate ,templateID                    ,'模板ID';/
@@ -127,6 +131,8 @@
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT PK_TActivityInfo PRIMARY KEY (activityID);/
                 
+                ALTER TABLE TActivityInfo ADD CONSTRAINT IDX_Activity_AC_TID UNIQUE (activityCode ,templateID);/
+                
                 COMMENT ON TABLE  TActivityInfo                           IS '工作流活动组件(节点)信息表';/
                 COMMENT ON COLUMN TActivityInfo.activityID                IS '工作流活动ID';/
                 COMMENT ON COLUMN TActivityInfo.activityCode              IS '工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同';/
@@ -174,6 +180,8 @@
                 );/
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT PK_TActivityInfo PRIMARY KEY (activityID);/
+                
+                ALTER TABLE TActivityInfo ADD CONSTRAINT IDX_Activity_AC_TID UNIQUE (activityCode ,templateID);/
                 
                 EXEC P_TableComment  TActivityInfo                            ,'工作流活动组件(节点)信息表';/
                 EXEC P_ColumnComment TActivityInfo ,activityID                ,'工作流活动ID';/
@@ -234,6 +242,8 @@
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT PK_TActivityRoute PRIMARY KEY (activityRouteID);/
                 
+                ALTER TABLE TActivityRoute ADD CONSTRAINT IDX_AR_AID_ARouteCode UNIQUE (activityID ,activityRouteCode);/
+                
                 COMMENT ON TABLE  TActivityRoute                          IS '工作流活动组件(节点)的路由表';/
                 COMMENT ON COLUMN TActivityRoute.activityRouteID          IS '主键ID';/
                 COMMENT ON COLUMN TActivityRoute.activityRouteCode        IS '活动路由Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同';/
@@ -281,6 +291,8 @@
                 );/
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT PK_TActivityRoute PRIMARY KEY (activityRouteID);/
+                
+                ALTER TABLE TActivityRoute ADD CONSTRAINT IDX_AR_AID_ARouteCode UNIQUE (activityID ,activityRouteCode);/
                 
                 EXEC P_TableComment  TActivityRoute                           ,'工作流活动组件(节点)的路由表';/
                 EXEC P_ColumnComment TActivityRoute ,activityRouteID          ,'主键ID';/
@@ -333,6 +345,8 @@
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT PK_TActivityParticipants PRIMARY KEY (participantID);/
                 
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT IDX_AP_AID_OType_OID UNIQUE (activityID ,objectType ,objectID);/
+                
                 COMMENT ON TABLE  TActivityParticipants                    IS '工作流过程的实际参与人';/
                 COMMENT ON COLUMN TActivityParticipants.participantID      IS '主键ID';/
                 COMMENT ON COLUMN TActivityParticipants.templateID         IS '工作流的模板ID';/
@@ -364,6 +378,8 @@
                 );/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT PK_TActivityParticipants PRIMARY KEY (participantID);/
+                
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT IDX_AP_AID_OType_OID UNIQUE (activityID ,objectType ,objectID);/
                 
                 EXEC P_TableComment  TActivityParticipants                     ,'工作流活动组件(节点)路由的参与人';/
                 EXEC P_ColumnComment TActivityParticipants ,participantID      ,'主键ID';/
@@ -408,6 +424,8 @@
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (participantID);/
                 
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT IDX_ARP_ARID_OType_OID UNIQUE (activityRouteID ,objectType ,objectID);/
+                
                 COMMENT ON TABLE  TActivityRouteParticipants                    IS '工作流过程的实际参与人';/
                 COMMENT ON COLUMN TActivityRouteParticipants.participantID      IS '主键ID';/
                 COMMENT ON COLUMN TActivityRouteParticipants.templateID         IS '工作流的模板ID';/
@@ -439,6 +457,8 @@
                 );/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (participantID);/
+                
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT IDX_ARP_ARID_OType_OID UNIQUE (activityRouteID ,objectType ,objectID);/
                 
                 EXEC P_TableComment  TActivityRouteParticipants                     ,'工作流活动组件(节点)路由的参与人';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,participantID      ,'主键ID';/

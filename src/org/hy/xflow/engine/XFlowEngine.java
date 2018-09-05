@@ -722,7 +722,7 @@ public class XFlowEngine
             throw new NullPointerException("Template[" + v_NextRoutes.getFlow().getFlowTemplateID() + "] is not exists. WorkID[" + i_WorkID + "] for User[" + i_User.getUserID() + "]");
         }
         
-        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(i_ActivityRouteCode);
+        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(v_NextRoutes.getCurrentActivity().getActivityCode() ,i_ActivityRouteCode);
         if ( v_Route == null )
         {
             throw new NullPointerException("ActivityRouteCode[" + i_ActivityRouteCode + "] is not exists. WorkID[" + i_WorkID + "] or User[" + i_User.getUserID() + "]");
@@ -972,7 +972,7 @@ public class XFlowEngine
             throw new NullPointerException("Template[" + v_NextRoutes.getFlow().getFlowTemplateID() + "] is not exists. ServiceDataID[" + i_ServiceDataID + "] or User[" + i_User.getUserID() + "]");
         }
         
-        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(i_ActivityRouteCode);
+        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(v_NextRoutes.getCurrentActivity().getActivityCode() ,i_ActivityRouteCode);
         if ( v_Route == null )
         {
             throw new NullPointerException("ActivityRouteCode[" + i_ActivityRouteCode + "] is not exists. ServiceDataID[" + i_ServiceDataID + "] or User[" + i_User.getUserID() + "]");
