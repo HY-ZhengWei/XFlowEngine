@@ -26,6 +26,35 @@ VALUES (
        
        
        
+       
+INSERT  INTO TActivityParticipants
+       (
+        participantID
+       ,templateID
+       ,activityID
+       ,objectType
+       ,objectID
+       ,objectName
+       ,objectNo
+       ,createrID
+       ,creater
+       ,createTime
+       )
+VALUES (
+        'AP001-4-V2'
+       ,'T001-V2'
+       ,'A001-V2'
+       ,3
+       ,'role-service'
+       ,'服务人员'
+       ,2
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-08-21 01:01:01'
+       );
+       
+       
+       
 INSERT  INTO TActivityParticipants
        (
         participantID
@@ -50,6 +79,62 @@ VALUES (
        ,'8a81b2aa4e4865b4014e535c6c900115'
        ,'郑伟'
        ,'2018-08-21 01:01:01'
+       );
+       
+       
+       
+INSERT  INTO TActivityParticipants
+       (
+        participantID
+       ,templateID
+       ,activityID
+       ,objectType
+       ,objectID
+       ,objectName
+       ,objectNo
+       ,createrID
+       ,creater
+       ,createTime
+       )
+VALUES (
+        'AP001-2-V2'
+       ,'T001-V2'
+       ,'A001-1-V2'
+       ,3
+       ,'role-approvalService'
+       ,'服务选型审批人'
+       ,2
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-09-25 01:01:01'
+       );
+       
+       
+       
+INSERT  INTO TActivityParticipants
+       (
+        participantID
+       ,templateID
+       ,activityID
+       ,objectType
+       ,objectID
+       ,objectName
+       ,objectNo
+       ,createrID
+       ,creater
+       ,createTime
+       )
+VALUES (
+        'AP001-3-V2'
+       ,'T001-V2'
+       ,'A001-1-V2'
+       ,3
+       ,'role-service'
+       ,'服务人员'
+       ,3
+       ,'8a81b2aa4e4865b4014e535c6c900115'
+       ,'郑伟'
+       ,'2018-09-25 01:01:01'
        );
        
        
