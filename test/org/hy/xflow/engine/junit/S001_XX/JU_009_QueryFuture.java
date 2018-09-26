@@ -44,4 +44,52 @@ public class JU_009_QueryFuture extends BaseJunit
         }
     }
     
+    
+    
+    @Test
+    public void test_002()
+    {
+        User v_User  = new User();
+        v_User.setUserID("B6F1C93A6141476BB0C04F9EDB1B83BE");
+        v_User.setUserName("公用销售选型审批人");
+        v_User.addRole("role-approval" ,"销售选型审批人");
+        
+        XFlowEngine v_XFlowEngine = XFlowEngine.getInstance();
+        
+        for (int i=1; i<=10; i++)
+        {
+            long v_BeginTime = System.nanoTime();
+            
+            Help.print(v_XFlowEngine.queryServiceDataIDs(v_User));
+
+            long v_EndTime = System.nanoTime();
+            
+            System.out.println("待办查询用时(纳秒)1秒(s)=1000000000纳秒(ns)：" + (v_EndTime - v_BeginTime));
+        }
+    }
+    
+    
+    
+    @Test
+    public void test_003()
+    {
+        User v_User  = new User();
+        v_User.setUserID("B368BB77C5A04A52BE82CE4E35C46D43");
+        v_User.setUserName("公用服务选型审批人");
+        v_User.addRole("role-approvalService" ,"服务选型审批人");
+        
+        XFlowEngine v_XFlowEngine = XFlowEngine.getInstance();
+        
+        for (int i=1; i<=10; i++)
+        {
+            long v_BeginTime = System.nanoTime();
+            
+            Help.print(v_XFlowEngine.queryServiceDataIDs(v_User));
+
+            long v_EndTime = System.nanoTime();
+            
+            System.out.println("待办查询用时(纳秒)1秒(s)=1000000000纳秒(ns)：" + (v_EndTime - v_BeginTime));
+        }
+    }
+    
 }

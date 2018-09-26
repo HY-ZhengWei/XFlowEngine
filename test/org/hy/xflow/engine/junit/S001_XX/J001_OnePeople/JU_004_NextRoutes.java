@@ -5,7 +5,9 @@ import org.hy.xflow.engine.XFlowEngine;
 import org.hy.xflow.engine.bean.ActivityRoute;
 import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.User;
+import org.hy.xflow.engine.bean.UserParticipant;
 import org.hy.xflow.engine.common.BaseJunit;
+import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 import org.junit.Test;
 
 
@@ -30,7 +32,7 @@ public class JU_004_NextRoutes extends BaseJunit
         v_Saler.setUserName("公用销售人员");
         v_Saler.addRole("004" ,"销售人员");
         
-        String v_ServiceDataID = "SID002";
+        String v_ServiceDataID = "F2018-09-26-001";
         
         NextRoutes v_NextRoutes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(v_Saler ,v_ServiceDataID);
         if ( Help.isNull(v_NextRoutes.getRoutes()) )
@@ -41,7 +43,13 @@ public class JU_004_NextRoutes extends BaseJunit
         {
             ActivityRoute v_Route  = v_NextRoutes.getRoutes().get(0);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityRouteCode());
+            UserParticipant v_Participant = new UserParticipant();
+            v_Participant.setObjectType(ParticipantTypeEnum.$Role);
+            v_Participant.setObjectID("role-approval");
+            v_Participant.setObjectName("选型审批人");
+            v_Participant.setObjectNo(1);
+            
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityRouteCode() ,v_Participant);
             
             System.out.println("-- 申请成功。版本2.0.0转审批选型；版本1.0.0转受理");
         }

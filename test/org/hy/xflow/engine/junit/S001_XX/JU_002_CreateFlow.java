@@ -27,7 +27,7 @@ public class JU_002_CreateFlow extends BaseJunit
         v_Saler.setUserName("公用销售人员");
         v_Saler.addRole("004" ,"销售人员");
         
-        XFlowEngine.getInstance().createByName(v_Saler ,"智能选型" ,"SID002");
+        XFlowEngine.getInstance().createByName(v_Saler ,"智能选型" ,"F2018-09-26-001");
     }
     
 }
