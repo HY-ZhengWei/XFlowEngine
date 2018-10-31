@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.service;
 
+import java.util.List;
+
 import org.hy.xflow.engine.bean.Template;
 
 
@@ -17,7 +19,20 @@ public interface ITemplateService
 {
     
     /**
-     * 按模板ID查询模板信息
+     * 查询所有工作流模板信息。内部组合生成关系数据网。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-10-31
+     * @version     v1.0
+     *
+     * @return
+     */
+    public List<Template> queryAll();
+    
+    
+    
+    /**
+     * 按模板ID查询模板信息。内部组合生成关系数据网。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-04-19
@@ -31,7 +46,7 @@ public interface ITemplateService
     
     
     /**
-     * 按模板ID查询模板信息
+     * 按模板ID查询模板信息。内部组合生成关系数据网。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-04-19
@@ -45,7 +60,7 @@ public interface ITemplateService
     
     
     /**
-     * 按模板名称查询版本号最大的有效的模板信息
+     * 按模板名称查询版本号最大的有效的模板信息。内部组合生成关系数据网。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-04-25
@@ -61,7 +76,7 @@ public interface ITemplateService
     
     
     /**
-     * 按模板名称查询版本号最大的有效的模板信息
+     * 按模板名称查询版本号最大的有效的模板信息。内部组合生成关系数据网。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-04-25

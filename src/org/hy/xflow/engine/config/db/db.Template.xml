@@ -11,6 +11,40 @@
     <!-- 工作流模板表模块的相关SQL -->
 	<sqls>
 	
+		<sql id="XSQL_XFlow_Template_QueryAll"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.templateID
+				       ,A.versionNo
+				       ,A.version
+				       ,A.templateName
+				       ,A.infoComment
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createTime
+				       ,A.lastUserID
+				       ,A.lastUser
+				       ,A.lastTime
+				       ,A.isValid
+				       ,A.isDelete
+				  FROM  TTemplate  A
+				 ORDER  BY A.templateName
+				          ,A.versionNo    DESC
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.Template</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+		
+	
 		<sql id="XSQL_XFlow_Template_QueryByID_NameVersionNo"> 
 		
 			<dataSourceGroup ref="DSG_XFlow" />

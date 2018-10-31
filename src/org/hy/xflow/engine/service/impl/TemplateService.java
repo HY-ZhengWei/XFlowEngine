@@ -1,8 +1,11 @@
 package org.hy.xflow.engine.service.impl;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
+import org.hy.common.Help;
 import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
@@ -66,6 +69,33 @@ public class TemplateService extends BaseService implements ITemplateService
     public static void clearCache()
     {
         $CacheTemplates.clear();
+    }
+    
+    
+    
+    /**
+     * 查询所有工作流模板信息。内部组合生成关系数据网。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-10-31
+     * @version     v1.0
+     *
+     * @return
+     */
+    public synchronized List<Template> queryAll()
+    {
+        List<Template> v_Tempaltes = this.templateDAO.queryAll();
+        List<Template> v_Ret       = new ArrayList<Template>();
+        
+        if ( !Help.isNull(v_Tempaltes) )
+        {
+            for (Template v_Template : v_Tempaltes)
+            {
+                v_Ret.add(this.queryByID(v_Template));
+            }
+        }
+        
+        return v_Ret;
     }
     
     

@@ -1,5 +1,6 @@
 package org.hy.xflow.engine.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.hy.common.xml.annotation.XType;
@@ -22,6 +23,19 @@ import org.hy.xflow.engine.bean.Template;
 @Xjava(id="TemplateDAO" ,value=XType.XSQL)
 public interface ITemplateDAO
 {
+    
+    /**
+     * 查询所有工作流模板信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-10-31
+     * @version     v1.0
+     *
+     * @return
+     */
+    @Xsql("XSQL_XFlow_Template_QueryAll")
+    public List<Template> queryAll();
+    
     
     
     /**
