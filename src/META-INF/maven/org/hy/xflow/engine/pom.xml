@@ -31,18 +31,11 @@
       <scope>test</scope>
     </dependency>
     
-    <!-- https://github.com/HY-ZhengWei/XJava -->
-	<dependency>
-	    <groupId>org</groupId>
-	    <artifactId>hy.common.xjava</artifactId>
-	    <version>3.9.24</version>
-	</dependency>
-	
 	<!-- https://github.com/HY-ZhengWei/XFlowEngineClient -->
 	<dependency>
 	    <groupId>org</groupId>
 	    <artifactId>hy.xflow.engine-client</artifactId>
-	    <version>1.0.2</version>
+	    <version>1.0.3</version>
 	</dependency>
 	
   </dependencies>
