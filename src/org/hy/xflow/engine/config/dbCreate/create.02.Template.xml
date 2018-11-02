@@ -120,6 +120,9 @@
                 ,height             NUMBER(10 ,2)
                 ,width              NUMBER(10 ,2)
                 ,iconURL            VARCHAR2(500)
+                ,backgroudColor     VARCHAR2(16)
+                ,lineColor          VARCHAR2(16)
+                ,flagColor          VARCHAR2(16)
                 ,infoComment        NVARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
@@ -145,6 +148,9 @@
                 COMMENT ON COLUMN TActivityInfo.height                    IS '图标高度';/
                 COMMENT ON COLUMN TActivityInfo.width                     IS '图标宽度';/
                 COMMENT ON COLUMN TActivityInfo.iconURL                   IS '图标路径';/
+                COMMENT ON COLUMN TActivityInfo.backgroudColor            IS '活动节点的背景色';/
+                COMMENT ON COLUMN TActivityInfo.lineColor                 IS '活动节点的边框线颜色';/
+                COMMENT ON COLUMN TActivityInfo.flagColor                 IS '活动节点的标记块颜色';/
                 COMMENT ON COLUMN TActivityInfo.infoComment               IS '备注说明';/
                 COMMENT ON COLUMN TActivityInfo.createrID                 IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityInfo.creater                   IS '创建人员名称';/
@@ -170,6 +176,9 @@
                 ,height             DECIMAL
                 ,width              DECIMAL
                 ,iconURL            VARCHAR(500)
+                ,backgroudColor     VARCHAR(16)
+                ,lineColor          VARCHAR(16)
+                ,flagColor          VARCHAR(16)
                 ,infoComment        NVARCHAR(2000)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            NVARCHAR(128)
@@ -195,6 +204,9 @@
                 EXEC P_ColumnComment TActivityInfo ,height                    ,'图标高度';/
                 EXEC P_ColumnComment TActivityInfo ,width                     ,'图标宽度';/
                 EXEC P_ColumnComment TActivityInfo ,iconURL                   ,'图标路径';/
+                EXEC P_ColumnComment TActivityInfo ,backgroudColor            ,'活动节点的背景色';/
+                EXEC P_ColumnComment TActivityInfo ,lineColor                 ,'活动节点的边框线颜色';/
+                EXEC P_ColumnComment TActivityInfo ,flagColor                 ,'活动节点的标记块颜色';/
                 EXEC P_ColumnComment TActivityInfo ,infoComment               ,'备注说明';/
                 EXEC P_ColumnComment TActivityInfo ,createrID                 ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityInfo ,creater                   ,'创建人员名称';/

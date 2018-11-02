@@ -1,5 +1,6 @@
 package org.hy.xflow.engine.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.hy.common.xml.annotation.XType;
@@ -51,5 +52,20 @@ public interface IActivityInfoDAO
      */
     @Xsql("XSQL_XFlow_ActivityInfo_QueryByTemplateID")
     public Map<String ,ActivityInfo> queryByTemplateID(@Xparam(notNulls={"templateID"}) Template i_Template); 
+    
+    
+    
+    /**
+     * 保存活动组件(节点)
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-11-02
+     * @version     v1.0
+     * 
+     * @param i_Activitys
+     * @return
+     */
+    @Xsql("XSQL_XFlow_ActivityInfo_Saves")
+    public int saves(List<ActivityInfo> i_Activitys);
     
 }

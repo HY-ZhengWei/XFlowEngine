@@ -31,6 +31,9 @@
 				       ,A.height
 				       ,A.width
 				       ,A.iconURL
+				       ,A.backgroudColor
+				       ,A.lineColor
+				       ,A.flagColor
 				       ,A.infoComment
 				       ,A.createrID
 				       ,A.creater
@@ -53,6 +56,43 @@
 				<cfill>setter(colValue)</cfill>
 			</result>
 			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_ActivityInfo_Saves"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				UPDATE  TActivityInfo
+				   SET  lastTime       = SYSDATE
+				<[     ,x              = ':x'              ]>
+				<[     ,y              = ':y'              ]>
+				<[     ,z              = ':z'              ]>
+				<[     ,backgroudColor = ':backgroudColor' ]>
+				<[     ,lineColor      = ':lineColor'      ]>
+				<[     ,flagColor      = ':flagColor'      ]>
+				 WHERE  activityID     = ':activityID'
+				   AND  templateID     = ':templateID'
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				UPDATE  TActivityInfo
+				   SET  lastTime       = GETDATE()
+				<[     ,x              = ':x'              ]>
+				<[     ,y              = ':y'              ]>
+				<[     ,z              = ':z'              ]>
+				<[     ,backgroudColor = ':backgroudColor' ]>
+				<[     ,lineColor      = ':lineColor'      ]>
+				<[     ,flagColor      = ':flagColor'      ]>
+				 WHERE  activityID     = ':activityID'
+				   AND  templateID     = ':templateID'
+				]]>
+			</content>
 		</sql>
 		
 	</sqls>

@@ -2,6 +2,7 @@ package org.hy.xflow.engine.service;
 
 import java.util.List;
 
+import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.Template;
 
 
@@ -87,5 +88,20 @@ public interface ITemplateService
      * @return
      */
     public Template queryByNameMaxVersionNo(Template i_Template);
+    
+    
+    
+    /**
+     * 保存活动组件(节点)
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-11-02
+     * @version     v1.0
+     * 
+     * @param i_TemplateID
+     * @param i_Activitys
+     * @return
+     */
+    public boolean saves(String i_TemplateID ,List<ActivityInfo> i_Activitys);
     
 }

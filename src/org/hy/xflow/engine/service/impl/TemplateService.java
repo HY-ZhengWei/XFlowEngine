@@ -191,4 +191,37 @@ public class TemplateService extends BaseService implements ITemplateService
         return this.templateDAO.queryByNameMaxVersionNo(i_Template);
     }
     
+
+    
+    /**
+     * 保存活动组件(节点)
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-11-02
+     * @version     v1.0
+     * 
+     * @param i_TemplateID
+     * @param i_Activitys
+     * @return
+     */
+    public boolean saves(String i_TemplateID ,List<ActivityInfo> i_Activitys)
+    {
+        for (ActivityInfo v_Activity : i_Activitys)
+        {
+            v_Activity.setTemplateID(i_TemplateID);
+        }
+        
+        int v_RetCount = this.activityInfoDAO.saves(i_Activitys);
+        if ( v_RetCount != i_Activitys.size() )
+        {
+            return false;
+        }
+        
+        // 数据库更新成功后，更新高速缓存
+        $CacheTemplates.remove(i_TemplateID);
+        this.queryByID(i_TemplateID);
+        
+        return true;
+    }
+    
 }
