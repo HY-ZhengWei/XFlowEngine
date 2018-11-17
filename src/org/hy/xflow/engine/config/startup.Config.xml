@@ -88,6 +88,10 @@
 				<value>dbGroup/db.FlowProcess.xml</value>
 			</item>
 			
+			<item>
+				<value>dbGroup/db.TemplateActivity.xml</value>
+			</item>
+			
 		</startupConfig>
 		
 	</xconfig>

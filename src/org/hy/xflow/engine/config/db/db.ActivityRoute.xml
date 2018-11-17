@@ -33,6 +33,7 @@
 				       ,A.conditionMethod
 				       ,A.conditionValue
 				       ,A.conditionVType
+				       ,A.lineColor
 				       ,A.infoComment
 				       ,A.createrID
 				       ,A.creater
@@ -61,6 +62,33 @@
 				<cfill>setter(colValue)</cfill>
 			</result>
 			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_ActivityRoute_Saves"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content if="ORACLE == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				UPDATE  TActivityRoute
+				   SET  lastTime        = SYSDATE
+				       ,lineColor       = :lineColor
+				 WHERE  activityRouteID = :activityRouteID
+				   AND  templateID      = :templateID
+				]]>
+			</content>
+			
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				UPDATE  TActivityRoute
+				   SET  lastTime        = GETDATE()
+				       ,lineColor       = :lineColor
+				 WHERE  activityRouteID = :activityRouteID
+				   AND  templateID      = :templateID
+				]]>
+			</content>
 		</sql>
 		
 	</sqls>

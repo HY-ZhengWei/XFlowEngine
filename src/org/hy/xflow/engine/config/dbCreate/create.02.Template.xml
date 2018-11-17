@@ -243,6 +243,7 @@
                 ,conditionMethod    VARCHAR2(64)
                 ,conditionValue     VARCHAR2(500)
                 ,conditionVType     NUMBER(2)
+                ,lineColor          VARCHAR2(16)
                 ,infoComment        NVARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
@@ -268,6 +269,7 @@
                 COMMENT ON COLUMN TActivityRoute.conditionMethod          IS '有条件判定时，执行的对象方法名称';/
                 COMMENT ON COLUMN TActivityRoute.conditionValue           IS '有条件判定时，方法执行结果的对比值';/
                 COMMENT ON COLUMN TActivityRoute.conditionVType           IS '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
+                COMMENT ON COLUMN TActivityRoute.lineColor                IS '路由连接线的颜色';/
                 COMMENT ON COLUMN TActivityRoute.infoComment              IS '备注说明';/
                 COMMENT ON COLUMN TActivityRoute.createrID                IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityRoute.creater                  IS '创建人员名称';/
@@ -293,6 +295,7 @@
                 ,conditionMethod    VARCHAR(64)
                 ,conditionValue     VARCHAR(500)
                 ,conditionVType     INT
+                ,lineColor          VARCHAR(16)
                 ,infoComment        NVARCHAR(2000)
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            NVARCHAR(128)
@@ -318,6 +321,7 @@
                 EXEC P_ColumnComment TActivityRoute ,conditionMethod          ,'有条件判定时，执行的对象方法名称';/
                 EXEC P_ColumnComment TActivityRoute ,conditionValue           ,'有条件判定时，方法执行结果的对比值';/
                 EXEC P_ColumnComment TActivityRoute ,conditionVType           ,'有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
+                EXEC P_ColumnComment TActivityRoute ,lineColor                ,'路由连接线的颜色';/
                 EXEC P_ColumnComment TActivityRoute ,infoComment              ,'备注说明';/
                 EXEC P_ColumnComment TActivityRoute ,createrID                ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityRoute ,creater                  ,'创建人员名称';/

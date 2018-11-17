@@ -8,6 +8,7 @@ import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
 import org.hy.common.xml.annotation.Xsql;
 import org.hy.xflow.engine.bean.ActivityInfo;
+import org.hy.xflow.engine.bean.ActivityRoute;
 import org.hy.xflow.engine.bean.Template;
 
 
@@ -67,5 +68,22 @@ public interface IActivityInfoDAO
      */
     @Xsql("XSQL_XFlow_ActivityInfo_Saves")
     public int saves(List<ActivityInfo> i_Activitys);
+    
+    
+    
+    /**
+     * 保存活动节点 及 活动路由
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-11-17
+     * @version     v1.0
+     * 
+     * @param i_Activitys
+     * @param i_Routes
+     * @return
+     */
+    @Xsql("GXSQL_XFlow_Activity_Route_Save")
+    public boolean saves(@Xparam(id="Activitys" ,notNull=true) List<ActivityInfo>  i_Activitys 
+                        ,@Xparam(id="Routes"    ,notNull=true) List<ActivityRoute> i_Routes);
     
 }

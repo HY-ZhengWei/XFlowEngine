@@ -191,35 +191,65 @@ public class TemplateService extends BaseService implements ITemplateService
         return this.templateDAO.queryByNameMaxVersionNo(i_Template);
     }
     
+    
+    
+    /**
+     * 数据库更新成功后，应即时更新高速缓存
+     *
+     * @author      ZhengWei(HY)
+     * @createDate  2018-11-17
+     * @version     v1.0
+     *
+     * @param i_TemplateID
+     * @return
+     */
+    public boolean refreshCache(String i_TemplateID)
+    {
+        try
+        {
+            $CacheTemplates.remove(i_TemplateID);
+            Template v_Template = this.queryByID(i_TemplateID);
+            
+            if ( v_Template != null )
+            {
+                return true;
+            }
+        }
+        catch (Exception exce)
+        {
+            exce.printStackTrace();
+        }
+        
+        return false;
+    }
+    
 
     
     /**
-     * 保存活动组件(节点)
+     * 保存活动节点 及 活动路由
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-11-02
      * @version     v1.0
+     *              v2.0  2018-11-17  添加：活动路由的保存
      * 
-     * @param i_TemplateID
-     * @param i_Activitys
+     * @param i_TemplateID  模板ID
+     * @param i_Activitys   活动节点的集合
+     * @param i_Routes      活动路由的集合
      * @return
      */
-    public boolean saves(String i_TemplateID ,List<ActivityInfo> i_Activitys)
+    public boolean saves(String i_TemplateID ,List<ActivityInfo> i_Activitys ,List<ActivityRoute> i_Routes)
     {
-        for (ActivityInfo v_Activity : i_Activitys)
-        {
-            v_Activity.setTemplateID(i_TemplateID);
-        }
+        Help.setValues(i_Activitys ,"templateID" ,i_TemplateID);
+        Help.setValues(i_Routes    ,"templateID" ,i_TemplateID);
         
-        int v_RetCount = this.activityInfoDAO.saves(i_Activitys);
-        if ( v_RetCount != i_Activitys.size() )
+        boolean v_Ret = this.activityInfoDAO.saves(i_Activitys ,i_Routes);
+        if ( !v_Ret )
         {
             return false;
         }
         
-        // 数据库更新成功后，更新高速缓存
-        $CacheTemplates.remove(i_TemplateID);
-        this.queryByID(i_TemplateID);
+        this.refreshCache(i_TemplateID);
         
         return true;
     }

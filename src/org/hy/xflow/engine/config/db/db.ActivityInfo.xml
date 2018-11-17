@@ -68,14 +68,13 @@
 				<![CDATA[
 				UPDATE  TActivityInfo
 				   SET  lastTime       = SYSDATE
-				<[     ,x              = ':x'              ]>
-				<[     ,y              = ':y'              ]>
-				<[     ,z              = ':z'              ]>
-				<[     ,backgroudColor = ':backgroudColor' ]>
-				<[     ,lineColor      = ':lineColor'      ]>
-				<[     ,flagColor      = ':flagColor'      ]>
-				 WHERE  activityID     = ':activityID'
-				   AND  templateID     = ':templateID'
+				       ,x              = :x
+				       ,y              = :y
+				       ,backgroudColor = :backgroudColor
+				       ,lineColor      = :lineColor
+				       ,flagColor      = :flagColor
+				 WHERE  activityID     = :activityID
+				   AND  templateID     = :templateID
 				]]>
 			</content>
 			
@@ -83,14 +82,13 @@
 				<![CDATA[
 				UPDATE  TActivityInfo
 				   SET  lastTime       = GETDATE()
-				<[     ,x              = ':x'              ]>
-				<[     ,y              = ':y'              ]>
-				<[     ,z              = ':z'              ]>
-				<[     ,backgroudColor = ':backgroudColor' ]>
-				<[     ,lineColor      = ':lineColor'      ]>
-				<[     ,flagColor      = ':flagColor'      ]>
-				 WHERE  activityID     = ':activityID'
-				   AND  templateID     = ':templateID'
+				       ,x              = :x
+				       ,y              = :y
+				       ,backgroudColor = :backgroudColor
+				       ,lineColor      = :lineColor
+				       ,flagColor      = :flagColor
+				 WHERE  activityID     = :activityID
+				   AND  templateID     = :templateID
 				]]>
 			</content>
 		</sql>
