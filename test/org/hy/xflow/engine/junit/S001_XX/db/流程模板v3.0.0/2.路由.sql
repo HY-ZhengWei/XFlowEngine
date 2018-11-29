@@ -66,7 +66,7 @@ INSERT  INTO TActivityRoute
 VALUES (
         'AR000-V3-01'
        ,'选型申请-单人选型'
-       ,'转向单人选型'
+       ,'申请转向单人选型'
        ,'T001-V3'
        ,'RT001'
        ,'A001-V3'
