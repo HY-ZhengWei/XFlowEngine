@@ -11,13 +11,13 @@
 
 
 
-实战流程案例：智能选型v2.0.0版本
+实战流程案例：智能选型v2.0.0版本（增加审批环节）
 ------
 ![image](test/org/hy/xflow/engine/junit/S001_XX/db/流程模板v2.0.0/选型工作流.png)
 
 
 
-实战流程案例：智能选型v3.0.0版本
+实战流程案例：智能选型v3.0.0版本（增加单人协助路由）
 ------
 ![image](test/org/hy/xflow/engine/junit/S001_XX/db/流程模板v3.0.0/选型工作流.png)
 
