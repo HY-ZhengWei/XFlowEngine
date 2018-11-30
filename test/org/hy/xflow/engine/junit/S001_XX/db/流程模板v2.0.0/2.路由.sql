@@ -774,7 +774,7 @@ INSERT  INTO TActivityRoute
 VALUES (
         'AR021-V2'
        ,'选型分包-选型结果确认'
-       ,'临时的，直接跳汇总'
+       ,'直接跳汇总'
        ,'T001-V2'
        ,'RT001'
        ,'A005-V2'
