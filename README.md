@@ -17,6 +17,12 @@
 
 
 
+实战流程案例：智能选型v3.0.0版本
+------
+![image](test/org/hy/xflow/engine/junit/S001_XX/db/流程模板v3.0.0/选型工作流.png)
+
+
+
 ---
 #### 本项目引用Jar包，其源码链接如下
 引用 https://github.com/HY-ZhengWei/XFlowEngineClient 类库
