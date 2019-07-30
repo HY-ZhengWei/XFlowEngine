@@ -91,6 +91,20 @@
 				   AND  templateID     = :templateID
 				]]>
 			</content>
+			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				UPDATE  TActivityInfo
+				   SET  lastTime       = NOW()
+				       ,x              = :x
+				       ,y              = :y
+				       ,backgroudColor = :backgroudColor
+				       ,lineColor      = :lineColor
+				       ,flagColor      = :flagColor
+				 WHERE  activityID     = :activityID
+				   AND  templateID     = :templateID
+				]]>
+			</content>
 		</sql>
 		
 	</sqls>

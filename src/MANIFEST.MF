@@ -1,5 +1,5 @@
-Manifest-Version: 1.0.3
+Manifest-Version: 1.0.4
 Created-By: HY.ZhengWei@qq.com  2018
-Specification-Version: 1.0.3  2018-11-17
+Specification-Version: 1.0.4  2019-07-30
 SourceCode: https://github.com/HY-ZhengWei/XFlowEngine
 Build-JDK: 1.6

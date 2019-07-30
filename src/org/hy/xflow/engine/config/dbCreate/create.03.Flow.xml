@@ -60,6 +60,35 @@
 				]]>
 			</content>
 			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TFlowInfo
+                (
+                 workID             varchar(64)                     NOT NULL comment '工作流实例ID'
+                ,workFatherID       varchar(64)                              comment '工作流的父实例ID，可为空'
+                ,flowTemplateID     varchar(64)                     NOT NULL comment '工作流的模板ID'
+                ,serviceDataID      varchar(64)                              comment '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
+                ,creater            varchar(128)                             comment '创建人员名称'
+                ,createOrgID        varchar(64)                              comment '创建部门ID'
+                ,createOrg          varchar(128)                             comment '创建部门名称'
+                ,createTime         datetime                        NOT NULL comment '创建时间'
+                ,lastUserID         varchar(64)                     NOT NULL comment '最后修改人员ID'
+                ,lastUser           varchar(128)                             comment '最后修改人员名称'
+                ,lastTime           datetime                                 comment '最后修改时间'
+                ,lastOrgID          varchar(64)                              comment '最后修改部门ID'
+                ,lastOrg            varchar(128)                             comment '最后修改部门名称'
+                ,lastProcessID      varchar(64)                     NOT NULL comment '最后修改的过程ID'
+                ,isValid            int(1)                          NOT NULL comment '是否有效标记(0:无效；1:有效)'
+                ,isDelete           int(1)                          NOT NULL comment '是否删除标记(0:未删除；1:已删除)'
+                );/
+                
+                ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
+                
+                ALTER TABLE  TFlowInfo     COMMENT                          = '工作流信息表';/
+				]]>
+			</content>
+			
 			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
                 CREATE TABLE TFlowInfo
@@ -199,6 +228,53 @@
 				]]>
 			</content>
 			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TProcess
+                (
+                 processID              varchar(64)                     NOT NULL comment '工作流的过程ID'
+                ,workID                 varchar(64)                     NOT NULL comment '工作流实例ID'
+                ,serviceDataID          varchar(64)                              comment '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,splitProcessID         varchar(64)                              comment '分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值'
+                ,processNo              int(10)                         NOT NULL comment '工作流的过程编号。下标从1开始'
+                ,currentActivityID      varchar(64)                     NOT NULL comment '当前活动ID'
+                ,currentActivityCode    varchar(64)                     NOT NULL comment '当前活动编码'
+                ,currentActivityName    varchar(64)                     NOT NULL comment '当前活动名称'
+                ,previousProcessID      varchar(64)                              comment '上一过程ID'
+                ,previousActivityID     varchar(64)                              comment '上一活动ID'
+                ,previousActivityCode   varchar(64)                              comment '上一活动编码'
+                ,previousActivityName   varchar(64)                              comment '上一活动名称'
+                ,nextProcessID          varchar(64)                              comment '下一过程ID'
+                ,nextActivityID         varchar(64)                              comment '下一活动ID'
+                ,nextActivityCode       varchar(64)                              comment '下一活动编码'
+                ,nextActivityName       varchar(64)                              comment '下一活动名称'
+                ,createrID              varchar(64)                     NOT NULL comment '创建人员ID'
+                ,creater                varchar(128)                             comment '创建人员名称'
+                ,createOrgID            varchar(64)                              comment '创建部门ID'
+                ,createOrg              varchar(128)                             comment '创建部门名称'
+                ,createTime             datetime                        NOT NULL comment '创建时间'
+                ,limitUserID            varchar(64)                              comment '限制操作人员ID'
+                ,limitOrgID             varchar(64)                              comment '限制操作部门ID'
+                ,limitTime              datetime                                 comment '限制操作时间'
+                ,operateTime            datetime                                 comment '操作时间'
+                ,operateTimeLen         int(10)                                  comment '操作时长（单位：秒）'
+                ,operateTypeID          varchar(64)                              comment '操作类型ID'
+                ,operateType            varchar(128)                             comment '操作类型名称'
+                ,operateUserID          varchar(64)                              comment '操作人员ID'
+                ,operateUser            varchar(128)                             comment '操作人员名称'
+                ,operateOrgID           varchar(64)                              comment '操作部门ID'
+                ,operateOrg             varchar(128)                             comment '操作部门名称'
+                ,operateFiles           varchar(2000)                            comment '操作文件信息，由第三方使用者定义其内容（拓展性数据）'
+                ,operateDatas           varchar(2000)                            comment '操作数据信息，由第三方使用者定义其内容（拓展性数据）'
+                ,infoComment            varchar(2000)                            comment '备注说明'
+                );/
+                
+                ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
+                
+                ALTER TABLE  TProcess   COMMENT                            = '工作流过程表';/
+				]]>
+			</content>
+			
 			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
                 CREATE TABLE TProcess
@@ -330,6 +406,31 @@
 				]]>
 			</content>
 			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TProcessParticipants
+                (
+                 pwpID              varchar(64)                     NOT NULL comment '主键ID'
+                ,processID          varchar(64)                     NOT NULL comment '工作流的过程ID'
+                ,workID             varchar(64)                     NOT NULL comment'工作流实例ID'
+                ,serviceDataID      varchar(64)                              comment '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,objectType         int(2)                          NOT NULL comment '参与者类型'
+                ,objectID           varchar(64)                     NOT NULL comment '参与者ID'
+                ,objectName         varchar(128)                             comment '参与者名称'
+                ,objectNo           int(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
+                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
+                ,creater            varchar(128)                             comment '创建人员名称'
+                ,createOrgID        varchar(64)                              comment '创建部门ID'
+                ,createOrg          varchar(128)                             comment '创建部门名称'
+                ,createTime         datetime                        NOT NULL comment '创建时间'
+                );/
+                
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT PK_TProcessParticipants PRIMARY KEY (pwpID);/
+                
+                ALTER TABLE  TProcessParticipants   comment                 = '工作流过程的实际参与人';/
+				]]>
+			</content>
+			
 			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
                 CREATE TABLE TProcessParticipants
@@ -406,6 +507,25 @@
 				]]>
 			</content>
 			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TFlowLastOperator
+                (
+                 workID             varchar(64)                     NOT NULL comment '工作流实例ID'
+                ,serviceDataID      varchar(64)                              comment '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,processID          varchar(64)                     NOT NULL comment '工作流的过程ID'
+                ,operateTime        datetime                        NOT NULL comment '操作时间'
+                ,operateUserID      varchar(64)                     NOT NULL comment '操作人员ID'
+                ,operateUser        varchar(128)                             comment '操作人员名称'
+                ,operateOrgID       varchar(64)                              comment '操作部门ID'
+                ,operateOrg         varchar(128)                             comment '操作部门名称'
+                );/
+                
+                
+                ALTER  TABLE  TFlowLastOperator      COMMENT              = '工作流最后操作人(实时数据)';/
+				]]>
+			</content>
+			
 			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
                 CREATE TABLE TFlowLastOperator
@@ -476,6 +596,29 @@
                 COMMENT ON COLUMN TFlowFutureOperator.createOrgID         IS '创建部门ID';/
                 COMMENT ON COLUMN TFlowFutureOperator.createOrg           IS '创建部门名称';/
                 COMMENT ON COLUMN TFlowFutureOperator.createTime          IS '创建时间';/
+				]]>
+			</content>
+			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+                CREATE TABLE TFlowFutureOperator
+                (
+                 workID             varchar(64)                     NOT NULL comment '工作流实例ID'
+                ,serviceDataID      varchar(64)                              comment '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,processID          varchar(64)                     NOT NULL comment '工作流的过程ID'
+                ,objectType         int(2)                          NOT NULL comment '参与者类型'
+                ,objectID           varchar(64)                     NOT NULL comment '参与者ID'
+                ,objectName         varchar(128)                             comment '参与者名称'
+                ,objectNo           int(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
+                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
+                ,creater            varchar(128)                             comment '创建人员名称'
+                ,createOrgID        varchar(64)                              comment '创建部门ID'
+                ,createOrg          varchar(128)                             comment '创建部门名称'
+                ,createTime         datetime                        NOT NULL comment '创建时间'
+                );/
+                
+                
+                ALTER  TABLE  TFlowFutureOperator    COMMENT                 = '工作流未来操作人(实时数据)';/
 				]]>
 			</content>
 			
