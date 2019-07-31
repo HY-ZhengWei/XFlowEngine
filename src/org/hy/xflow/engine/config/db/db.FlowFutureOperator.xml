@@ -22,6 +22,13 @@
 				]]>
 			</content>
 			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				DELETE FROM TFlowFutureOperator
+			     WHERE  workID = ':process.workID'
+				]]>
+			</content>
+			
 			<comment>删除工作流实例的未来操作人</comment>
 			
 		</sql>
@@ -76,7 +83,7 @@
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
-			<content>
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
 				SELECT  CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
 				       ,A.workID
@@ -84,6 +91,19 @@
 				 GROUP  BY A.objectID
 				          ,A.objectType
 				          ,A.workID
+				]]>
+			</content>
+			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				SELECT CONCAT(A.objectType, '') + ':' + A.objectID AS objectID
+					  ,A.workID
+				FROM
+					TFlowFutureOperator A
+				GROUP BY
+					A.objectID,
+					A.objectType,
+					A.workID
 				]]>
 			</content>
 			
@@ -104,9 +124,20 @@
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
-			<content>
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
 				SELECT  CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
+				       ,A.serviceDataID
+				  FROM  TFlowFutureOperator  A
+				 GROUP  BY A.objectID
+				          ,A.objectType
+				          ,A.serviceDataID
+				]]>
+			</content>
+			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				SELECT  CONCAT(A.objectType,'') + ':' + A.objectID  AS objectID
 				       ,A.serviceDataID
 				  FROM  TFlowFutureOperator  A
 				 GROUP  BY A.objectID
@@ -132,10 +163,21 @@
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
-			<content>
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
 				SELECT  A.workID
 				       ,CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
+				  FROM  TFlowFutureOperator  A
+				 GROUP  BY A.workID
+				          ,A.objectID
+				          ,A.objectType
+				]]>
+			</content>
+			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				SELECT  A.workID
+				       ,CONCAT(A.objectType,'') + ':' + A.objectID  AS objectID
 				  FROM  TFlowFutureOperator  A
 				 GROUP  BY A.workID
 				          ,A.objectID
@@ -160,10 +202,21 @@
 		
 			<dataSourceGroup ref="DSG_XFlow" />
 			
-			<content>
+			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
 				<![CDATA[
 				SELECT  A.serviceDataID
 				       ,CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
+				  FROM  TFlowFutureOperator  A
+				 GROUP  BY A.serviceDataID
+				          ,A.objectID
+				          ,A.objectType
+				]]>
+			</content>
+			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				SELECT  A.serviceDataID
+				       ,CONCAT(A.objectType,'') + ':' + A.objectID  AS objectID
 				  FROM  TFlowFutureOperator  A
 				 GROUP  BY A.serviceDataID
 				          ,A.objectID

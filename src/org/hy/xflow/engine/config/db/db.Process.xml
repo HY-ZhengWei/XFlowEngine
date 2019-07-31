@@ -291,6 +291,14 @@
 				]]>
 			</content>
 			
+			<content if="MYSQL == DSG_XFlow.getDbProductType">
+				<![CDATA[
+				DELETE FROM TProcess
+			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
+			<[   WHERE  workID        = ':workID'          ]>
+				]]>
+			</content>
+			
 			<comment>删除前转历史</comment>
 			
 		</sql>
