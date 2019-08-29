@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.service;
 
+import java.util.List;
+
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
 
@@ -16,6 +18,20 @@ import org.hy.xflow.engine.bean.FlowProcess;
  */
 public interface IFlowInfoService
 {
+    
+    /**
+     * 查询某一工作流模板下的所有活动的工作流实例。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-08-29
+     * @version     v1.0
+     *
+     * @param i_TemplateID  工作流模板ID
+     * @return
+     */
+    public List<FlowInfo> queryActivitys(String i_TemplateID);
+    
+    
     
     /**
      * 工作流实例ID，查询工作流实例

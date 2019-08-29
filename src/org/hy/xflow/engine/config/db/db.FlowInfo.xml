@@ -10,6 +10,43 @@
 
     <!-- 工作流信息表模块的相关SQL -->
 	<sqls>
+		
+		<sql id="XSQL_XFlow_FlowInfo_QueryByTemplateID_ForActivity"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.workID
+				       ,A.workFatherID
+				       ,A.flowTemplateID
+				       ,A.serviceDataID
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.lastUserID
+				       ,A.lastUser
+				       ,A.lastTime
+				       ,A.lastOrgID
+				       ,A.lastOrg
+				       ,A.lastProcessID
+				       ,A.isValid
+				       ,A.isDelete
+				  FROM  TFlowInfo  A
+			     WHERE  A.flowTemplateID = ':flowTemplateID'
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.FlowInfo</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+	
 	
 		<sql id="XSQL_XFlow_FlowInfo_QueryByWorkID_ServiceDataID"> 
 		

@@ -150,6 +150,7 @@
                 ,backgroudColor     VARCHAR2(16)
                 ,lineColor          VARCHAR2(16)
                 ,flagColor          VARCHAR2(16)
+                ,fontColor          VARCHAR2(16)
                 ,infoComment        NVARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
@@ -178,6 +179,7 @@
                 COMMENT ON COLUMN TActivityInfo.backgroudColor            IS '活动节点的背景色';/
                 COMMENT ON COLUMN TActivityInfo.lineColor                 IS '活动节点的边框线颜色';/
                 COMMENT ON COLUMN TActivityInfo.flagColor                 IS '活动节点的标记块颜色';/
+                COMMENT ON COLUMN TActivityInfo.fontColor                 IS '活动节点的文字颜色';/
                 COMMENT ON COLUMN TActivityInfo.infoComment               IS '备注说明';/
                 COMMENT ON COLUMN TActivityInfo.createrID                 IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityInfo.creater                   IS '创建人员名称';/
@@ -192,27 +194,28 @@
 				<![CDATA[
                 CREATE TABLE TActivityInfo
                 (
-                 activityID         varchar(64)                     NOT NULL comment '工作流活动ID'
-                ,activityCode       varchar(64)                     NOT NULL comment '工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同'
-                ,templateID         varchar(64)                     NOT NULL comment '工作流的模板ID'                  
-                ,activityName       varchar(128)                    NOT NULL comment '活动名称'
-                ,activityTypeID     varchar(64)                     NOT NULL comment '活动类型ID'
-                ,x                  decimal(10 ,2)                           comment '位置x坐标值'
-                ,y                  decimal(10 ,2)                           comment '位置y坐标值'
-                ,z                  decimal(10 ,2)                           comment '位置z坐标值'
-                ,height             decimal(10 ,2)                           comment '图标高度'
-                ,width              decimal(10 ,2)                           comment '图标宽度'
-                ,iconURL            varchar(500)                             comment '图标路径'
-                ,backgroudColor     varchar(16)                              comment '活动节点的背景色'
-                ,lineColor          varchar(16)                              comment '活动节点的边框线颜色'
-                ,flagColor          varchar(16)                              comment '活动节点的标记块颜色'
-                ,infoComment        varchar(2000)                            comment '备注说明'
-                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
-                ,creater            varchar(128)                             comment '创建人员名称'
-                ,createTime         datetime                        NOT NULL comment '创建时间'
-                ,lastUserID         varchar(64)                     NOT NULL comment '最后修改人员ID'
-                ,lastUser           varchar(128)                             comment '最后修改人员名称'
-                ,lastTime           datetime                                 comment '最后修改时间'
+                 activityID         VARCHAR(64)                     NOT NULL COMMENT '工作流活动ID'
+                ,activityCode       VARCHAR(64)                     NOT NULL COMMENT '工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同'
+                ,templateID         VARCHAR(64)                     NOT NULL COMMENT '工作流的模板ID'                  
+                ,activityName       VARCHAR(128)                    NOT NULL COMMENT '活动名称'
+                ,activityTypeID     VARCHAR(64)                     NOT NULL COMMENT '活动类型ID'
+                ,x                  DECIMAL(10 ,2)                           COMMENT '位置x坐标值'
+                ,y                  DECIMAL(10 ,2)                           COMMENT '位置y坐标值'
+                ,z                  DECIMAL(10 ,2)                           COMMENT '位置z坐标值'
+                ,height             DECIMAL(10 ,2)                           COMMENT '图标高度'
+                ,width              DECIMAL(10 ,2)                           COMMENT '图标宽度'
+                ,iconURL            VARCHAR(500)                             COMMENT '图标路径'
+                ,backgroudColor     VARCHAR(16)                              COMMENT '活动节点的背景色'
+                ,lineColor          VARCHAR(16)                              COMMENT '活动节点的边框线颜色'
+                ,flagColor          VARCHAR(16)                              COMMENT '活动节点的标记块颜色'
+                ,fontColor          VARCHAR(16)                              COMMENT '活动节点的文字颜色'
+                ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
+                ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
+                ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
+                ,lastUserID         VARCHAR(64)                     NOT NULL COMMENT '最后修改人员ID'
+                ,lastUser           VARCHAR(128)                             COMMENT '最后修改人员名称'
+                ,lastTime           DATETIME                                 COMMENT '最后修改时间'
                 );/
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT PK_TActivityInfo PRIMARY KEY (activityID);/
@@ -241,6 +244,7 @@
                 ,backgroudColor     VARCHAR(16)
                 ,lineColor          VARCHAR(16)
                 ,flagColor          VARCHAR(16)
+                ,fontColor          VARCHAR(16)
                 ,infoComment        NVARCHAR(2000)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            NVARCHAR(128)
@@ -269,6 +273,7 @@
                 EXEC P_ColumnComment TActivityInfo ,backgroudColor            ,'活动节点的背景色';/
                 EXEC P_ColumnComment TActivityInfo ,lineColor                 ,'活动节点的边框线颜色';/
                 EXEC P_ColumnComment TActivityInfo ,flagColor                 ,'活动节点的标记块颜色';/
+                EXEC P_ColumnComment TActivityInfo ,fontColor                 ,'活动节点的文字颜色';/
                 EXEC P_ColumnComment TActivityInfo ,infoComment               ,'备注说明';/
                 EXEC P_ColumnComment TActivityInfo ,createrID                 ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityInfo ,creater                   ,'创建人员名称';/
@@ -306,6 +311,7 @@
                 ,conditionValue     VARCHAR2(500)
                 ,conditionVType     NUMBER(2)
                 ,lineColor          VARCHAR2(16)
+                ,fontColor          VARCHAR2(16)
                 ,infoComment        NVARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
@@ -332,6 +338,7 @@
                 COMMENT ON COLUMN TActivityRoute.conditionValue           IS '有条件判定时，方法执行结果的对比值';/
                 COMMENT ON COLUMN TActivityRoute.conditionVType           IS '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
                 COMMENT ON COLUMN TActivityRoute.lineColor                IS '路由连接线的颜色';/
+                COMMENT ON COLUMN TActivityRoute.fontColor                IS '路由连接线的文字颜色';/
                 COMMENT ON COLUMN TActivityRoute.infoComment              IS '备注说明';/
                 COMMENT ON COLUMN TActivityRoute.createrID                IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityRoute.creater                  IS '创建人员名称';/
@@ -346,25 +353,26 @@
 				<![CDATA[
                 CREATE TABLE TActivityRoute
                 (
-                 activityRouteID    varchar(64)                     NOT NULL comment '主键ID'
-                ,activityRouteCode  varchar(64)                     NOT NULL comment '活动路由Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同'
-                ,activityRouteName  varchar(128)                    NOT NULL comment '活动路由名称'
-                ,templateID         varchar(64)                     NOT NULL comment '工作流的模板ID'
-                ,routeTypeID        varchar(64)                     NOT NULL comment '路由类型ID'
-                ,activityID         varchar(64)                     NOT NULL comment '工作流活动ID'
-                ,nextActivityID     varchar(64)                     NOT NULL comment '下一活动ID。可以为不同工作流模板的活动。即支持子流程'
-                ,conditionXJavaID   varchar(128)                             comment '有条件判定时，执行的XJava对象ID'
-                ,conditionMethod    varchar(64)                              comment '有条件判定时，执行的对象方法名称'
-                ,conditionValue     varchar(500)                             comment '有条件判定时，方法执行结果的对比值'
-                ,conditionVType     int(2)                                   comment '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）'
-                ,lineColor          varchar(16)                              comment '路由连接线的颜色'
-                ,infoComment        varchar(2000)                            comment '备注说明'
-                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
-                ,creater            varchar(128)                             comment '创建人员名称'
-                ,createTime         datetime                        NOT NULL comment '创建时间'
-                ,lastUserID         varchar(64)                     NOT NULL comment '最后修改人员ID'
-                ,lastUser           varchar(128)                             comment '最后修改人员名称'
-                ,lastTime           datetime                                 comment '最后修改时间'
+                 activityRouteID    VARCHAR(64)                     NOT NULL COMMENT '主键ID'
+                ,activityRouteCode  VARCHAR(64)                     NOT NULL COMMENT '活动路由Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同'
+                ,activityRouteName  VARCHAR(128)                    NOT NULL COMMENT '活动路由名称'
+                ,templateID         VARCHAR(64)                     NOT NULL COMMENT '工作流的模板ID'
+                ,routeTypeID        VARCHAR(64)                     NOT NULL COMMENT '路由类型ID'
+                ,activityID         VARCHAR(64)                     NOT NULL COMMENT '工作流活动ID'
+                ,nextActivityID     VARCHAR(64)                     NOT NULL COMMENT '下一活动ID。可以为不同工作流模板的活动。即支持子流程'
+                ,conditionXJavaID   VARCHAR(128)                             COMMENT '有条件判定时，执行的XJava对象ID'
+                ,conditionMethod    VARCHAR(64)                              COMMENT '有条件判定时，执行的对象方法名称'
+                ,conditionValue     VARCHAR(500)                             COMMENT '有条件判定时，方法执行结果的对比值'
+                ,conditionVType     INT(2)                                   COMMENT '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）'
+                ,lineColor          VARCHAR(16)                              COMMENT '路由连接线的颜色'
+                ,fontColor          VARCHAR(16)                              COMMENT '路由连接线的文字颜色'
+                ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
+                ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
+                ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
+                ,lastUserID         VARCHAR(64)                     NOT NULL COMMENT '最后修改人员ID'
+                ,lastUser           VARCHAR(128)                             COMMENT '最后修改人员名称'
+                ,lastTime           DATETIME                                 COMMENT '最后修改时间'
                 );/
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT PK_TActivityRoute PRIMARY KEY (activityRouteID);/
@@ -391,6 +399,7 @@
                 ,conditionValue     VARCHAR(500)
                 ,conditionVType     INT
                 ,lineColor          VARCHAR(16)
+                ,fontColor          VARCHAR(16)
                 ,infoComment        NVARCHAR(2000)
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            NVARCHAR(128)
@@ -417,6 +426,7 @@
                 EXEC P_ColumnComment TActivityRoute ,conditionValue           ,'有条件判定时，方法执行结果的对比值';/
                 EXEC P_ColumnComment TActivityRoute ,conditionVType           ,'有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
                 EXEC P_ColumnComment TActivityRoute ,lineColor                ,'路由连接线的颜色';/
+                EXEC P_ColumnComment TActivityRoute ,fontColor                ,'路由连接线的文字颜色';/
                 EXEC P_ColumnComment TActivityRoute ,infoComment              ,'备注说明';/
                 EXEC P_ColumnComment TActivityRoute ,createrID                ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityRoute ,creater                  ,'创建人员名称';/

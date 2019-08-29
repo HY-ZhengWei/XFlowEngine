@@ -34,6 +34,7 @@
 				       ,A.conditionValue
 				       ,A.conditionVType
 				       ,A.lineColor
+				       ,A.fontColor
 				       ,A.infoComment
 				       ,A.createrID
 				       ,A.creater
@@ -75,6 +76,7 @@
 				UPDATE  TActivityRoute
 				   SET  lastTime        = SYSDATE
 				       ,lineColor       = :lineColor
+				       ,fontColor       = :fontColor
 				 WHERE  activityRouteID = :activityRouteID
 				   AND  templateID      = :templateID
 				]]>
@@ -85,6 +87,7 @@
 				UPDATE  TActivityRoute
 				   SET  lastTime        = GETDATE()
 				       ,lineColor       = :lineColor
+				       ,fontColor       = :fontColor
 				 WHERE  activityRouteID = :activityRouteID
 				   AND  templateID      = :templateID
 				]]>
@@ -95,6 +98,7 @@
 				UPDATE  TActivityRoute
 				   SET  lastTime        = NOW()
 				       ,lineColor       = :lineColor
+				       ,fontColor       = :fontColor
 				 WHERE  activityRouteID = :activityRouteID
 				   AND  templateID      = :templateID
 				]]>

@@ -34,6 +34,7 @@
 				       ,A.backgroudColor
 				       ,A.lineColor
 				       ,A.flagColor
+				       ,A.fontColor
 				       ,A.infoComment
 				       ,A.createrID
 				       ,A.creater
@@ -73,6 +74,7 @@
 				       ,backgroudColor = :backgroudColor
 				       ,lineColor      = :lineColor
 				       ,flagColor      = :flagColor
+				       ,fontColor      = :fontColor
 				 WHERE  activityID     = :activityID
 				   AND  templateID     = :templateID
 				]]>
@@ -87,6 +89,7 @@
 				       ,backgroudColor = :backgroudColor
 				       ,lineColor      = :lineColor
 				       ,flagColor      = :flagColor
+				       ,fontColor      = :fontColor
 				 WHERE  activityID     = :activityID
 				   AND  templateID     = :templateID
 				]]>
@@ -101,6 +104,7 @@
 				       ,backgroudColor = :backgroudColor
 				       ,lineColor      = :lineColor
 				       ,flagColor      = :flagColor
+				       ,fontColor      = :fontColor
 				 WHERE  activityID     = :activityID
 				   AND  templateID     = :templateID
 				]]>

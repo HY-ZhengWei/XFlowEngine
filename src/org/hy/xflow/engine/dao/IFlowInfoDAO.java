@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.dao;
 
+import java.util.List;
+
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
@@ -23,7 +25,22 @@ public interface IFlowInfoDAO
 {
     
     /**
-     * 工作流实例ID，查询工作流实例
+     * 查询某一工作流模板下的所有活动的工作流实例。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-08-29
+     * @version     v1.0
+     *
+     * @param i_TemplateID  工作流模板ID
+     * @return
+     */
+    @Xsql(id="XSQL_XFlow_FlowInfo_QueryByTemplateID_ForActivity")
+    public List<FlowInfo> queryActivitys(@Xparam(id="flowTemplateID") String i_TemplateID);
+    
+    
+    
+    /**
+     * 工作流实例ID，查询工作流实例（活动及历史的均查询）
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-04-27
