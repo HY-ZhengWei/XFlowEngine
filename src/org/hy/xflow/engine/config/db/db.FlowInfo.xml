@@ -36,6 +36,7 @@
 				       ,A.isDelete
 				  FROM  TFlowInfo  A
 			     WHERE  A.flowTemplateID = ':flowTemplateID'
+			     ORDER  BY A.lastTime DESC
 				]]>
 			</content>
 			
