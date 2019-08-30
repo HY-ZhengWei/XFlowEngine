@@ -173,8 +173,9 @@
 				       ,lastOrgID     = ':process.operateOrgID'
 				       ,lastOrg       = ':process.operateOrg'
 				       ,lastProcessID = ':process.processID'
-			<[   WHERE  serviceDataID = ':process.serviceDataID'   ]>
-			<[   WHERE  workID        = ':process.workID'          ]>
+				 WHERE  1 = 1
+			<[     AND  serviceDataID = ':process.serviceDataID'   ]>
+			<[     AND  workID        = ':process.workID'          ]>
 				]]>
 			</content>
 			
