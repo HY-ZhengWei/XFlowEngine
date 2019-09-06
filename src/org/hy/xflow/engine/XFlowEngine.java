@@ -567,13 +567,14 @@ public class XFlowEngine
         }
         
         int         v_PIndex  = 0;
-        FlowProcess v_Process = null;
+        FlowProcess v_Process = null;  // 默认当前流转就在0下标的位置。但时间精度不高、操作及快时，会出现排序规则失效的情况，所以通过下面for处理
         for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
-            v_Process = v_FlowInfo.getProcesses().get(v_PIndex);
-            
-            // 预留代码
-            break;
+            if ( Help.isNull(v_FlowInfo.getProcesses().get(v_PIndex).getNextProcessID()) )
+            {
+                v_Process = v_FlowInfo.getProcesses().get(v_PIndex);
+                break;
+            }
         }
         if ( v_Process == null )
         {
@@ -641,13 +642,14 @@ public class XFlowEngine
         }
         
         int         v_PIndex  = 0;
-        FlowProcess v_Process = null;
+        FlowProcess v_Process = null;  // 默认当前流转就在0下标的位置。但时间精度不高、操作及快时，会出现排序规则失效的情况，所以通过下面for处理
         for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
-            v_Process = v_FlowInfo.getProcesses().get(v_PIndex);
-            
-            // 预留代码
-            break;
+            if ( Help.isNull(v_FlowInfo.getProcesses().get(v_PIndex).getNextProcessID()) )
+            {
+                v_Process = v_FlowInfo.getProcesses().get(v_PIndex);
+                break;
+            }
         }
         if ( v_Process == null )
         {
