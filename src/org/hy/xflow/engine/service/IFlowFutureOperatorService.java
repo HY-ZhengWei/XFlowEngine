@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hy.common.PartitionMap;
 import org.hy.xflow.engine.bean.FlowProcess;
+import org.hy.xflow.engine.bean.FutureOperator;
 import org.hy.xflow.engine.bean.User;
 
 
@@ -109,26 +110,23 @@ public interface IFlowFutureOperatorService
     
     
     /**
-     * 查询所有未来操作人，并分区保存，用于高速缓存查询
-     * 
-     *   Map.key分区为参与人的形式的值：objectType:objectID 
-     *   Map.value元素为工作流实例ID：workID
+     * 删除缓存中的未来操作人信息。在转历史单时触发。
      * 
      * @author      ZhengWei(HY)
-     * @createDate  2018-05-15
+     * @createDate  2019-09-11
      * @version     v1.0
      *
-     * @return
+     * @param i_Process
      */
-    public PartitionMap<String ,String> queryAllByWorkID();
+    public void delCacheToHistory(FlowProcess i_Process);
     
     
     
     /**
      * 查询所有未来操作人，并分区保存，用于高速缓存查询
      * 
-     *   Map.key分区为参与人的形式的值：objectType:objectID 
-     *   Map.value元素为工作流实例第三方使用系统的业务数据ID：serviceDataID
+     *   Map.key    分区为参与人的形式的值：objectType:objectID 
+     *   Map.value  元素为工作流未来操作人对象
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
@@ -136,6 +134,34 @@ public interface IFlowFutureOperatorService
      *
      * @return
      */
-    public PartitionMap<String ,String> queryAllByServiceDataID();
+    public PartitionMap<String ,FutureOperator> queryAllByWorkID();
+    
+    
+    
+    /**
+     * 业务ID找工作流ID
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-12
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  业务ID
+     * @return                 返回工作流实例ID
+     */
+    public String querySToWorkID(String i_ServiceDataID);
+    
+    
+    
+    /**
+     * 业务ID找工作流ID的高速缓存中添加新关系
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-12
+     * @version     v1.0
+     *
+     * @param i_WorkID         工作流实例ID
+     * @param i_ServiceDataID  业务ID
+     */
+    public void pushSToWorkID(String i_WorkID ,String i_ServiceDataID);
     
 }

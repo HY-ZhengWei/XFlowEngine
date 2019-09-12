@@ -1,9 +1,12 @@
 package org.hy.xflow.engine.dao;
 
+import java.util.Map;
+
 import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xsql;
+import org.hy.xflow.engine.bean.FutureOperator;
 
 
 
@@ -21,7 +24,7 @@ public interface IFlowFutureOperatorDAO
 {
     
     /**
-     * 查询所有未来操作人，并分区保存，用于高速缓存查询
+     * 查询所有未来操作人，并分区保存，用于人找实例ID的高速缓存查询
      * 
      *   Map.key分区为参与人的形式的值：objectType:objectID 
      *   Map.value元素为工作流实例ID：workID
@@ -33,29 +36,12 @@ public interface IFlowFutureOperatorDAO
      * @return
      */
     @Xsql(id="XSQL_XFlow_TFlowFutureOperator_QueryAllByWorkID" ,cacheID="$FutureOperatorsByWorkID")
-    public PartitionMap<String ,String> queryAllByWorkID();
+    public PartitionMap<String ,FutureOperator> queryAllByWorkID();
     
     
     
     /**
-     * 查询所有未来操作人，并分区保存，用于高速缓存查询
-     * 
-     *   Map.key分区为参与人的形式的值：objectType:objectID 
-     *   Map.value元素为工作流实例第三方使用系统的业务数据ID：serviceDataID
-     * 
-     * @author      ZhengWei(HY)
-     * @createDate  2018-05-15
-     * @version     v1.0
-     *
-     * @return
-     */
-    @Xsql(id="XSQL_XFlow_TFlowFutureOperator_QueryAllByServiceDataID" ,cacheID="$FutureOperatorsByServiceDataID")
-    public PartitionMap<String ,String> queryAllByServiceDataID();
-    
-    
-    
-    /**
-     * 查询所有未来操作人，并分区保存，用于高速缓存查询
+     * 查询所有未来操作人，并分区保存，用于实例ID找人的高速缓存查询
      * 
      *   Map.key分区为工作流实例ID：workID
      *   Map.value元素为参与人的形式的值：objectType:objectID 
@@ -67,23 +53,23 @@ public interface IFlowFutureOperatorDAO
      * @return
      */
     @Xsql(id="XSQL_XFlow_TFlowFutureOperator_QueryAll_KeyWorkID" ,cacheID="$FutureOperators_KeyWorkID")
-    public PartitionMap<String ,String> queryAll_KeyWorkID();
+    public PartitionMap<String ,FutureOperator> queryAll_KeyWorkID();
     
     
     
     /**
-     * 查询所有未来操作人，并分区保存，用于高速缓存查询
+     * 查询所有未来操作人，用业务ID找实例ID
      * 
-     *   Map.key分区为工作流实例第三方使用系统的业务数据ID：serviceDataID
-     *   Map.value元素为参与人的形式的值：objectType:objectID 
+     *   Map.key    为业务ID - serviceDataID
+     *   Map.value  为实例ID - workID
      * 
      * @author      ZhengWei(HY)
-     * @createDate  2018-05-15
+     * @createDate  2019-09-11
      * @version     v1.0
      *
      * @return
      */
-    @Xsql(id="XSQL_XFlow_TFlowFutureOperator_QueryAll_KeyServiceDataID" ,cacheID="$FutureOperators_KeyServiceDataID")
-    public PartitionMap<String ,String> queryAll_KeyServiceDataID();
+    @Xsql(id="XSQL_XFlow_TFlowFutureOperator_QueryAll_SToWorkID" ,cacheID="$FutureOperators_SToWorkID")
+    public Map<String ,String> queryAll_SToWorkID();
     
 }

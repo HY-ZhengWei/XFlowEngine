@@ -95,7 +95,97 @@
 				]]>
 			</content>
 			
-			<comment>新增工作流流转过程</comment>
+			<comment>用于创建实例时：新增工作流流转过程</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_Insert_GoOn"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				INSERT  INTO TProcess
+				       (
+				        processID
+				       ,workID
+				       ,serviceDataID
+				       ,splitProcessID
+				       ,processNo
+				       ,currentActivityID
+				       ,currentActivityCode
+				       ,currentActivityName
+				       ,previousProcessID
+				       ,previousActivityID
+				       ,previousActivityCode
+				       ,previousActivityName
+				       ,nextProcessID
+				       ,nextActivityID
+				       ,nextActivityCode
+				       ,nextActivityName
+				       ,createrID
+				       ,creater
+				       ,createOrgID
+				       ,createOrg
+				       ,createTime
+				       ,limitUserID
+				       ,limitOrgID
+				       ,limitTime
+				       ,operateTime
+				       ,operateTimeLen
+				       ,operateTypeID
+				       ,operateType
+				       ,operateUserID
+				       ,operateUser
+				       ,operateOrgID
+				       ,operateOrg
+				       ,operateFiles
+				       ,operateDatas
+				       ,infoComment
+				       )
+				VALUES (
+				        ':processID'
+				       ,':workID'
+				       ,':serviceDataID'
+				       ,':splitProcessID'
+				       , :processNo
+				       ,':currentActivityID'
+				       ,':currentActivityCode'
+				       ,':currentActivityName'
+				       ,':previousProcessID'
+				       ,':previousActivityID'
+				       ,':previousActivityCode'
+				       ,':previousActivityName'
+				       ,':nextProcessID'
+				       ,':nextActivityID'
+				       ,':nextActivityCode'
+				       ,':nextActivityName'
+				       ,':createrID'
+				       ,':creater'
+				       ,':createOrgID'
+				       ,':createOrg'
+				       ,':createTime.fullMilli'
+				       ,':limitUserID'
+				       ,':limitOrgID'
+				       ,':limitTime'
+				       ,':operateTime.fullMilli'
+				       , :operateTimeLen
+				       ,':operateTypeID'
+				       ,':operateType'
+				       ,':operateUserID'
+				       ,':operateUser'
+				       ,':operateOrgID'
+				       ,':operateOrg'
+				       ,':operateFiles'
+				       ,':operateDatas'
+				       ,':infoComment'
+				       )
+				]]>
+			</content>
+			
+			<comment>用于流转实例时：新增工作流流转过程</comment>
 			
 		</sql>
 		

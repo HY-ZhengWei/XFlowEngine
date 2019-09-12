@@ -167,15 +167,13 @@
 			<content>
 				<![CDATA[
 				UPDATE  TFlowInfo
-				   SET  lastTime      = ':process.operateTime.fullMilli'
-				       ,lastUserID    = ':process.operateUserID'
-				       ,lastUser      = ':process.operateUser'
-				       ,lastOrgID     = ':process.operateOrgID'
-				       ,lastOrg       = ':process.operateOrg'
-				       ,lastProcessID = ':process.processID'
-				 WHERE  1 = 1
-			<[     AND  serviceDataID = ':process.serviceDataID'   ]>
-			<[     AND  workID        = ':process.workID'          ]>
+				   SET  lastTime      = ':flow.lastTime.fullMilli'
+				       ,lastUserID    = ':flow.lastUserID'
+				       ,lastUser      = ':flow.lastUser'
+				       ,lastOrgID     = ':flow.lastOrgID'
+				       ,lastOrg       = ':flow.lastOrg'
+				       ,lastProcessID = ':flow.lastProcessID'
+				 WHERE  workID        = ':flow.workID'
 				]]>
 			</content>
 			

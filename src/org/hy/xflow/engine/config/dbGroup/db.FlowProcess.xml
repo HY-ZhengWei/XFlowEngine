@@ -49,35 +49,49 @@
 			</sqlNode>
 			
 			<sqlNode>
-				<sql  ref="XSQL_XFlow_Process_Insert" />
+				<sql  ref="XSQL_XFlow_TFlowFutureOperator_GoOn_Del" />
+				<type ref="this.$Type_ExecuteUpdate" />
+				<condition>:previous.SplitProcessID == ''</condition>
+				<comment>正常流转时删除之前的未来操作人</comment>
+			</sqlNode>
+			
+			<sqlNode>
+				<type ref="this.$Type_CollectionToQuery" />
+				<collectionID>processList</collectionID>
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_Process_Insert_GoOn" />
 				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
 			<sqlNode>
 				<sql  ref="XSQL_XFlow_ProcessParticipants_Insert" />
 				<type ref="this.$Type_CollectionToExecuteUpdate" />
-				<collectionID>process.participants</collectionID>
+				<collectionID>participants</collectionID>
 			</sqlNode>
 			
 			<sqlNode>
-				<sql  ref="XSQL_XFlow_TFlowLastOperator_Del" />
+				<sql  ref="XSQL_XFlow_TFlowFutureOperator_GoOn_Del" />
 				<type ref="this.$Type_ExecuteUpdate" />
-			</sqlNode>
-			
-			<sqlNode>
-				<sql  ref="XSQL_XFlow_TFlowLastOperator_Insert" />
-				<type ref="this.$Type_ExecuteUpdate" />
-			</sqlNode>
-			
-			<sqlNode>
-				<sql  ref="XSQL_XFlow_TFlowFutureOperator_Del" />
-				<type ref="this.$Type_ExecuteUpdate" />
+				<condition>:previous.SplitProcessID != ''</condition>
+				<comment>分单多路流转时删除之前的未来操作人</comment>
 			</sqlNode>
 			
 			<sqlNode>
 				<sql  ref="XSQL_XFlow_TFlowFutureOperator_Insert" />
 				<type ref="this.$Type_CollectionToExecuteUpdate" />
-				<collectionID>process.futureParticipants</collectionID>
+				<collectionID>futureParticipants</collectionID>
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowLastOperator_GoOn_Del" />
+				<type ref="this.$Type_ExecuteUpdate" />
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_TFlowLastOperator_GoOn_Insert" />
+				<type ref="this.$Type_ExecuteUpdate" />
 			</sqlNode>
 			
 			<comment>工作流流转，并更新前一个流转信息</comment>

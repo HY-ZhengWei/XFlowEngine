@@ -19,6 +19,7 @@ import org.hy.xflow.engine.bean.FlowProcess;
  * @author      ZhengWei(HY)
  * @createDate  2018-04-25
  * @version     v1.0
+ *              v2.0  2019-09-12  添加：支持多路并行路由的流程
  */
 @Xjava(id="FlowInfoDAO" ,value=XType.XSQL)
 public interface IFlowInfoDAO
@@ -93,13 +94,15 @@ public interface IFlowInfoDAO
      * @createDate  2018-05-07
      * @version     v1.0
      *
-     * @param i_Process   新流转的过程信息
-     * @param i_Previous  前一个流转的过程信息
+     * @param i_Flow          工作流实例对象
+     * @param i_ProcessList   新流转的过程集合信息（分单时会有多个，正常情况下均只有一个元素）
+     * @param i_Previous      前一个流转的过程信息
      * @return
      */
     @Xsql("GXSQL_Flow_ToNext")
-    public boolean toNext(@Xparam("process")  FlowProcess i_Process
-                         ,@Xparam("previous") FlowProcess i_Previous);
+    public boolean toNext(@Xparam("flow")        FlowInfo          i_Flow
+                         ,@Xparam("processList") List<FlowProcess> i_ProcessList
+                         ,@Xparam("previous")    FlowProcess       i_Previous);
     
     
     

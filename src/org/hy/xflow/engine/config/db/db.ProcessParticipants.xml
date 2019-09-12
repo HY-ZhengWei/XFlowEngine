@@ -21,6 +21,7 @@
 				       (
 				        pwpID
 				       ,processID
+				       ,splitProcessID
 				       ,workID
 				       ,serviceDataID
 				       ,objectID
@@ -36,6 +37,7 @@
 				VALUES (
 				        :pwpID
 				       ,:processID
+				       ,:splitProcessID
 				       ,:workID
 				       ,:serviceDataID
 				       ,:objectID
@@ -65,6 +67,7 @@
 				<![CDATA[
 				SELECT  A.pwpID
 				       ,A.processID
+				       ,A.splitProcessID
 				       ,A.workID
 				       ,A.serviceDataID
 				       ,A.objectID
@@ -107,6 +110,7 @@
 				       (
 				        pwpID
 				       ,processID
+				       ,splitProcessID
 				       ,workID
 				       ,serviceDataID
 				       ,objectID
@@ -121,6 +125,7 @@
 				       )
                 SELECT  A.pwpID
 				       ,A.processID
+				       ,A.splitProcessID
 				       ,A.workID
 				       ,A.serviceDataID
 				       ,A.objectID

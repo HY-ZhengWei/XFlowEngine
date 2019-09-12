@@ -3,8 +3,11 @@ package org.hy.xflow.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hy.common.Date;
 import org.hy.common.Help;
 import org.hy.common.PartitionMap;
+import org.hy.common.StringHelp;
+import org.hy.common.TablePartition;
 import org.hy.common.xml.XJava;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
@@ -39,6 +42,8 @@ import org.hy.xflow.engine.service.ITemplateService;
  * @version     v1.0
  *              v1.1  2018-08-21  添加：1.指定流程模板版本号情况下，创建流程实例的createByName()方法。
  *              v1.2  2018-09-05  添加：1.通过工作流流转信息，获取当前活动节点的信息
+ *              v2.0  2019-09-12  添加：1.支持多路并行路由的流程
+ *                                优化：2.统一所有 toNextByServiceDataID() 系列的方法，均从 toNext() 方法走。
  */
 @Xjava
 public class XFlowEngine
@@ -512,6 +517,11 @@ public class XFlowEngine
         
         if ( v_Ret )
         {
+            if ( !Help.isNull(i_ServiceDataID) )
+            {
+                this.futureOperatorService.pushSToWorkID(v_Flow.getWorkID() ,i_ServiceDataID);
+            }
+            
             return v_Flow;
         }
         else
@@ -739,6 +749,63 @@ public class XFlowEngine
      */
     public FlowProcess toNext(User i_User ,String i_WorkID ,String i_ActivityRouteCode ,List<UserParticipant> i_Participants)
     {
+        TablePartition<String ,UserParticipant> v_ActivityRouteCodes = new TablePartition<String ,UserParticipant>();
+        
+        v_ActivityRouteCodes.put(i_ActivityRouteCode ,i_Participants);
+        
+        List<FlowProcess> v_ProcessList = this.toNext(i_User ,i_WorkID ,v_ActivityRouteCodes);
+        
+        return v_ProcessList.get(0);
+    }
+    
+    
+    
+    /**
+     * 向下一个活动节点流转（支持多路由并发执行）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-12
+     * @version     v1.0
+     *
+     * @param i_User                操作用户 
+     * @param i_WorkID              工作流ID
+     * @param i_ActivityRouteCodes  走的多个发并路由编码
+     * @return
+     */
+    public FlowProcess toNext(User i_User ,String i_WorkID ,String [] i_ActivityRouteCodes)
+    {
+        TablePartition<String ,UserParticipant> v_ActivityRouteCodes = new TablePartition<String ,UserParticipant>();
+        
+        for (String v_ActivityRouteCode : i_ActivityRouteCodes)
+        {
+            v_ActivityRouteCodes.put(v_ActivityRouteCode ,new ArrayList<UserParticipant>(0));
+        }
+        
+        List<FlowProcess> v_ProcessList = this.toNext(i_User ,i_WorkID ,v_ActivityRouteCodes);
+        
+        return v_ProcessList.get(0);
+    }
+    
+    
+    
+    /**
+     * 向下一个活动节点流转（支持多路由并发执行）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-10
+     * @version     v1.0
+     *
+     * @param i_User                操作用户 
+     * @param i_WorkID              工作流ID
+     * @param i_ActivityRouteCodes  Map.Partition  走的路由编码，
+     *                              Map.value      指定每个路由的下一活动的动态参与人，可选项。
+     *                                             指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
+     *                                             指定动态参与人时，同时也受限于路由上设定的参与人。
+     *                                             但当路由上没有设定参与人时，动态参与人将畅通无阻
+     * @return
+     */
+    public List<FlowProcess> toNext(User i_User ,String i_WorkID ,PartitionMap<String ,UserParticipant> i_ActivityRouteCodes)
+    {
         if ( i_User == null )
         {
             throw new NullPointerException("User is null.");
@@ -751,9 +818,9 @@ public class XFlowEngine
         {
             throw new NullPointerException("WorkID is null.");
         }
-        else if ( Help.isNull(i_ActivityRouteCode) )
+        else if ( Help.isNull(i_ActivityRouteCodes) )
         {
-            throw new NullPointerException("ActivityRouteCode is null.");
+            throw new NullPointerException("ActivityRouteCodes is null.");
         }
         
         NextRoutes v_NextRoutes = this.queryNextRoutes(i_User ,i_WorkID);
@@ -763,159 +830,218 @@ public class XFlowEngine
             throw new NullPointerException("Template[" + v_NextRoutes.getFlow().getFlowTemplateID() + "] is not exists. WorkID[" + i_WorkID + "] for User[" + i_User.getUserID() + "]");
         }
         
-        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(v_NextRoutes.getCurrentActivity().getActivityCode() ,i_ActivityRouteCode);
-        if ( v_Route == null )
+        FlowProcess         v_Previous    = v_NextRoutes.getCurrentProcess();
+        List<FlowProcess>   v_ProcessList = new ArrayList<FlowProcess>();
+        List<ActivityRoute> v_RouteList   = new ArrayList<ActivityRoute>();
+        for (String v_ActivityRouteCode : i_ActivityRouteCodes.keySet())
         {
-            throw new NullPointerException("ActivityRouteCode[" + i_ActivityRouteCode + "] is not exists. WorkID[" + i_WorkID + "] or User[" + i_User.getUserID() + "]");
-        }
-        
-        // 判定是否允许用户走这条路由
-        boolean v_AllowRoute = false;
-        for (ActivityRoute v_MaybeRoute : v_NextRoutes.getRoutes())
-        {
-            if ( v_MaybeRoute.getActivityRouteID().equals(v_Route.getActivityRouteID()) )
+            ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(v_NextRoutes.getCurrentActivity().getActivityCode() ,v_ActivityRouteCode);
+            if ( v_Route == null )
             {
-                v_AllowRoute = true;
-                break;
-            }
-        }
-        if ( !v_AllowRoute )
-        {
-            throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not Route. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
-        }
-        
-        // 设置动态参与人
-        FlowProcess v_Previous = v_NextRoutes.getCurrentProcess();
-        v_Previous.setParticipants(v_NextRoutes.getFlowParticipants().get(v_Previous.getProcessID()));
-        
-        // 判定是否为参与人
-        Participant v_Participant = isParticipant(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
-        if ( v_Participant == null )
-        {
-            throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
-        }
-        
-        FlowProcess v_Process = new FlowProcess();
-        v_Process.init_ToNext(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
-        
-        // 生成参与人信息
-        if ( !Help.isNull(i_Participants) )
-        {
-            v_Process.setParticipants(new ArrayList<ProcessParticipant>());
-            for (int v_Index=0; v_Index<i_Participants.size(); v_Index++)
-            {
-                UserParticipant v_UserPart = i_Participants.get(v_Index);
-                if ( v_UserPart == null )
-                {
-                    throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] is null to User[" + i_User.getUserID() + "].");
-                }
-                else if ( Help.isNull(v_UserPart.getObjectID()) )
-                {
-                    throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] ObjectID is null to User[" + i_User.getUserID() + "].");
-                }
-                else if ( v_UserPart.getObjectType() == null )
-                {
-                    throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] ObjectType is null to User[" + i_User.getUserID() + "].");
-                }
-                
-                if ( v_UserPart.getObjectNo() == null )
-                {
-                    v_UserPart.setObjectNo(v_Index + 1);
-                }
-                
-                ProcessParticipant v_PartTemp = new ProcessParticipant();
-                v_PartTemp.init(i_User ,v_Process ,i_Participants.get(v_Index));
-                v_Process.getParticipants().add(v_PartTemp);
-            }
-        }
-        
-        List<FlowProcess> v_OldProcesses = v_NextRoutes.getFlow().getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
-        
-        // 驳回的路由
-        if ( v_Route.getRouteTypeID() == RouteTypeEnum.$Reject )
-        {
-            if ( Help.isNull(v_OldProcesses) )
-            {
-                throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                throw new NullPointerException("ActivityRouteCode[" + v_ActivityRouteCode + "] is not exists. WorkID[" + i_WorkID + "] or User[" + i_User.getUserID() + "]");
             }
             
-            if ( Help.isNull(v_Process.getParticipants()) )
+            if ( i_ActivityRouteCodes.size() > 1 )
+            {
+                if ( RouteTypeEnum.$ToMany != v_Route.getRouteTypeID() )
+                {
+                    // 路由类型不是：分派路由时，不允许并发多路路由
+                    throw new VerifyError("ActivityRouteCode[" + v_ActivityRouteCode + "] routeType is not RouteTypeEnum.$ToMany. WorkID[" + i_WorkID + "] or User[" + i_User.getUserID() + "]");
+                }
+            }
+            
+            // 判定是否允许用户走这条路由
+            boolean v_AllowRoute = false;
+            for (ActivityRoute v_MaybeRoute : v_NextRoutes.getRoutes())
+            {
+                if ( v_MaybeRoute.getActivityRouteID().equals(v_Route.getActivityRouteID()) )
+                {
+                    v_AllowRoute = true;
+                    break;
+                }
+            }
+            if ( !v_AllowRoute )
+            {
+                throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not Route. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+            }
+            
+            // 设置动态参与人
+            v_Previous.setParticipants(v_NextRoutes.getFlowParticipants().get(v_Previous.getProcessID()));
+            
+            // 判定是否为参与人
+            Participant v_Participant = isParticipant(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
+            if ( v_Participant == null )
+            {
+                throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
+            }
+            
+            FlowProcess v_Process = new FlowProcess();
+            v_Process.init_ToNext(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
+            
+            // 生成参与人信息
+            List<UserParticipant> v_Participants = i_ActivityRouteCodes.get(v_ActivityRouteCode);
+            if ( !Help.isNull(v_Participants) )
             {
                 v_Process.setParticipants(new ArrayList<ProcessParticipant>());
+                for (int v_Index=0; v_Index<v_Participants.size(); v_Index++)
+                {
+                    UserParticipant v_UserPart = v_Participants.get(v_Index);
+                    if ( v_UserPart == null )
+                    {
+                        throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] is null to User[" + i_User.getUserID() + "].");
+                    }
+                    else if ( Help.isNull(v_UserPart.getObjectID()) )
+                    {
+                        throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] ObjectID is null to User[" + i_User.getUserID() + "].");
+                    }
+                    else if ( v_UserPart.getObjectType() == null )
+                    {
+                        throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] ObjectType is null to User[" + i_User.getUserID() + "].");
+                    }
+                    
+                    if ( v_UserPart.getObjectNo() == null )
+                    {
+                        v_UserPart.setObjectNo(v_Index + 1);
+                    }
+                    
+                    ProcessParticipant v_PartTemp = new ProcessParticipant();
+                    v_PartTemp.init(i_User ,v_Process ,v_Participants.get(v_Index));
+                    v_Process.getParticipants().add(v_PartTemp);
+                }
             }
             
-            // 指定原操作人，为驳回后的操作人
-            ProcessParticipant v_RejectPart = new ProcessParticipant();
-            v_RejectPart.init_ToReject(i_User ,v_Process ,v_OldProcesses.get(0));
-            v_Process.getParticipants().add(v_RejectPart);
-        }
-        
-        
-        // 未来操作人：是工作流模板中定义的参与人
-        if ( Help.isNull(v_Process.getParticipants()) )
-        {
-            v_Process.setFutureParticipants(new ArrayList<ProcessParticipant>());
-            
-            if ( !Help.isNull(v_Route.getNextActivity().getParticipants()) )
+            // 驳回的路由
+            List<FlowProcess> v_OldProcesses = v_NextRoutes.getFlow().getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
+            if ( v_Route.getRouteTypeID() == RouteTypeEnum.$Reject )
             {
-                for (Participant v_PartItem : v_Route.getNextActivity().getParticipants())
+                if ( Help.isNull(v_OldProcesses) )
                 {
-                    ProcessParticipant v_FuturePart = new ProcessParticipant();
+                    throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                }
+                
+                if ( Help.isNull(v_Process.getParticipants()) )
+                {
+                    v_Process.setParticipants(new ArrayList<ProcessParticipant>());
+                }
+                
+                // 指定原操作人，为驳回后的操作人
+                ProcessParticipant v_RejectPart = new ProcessParticipant();
+                v_RejectPart.init_ToReject(i_User ,v_Process ,v_OldProcesses.get(0));
+                v_Process.getParticipants().add(v_RejectPart);
+            }
+            
+            // 未来操作人：是工作流模板中定义的参与人
+            if ( Help.isNull(v_Process.getParticipants()) )
+            {
+                v_Process.setFutureParticipants(new ArrayList<ProcessParticipant>());
+                
+                if ( !Help.isNull(v_Route.getNextActivity().getParticipants()) )
+                {
+                    String v_SplitProcessID = i_ActivityRouteCodes.size() > 1 ? v_Previous.getProcessID() : "";
                     
-                    if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$CreateUser )
+                    for (Participant v_PartItem : v_Route.getNextActivity().getParticipants())
                     {
-                        v_FuturePart.init(i_User ,v_Process ,v_PartItem.toCreater(v_NextRoutes.getFlow()));
-                    }
-                    else if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$ActivityUser )
-                    {
-                        if ( !Help.isNull(v_OldProcesses) )
+                        ProcessParticipant v_FuturePart = new ProcessParticipant();
+                        
+                        if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$CreateUser )
                         {
-                            v_FuturePart.init(i_User ,v_Process ,v_PartItem.toOperater(v_OldProcesses.get(0)));
+                            v_FuturePart.init(i_User ,v_Process ,v_PartItem.toCreater(v_NextRoutes.getFlow()));
+                        }
+                        else if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$ActivityUser )
+                        {
+                            if ( !Help.isNull(v_OldProcesses) )
+                            {
+                                v_FuturePart.init(i_User ,v_Process ,v_PartItem.toOperater(v_OldProcesses.get(0)));
+                            }
+                            else
+                            {
+                                throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                            }
                         }
                         else
                         {
-                            throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                            v_FuturePart.init(i_User ,v_Process ,v_PartItem);
                         }
+                        
+                        v_FuturePart.setSplitProcessID(v_SplitProcessID);
+                        v_Process.getFutureParticipants().add(v_FuturePart);
                     }
-                    else
-                    {
-                        v_FuturePart.init(i_User ,v_Process ,v_PartItem);
-                    }
-                    
-                    v_Process.getFutureParticipants().add(v_FuturePart);
+                }
+                else
+                {
+                    // 走到最后的结束节点，会执行此。
                 }
             }
+            // 未来操作人：是动态参与人
             else
             {
-                // 走到最后的结束节点，会执行此。
+                v_Process.setFutureParticipants(v_Process.getParticipants());
             }
-        }
-        // 未来操作人：是动态参与人
-        else
-        {
-            v_Process.setFutureParticipants(v_Process.getParticipants());
+            
+            v_ProcessList.add(v_Process);
+            v_RouteList  .add(v_Route);
         }
         
-        boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
+        if ( v_ProcessList.size() > 1 )
+        {
+            v_Previous.setNextProcessID   ("");
+            v_Previous.setNextActivityID  ("");
+            v_Previous.setNextActivityCode("");
+            v_Previous.setNextActivityName("");
+            
+            for (int i=0; i<v_ProcessList.size(); i++)
+            {
+                FlowProcess v_Process = v_ProcessList.get(i);
+                String      v_Split   = i == 0 ? "" : ",";
+                
+                v_Process.setSplitProcessID(v_Previous.getProcessID());
+                
+                v_Previous.setNextProcessID   (v_Previous.getNextProcessID()    + v_Split + v_Process.getProcessID());
+                v_Previous.setNextActivityID  (v_Previous.getNextActivityID()   + v_Split + v_Process.getCurrentActivityID());
+                v_Previous.setNextActivityCode(v_Previous.getNextActivityCode() + v_Split + v_Process.getCurrentActivityCode());
+                v_Previous.setNextActivityName(v_Previous.getNextActivityName() + v_Split + v_Process.getCurrentActivityName());
+            }
+        }
+        
+        FlowInfo v_Flow = new FlowInfo();
+        
+        v_Flow.setWorkID(       v_Previous.getWorkID());
+        v_Flow.setLastProcessID(v_ProcessList.get(0).getProcessID());
+        v_Flow.setLastTime(new Date());
+        v_Flow.setLastUserID(       i_User.getUserID());
+        v_Flow.setLastUser(Help.NVL(i_User.getUserName()));
+        v_Flow.setLastOrgID(        i_User.getOrgID());
+        v_Flow.setLastOrg(Help.NVL( i_User.getOrgName()));
+        
+        boolean v_Ret = this.flowInfoService.toNext(v_Flow ,v_ProcessList ,v_Previous);
         
         if ( v_Ret )
         {
-            if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
-              || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
+            for (ActivityRoute v_Route : v_RouteList)
             {
-                this.flowInfoService.toHistory(i_WorkID);
-                this.futureOperatorService.delCache(v_Process);
+                if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
+                  || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
+                {
+                    this.flowInfoService.toHistory(i_WorkID);
+                    this.futureOperatorService.delCacheToHistory(v_ProcessList.get(0));
+                    
+                    return v_ProcessList;
+                }
             }
-            else
+            
+            for (FlowProcess v_Process : v_ProcessList)
             {
                 this.futureOperatorService.updateCache(v_Process);
             }
             
-            return v_Process;
+            return v_ProcessList;
         }
         else
         {
-            throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is error. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+            throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is error. ActivityCode[" 
+                                     + StringHelp.toString(Help.toList(v_RouteList ,"activityCode"))
+                                     + "]  ActivityRouteCode[" + StringHelp.toString(Help.toListKeys(i_ActivityRouteCodes)) 
+                                     + "] User[" + i_User.getUserID() + "]");
         }
     }
     
@@ -958,15 +1084,13 @@ public class XFlowEngine
      */
     public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityRouteCode ,UserParticipant i_Participant)
     {
-        List<UserParticipant> v_Participants = null;
-        
-        if ( i_Participant != null )
+        String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
+        if ( Help.isNull(v_WorkID) )
         {
-            v_Participants = new ArrayList<UserParticipant>();
-            v_Participants.add(i_Participant);
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
         }
         
-        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ActivityRouteCode ,v_Participants);
+        return this.toNext(i_User ,v_WorkID ,i_ActivityRouteCode ,i_Participant);
     }
     
     
@@ -989,185 +1113,67 @@ public class XFlowEngine
      */
     public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String i_ActivityRouteCode ,List<UserParticipant> i_Participants)
     {
-        if ( i_User == null )
+        String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
+        if ( Help.isNull(v_WorkID) )
         {
-            throw new NullPointerException("User is null.");
-        }
-        else if ( Help.isNull(i_User.getUserID()) )
-        {
-            throw new NullPointerException("UserID is null.");
-        }
-        else if ( Help.isNull(i_ServiceDataID) )
-        {
-            throw new NullPointerException("ServiceDataID is null.");
-        }
-        else if ( Help.isNull(i_ActivityRouteCode) )
-        {
-            throw new NullPointerException("ActivityRouteCode is null.");
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
         }
         
-        NextRoutes v_NextRoutes = this.queryNextRoutesByServiceDataID(i_User ,i_ServiceDataID);
-        Template   v_Template   = this.templateService.queryByID(v_NextRoutes.getFlow().getFlowTemplateID());
-        if ( v_Template == null )
+        return this.toNext(i_User ,v_WorkID ,i_ActivityRouteCode ,i_Participants);
+    }
+    
+    
+    
+    /**
+     * 向下一个活动节点流转（支持多路由并发执行）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-12
+     * @version     v1.0
+     *
+     * @param i_User                操作用户 
+     * @param i_ServiceDataID       第三方使用系统的业务数据ID
+     * @param i_ActivityRouteCodes  走的多个发并路由编码
+     * @return
+     */
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,String [] i_ActivityRouteCodes)
+    {
+        String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
+        if ( Help.isNull(v_WorkID) )
         {
-            throw new NullPointerException("Template[" + v_NextRoutes.getFlow().getFlowTemplateID() + "] is not exists. ServiceDataID[" + i_ServiceDataID + "] or User[" + i_User.getUserID() + "]");
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
         }
         
-        ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(v_NextRoutes.getCurrentActivity().getActivityCode() ,i_ActivityRouteCode);
-        if ( v_Route == null )
+        return this.toNext(i_User ,v_WorkID ,i_ActivityRouteCodes);
+    }
+    
+    
+    
+    /**
+     * 向下一个活动节点流转（支持多路由并发执行）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-10
+     * @version     v1.0
+     *
+     * @param i_User                操作用户 
+     * @param i_ServiceDataID       第三方使用系统的业务数据ID
+     * @param i_ActivityRouteCodes  Map.Partition  走的路由编码，
+     *                              Map.value      指定每个路由的下一活动的动态参与人，可选项。
+     *                                             指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
+     *                                             指定动态参与人时，同时也受限于路由上设定的参与人。
+     *                                             但当路由上没有设定参与人时，动态参与人将畅通无阻
+     * @return
+     */
+    public List<FlowProcess> toNextByServiceDataID(User i_User ,String i_ServiceDataID ,PartitionMap<String ,UserParticipant> i_ActivityRouteCodes)
+    {
+        String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
+        if ( Help.isNull(v_WorkID) )
         {
-            throw new NullPointerException("ActivityRouteCode[" + i_ActivityRouteCode + "] is not exists. ServiceDataID[" + i_ServiceDataID + "] or User[" + i_User.getUserID() + "]");
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
         }
         
-        // 判定是否允许用户走这条路由
-        boolean v_AllowRoute = false;
-        for (ActivityRoute v_MaybeRoute : v_NextRoutes.getRoutes())
-        {
-            if ( v_MaybeRoute.getActivityRouteID().equals(v_Route.getActivityRouteID()) )
-            {
-                v_AllowRoute = true;
-                break;
-            }
-        }
-        if ( !v_AllowRoute )
-        {
-            throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not Route. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
-        }
-        
-        
-        // 设置动态参与人
-        FlowProcess v_Previous = v_NextRoutes.getCurrentProcess();
-        v_Previous.setParticipants(v_NextRoutes.getFlowParticipants().get(v_Previous.getProcessID()));
-        
-        // 判定是否为参与人
-        Participant v_Participant = isParticipant(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
-        if ( v_Participant == null )
-        {
-            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not grant to User[" + i_User.getUserID() + "].");
-        }
-        
-        FlowProcess v_Process = new FlowProcess();
-        v_Process.init_ToNext(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
-        
-        // 生成参与人信息
-        if ( !Help.isNull(i_Participants) )
-        {
-            v_Process.setParticipants(new ArrayList<ProcessParticipant>());
-            for (int v_Index=0; v_Index<i_Participants.size(); v_Index++)
-            {
-                UserParticipant v_UserPart = i_Participants.get(v_Index);
-                if ( v_UserPart == null )
-                {
-                    throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] participant[" + v_Index + "] is null to User[" + i_User.getUserID() + "].");
-                }
-                else if ( Help.isNull(v_UserPart.getObjectID()) )
-                {
-                    throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] participant[" + v_Index + "] ObjectID is null to User[" + i_User.getUserID() + "].");
-                }
-                else if ( v_UserPart.getObjectType() == null )
-                {
-                    throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] participant[" + v_Index + "] ObjectType is null to User[" + i_User.getUserID() + "].");
-                }
-                
-                if ( v_UserPart.getObjectNo() == null )
-                {
-                    v_UserPart.setObjectNo(v_Index + 1);
-                }
-                
-                ProcessParticipant v_PartTemp = new ProcessParticipant();
-                v_PartTemp.init(i_User ,v_Process ,i_Participants.get(v_Index));
-                v_Process.getParticipants().add(v_PartTemp);
-            }
-        }
-        
-        List<FlowProcess> v_OldProcesses = v_NextRoutes.getFlow().getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
-        
-        // 驳回的路由
-        if ( v_Route.getRouteTypeID() == RouteTypeEnum.$Reject )
-        {
-            if ( Help.isNull(v_OldProcesses) )
-            {
-                throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
-            }
-            
-            if ( Help.isNull(v_Process.getParticipants()) )
-            {
-                v_Process.setParticipants(new ArrayList<ProcessParticipant>());
-            }
-            
-            // 指定原操作人，为驳回后的操作人
-            ProcessParticipant v_RejectPart = new ProcessParticipant();
-            v_RejectPart.init_ToReject(i_User ,v_Process ,v_OldProcesses.get(0));
-            v_Process.getParticipants().add(v_RejectPart);
-        }
-        
-        
-        // 未来操作人：是工作流模板中定义的参与人
-        if ( Help.isNull(v_Process.getParticipants()) )
-        {
-            v_Process.setFutureParticipants(new ArrayList<ProcessParticipant>());
-            
-            if ( !Help.isNull(v_Route.getNextActivity().getParticipants()) )
-            {
-                for (Participant v_PartItem : v_Route.getNextActivity().getParticipants())
-                {
-                    ProcessParticipant v_FuturePart = new ProcessParticipant();
-                    
-                    if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$CreateUser )
-                    {
-                        v_FuturePart.init(i_User ,v_Process ,v_PartItem.toCreater(v_NextRoutes.getFlow()));
-                    }
-                    else if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$ActivityUser )
-                    {
-                        if ( !Help.isNull(v_OldProcesses) )
-                        {
-                            v_FuturePart.init(i_User ,v_Process ,v_PartItem.toOperater(v_OldProcesses.get(0)));
-                        }
-                        else
-                        {
-                            throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
-                        }
-                    }
-                    else
-                    {
-                        v_FuturePart.init(i_User ,v_Process ,v_PartItem);
-                    }
-                    
-                    v_Process.getFutureParticipants().add(v_FuturePart);
-                }
-            }
-            else
-            {
-                // 走到最后的结束节点，会执行此。
-            }
-        }
-        // 未来操作人：是动态参与人
-        else
-        {
-            v_Process.setFutureParticipants(v_Process.getParticipants());
-        }
-        
-        boolean v_Ret = this.flowInfoService.toNext(v_Process ,v_Previous);
-        
-        if ( v_Ret )
-        {
-            if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
-              || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
-            {
-                this.flowInfoService.toHistoryByServiceDataID(i_ServiceDataID);
-                this.futureOperatorService.delCache(v_Process);
-            }
-            else
-            {
-                this.futureOperatorService.updateCache(v_Process);
-            }
-            
-            return v_Process;
-        }
-        else
-        {
-            throw new RuntimeException("ServiceDataID[" + i_ServiceDataID + "] to next process is error. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + i_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
-        }
+        return this.toNext(i_User ,v_WorkID ,i_ActivityRouteCodes);
     }
     
     

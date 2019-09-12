@@ -162,10 +162,10 @@
                 ,previousActivityID     VARCHAR2(64)
                 ,previousActivityCode   VARCHAR2(64)
                 ,previousActivityName   NVARCHAR2(64)
-                ,nextProcessID          VARCHAR2(64)
-                ,nextActivityID         VARCHAR2(64)
-                ,nextActivityCode       VARCHAR2(64)
-                ,nextActivityName       NVARCHAR2(64)
+                ,nextProcessID          VARCHAR2(4000)
+                ,nextActivityID         VARCHAR2(4000)
+                ,nextActivityCode       VARCHAR2(4000)
+                ,nextActivityName       NVARCHAR2(4000)
                 ,createrID              VARCHAR2(64)                     NOT NULL
                 ,creater                NVARCHAR2(128)
                 ,createOrgID            VARCHAR2(64)
@@ -202,10 +202,10 @@
                 COMMENT ON COLUMN TProcess.previousActivityID            IS '上一活动ID';/
                 COMMENT ON COLUMN TProcess.previousActivityCode          IS '上一活动编码';/
                 COMMENT ON COLUMN TProcess.previousActivityName          IS '上一活动名称';/
-                COMMENT ON COLUMN TProcess.nextProcessID                 IS '下一过程ID';/
-                COMMENT ON COLUMN TProcess.nextActivityID                IS '下一活动ID';/
-                COMMENT ON COLUMN TProcess.nextActivityCode              IS '下一活动编码';/
-                COMMENT ON COLUMN TProcess.nextActivityName              IS '下一活动名称';/
+                COMMENT ON COLUMN TProcess.nextProcessID                 IS '下一过程ID。分单时记录多个ID，用逗号分隔';/
+                COMMENT ON COLUMN TProcess.nextActivityID                IS '下一活动ID。分单时记录多个ID，用逗号分隔';/
+                COMMENT ON COLUMN TProcess.nextActivityCode              IS '下一活动编码。分单时记录多个ID，用逗号分隔';/
+                COMMENT ON COLUMN TProcess.nextActivityName              IS '下一活动名称。分单时记录多个ID，用逗号分隔';/
                 COMMENT ON COLUMN TProcess.createrID                     IS '创建人员ID';/
                 COMMENT ON COLUMN TProcess.creater                       IS '创建人员名称';/
                 COMMENT ON COLUMN TProcess.createOrgID                   IS '创建部门ID';/
@@ -244,10 +244,10 @@
                 ,previousActivityID     VARCHAR(64)                              COMMENT '上一活动ID'
                 ,previousActivityCode   VARCHAR(64)                              COMMENT '上一活动编码'
                 ,previousActivityName   VARCHAR(64)                              COMMENT '上一活动名称'
-                ,nextProcessID          VARCHAR(64)                              COMMENT '下一过程ID'
-                ,nextActivityID         VARCHAR(64)                              COMMENT '下一活动ID'
-                ,nextActivityCode       VARCHAR(64)                              COMMENT '下一活动编码'
-                ,nextActivityName       VARCHAR(64)                              COMMENT '下一活动名称'
+                ,nextProcessID          VARCHAR(4000)                            COMMENT '下一过程ID。分单时记录多个ID，用逗号分隔'
+                ,nextActivityID         VARCHAR(4000)                            COMMENT '下一活动ID。分单时记录多个ID，用逗号分隔'
+                ,nextActivityCode       VARCHAR(4000)                            COMMENT '下一活动编码。分单时记录多个ID，用逗号分隔'
+                ,nextActivityName       VARCHAR(4000)                            COMMENT '下一活动名称。分单时记录多个ID，用逗号分隔'
                 ,createrID              VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater                VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createOrgID            VARCHAR(64)                              COMMENT '创建部门ID'
@@ -291,10 +291,10 @@
                 ,previousActivityID      VARCHAR(64)
                 ,previousActivityCode    VARCHAR(64)
                 ,previousActivityName    NVARCHAR(64)
-                ,nextProcessID           VARCHAR(64)
-                ,nextActivityID          VARCHAR(64)
-                ,nextActivityCode        VARCHAR(64)
-                ,nextActivityName        NVARCHAR(64)
+                ,nextProcessID           VARCHAR(4000)
+                ,nextActivityID          VARCHAR(4000)
+                ,nextActivityCode        VARCHAR(4000)
+                ,nextActivityName        NVARCHAR(4000)
                 ,createrID               VARCHAR(64)                      NOT NULL
                 ,creater                 NVARCHAR(128)
                 ,createOrgID             VARCHAR(64)
@@ -331,10 +331,10 @@
                 EXEC P_ColumnComment TProcess ,previousActivityID           ,'上一活动ID';/
                 EXEC P_ColumnComment TProcess ,previousActivityCode         ,'上一活动编码';/
                 EXEC P_ColumnComment TProcess ,previousActivityName         ,'上一活动名称';/
-                EXEC P_ColumnComment TProcess ,nextProcessID                ,'下一过程ID';/
-                EXEC P_ColumnComment TProcess ,nextActivityID               ,'下一活动ID';/
-                EXEC P_ColumnComment TProcess ,nextActivityCode             ,'下一活动编码';/
-                EXEC P_ColumnComment TProcess ,nextActivityName             ,'下一活动名称';/
+                EXEC P_ColumnComment TProcess ,nextProcessID                ,'下一过程ID。分单时记录多个ID，用逗号分隔';/
+                EXEC P_ColumnComment TProcess ,nextActivityID               ,'下一活动ID。分单时记录多个ID，用逗号分隔';/
+                EXEC P_ColumnComment TProcess ,nextActivityCode             ,'下一活动编码。分单时记录多个ID，用逗号分隔';/
+                EXEC P_ColumnComment TProcess ,nextActivityName             ,'下一活动名称。分单时记录多个ID，用逗号分隔';/
                 EXEC P_ColumnComment TProcess ,createrID                    ,'创建人员ID';/
                 EXEC P_ColumnComment TProcess ,creater                      ,'创建人员名称';/
                 EXEC P_ColumnComment TProcess ,createOrgID                  ,'创建部门ID';/
@@ -374,6 +374,7 @@
                 (
                  pwpID              VARCHAR2(64)                     NOT NULL
                 ,processID          VARCHAR2(64)                     NOT NULL
+                ,splitProcessID     VARCHAR2(64)
                 ,workID             VARCHAR2(64)                     NOT NULL
                 ,serviceDataID      VARCHAR2(64)
                 ,objectType         NUMBER(2)                        NOT NULL
@@ -392,6 +393,7 @@
                 COMMENT ON TABLE  TProcessParticipants                    IS '工作流过程的实际参与人';/
                 COMMENT ON COLUMN TProcessParticipants.pwpID              IS '主键ID';/
                 COMMENT ON COLUMN TProcessParticipants.processID          IS '工作流的过程ID';/
+                COMMENT ON COLUMN TProcessParticipants.splitProcessID     IS '分单前的过程ID。合单前持续记录ID值';/
                 COMMENT ON COLUMN TProcessParticipants.workID             IS '工作流实例ID';/
                 COMMENT ON COLUMN TProcessParticipants.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 COMMENT ON COLUMN TProcessParticipants.objectType         IS '参与者类型';/
@@ -410,19 +412,20 @@
 				<![CDATA[
                 CREATE TABLE TProcessParticipants
                 (
-                 pwpID              varchar(64)                     NOT NULL comment '主键ID'
-                ,processID          varchar(64)                     NOT NULL comment '工作流的过程ID'
-                ,workID             varchar(64)                     NOT NULL comment'工作流实例ID'
-                ,serviceDataID      varchar(64)                              comment '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
-                ,objectType         int(2)                          NOT NULL comment '参与者类型'
-                ,objectID           varchar(64)                     NOT NULL comment '参与者ID'
-                ,objectName         varchar(128)                             comment '参与者名称'
-                ,objectNo           int(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
-                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
-                ,creater            varchar(128)                             comment '创建人员名称'
-                ,createOrgID        varchar(64)                              comment '创建部门ID'
-                ,createOrg          varchar(128)                             comment '创建部门名称'
-                ,createTime         datetime                        NOT NULL comment '创建时间'
+                 pwpID              VARCHAR(64)                     NOT NULL COMMENT '主键ID'
+                ,processID          VARCHAR(64)                     NOT NULL COMMENT '工作流的过程ID'
+                ,splitProcessID     VARCHAR(64)                              COMMENT '分单前的过程ID。合单前持续记录ID值'
+                ,workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
+                ,serviceDataID      VARCHAR(64)                              COMMENT '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,objectType         INT(2)                          NOT NULL COMMENT '参与者类型'
+                ,objectID           VARCHAR(64)                     NOT NULL COMMENT '参与者ID'
+                ,objectName         VARCHAR(128)                             COMMENT '参与者名称'
+                ,objectNo           INT(10)                         NOT NULL COMMENT '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
+                ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
+                ,createOrgID        VARCHAR(64)                              COMMENT '创建部门ID'
+                ,createOrg          VARCHAR(128)                             COMMENT '创建部门名称'
+                ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
                 );/
                 
                 ALTER TABLE TProcessParticipants ADD CONSTRAINT PK_TProcessParticipants PRIMARY KEY (pwpID);/
@@ -437,6 +440,7 @@
                 (
                  pwpID              VARCHAR(64)                     NOT NULL
                 ,processID          VARCHAR(64)                     NOT NULL
+                ,splitProcessID     VARCHAR(64)
                 ,workID             VARCHAR(64)                     NOT NULL
                 ,serviceDataID      VARCHAR(64)
                 ,objectType         INT                             NOT NULL
@@ -455,6 +459,7 @@
                 EXEC P_TableComment  TProcessParticipants                     ,'工作流过程的实际参与人';/
                 EXEC P_ColumnComment TProcessParticipants ,pwpID              ,'主键ID';/
                 EXEC P_ColumnComment TProcessParticipants ,processID          ,'工作流的过程ID';/
+                EXEC P_ColumnComment TProcessParticipants ,splitProcessID     ,'分单前的过程ID。合单前持续记录ID值';/
                 EXEC P_ColumnComment TProcessParticipants ,workID             ,'工作流实例ID';/
                 EXEC P_ColumnComment TProcessParticipants ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 EXEC P_ColumnComment TProcessParticipants ,objectType         ,'参与者类型';/
@@ -511,14 +516,14 @@
 				<![CDATA[
                 CREATE TABLE TFlowLastOperator
                 (
-                 workID             varchar(64)                     NOT NULL comment '工作流实例ID'
-                ,serviceDataID      varchar(64)                              comment '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
-                ,processID          varchar(64)                     NOT NULL comment '工作流的过程ID'
-                ,operateTime        datetime                        NOT NULL comment '操作时间'
-                ,operateUserID      varchar(64)                     NOT NULL comment '操作人员ID'
-                ,operateUser        varchar(128)                             comment '操作人员名称'
-                ,operateOrgID       varchar(64)                              comment '操作部门ID'
-                ,operateOrg         varchar(128)                             comment '操作部门名称'
+                 workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
+                ,serviceDataID      VARCHAR(64)                              COMMENT '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,processID          VARCHAR(64)                     NOT NULL COMMENT '工作流的过程ID'
+                ,operateTime        DATETIME                        NOT NULL COMMENT '操作时间'
+                ,operateUserID      VARCHAR(64)                     NOT NULL COMMENT '操作人员ID'
+                ,operateUser        VARCHAR(128)                             COMMENT '操作人员名称'
+                ,operateOrgID       VARCHAR(64)                              COMMENT '操作部门ID'
+                ,operateOrg         VARCHAR(128)                             COMMENT '操作部门名称'
                 );/
                 
                 
@@ -532,6 +537,7 @@
                 (
                  workID             VARCHAR(64)                      NOT NULL
                 ,serviceDataID      VARCHAR(64)
+                ,processID          VARCHAR(64)                      NOT NULL
                 ,processID          VARCHAR(64)                      NOT NULL
                 ,operateTime        DATETIME                         NOT NULL
                 ,operateUserID      NVARCHAR(64)                     NOT NULL
@@ -571,6 +577,7 @@
                  workID             VARCHAR2(64)                     NOT NULL
                 ,serviceDataID      VARCHAR2(64)
                 ,processID          VARCHAR2(64)                     NOT NULL
+                ,splitProcessID     VARCHAR2(64)
                 ,objectType         NUMBER(2)                        NOT NULL
                 ,objectID           VARCHAR2(64)                     NOT NULL
                 ,objectName         NVARCHAR2(128)
@@ -587,6 +594,7 @@
                 COMMENT ON COLUMN TFlowFutureOperator.workID              IS '工作流实例ID';/
                 COMMENT ON COLUMN TFlowFutureOperator.serviceDataID       IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 COMMENT ON COLUMN TFlowFutureOperator.processID           IS '工作流的过程ID';/
+                COMMENT ON COLUMN TFlowFutureOperator.splitProcessID      IS '分单前的过程ID。合单前持续记录ID值';/
                 COMMENT ON COLUMN TFlowFutureOperator.objectType          IS '参与者类型';/
                 COMMENT ON COLUMN TFlowFutureOperator.objectID            IS '参与者ID';/
                 COMMENT ON COLUMN TFlowFutureOperator.objectName          IS '参与者名称';/
@@ -603,18 +611,19 @@
 				<![CDATA[
                 CREATE TABLE TFlowFutureOperator
                 (
-                 workID             varchar(64)                     NOT NULL comment '工作流实例ID'
-                ,serviceDataID      varchar(64)                              comment '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
-                ,processID          varchar(64)                     NOT NULL comment '工作流的过程ID'
-                ,objectType         int(2)                          NOT NULL comment '参与者类型'
-                ,objectID           varchar(64)                     NOT NULL comment '参与者ID'
-                ,objectName         varchar(128)                             comment '参与者名称'
-                ,objectNo           int(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
-                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
-                ,creater            varchar(128)                             comment '创建人员名称'
-                ,createOrgID        varchar(64)                              comment '创建部门ID'
-                ,createOrg          varchar(128)                             comment '创建部门名称'
-                ,createTime         datetime                        NOT NULL comment '创建时间'
+                 workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
+                ,serviceDataID      VARCHAR(64)                              COMMENT '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,processID          VARCHAR(64)                     NOT NULL COMMENT '工作流的过程ID'
+                ,splitProcessID     VARCHAR(64)                              COMMENT '分单前的过程ID。合单前持续记录ID值'
+                ,objectType         INT(2)                          NOT NULL COMMENT '参与者类型'
+                ,objectID           VARCHAR(64)                     NOT NULL COMMENT '参与者ID'
+                ,objectName         VARCHAR(128)                             COMMENT '参与者名称'
+                ,objectNo           INT(10)                         NOT NULL COMMENT '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
+                ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
+                ,createOrgID        VARCHAR(64)                              COMMENT '创建部门ID'
+                ,createOrg          VARCHAR(128)                             COMMENT '创建部门名称'
+                ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
                 );/
                 
                 
@@ -629,6 +638,7 @@
                  workID             VARCHAR(64)                     NOT NULL
                 ,serviceDataID      VARCHAR(64)
                 ,processID          VARCHAR(64)                     NOT NULL
+                ,splitProcessID     VARCHAR(64)
                 ,objectType         INT                             NOT NULL
                 ,objectID           VARCHAR(64)                     NOT NULL
                 ,objectName         NVARCHAR(128)
@@ -645,6 +655,7 @@
                 EXEC P_ColumnComment TFlowFutureOperator ,workID             ,'工作流实例ID';/
                 EXEC P_ColumnComment TFlowFutureOperator ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
                 EXEC P_ColumnComment TFlowFutureOperator ,processID          ,'工作流的过程ID';/
+                EXEC P_ColumnComment TFlowFutureOperator ,splitProcessID     ,'分单前的过程ID。合单前持续记录ID值';/
                 EXEC P_ColumnComment TFlowFutureOperator ,objectType         ,'参与者类型';/
                 EXEC P_ColumnComment TFlowFutureOperator ,objectID           ,'参与者ID';/
                 EXEC P_ColumnComment TFlowFutureOperator ,objectName         ,'参与者名称';/

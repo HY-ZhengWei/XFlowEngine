@@ -15,7 +15,7 @@
 	
 		<item id="XFlow_DataSourceType">
             <name>XFlow_DataSourceType</name>
-			<value>SQLSERVER</value>
+			<value>MYSQL</value>
 			<comment>配置数据库是什么类型的。详见：org.hy.common.db.DataSourceGroup</comment>
         </item>
         
@@ -35,12 +35,12 @@
 		<!-- MySQL数据库 -->
 		<dataSource id="DS_XFlow_01" if="MYSQL == XFlow_DataSourceType.getValue">
 			<driverClass>com.mysql.jdbc.Driver</driverClass>
-			<jdbcUrl>jdbc:mysql://127.0.0.1:3306/XFlow?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
+			<jdbcUrl>jdbc:mysql://10.1.50.114:3306/service_change?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
 			<user>root</user>
-			<password>root</password>
+			<password>wzyb!@#change</password>
 			<maxPoolSize>100</maxPoolSize>
 			<initialPoolSize>2</initialPoolSize>
-			<checkoutTimeout>10000</checkoutTimeout>
+			<checkoutTimeout>30000</checkoutTimeout>
 		</dataSource>
 		
 		

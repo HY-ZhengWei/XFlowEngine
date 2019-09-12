@@ -105,13 +105,14 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      * @createDate  2018-05-07
      * @version     v1.0
      *
-     * @param i_Process   新流转的过程信息
-     * @param i_Previous  前一个流转的过程信息
+     * @param i_Flow          工作流实例对象
+     * @param i_ProcessList   新流转的过程集合信息（分单时会有多个，正常情况下均只有一个元素）
+     * @param i_Previous      前一个流转的过程信息
      * @return
      */
-    public boolean toNext(FlowProcess i_Process ,FlowProcess i_Previous)
+    public boolean toNext(FlowInfo i_Flow ,List<FlowProcess> i_ProcessList ,FlowProcess i_Previous)
     {
-        return this.flowInfoDAO.toNext(i_Process ,i_Previous);
+        return this.flowInfoDAO.toNext(i_Flow ,i_ProcessList ,i_Previous);
     }
     
     
