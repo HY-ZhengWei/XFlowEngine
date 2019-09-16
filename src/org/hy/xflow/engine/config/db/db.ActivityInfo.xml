@@ -36,6 +36,7 @@
 				       ,A.flagColor
 				       ,A.fontColor
 				       ,A.infoComment
+				       ,A.summaryPass
 				       ,A.createrID
 				       ,A.creater
 				       ,A.createTime

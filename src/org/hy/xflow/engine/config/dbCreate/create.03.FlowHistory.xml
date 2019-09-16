@@ -162,6 +162,7 @@
                 ,previousActivityID     VARCHAR2(64)
                 ,previousActivityCode   VARCHAR2(64)
                 ,previousActivityName   NVARCHAR2(64)
+                ,previousOperateTypeID  VARCHAR2(64)
                 ,nextProcessID          VARCHAR2(4000)
                 ,nextActivityID         VARCHAR2(4000)
                 ,nextActivityCode       VARCHAR2(4000)
@@ -171,6 +172,8 @@
                 ,createOrgID            VARCHAR2(64)
                 ,createOrg              NVARCHAR2(128)
                 ,createTime             DATE                             NOT NULL
+                ,summary                NUMBER(18 ,4)
+                ,summaryPass            NUMBER(18 ,4)
                 ,limitUserID            VARCHAR2(64)
                 ,limitOrgID             VARCHAR2(64)
                 ,limitTime              DATE
@@ -202,6 +205,7 @@
                 COMMENT ON COLUMN TProcess_History.previousActivityID    IS '上一活动ID';/
                 COMMENT ON COLUMN TProcess_History.previousActivityCode  IS '上一活动编码';/
                 COMMENT ON COLUMN TProcess_History.previousActivityName  IS '上一活动名称';/
+                COMMENT ON COLUMN TProcess_History.previousOperateTypeID IS '上一活动的操作类型ID';/
                 COMMENT ON COLUMN TProcess_History.nextProcessID         IS '下一过程ID。分单时记录多个ID，用逗号分隔';/
                 COMMENT ON COLUMN TProcess_History.nextActivityID        IS '下一活动ID。分单时记录多个ID，用逗号分隔';/
                 COMMENT ON COLUMN TProcess_History.nextActivityCode      IS '下一活动编码。分单时记录多个ID，用逗号分隔';/
@@ -211,6 +215,8 @@
                 COMMENT ON COLUMN TProcess_History.createOrgID           IS '创建部门ID';/
                 COMMENT ON COLUMN TProcess_History.createOrg             IS '创建部门名称';/
                 COMMENT ON COLUMN TProcess_History.createTime            IS '创建时间';/
+                COMMENT ON COLUMN TProcess_History.summary               IS '汇总值';/
+                COMMENT ON COLUMN TProcess_History.summaryPass           IS '汇总通过值。当大于等于此值后，才能继续向下流转';/
                 COMMENT ON COLUMN TProcess_History.limitUserID           IS '限制操作人员ID';/
                 COMMENT ON COLUMN TProcess_History.limitOrgID            IS '限制操作部门ID';/
                 COMMENT ON COLUMN TProcess_History.limitTime             IS '限制操作时间';/
@@ -244,6 +250,7 @@
                 ,previousActivityID     VARCHAR(64)                              COMMENT '上一活动ID'
                 ,previousActivityCode   VARCHAR(64)                              COMMENT '上一活动编码'
                 ,previousActivityName   VARCHAR(64)                              COMMENT '上一活动名称'
+                ,previousOperateTypeID  VARCHAR(64)                              COMMENT '上一活动的操作类型ID'
                 ,nextProcessID          VARCHAR(4000)                            COMMENT '下一过程ID。分单时记录多个ID，用逗号分隔'
                 ,nextActivityID         VARCHAR(4000)                            COMMENT '下一活动ID。分单时记录多个ID，用逗号分隔'
                 ,nextActivityCode       VARCHAR(4000)                            COMMENT '下一活动编码。分单时记录多个ID，用逗号分隔'
@@ -253,6 +260,8 @@
                 ,createOrgID            VARCHAR(64)                              COMMENT '创建部门ID'
                 ,createOrg              VARCHAR(128)                             COMMENT '创建部门名称'
                 ,createTime             DATETIME                        NOT NULL COMMENT '创建时间'
+                ,summary                DECIMAL(18 ,4)                           COMMENT '汇总值'
+                ,summaryPass            DECIMAL(18 ,4)                           COMMENT '汇总通过值。当大于等于此值后，才能继续向下流转'
                 ,limitUserID            VARCHAR(64)                              COMMENT '限制操作人员ID'
                 ,limitOrgID             VARCHAR(64)                              COMMENT '限制操作部门ID'
                 ,limitTime              DATETIME                                 COMMENT '限制操作时间'
@@ -291,6 +300,7 @@
                 ,previousActivityID      VARCHAR(64)
                 ,previousActivityCode    VARCHAR(64)
                 ,previousActivityName    NVARCHAR(64)
+                ,previousOperateTypeID   VARCHAR(64)
                 ,nextProcessID           VARCHAR(4000)
                 ,nextActivityID          VARCHAR(4000)
                 ,nextActivityCode        VARCHAR(4000)
@@ -300,6 +310,8 @@
                 ,createOrgID             VARCHAR(64)
                 ,createOrg               NVARCHAR(128)
                 ,createTime              DATETIME                         NOT NULL
+                ,summary                 DECIMAL(18 ,4)
+                ,summaryPass             DECIMAL(18 ,4)
                 ,limitUserID             VARCHAR(64)
                 ,limitOrgID              VARCHAR(64)
                 ,limitTime               DATETIME
@@ -318,42 +330,45 @@
                 
                 ALTER TABLE TProcess_History ADD CONSTRAINT PK_TProcess_History PRIMARY KEY (processID);/
                 
-                EXEC P_TableComment  TProcess_History                       ,'工作流过程表';/
-                EXEC P_ColumnComment TProcess_History ,processID            ,'工作流的过程ID';/
-                EXEC P_ColumnComment TProcess_History ,workID               ,'工作流实例ID';/
-                EXEC P_ColumnComment TProcess_History ,serviceDataID        ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
-                EXEC P_ColumnComment TProcess_History ,splitProcessID       ,'分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
-                EXEC P_ColumnComment TProcess_History ,processNo            ,'工作流的过程编号。下标从1开始';/
-                EXEC P_ColumnComment TProcess_History ,currentActivityID    ,'当前活动ID';/
-                EXEC P_ColumnComment TProcess_History ,currentActivityCode  ,'当前活动编码';/
-                EXEC P_ColumnComment TProcess_History ,currentActivityName  ,'当前活动名称';/
-                EXEC P_ColumnComment TProcess_History ,previousProcessID    ,'上一过程ID';/
-                EXEC P_ColumnComment TProcess_History ,previousActivityID   ,'上一活动ID';/
-                EXEC P_ColumnComment TProcess_History ,previousActivityCode ,'上一活动编码';/
-                EXEC P_ColumnComment TProcess_History ,previousActivityName ,'上一活动名称';/
-                EXEC P_ColumnComment TProcess_History ,nextProcessID        ,'下一过程ID。分单时记录多个ID，用逗号分隔';/
-                EXEC P_ColumnComment TProcess_History ,nextActivityID       ,'下一活动ID。分单时记录多个ID，用逗号分隔';/
-                EXEC P_ColumnComment TProcess_History ,nextActivityCode     ,'下一活动编码。分单时记录多个ID，用逗号分隔';/
-                EXEC P_ColumnComment TProcess_History ,nextActivityName     ,'下一活动名称。分单时记录多个ID，用逗号分隔';/
-                EXEC P_ColumnComment TProcess_History ,createrID            ,'创建人员ID';/
-                EXEC P_ColumnComment TProcess_History ,creater              ,'创建人员名称';/
-                EXEC P_ColumnComment TProcess_History ,createOrgID          ,'创建部门ID';/
-                EXEC P_ColumnComment TProcess_History ,createOrg            ,'创建部门名称';/
-                EXEC P_ColumnComment TProcess_History ,createTime           ,'创建时间';/
-                EXEC P_ColumnComment TProcess_History ,limitUserID          ,'限制操作人员ID';/
-                EXEC P_ColumnComment TProcess_History ,limitOrgID           ,'限制操作部门ID';/
-                EXEC P_ColumnComment TProcess_History ,limitTime            ,'限制操作时间';/
-                EXEC P_ColumnComment TProcess_History ,operateTime          ,'操作时间';/
-                EXEC P_ColumnComment TProcess_History ,operateTimeLen       ,'操作时长（单位：秒）';/
-                EXEC P_ColumnComment TProcess_History ,operateTypeID        ,'操作类型ID';/
-                EXEC P_ColumnComment TProcess_History ,operateType          ,'操作类型名称';/
-                EXEC P_ColumnComment TProcess_History ,operateUserID        ,'操作人员ID';/
-                EXEC P_ColumnComment TProcess_History ,operateUser          ,'操作人员名称';/
-                EXEC P_ColumnComment TProcess_History ,operateOrgID         ,'操作部门ID';/
-                EXEC P_ColumnComment TProcess_History ,operateOrg           ,'操作部门名称';/
-                EXEC P_ColumnComment TProcess_History ,operateFiles         ,'操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
-                EXEC P_ColumnComment TProcess_History ,operateDatas         ,'操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
-                EXEC P_ColumnComment TProcess_History ,infoComment          ,'备注说明';/
+                EXEC P_TableComment  TProcess_History                        ,'工作流过程表';/
+                EXEC P_ColumnComment TProcess_History ,processID             ,'工作流的过程ID';/
+                EXEC P_ColumnComment TProcess_History ,workID                ,'工作流实例ID';/
+                EXEC P_ColumnComment TProcess_History ,serviceDataID         ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                EXEC P_ColumnComment TProcess_History ,splitProcessID        ,'分单前的过程ID。合单前持续记录ID值。不一定与previousProcessID同值';/
+                EXEC P_ColumnComment TProcess_History ,processNo             ,'工作流的过程编号。下标从1开始';/
+                EXEC P_ColumnComment TProcess_History ,currentActivityID     ,'当前活动ID';/
+                EXEC P_ColumnComment TProcess_History ,currentActivityCode   ,'当前活动编码';/
+                EXEC P_ColumnComment TProcess_History ,currentActivityName   ,'当前活动名称';/
+                EXEC P_ColumnComment TProcess_History ,previousProcessID     ,'上一过程ID';/
+                EXEC P_ColumnComment TProcess_History ,previousActivityID    ,'上一活动ID';/
+                EXEC P_ColumnComment TProcess_History ,previousActivityCode  ,'上一活动编码';/
+                EXEC P_ColumnComment TProcess_History ,previousActivityName  ,'上一活动名称';/
+                EXEC P_ColumnComment TProcess_History ,previousOperateTypeID ,'上一活动的操作类型ID';/
+                EXEC P_ColumnComment TProcess_History ,nextProcessID         ,'下一过程ID。分单时记录多个ID，用逗号分隔';/
+                EXEC P_ColumnComment TProcess_History ,nextActivityID        ,'下一活动ID。分单时记录多个ID，用逗号分隔';/
+                EXEC P_ColumnComment TProcess_History ,nextActivityCode      ,'下一活动编码。分单时记录多个ID，用逗号分隔';/
+                EXEC P_ColumnComment TProcess_History ,nextActivityName      ,'下一活动名称。分单时记录多个ID，用逗号分隔';/
+                EXEC P_ColumnComment TProcess_History ,createrID             ,'创建人员ID';/
+                EXEC P_ColumnComment TProcess_History ,creater               ,'创建人员名称';/
+                EXEC P_ColumnComment TProcess_History ,createOrgID           ,'创建部门ID';/
+                EXEC P_ColumnComment TProcess_History ,createOrg             ,'创建部门名称';/
+                EXEC P_ColumnComment TProcess_History ,createTime            ,'创建时间';/
+                EXEC P_ColumnComment TProcess_History ,summary               ,'汇总值';/
+                EXEC P_ColumnComment TProcess_History ,summaryPass           ,'汇总通过值。当大于等于此值后，才能继续向下流转';/
+                EXEC P_ColumnComment TProcess_History ,limitUserID           ,'限制操作人员ID';/
+                EXEC P_ColumnComment TProcess_History ,limitOrgID            ,'限制操作部门ID';/
+                EXEC P_ColumnComment TProcess_History ,limitTime             ,'限制操作时间';/
+                EXEC P_ColumnComment TProcess_History ,operateTime           ,'操作时间';/
+                EXEC P_ColumnComment TProcess_History ,operateTimeLen        ,'操作时长（单位：秒）';/
+                EXEC P_ColumnComment TProcess_History ,operateTypeID         ,'操作类型ID';/
+                EXEC P_ColumnComment TProcess_History ,operateType           ,'操作类型名称';/
+                EXEC P_ColumnComment TProcess_History ,operateUserID         ,'操作人员ID';/
+                EXEC P_ColumnComment TProcess_History ,operateUser           ,'操作人员名称';/
+                EXEC P_ColumnComment TProcess_History ,operateOrgID          ,'操作部门ID';/
+                EXEC P_ColumnComment TProcess_History ,operateOrg            ,'操作部门名称';/
+                EXEC P_ColumnComment TProcess_History ,operateFiles          ,'操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
+                EXEC P_ColumnComment TProcess_History ,operateDatas          ,'操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
+                EXEC P_ColumnComment TProcess_History ,infoComment           ,'备注说明';/
 				]]>
 			</content>
 			

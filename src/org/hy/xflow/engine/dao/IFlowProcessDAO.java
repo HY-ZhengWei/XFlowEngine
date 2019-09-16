@@ -86,4 +86,19 @@ public interface IFlowProcessDAO
     @Xsql("XSQL_XFlow_Process_queryServiceDataIDsByDone")
     public List<String> queryServiceDataIDsByDone(User i_User);
     
+    
+    
+    /**
+     * 汇总“汇总值”
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-16
+     * @version     v1.0
+     *
+     * @param i_Process
+     * @return
+     */
+    @Xsql(id="XSQL_XFlow_Process_Summary" ,returnOne=true)
+    public FlowProcess querySummary(FlowProcess i_Process);
+    
 }

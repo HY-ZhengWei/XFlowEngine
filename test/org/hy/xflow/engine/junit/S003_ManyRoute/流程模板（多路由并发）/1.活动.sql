@@ -200,6 +200,50 @@ VALUES (
        ,'执行结果'
        ,'T-ManyRoute-001'
        ,'执行结果'
+       ,'AT001'
+       ,0
+       ,0
+       ,0
+       ,64
+       ,64
+       ,'http://'
+       ,''
+       ,'UID-00001'
+       ,'ZhengWei(HY)'
+       ,'2019-09-11 01:01:01'
+       ,'UID-00001'
+       ,'ZhengWei(HY)'
+       ,'2019-09-11 01:01:01'
+       );
+       
+       
+       
+INSERT  INTO TActivityInfo
+       (
+        activityID
+       ,activityCode
+       ,templateID
+       ,activityName
+       ,activityTypeID
+       ,x
+       ,y
+       ,z
+       ,height
+       ,width
+       ,iconURL
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'A-ManyRoute-006'
+       ,'完成'
+       ,'T-ManyRoute-001'
+       ,'完成'
        ,'AT999'
        ,0
        ,0

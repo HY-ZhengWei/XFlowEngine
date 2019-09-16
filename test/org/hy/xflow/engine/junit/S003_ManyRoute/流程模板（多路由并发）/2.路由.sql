@@ -200,9 +200,53 @@ VALUES (
        ,'执行'
        ,'执行'
        ,'T-ManyRoute-001'
-       ,'RT999'
+       ,'RT001'
        ,'A-ManyRoute-004'
        ,'A-ManyRoute-005'
+       ,''
+       ,''
+       ,''
+       ,NULL
+       ,''
+       ,'UID-00001'
+       ,'ZhengWei(HY)'
+       ,'2019-09-11 01:01:01'
+       ,'UID-00001'
+       ,'ZhengWei(HY)'
+       ,'2019-09-11 01:01:01'
+       );
+       
+       
+       
+INSERT  INTO TActivityRoute
+       (
+        activityRouteID
+       ,activityRouteCode
+       ,activityRouteName
+       ,templateID
+       ,routeTypeID
+       ,activityID
+       ,nextActivityID
+       ,conditionXJavaID
+       ,conditionMethod
+       ,conditionValue
+       ,conditionVType
+       ,infoComment
+       ,createrID
+       ,creater
+       ,createTime
+       ,lastUserID
+       ,lastUser
+       ,lastTime
+       )
+VALUES (
+        'AR-ManyRoute-005To006'
+       ,'完成'
+       ,'完成'
+       ,'T-ManyRoute-001'
+       ,'RT999'
+       ,'A-ManyRoute-005'
+       ,'A-ManyRoute-006'
        ,''
        ,''
        ,''

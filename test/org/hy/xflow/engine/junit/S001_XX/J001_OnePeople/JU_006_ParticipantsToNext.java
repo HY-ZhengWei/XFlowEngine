@@ -41,7 +41,7 @@ public class JU_006_ParticipantsToNext extends BaseJunit
         {
             ActivityRoute v_Route = v_NextRoutes.getRoutes().get(0);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_User ,v_ServiceDataID ,v_Route.getActivityRouteCode());
+            XFlowEngine.getInstance().toNextByServiceDataID(v_User ,v_ServiceDataID ,null ,v_Route.getActivityRouteCode());
             
             System.out.println("-- 单人选型转向选型结果确认");
         }

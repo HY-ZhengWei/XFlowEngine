@@ -94,15 +94,54 @@ public interface IFlowInfoDAO
      * @createDate  2018-05-07
      * @version     v1.0
      *
+     * @param i_Flow      工作流实例对象
+     * @param i_Process   新流转的过程集合信息（分单时会有多个，正常情况下均只有一个元素）
+     * @param i_Previous  前一个流转的过程信息
+     * @return
+     */
+    @Xsql("GXSQL_Flow_ToNext")
+    public boolean toNext(@Xparam("flow")     FlowInfo    i_Flow
+                         ,@Xparam("process")  FlowProcess i_Process
+                         ,@Xparam("previous") FlowProcess i_Previous);
+    
+    
+    
+    
+    /**
+     * 分单多路的工作流流转，并更新前一个流转信息。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-16
+     * @version     v1.0
+     *
      * @param i_Flow          工作流实例对象
      * @param i_ProcessList   新流转的过程集合信息（分单时会有多个，正常情况下均只有一个元素）
      * @param i_Previous      前一个流转的过程信息
      * @return
      */
-    @Xsql("GXSQL_Flow_ToNext")
-    public boolean toNext(@Xparam("flow")        FlowInfo          i_Flow
-                         ,@Xparam("processList") List<FlowProcess> i_ProcessList
-                         ,@Xparam("previous")    FlowProcess       i_Previous);
+    @Xsql("GXSQL_Flow_ToNext_Split")
+    public boolean toNextSplit(@Xparam("flow")        FlowInfo          i_Flow
+                              ,@Xparam("processList") List<FlowProcess> i_ProcessList
+                              ,@Xparam("previous")    FlowProcess       i_Previous);
+    
+    
+    
+    /**
+     * 分单多路后的汇总，工作流流转，并更新前一个流转信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-16
+     * @version     v1.0
+     *
+     * @param i_Flow      工作流实例对象
+     * @param i_Process   新流转的过程集合信息（分单时会有多个，正常情况下均只有一个元素）
+     * @param i_Previous  前一个流转的过程信息
+     * @return
+     */
+    @Xsql("GXSQL_Flow_ToNext_Summary")
+    public boolean toNextSummary(@Xparam("flow")     FlowInfo    i_Flow
+                                ,@Xparam("process")  FlowProcess i_Process
+                                ,@Xparam("previous") FlowProcess i_Previous);
     
     
     

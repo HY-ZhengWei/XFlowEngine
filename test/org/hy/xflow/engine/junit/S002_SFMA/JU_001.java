@@ -95,7 +95,7 @@ public class JU_001 extends BaseJunit
     @Test
     public void test_003_ToNext()
     {
-        XFlowEngine.getInstance().toNextByServiceDataID(doctor ,serviceDataID ,"FN");
+        XFlowEngine.getInstance().toNextByServiceDataID(doctor ,serviceDataID ,null ,"FN");
     }
     
     
@@ -126,7 +126,7 @@ public class JU_001 extends BaseJunit
             FlowProcess v_LastProcess = null;
             for (String v_Route : v_Routes[i])
             {
-                v_LastProcess = XFlowEngine.getInstance().toNextByServiceDataID(doctor ,serviceDataID ,v_Route);
+                v_LastProcess = XFlowEngine.getInstance().toNextByServiceDataID(doctor ,serviceDataID ,null ,v_Route);
             }
             
             ActivityInfo v_Activity = XFlowEngine.getInstance().getCurrentActivity(v_LastProcess);

@@ -107,3 +107,31 @@ VALUES (
        ,'ZhengWei(HY)'
        ,'2019-09-12 01:01:01'
        );
+       
+       
+       
+INSERT  INTO TActivityParticipants
+       (
+        participantID
+       ,templateID
+       ,activityID
+       ,objectType
+       ,objectID
+       ,objectName
+       ,objectNo
+       ,createrID
+       ,creater
+       ,createTime
+       )
+VALUES (
+        'AP-ManyRoute-005'
+       ,'T-ManyRoute-001'
+       ,'A-ManyRoute-005'
+       ,21
+       ,''
+       ,'发起人'
+       ,1
+       ,'UID-00001'
+       ,'ZhengWei(HY)'
+       ,'2019-09-12 01:01:01'
+       );

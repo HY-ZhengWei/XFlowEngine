@@ -162,6 +162,7 @@
                 ,previousActivityID     VARCHAR2(64)
                 ,previousActivityCode   VARCHAR2(64)
                 ,previousActivityName   NVARCHAR2(64)
+                ,previousOperateTypeID  VARCHAR2(64)
                 ,nextProcessID          VARCHAR2(4000)
                 ,nextActivityID         VARCHAR2(4000)
                 ,nextActivityCode       VARCHAR2(4000)
@@ -171,6 +172,8 @@
                 ,createOrgID            VARCHAR2(64)
                 ,createOrg              NVARCHAR2(128)
                 ,createTime             DATE                             NOT NULL
+                ,summary                NUMBER(18 ,4)
+                ,summaryPass            NUMBER(18 ,4)
                 ,limitUserID            VARCHAR2(64)
                 ,limitOrgID             VARCHAR2(64)
                 ,limitTime              DATE
@@ -202,6 +205,7 @@
                 COMMENT ON COLUMN TProcess.previousActivityID            IS '上一活动ID';/
                 COMMENT ON COLUMN TProcess.previousActivityCode          IS '上一活动编码';/
                 COMMENT ON COLUMN TProcess.previousActivityName          IS '上一活动名称';/
+                COMMENT ON COLUMN TProcess.previousOperateTypeID         IS '上一活动的操作类型ID';/
                 COMMENT ON COLUMN TProcess.nextProcessID                 IS '下一过程ID。分单时记录多个ID，用逗号分隔';/
                 COMMENT ON COLUMN TProcess.nextActivityID                IS '下一活动ID。分单时记录多个ID，用逗号分隔';/
                 COMMENT ON COLUMN TProcess.nextActivityCode              IS '下一活动编码。分单时记录多个ID，用逗号分隔';/
@@ -211,6 +215,8 @@
                 COMMENT ON COLUMN TProcess.createOrgID                   IS '创建部门ID';/
                 COMMENT ON COLUMN TProcess.createOrg                     IS '创建部门名称';/
                 COMMENT ON COLUMN TProcess.createTime                    IS '创建时间';/
+                COMMENT ON COLUMN TProcess.summary                       IS '汇总值';/
+                COMMENT ON COLUMN TProcess.summaryPass                   IS '汇总通过值。当大于等于此值后，才能继续向下流转';/
                 COMMENT ON COLUMN TProcess.limitUserID                   IS '限制操作人员ID';/
                 COMMENT ON COLUMN TProcess.limitOrgID                    IS '限制操作部门ID';/
                 COMMENT ON COLUMN TProcess.limitTime                     IS '限制操作时间';/
@@ -244,6 +250,7 @@
                 ,previousActivityID     VARCHAR(64)                              COMMENT '上一活动ID'
                 ,previousActivityCode   VARCHAR(64)                              COMMENT '上一活动编码'
                 ,previousActivityName   VARCHAR(64)                              COMMENT '上一活动名称'
+                ,previousOperateTypeID  VARCHAR(64)                              COMMENT '上一活动的操作类型ID'
                 ,nextProcessID          VARCHAR(4000)                            COMMENT '下一过程ID。分单时记录多个ID，用逗号分隔'
                 ,nextActivityID         VARCHAR(4000)                            COMMENT '下一活动ID。分单时记录多个ID，用逗号分隔'
                 ,nextActivityCode       VARCHAR(4000)                            COMMENT '下一活动编码。分单时记录多个ID，用逗号分隔'
@@ -253,6 +260,8 @@
                 ,createOrgID            VARCHAR(64)                              COMMENT '创建部门ID'
                 ,createOrg              VARCHAR(128)                             COMMENT '创建部门名称'
                 ,createTime             DATETIME(3)                     NOT NULL COMMENT '创建时间'
+                ,summary                DECIMAL(18 ,4)                           COMMENT '汇总值'
+                ,summaryPass            DECIMAL(18 ,4)                           COMMENT '汇总通过值。当大于等于此值后，才能继续向下流转'
                 ,limitUserID            VARCHAR(64)                              COMMENT '限制操作人员ID'
                 ,limitOrgID             VARCHAR(64)                              COMMENT '限制操作部门ID'
                 ,limitTime              DATETIME                                 COMMENT '限制操作时间'
@@ -271,7 +280,7 @@
                 
                 ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
                 
-                ALTER TABLE  TProcess   COMMENT                            = '工作流过程表';/
+                ALTER TABLE TProcess COMMENT = '工作流过程表';/
 				]]>
 			</content>
 			
@@ -291,6 +300,7 @@
                 ,previousActivityID      VARCHAR(64)
                 ,previousActivityCode    VARCHAR(64)
                 ,previousActivityName    NVARCHAR(64)
+                ,previousOperateTypeID   VARCHAR(64)
                 ,nextProcessID           VARCHAR(4000)
                 ,nextActivityID          VARCHAR(4000)
                 ,nextActivityCode        VARCHAR(4000)
@@ -300,6 +310,8 @@
                 ,createOrgID             VARCHAR(64)
                 ,createOrg               NVARCHAR(128)
                 ,createTime              DATETIME                         NOT NULL
+                ,summary                 DECIMAL(18 ,4)
+                ,summaryPass             DECIMAL(18 ,4)
                 ,limitUserID             VARCHAR(64)
                 ,limitOrgID              VARCHAR(64)
                 ,limitTime               DATETIME
@@ -331,6 +343,7 @@
                 EXEC P_ColumnComment TProcess ,previousActivityID           ,'上一活动ID';/
                 EXEC P_ColumnComment TProcess ,previousActivityCode         ,'上一活动编码';/
                 EXEC P_ColumnComment TProcess ,previousActivityName         ,'上一活动名称';/
+                EXEC P_ColumnComment TProcess ,previousOperateTypeID        ,'上一活动的操作类型ID';/
                 EXEC P_ColumnComment TProcess ,nextProcessID                ,'下一过程ID。分单时记录多个ID，用逗号分隔';/
                 EXEC P_ColumnComment TProcess ,nextActivityID               ,'下一活动ID。分单时记录多个ID，用逗号分隔';/
                 EXEC P_ColumnComment TProcess ,nextActivityCode             ,'下一活动编码。分单时记录多个ID，用逗号分隔';/
@@ -340,6 +353,8 @@
                 EXEC P_ColumnComment TProcess ,createOrgID                  ,'创建部门ID';/
                 EXEC P_ColumnComment TProcess ,createOrg                    ,'创建部门名称';/
                 EXEC P_ColumnComment TProcess ,createTime                   ,'创建时间';/
+                EXEC P_ColumnComment TProcess ,summary                      ,'汇总值';/
+                EXEC P_ColumnComment TProcess ,summaryPass                  ,'汇总通过值。当大于等于此值后，才能继续向下流转';/
                 EXEC P_ColumnComment TProcess ,limitUserID                  ,'限制操作人员ID';/
                 EXEC P_ColumnComment TProcess ,limitOrgID                   ,'限制操作部门ID';/
                 EXEC P_ColumnComment TProcess ,limitTime                    ,'限制操作时间';/

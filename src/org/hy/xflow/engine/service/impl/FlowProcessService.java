@@ -99,4 +99,21 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
         return this.flowProcessDAO.queryServiceDataIDsByDone(i_User);
     }
     
+    
+    
+    /**
+     * 汇总“汇总值”
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-16
+     * @version     v1.0
+     *
+     * @param i_Process
+     * @return
+     */
+    public FlowProcess querySummary(FlowProcess i_Process)
+    {
+        return this.flowProcessDAO.querySummary(i_Process);
+    }
+    
 }

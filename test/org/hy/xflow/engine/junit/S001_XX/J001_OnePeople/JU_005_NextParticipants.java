@@ -49,7 +49,7 @@ public class JU_005_NextParticipants extends BaseJunit
             
             ActivityRoute v_Route = v_NextRoutes.getRoutes().get(0);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Review ,v_ServiceDataID ,v_Route.getActivityRouteCode() ,v_UserPart);
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Review ,v_ServiceDataID ,null ,v_Route.getActivityRouteCode() ,v_UserPart);
             
             System.out.println("-- 评审后转向单人选型");
         }

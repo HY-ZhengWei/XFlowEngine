@@ -152,6 +152,7 @@
                 ,flagColor          VARCHAR2(16)
                 ,fontColor          VARCHAR2(16)
                 ,infoComment        NVARCHAR2(2000)
+                ,summaryPass        NUMBER(18 ,2)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -181,6 +182,7 @@
                 COMMENT ON COLUMN TActivityInfo.flagColor                 IS '活动节点的标记块颜色';/
                 COMMENT ON COLUMN TActivityInfo.fontColor                 IS '活动节点的文字颜色';/
                 COMMENT ON COLUMN TActivityInfo.infoComment               IS '备注说明';/
+                COMMENT ON COLUMN TActivityInfo.summaryPass               IS '汇总通过值。当大于等于此值后，才能继续向下流转';/
                 COMMENT ON COLUMN TActivityInfo.createrID                 IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityInfo.creater                   IS '创建人员名称';/
                 COMMENT ON COLUMN TActivityInfo.createTime                IS '创建时间';/
@@ -210,6 +212,7 @@
                 ,flagColor          VARCHAR(16)                              COMMENT '活动节点的标记块颜色'
                 ,fontColor          VARCHAR(16)                              COMMENT '活动节点的文字颜色'
                 ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
+                ,summaryPass        DECIMAL(18 ,4)                           COMMENT '汇总通过值。当大于等于此值后，才能继续向下流转'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
@@ -246,6 +249,7 @@
                 ,flagColor          VARCHAR(16)
                 ,fontColor          VARCHAR(16)
                 ,infoComment        NVARCHAR(2000)
+                ,summaryPass        DECIMAL(18 ,4)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            NVARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
@@ -275,6 +279,7 @@
                 EXEC P_ColumnComment TActivityInfo ,flagColor                 ,'活动节点的标记块颜色';/
                 EXEC P_ColumnComment TActivityInfo ,fontColor                 ,'活动节点的文字颜色';/
                 EXEC P_ColumnComment TActivityInfo ,infoComment               ,'备注说明';/
+                EXEC P_ColumnComment TActivityInfo ,summaryPass               ,'汇总通过值。当大于等于此值后，才能继续向下流转';/
                 EXEC P_ColumnComment TActivityInfo ,createrID                 ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityInfo ,creater                   ,'创建人员名称';/
                 EXEC P_ColumnComment TActivityInfo ,createTime                ,'创建时间';/
@@ -749,6 +754,7 @@
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT001' ,'转派'      ,1);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT002' ,'分派'      ,2);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003' ,'汇签'      ,3);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT004' ,'汇签关闭'  ,4);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020' ,'驳回'      ,20);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT021' ,'追回'      ,21);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT022' ,'回退'      ,22);/

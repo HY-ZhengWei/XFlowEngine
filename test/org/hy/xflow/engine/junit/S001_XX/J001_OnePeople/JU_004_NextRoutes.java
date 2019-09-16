@@ -49,7 +49,7 @@ public class JU_004_NextRoutes extends BaseJunit
             v_Participant.setObjectName("选型审批人");
             v_Participant.setObjectNo(1);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,v_Route.getActivityRouteCode() ,v_Participant);
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Saler ,v_ServiceDataID ,null ,v_Route.getActivityRouteCode() ,v_Participant);
             
             System.out.println("-- 申请成功。版本2.0.0转审批选型；版本1.0.0转受理");
         }
@@ -82,7 +82,7 @@ public class JU_004_NextRoutes extends BaseJunit
         {
             ActivityRoute v_Route = v_NextRoutes.getRoutes().get(0);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Approval ,v_ServiceDataID ,v_Route.getActivityRouteCode());
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Approval ,v_ServiceDataID ,null ,v_Route.getActivityRouteCode());
             
             System.out.println("-- 审批成功，转受理");
         }
@@ -115,7 +115,7 @@ public class JU_004_NextRoutes extends BaseJunit
         {
             ActivityRoute v_Route = v_NextRoutes.getRoutes().get(0);
             
-            XFlowEngine.getInstance().toNextByServiceDataID(v_Manager ,v_ServiceDataID ,v_Route.getActivityRouteCode());
+            XFlowEngine.getInstance().toNextByServiceDataID(v_Manager ,v_ServiceDataID ,null ,v_Route.getActivityRouteCode());
             
             System.out.println("-- 受理成功，转评审");
         }

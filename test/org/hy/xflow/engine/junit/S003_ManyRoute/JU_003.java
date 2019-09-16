@@ -2,6 +2,7 @@ package org.hy.xflow.engine.junit.S003_ManyRoute;
 
 import org.hy.xflow.engine.XFlowEngine;
 import org.hy.xflow.engine.bean.ActivityRoute;
+import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseJunit;
@@ -72,7 +73,7 @@ public class JU_003 extends BaseJunit
     
     
     /**
-     * 查询当前活动节点有哪几条路由可走
+     * 查询当前活动节点有哪几条路由可走。即，孩子可以有哪些路可以走？
      * 
      * @author      ZhengWei(HY)
      * @createDate  2019-09-12
@@ -95,7 +96,7 @@ public class JU_003 extends BaseJunit
     
     
     /**
-     * 向下一活动节点流转
+     * 向下一活动节点流转。即，孩子问爸爸、问妈妈（发起分单，多路并行流程）
      * 
      * @author      ZhengWei(HY)
      * @createDate  2019-09-12
@@ -105,7 +106,67 @@ public class JU_003 extends BaseJunit
     @Test
     public void test_003_ToNext()
     {
-        XFlowEngine.getInstance().toNextByServiceDataID(children ,serviceDataID ,new String []{"问爸爸" ,"问妈妈"});
+        XFlowEngine.getInstance().toNextByServiceDataID(children ,serviceDataID ,null ,new String []{"问爸爸" ,"问妈妈"});
     }
-
+    
+    
+    
+    /**
+     * 向下一活动节点流转。即，爸爸回答孩子
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-15
+     * @version     v1.0
+     *
+     */
+    @Test
+    public void test_004_ToNextByFather()
+    {
+        FlowProcess v_Process = new FlowProcess();
+        
+        v_Process.setSummary(50D);
+        
+        XFlowEngine.getInstance().toNextByServiceDataID(father ,serviceDataID ,v_Process ,"爸爸答复");
+    }
+    
+    
+    
+    /**
+     * 向下一活动节点流转。即，妈妈回答孩子
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-16
+     * @version     v1.0
+     *
+     */
+    @Test
+    public void test_004_ToNextByMother()
+    {
+        FlowProcess v_Process = new FlowProcess();
+        
+        v_Process.setSummary(50D);
+        
+        XFlowEngine.getInstance().toNextByServiceDataID(mother ,serviceDataID ,v_Process ,"妈妈答复");
+    }
+    
+    
+    
+    /**
+     * 向下一活动节点流转。即，孩子执行询问结果
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-16
+     * @version     v1.0
+     *
+     */
+    @Test
+    public void test_005_ToNextByExecute()
+    {
+        FlowProcess v_Process = new FlowProcess();
+        
+        v_Process.setSummary(50D);
+        
+        XFlowEngine.getInstance().toNextByServiceDataID(children ,serviceDataID ,null ,"执行");
+    }
+    
 }

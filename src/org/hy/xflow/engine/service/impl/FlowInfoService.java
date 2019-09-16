@@ -7,6 +7,7 @@ import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.common.BaseService;
 import org.hy.xflow.engine.dao.IFlowInfoDAO;
+import org.hy.xflow.engine.enums.RouteTypeEnum;
 import org.hy.xflow.engine.service.IFlowInfoService;
 
 
@@ -112,7 +113,21 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      */
     public boolean toNext(FlowInfo i_Flow ,List<FlowProcess> i_ProcessList ,FlowProcess i_Previous)
     {
-        return this.flowInfoDAO.toNext(i_Flow ,i_ProcessList ,i_Previous);
+        if ( i_ProcessList.size() == 1 )
+        {
+            if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(i_Previous.getOperateTypeID())) )
+            {
+                return this.flowInfoDAO.toNextSummary(i_Flow ,i_ProcessList.get(0) ,i_Previous);
+            }
+            else
+            {
+                return this.flowInfoDAO.toNext(i_Flow ,i_ProcessList.get(0) ,i_Previous);
+            }
+        }
+        else
+        {
+            return this.flowInfoDAO.toNextSplit(i_Flow ,i_ProcessList ,i_Previous);
+        }
     }
     
     

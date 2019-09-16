@@ -31,6 +31,7 @@
 				       ,previousActivityID
 				       ,previousActivityCode
 				       ,previousActivityName
+				       ,previousOperateTypeID
 				       ,nextProcessID
 				       ,nextActivityID
 				       ,nextActivityCode
@@ -40,6 +41,8 @@
 				       ,createOrgID
 				       ,createOrg
 				       ,createTime
+				       ,summary
+				       ,summaryPass
 				       ,limitUserID
 				       ,limitOrgID
 				       ,limitTime
@@ -68,6 +71,7 @@
 				       ,':process.previousActivityID'
 				       ,':process.previousActivityCode'
 				       ,':process.previousActivityName'
+				       ,':process.previousOperateTypeID'
 				       ,':process.nextProcessID'
 				       ,':process.nextActivityID'
 				       ,':process.nextActivityCode'
@@ -77,6 +81,8 @@
 				       ,':process.createOrgID'
 				       ,':process.createOrg'
 				       ,':process.createTime.fullMilli'
+				       ,':process.summary'
+				       ,':process.summaryPass'
 				       ,':process.limitUserID'
 				       ,':process.limitOrgID'
 				       ,':process.limitTime'
@@ -121,6 +127,7 @@
 				       ,previousActivityID
 				       ,previousActivityCode
 				       ,previousActivityName
+				       ,previousOperateTypeID
 				       ,nextProcessID
 				       ,nextActivityID
 				       ,nextActivityCode
@@ -130,6 +137,8 @@
 				       ,createOrgID
 				       ,createOrg
 				       ,createTime
+				       ,summary
+				       ,summaryPass
 				       ,limitUserID
 				       ,limitOrgID
 				       ,limitTime
@@ -158,6 +167,7 @@
 				       ,':previousActivityID'
 				       ,':previousActivityCode'
 				       ,':previousActivityName'
+				       ,':previousOperateTypeID'
 				       ,':nextProcessID'
 				       ,':nextActivityID'
 				       ,':nextActivityCode'
@@ -167,6 +177,8 @@
 				       ,':createOrgID'
 				       ,':createOrg'
 				       ,':createTime.fullMilli'
+				       ,':summary'
+				       ,':summaryPass'
 				       ,':limitUserID'
 				       ,':limitOrgID'
 				       ,':limitTime'
@@ -208,13 +220,105 @@
 				       ,operateType      = ':previous.operateType'         
 				       ,operateUserID    = ':previous.operateUserID'       
 				       ,operateUser      = ':previous.operateUser'         
-				       ,operateOrgID     = ':previous.operateOrgID'        
-				       ,operateOrg       = ':previous.operateOrg'                   
+				       ,operateOrgID     = ':previous.operateOrgID'
+				       ,operateOrg       = ':previous.operateOrg'
+				       ,summary          = ':previous.summary'
+				       ,summaryPass      = ':previous.summaryPass'
 				 WHERE  processID        = ':previous.processID'
 				]]>
 			</content>
 			
 			<comment>更新前一个工作流流转过程</comment>
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_UpdatePrevious_Summary"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				UPDATE  TProcess
+				   SET  nextProcessID    = ':previous.nextProcessID'       
+				       ,nextActivityID   = ':previous.nextActivityID'
+				       ,nextActivityCode = ':previous.nextActivityCode'
+				       ,nextActivityName = ':previous.nextActivityName'    
+				       ,operateTime      = ':previous.operateTime.fullMilli'         
+				       ,operateTimeLen   =  :previous.operateTimeLen       
+				       ,operateTypeID    = ':previous.operateTypeID'       
+				       ,operateType      = ':previous.operateType'         
+				       ,operateUserID    = ':previous.operateUserID'       
+				       ,operateUser      = ':previous.operateUser'         
+				       ,operateOrgID     = ':previous.operateOrgID'        
+				       ,operateOrg       = ':previous.operateOrg'
+				       ,summary          = ':previous.summary'
+				       ,summaryPass      = ':previous.summaryPass'
+				       ,splitProcessID   = ''
+				 WHERE  splitProcessID   = ':previous.splitProcessID'
+				   AND (nextProcessID   IS NULL
+				    OR  nextProcessID    = '')
+				]]>
+			</content>
+			
+			<comment>分单多路后的汇总，汇总节点向下一节点流转时，更新之前所有汇总流转路由</comment>
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_Update_SummaryToClose"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				UPDATE  TProcess
+				   SET  nextProcessID          = 'FLOW-SYSTEM'       
+				       ,nextActivityID         = 'FLOW-SYSTEM'
+				       ,nextActivityCode       = 'FLOW-SYSTEM'
+				       ,nextActivityName       = 'FLOW-SYSTEM'    
+				       ,operateTime            = ':process.operateTime.fullMilli'         
+				       ,operateTimeLen         =  0       
+				       ,operateTypeID          = 'RT004'       
+				       ,operateType            = '汇签关闭'         
+				       ,operateUserID          = 'FLOW-SYSTEM'       
+				       ,operateUser            = 'FLOW-SYSTEM'         
+				       ,operateOrgID           = ''        
+				       ,operateOrg             = ''                   
+				 WHERE  splitProcessID         = ':process.splitProcessID'
+				   AND  previousOperateTypeID != 'RT003'
+				   AND (nextProcessID         IS NULL
+				    OR  nextProcessID          = '')
+				]]>
+			</content>
+			
+			<comment>分单多路后的汇总，在汇总条件满足时，将未执行的其它路由更新系统关闭</comment>
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_Summary"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  SUM(A.summary)      AS summary
+				       ,MAX(A.summaryPass)  AS summaryPass
+				       ,COUNT(1)            AS summaryCount
+				  FROM  TProcess  A
+				 WHERE  splitProcessID  = ':splitProcessID'
+				   AND  operateTypeID   = 'RT003'
+			  <[   AND  A.workID        = ':workID'          ]>
+			  <[   AND  A.serviceDataID = ':serviceDataID'   ]>
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.FlowProcess</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
 		</sql>
 		
 		
@@ -237,6 +341,7 @@
 				       ,A.previousActivityID
 				       ,A.previousActivityCode
 				       ,A.previousActivityName
+				       ,A.previousOperateTypeID
 				       ,A.nextProcessID
 				       ,A.nextActivityID
 				       ,A.nextActivityCode
@@ -246,6 +351,8 @@
 				       ,A.createOrgID
 				       ,A.createOrg
 				       ,A.createTime
+				       ,A.summary
+				       ,A.summaryPass
 				       ,A.limitUserID
 				       ,A.limitOrgID
 				       ,A.limitTime
@@ -263,11 +370,10 @@
 				  FROM  TProcess  A
 			<[   WHERE  A.workID        = ':workID'          ]>
 			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-				 ORDER  BY A.operateTime DESC
-				          ,A.createTime  DESC
+				 ORDER  BY A.createTime  DESC
+				          ,A.operateTime DESC
 				]]>
 			</content>
-			<!-- 先按CreateTime倒排，之后将要改为按processNo倒排的 -->
 			
 			<result>
 				<row>org.hy.xflow.engine.bean.FlowProcess</row>
@@ -298,6 +404,7 @@
 				       ,previousActivityID
 				       ,previousActivityCode
 				       ,previousActivityName
+				       ,previousOperateTypeID
 				       ,nextProcessID
 				       ,nextActivityID
 				       ,nextActivityCode
@@ -307,6 +414,8 @@
 				       ,createOrgID
 				       ,createOrg
 				       ,createTime
+				       ,summary
+				       ,summaryPass
 				       ,limitUserID
 				       ,limitOrgID
 				       ,limitTime
@@ -334,6 +443,7 @@
 				       ,A.previousActivityID
 				       ,A.previousActivityCode
 				       ,A.previousActivityName
+				       ,A.previousOperateTypeID
 				       ,A.nextProcessID
 				       ,A.nextActivityID
 				       ,A.nextActivityCode
@@ -343,6 +453,8 @@
 				       ,A.createOrgID
 				       ,A.createOrg
 				       ,A.createTime
+				       ,A.summary
+				       ,A.summaryPass
 				       ,A.limitUserID
 				       ,A.limitOrgID
 				       ,A.limitTime
