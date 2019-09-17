@@ -600,26 +600,29 @@ public class XFlowEngine
                 
                 if ( !Help.isNull(v_WhereTo) )
                 {
-                    // 判定：当前流转是否是从“汇总路由”过来的
-                    ActivityRoute v_PreviousRoute = v_Template.getActivityRouteTree().getActivityRouteByNext(v_Process.getPreviousActivityCode() ,v_Process.getCurrentActivityCode());
-                    if ( RouteTypeEnum.$ToSum.equals(v_PreviousRoute.getRouteTypeID()) )
+                    if ( !Help.isNull(v_Process.getPreviousActivityCode()) )
                     {
-                        FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Process);
-                        
-                        if ( v_HistorySummary.getSummaryPass().doubleValue() > 0 )
+                        // 判定：当前流转是否是从“汇总路由”过来的
+                        ActivityRoute v_PreviousRoute = v_Template.getActivityRouteTree().getActivityRouteByNext(v_Process.getPreviousActivityCode() ,v_Process.getCurrentActivityCode());
+                        if ( RouteTypeEnum.$ToSum.equals(v_PreviousRoute.getRouteTypeID()) )
                         {
-                            if ( v_HistorySummary.getSummary().doubleValue() >= v_HistorySummary.getSummaryPass().doubleValue() )
+                            FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Process);
+                            
+                            if ( v_HistorySummary.getSummaryPass().doubleValue() > 0 )
                             {
-                                v_HistorySummary.setIsPass(1);
+                                if ( v_HistorySummary.getSummary().doubleValue() >= v_HistorySummary.getSummaryPass().doubleValue() )
+                                {
+                                    v_HistorySummary.setIsPass(1);
+                                }
+                                else
+                                {
+                                    throw new VerifyError("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
+                                }
                             }
                             else
                             {
                                 throw new VerifyError("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
                             }
-                        }
-                        else
-                        {
-                            throw new VerifyError("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
                         }
                     }
                     
@@ -978,18 +981,6 @@ public class XFlowEngine
                 v_Process.setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
             }
             
-            if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Previous.getOperateTypeID())) )
-            {
-                
-            }
-            
-            if ( i_ActivityRouteCodes.size() == 1 )
-            {
-                // 每个分支路由的汇总值，均记录在操作时间、操作类型、操作动作的哪行记录上。
-                v_Previous.setSummary(i_ProcessExtra == null ? 0 : Help.NVL(i_ProcessExtra.getSummary()));
-                v_Previous.setSummaryPass(Help.NVL(v_Route.getNextActivity().getSummaryPass()));
-            }
-            
             v_ProcessList.add(v_Process);
             v_RouteList  .add(v_Route);
         }
@@ -1018,24 +1009,30 @@ public class XFlowEngine
         }
         else
         {
+            // 每个分支路由的汇总值，均记录在操作时间、操作类型、操作动作的那行记录上。
+            v_Previous.setSummary(i_ProcessExtra == null ? 0 : Help.NVL(i_ProcessExtra.getSummary()));
+            v_Previous.setSummaryPass(Help.NVL(v_RouteList.get(0).getNextActivity().getSummaryPass()));
+            
             v_ProcessList.get(0).setSplitProcessID(v_Previous.getSplitProcessID());
             
             if ( !Help.isNull(v_Previous.getSplitProcessID()) )
             {
                 FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Previous);
                 
-                if ( v_Previous.getSummaryPass().doubleValue() > 0 )
+                if ( v_HistorySummary.getSummaryPass().doubleValue() > 0 )
                 {
                     if ( v_HistorySummary.getSummary().doubleValue() + v_Previous.getSummary().doubleValue() >= v_Previous.getSummaryPass().doubleValue() )
                     {
                         // 汇总通过
                         v_Previous.setIsPass(1);
                         
-                        if ( !RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Previous.getOperateTypeID())) )
+                        if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Previous.getPreviousOperateTypeID())) )
                         {
                             // 汇总节点向后继续流转时
                             v_Previous.setSummary(    v_HistorySummary.getSummary());
                             v_Previous.setSummaryPass(v_HistorySummary.getSummaryPass());
+                            
+                            v_ProcessList.get(0).setSplitProcessID("");
                         }
                     }
                 }

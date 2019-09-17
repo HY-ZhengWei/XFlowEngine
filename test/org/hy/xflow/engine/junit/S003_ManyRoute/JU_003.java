@@ -31,7 +31,7 @@ public class JU_003 extends BaseJunit
     
     private User   mother;
     
-    private String serviceDataID = "能玩游戏吗001";
+    private String serviceDataID = "能玩游戏吗003";
     
     
     
@@ -89,7 +89,7 @@ public class JU_003 extends BaseJunit
         int v_Index = 1;
         for (ActivityRoute v_Route : v_NextRoutes.getRoutes())
         {
-            System.out.println("可走的路由：" + (v_Index++) + "：" + v_Route.getActivityRouteCode());
+            System.out.println(children.getUserName() + "可走的路由：" + (v_Index++) + "：" + v_Route.getActivityRouteCode());
         }
     }
     
@@ -107,6 +107,52 @@ public class JU_003 extends BaseJunit
     public void test_003_ToNext()
     {
         XFlowEngine.getInstance().toNextByServiceDataID(children ,serviceDataID ,null ,new String []{"问爸爸" ,"问妈妈"});
+    }
+    
+    
+    
+    /**
+     * 查询当前活动节点有哪几条路由可走。即，爸爸可以有哪些路可以走？
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-17
+     * @version     v1.0
+     */
+    @Test
+    public void test_004_QueryNextRoutes_ToFather()
+    {
+        NextRoutes v_NextRoutes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(father ,serviceDataID);
+        
+        System.out.println("当前所在的活动节点：" + v_NextRoutes.getCurrentActivity().getActivityName());
+        
+        int v_Index = 1;
+        for (ActivityRoute v_Route : v_NextRoutes.getRoutes())
+        {
+            System.out.println(father.getUserName() + "可走的路由：" + (v_Index++) + "：" + v_Route.getActivityRouteCode());
+        }
+    }
+    
+    
+    
+    /**
+     * 查询当前活动节点有哪几条路由可走。即，妈妈可以有哪些路可以走？
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-17
+     * @version     v1.0
+     */
+    @Test
+    public void test_004_QueryNextRoutes_ToMother()
+    {
+        NextRoutes v_NextRoutes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(mother ,serviceDataID);
+        
+        System.out.println("当前所在的活动节点：" + v_NextRoutes.getCurrentActivity().getActivityName());
+        
+        int v_Index = 1;
+        for (ActivityRoute v_Route : v_NextRoutes.getRoutes())
+        {
+            System.out.println(mother.getUserName() + "可走的路由：" + (v_Index++) + "：" + v_Route.getActivityRouteCode());
+        }
     }
     
     
@@ -162,10 +208,6 @@ public class JU_003 extends BaseJunit
     @Test
     public void test_005_ToNextByExecute()
     {
-        FlowProcess v_Process = new FlowProcess();
-        
-        v_Process.setSummary(50D);
-        
         XFlowEngine.getInstance().toNextByServiceDataID(children ,serviceDataID ,null ,"执行");
     }
     

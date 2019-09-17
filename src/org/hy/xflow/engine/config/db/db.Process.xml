@@ -240,24 +240,24 @@
 			<content>
 				<![CDATA[
 				UPDATE  TProcess
-				   SET  nextProcessID    = ':previous.nextProcessID'       
-				       ,nextActivityID   = ':previous.nextActivityID'
-				       ,nextActivityCode = ':previous.nextActivityCode'
-				       ,nextActivityName = ':previous.nextActivityName'    
-				       ,operateTime      = ':previous.operateTime.fullMilli'         
-				       ,operateTimeLen   =  :previous.operateTimeLen       
-				       ,operateTypeID    = ':previous.operateTypeID'       
-				       ,operateType      = ':previous.operateType'         
-				       ,operateUserID    = ':previous.operateUserID'       
-				       ,operateUser      = ':previous.operateUser'         
-				       ,operateOrgID     = ':previous.operateOrgID'        
-				       ,operateOrg       = ':previous.operateOrg'
-				       ,summary          = ':previous.summary'
-				       ,summaryPass      = ':previous.summaryPass'
-				       ,splitProcessID   = ''
-				 WHERE  splitProcessID   = ':previous.splitProcessID'
-				   AND (nextProcessID   IS NULL
-				    OR  nextProcessID    = '')
+				   SET  nextProcessID         = ':previous.nextProcessID'       
+				       ,nextActivityID        = ':previous.nextActivityID'
+				       ,nextActivityCode      = ':previous.nextActivityCode'
+				       ,nextActivityName      = ':previous.nextActivityName'    
+				       ,operateTime           = ':previous.operateTime.fullMilli'         
+				       ,operateTimeLen        =  :previous.operateTimeLen       
+				       ,operateTypeID         = ':previous.operateTypeID'       
+				       ,operateType           = ':previous.operateType'         
+				       ,operateUserID         = ':previous.operateUserID'       
+				       ,operateUser           = ':previous.operateUser'         
+				       ,operateOrgID          = ':previous.operateOrgID'        
+				       ,operateOrg            = ':previous.operateOrg'
+				       ,summary               = ':previous.summary'
+				       ,summaryPass           = ':previous.summaryPass'
+				 WHERE  splitProcessID        = ':previous.splitProcessID'
+				   AND  previousOperateTypeID = 'RT003'
+				   AND (nextProcessID        IS NULL
+				    OR  nextProcessID         = '')
 				]]>
 			</content>
 			
