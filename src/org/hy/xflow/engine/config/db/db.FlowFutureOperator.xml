@@ -68,16 +68,16 @@
 			<content>
 				<![CDATA[
 				DELETE  TFlowFutureOperator
-			     WHERE  workID    = ':process.workID'
-			       AND  processID = ':process.processID'
+			     WHERE  workID    = ':previous.workID'
+			       AND  processID = ':previous.processID'
 				]]>
 			</content>
 			
 			<content if="MYSQL == DSG_XFlow.getDbProductType">
 				<![CDATA[
 				DELETE FROM TFlowFutureOperator
-			     WHERE  workID    = ':process.workID'
-			       AND  processID = ':process.processID'
+			     WHERE  workID    = ':previous.workID'
+			       AND  processID = ':previous.processID'
 				]]>
 			</content>
 			

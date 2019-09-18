@@ -70,8 +70,7 @@
 			<sqlNode>
 				<sql  ref="XSQL_XFlow_TFlowFutureOperator_Del" />
 				<type ref="this.$Type_ExecuteUpdate" />
-				<condition>:previous.SplitProcessID == ''</condition>
-				<comment>正常流转时删除之前的未来操作人</comment>
+				<comment>删除之前的未来操作人</comment>
 			</sqlNode>
 			
 			<sqlNode>

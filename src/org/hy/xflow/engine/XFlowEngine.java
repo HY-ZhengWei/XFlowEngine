@@ -603,21 +603,34 @@ public class XFlowEngine
                     if ( !Help.isNull(v_Process.getPreviousActivityCode()) )
                     {
                         // 判定：当前流转是否是从“汇总路由”过来的
-                        ActivityRoute v_PreviousRoute = v_Template.getActivityRouteTree().getActivityRouteByNext(v_Process.getPreviousActivityCode() ,v_Process.getCurrentActivityCode());
-                        if ( RouteTypeEnum.$ToSum.equals(v_PreviousRoute.getRouteTypeID()) )
+                        if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Process.getPreviousOperateTypeID())) )
                         {
                             FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Process);
+                            String      v_PassType       = v_Activity.getPassType();
+                            boolean     v_IsSummaryPass  = false;
+                            boolean     v_IsCounterPass  = false;
                             
                             if ( v_HistorySummary.getSummaryPass().doubleValue() > 0 )
                             {
                                 if ( v_HistorySummary.getSummary().doubleValue() >= v_HistorySummary.getSummaryPass().doubleValue() )
                                 {
-                                    v_HistorySummary.setIsPass(1);
+                                    v_IsSummaryPass = true;
                                 }
-                                else
+                            }
+                            
+                            if ( v_HistorySummary.getCounterPass().intValue() > 0 )
+                            {
+                                if ( v_HistorySummary.getCounter().intValue() >= v_HistorySummary.getCounterPass().intValue() )
                                 {
-                                    throw new VerifyError("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
+                                    v_IsCounterPass = true;
                                 }
+                            }
+                            
+                            if ( ("AND".equalsIgnoreCase(v_PassType) && (v_IsSummaryPass && v_IsCounterPass))
+                              || ("OR" .equalsIgnoreCase(v_PassType) && (v_IsSummaryPass || v_IsCounterPass)) )
+                            {
+                                // 汇总通过
+                                v_HistorySummary.setIsPass(1);
                             }
                             else
                             {
@@ -1032,8 +1045,8 @@ public class XFlowEngine
                 v_Previous.setSummaryPass(v_SummaryActivity.getSummaryPass());
                 v_Previous.setCounterPass(v_SummaryActivity.getCounterPass());
                 
-                String      v_PassType       = v_SummaryActivity.getPassType();
                 FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Previous);
+                String      v_PassType       = v_SummaryActivity.getPassType();
                 boolean     v_IsSummaryPass  = false;
                 boolean     v_IsCounterPass  = false;
                 
