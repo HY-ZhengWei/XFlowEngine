@@ -3,13 +3,12 @@ package org.hy.xflow.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.ValidationException;
-
 import org.hy.common.Date;
 import org.hy.common.Help;
 import org.hy.common.PartitionMap;
 import org.hy.common.StringHelp;
 import org.hy.common.TablePartition;
+import org.hy.common.TablePartitionLink;
 import org.hy.common.xml.XJava;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
@@ -544,8 +543,7 @@ public class XFlowEngine
      * @param i_User                用户 
      * @param i_WorkID              工作流ID
      * @param i_ProcessExtra        流转的附加信息。非必填
-     * @return
-     * @throws ValidationException 
+     * @return                      是否有可走的路由，要通过 NextRoutes.getRoutes() 来判定
      */
     public NextRoutes queryNextRoutes(User i_User ,String i_WorkID)
     {
@@ -600,7 +598,7 @@ public class XFlowEngine
                 
                 if ( !Help.isNull(v_WhereTo) )
                 {
-                    if ( !Help.isNull(v_Process.getPreviousActivityCode()) )
+                    if ( !Help.isNull(v_Process.getPreviousOperateTypeID()) )
                     {
                         // 判定：当前流转是否是从“汇总路由”过来的
                         if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Process.getPreviousOperateTypeID())) )
@@ -626,15 +624,26 @@ public class XFlowEngine
                                 }
                             }
                             
+                            v_Process.setSummary(    v_HistorySummary.getSummary());
+                            v_Process.setSummaryPass(v_HistorySummary.getSummaryPass());
+                            v_Process.setCounter(    v_HistorySummary.getCounter());
+                            v_Process.setCounterPass(v_HistorySummary.getCounterPass());
+                            
                             if ( ("AND".equalsIgnoreCase(v_PassType) && (v_IsSummaryPass && v_IsCounterPass))
                               || ("OR" .equalsIgnoreCase(v_PassType) && (v_IsSummaryPass || v_IsCounterPass)) )
                             {
                                 // 汇总通过
-                                v_HistorySummary.setIsPass(1);
+                                v_Process.setIsPass(1);
                             }
                             else
                             {
-                                throw new VerifyError("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
+                                // 汇总未通过
+                                v_Process.setIsPass(-1);
+                                return new NextRoutes(v_FlowInfo
+                                                     ,v_Process
+                                                     ,v_Activity
+                                                     ,null
+                                                     ,new ArrayList<ActivityRoute>());
                             }
                         }
                     }
@@ -833,7 +842,20 @@ public class XFlowEngine
         }
         
         NextRoutes v_NextRoutes = this.queryNextRoutes(i_User ,i_WorkID);
-        Template   v_Template   = this.templateService.queryByID(v_NextRoutes.getFlow().getFlowTemplateID());
+        if ( Help.isNull(v_NextRoutes.getRoutes()) )
+        {
+            if ( v_NextRoutes.getCurrentProcess().getIsPass().intValue() == -1 )
+            {
+                // 未满足汇总条件
+                throw new VerifyError("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
+            }
+            else
+            {
+                // 没有可走的路由
+                throw new VerifyError("WorkID[" + i_WorkID + "] is not find route to User[" + i_User.getUserID() + "].");
+            }
+        }
+        Template v_Template = this.templateService.queryByID(v_NextRoutes.getFlow().getFlowTemplateID());
         if ( v_Template == null )
         {
             throw new NullPointerException("Template[" + v_NextRoutes.getFlow().getFlowTemplateID() + "] is not exists. WorkID[" + i_WorkID + "] for User[" + i_User.getUserID() + "]");
@@ -1002,6 +1024,12 @@ public class XFlowEngine
         // 分单时，对分的多个路由信息用逗号分隔的处理
         if ( v_ProcessList.size() > 1 )
         {
+            if ( !Help.isNull(v_Previous.getSplitProcessID()) )
+            {
+                // 已有多路并行的情况，未闭环前，不能再次发新的多路并行路流转。
+                throw new VerifyError("WorkID[" + i_WorkID + "] is have many SplitProcessID[" + v_Previous.getSplitProcessID() + "] to User[" + i_User.getUserID() + "].");
+            }
+            
             v_Previous.setNextProcessID   ("");
             v_Previous.setNextActivityID  ("");
             v_Previous.setNextActivityCode("");
@@ -1359,6 +1387,40 @@ public class XFlowEngine
     public List<FlowInfo> queryActivitys(String i_TemplateID)
     {
         return this.flowInfoService.queryActivitys(i_TemplateID);
+    }
+    
+    
+    
+    /**
+     * 查询历次的汇总情况。首次为最新的流转（即按时间顺序倒排的）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-18
+     * @version     v1.0
+     *
+     * @param i_WorkID  工作流实例ID
+     * @return          Map.key  按分单号分区的
+     */
+    public TablePartitionLink<String ,FlowProcess> querySummarysByWorkID(String i_WorkID)
+    {
+        return this.flowProcessService.querySummarysByWorkID(i_WorkID);
+    }
+    
+    
+    
+    /**
+     * 查询历次的汇总情况。首次为最新的流转（即按时间顺序倒排的）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-18
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return                 Map.key  按分单号分区的
+     */
+    public TablePartitionLink<String ,FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID)
+    {
+        return this.flowProcessService.querySummarysByServiceDataID(i_ServiceDataID);
     }
     
 }

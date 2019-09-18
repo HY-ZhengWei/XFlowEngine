@@ -2,6 +2,7 @@ package org.hy.xflow.engine.service;
 
 import java.util.List;
 
+import org.hy.common.TablePartitionLink;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.User;
 
@@ -90,5 +91,33 @@ public interface IFlowProcessService
      * @return
      */
     public FlowProcess querySummary(FlowProcess i_Process);
+    
+    
+    
+    /**
+     * 查询历次的汇总情况。首次为最新的流转（即按时间顺序倒排的）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-18
+     * @version     v1.0
+     *
+     * @param i_WorkID  工作流实例ID
+     * @return          Map.key  按分单号分区的
+     */
+    public TablePartitionLink<String ,FlowProcess> querySummarysByWorkID(String i_WorkID);
+    
+    
+    
+    /**
+     * 查询历次的汇总情况。首次为最新的流转（即按时间顺序倒排的）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-18
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return                 Map.key  按分单号分区的
+     */
+    public TablePartitionLink<String ,FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID);
     
 }

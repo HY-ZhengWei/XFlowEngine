@@ -321,16 +321,16 @@
 			
 			<content>
 				<![CDATA[
-				SELECT  SUM(A.summary)      AS summary
-				       ,MAX(A.summaryPass)  AS summaryPass
-				       ,SUM(A.counter)      AS counter
-				       ,MAX(A.counterPass)  AS counterPass
-				       ,MAX(A.passType)     AS passType
+				SELECT  SUM(A.summary)         AS summary
+				       ,MAX(A.summaryPass)     AS summaryPass
+				       ,SUM(A.counter)         AS counter
+				       ,MAX(A.counterPass)     AS counterPass
+				       ,MAX(A.passType)        AS passType
 				  FROM  TProcess  A
-				 WHERE  splitProcessID  = ':splitProcessID'
-				   AND  operateTypeID   = 'RT003'
-			  <[   AND  A.workID        = ':workID'          ]>
-			  <[   AND  A.serviceDataID = ':serviceDataID'   ]>
+				 WHERE  A.splitProcessID = ':splitProcessID'
+				   AND  A.operateTypeID  = 'RT003'
+			  <[   AND  A.workID         = ':workID'          ]>
+			  <[   AND  A.serviceDataID  = ':serviceDataID'   ]>
 				]]>
 			</content>
 			
@@ -338,6 +338,146 @@
 				<row>org.hy.xflow.engine.bean.FlowProcess</row>
 				<cfill>setter(colValue)</cfill>
 			</result>
+			
+			<comment>用于流转时，判定是否满足了汇总条件</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_Query_SummaryList"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.processID
+				       ,A.workID
+				       ,A.serviceDataID
+				       ,A.splitProcessID
+				       ,A.processNo
+				       ,A.currentActivityID
+				       ,A.currentActivityCode
+				       ,A.currentActivityName
+				       ,A.previousProcessID
+				       ,A.previousActivityID
+				       ,A.previousActivityCode
+				       ,A.previousActivityName
+				       ,A.previousOperateTypeID
+				       ,A.nextProcessID
+				       ,A.nextActivityID
+				       ,A.nextActivityCode
+				       ,A.nextActivityName
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.summary
+				       ,A.summaryPass
+				       ,A.counter
+				       ,A.counterPass
+				       ,A.passType
+				       ,A.limitUserID
+				       ,A.limitOrgID
+				       ,A.limitTime
+				       ,A.operateTime
+				       ,A.operateTimeLen
+				       ,A.operateTypeID
+				       ,A.operateType
+				       ,A.operateUserID
+				       ,A.operateUser
+				       ,A.operateOrgID
+				       ,A.operateOrg
+				       ,A.operateFiles
+				       ,A.operateDatas
+				       ,A.infoComment
+				  FROM  TProcess  A
+				 WHERE  A.operateTypeID = 'RT003'
+			  <[   AND  A.workID        = ':workID'          ]>
+			  <[   AND  A.serviceDataID = ':serviceDataID'   ]>
+				 ORDER  BY A.createTime  DESC
+				          ,A.operateTime DESC
+				]]>
+			</content>
+			
+			<result>
+				<table>org.hy.common.TablePartitionLink</table>
+				<fill>putRow(row.splitProcessID ,row)</fill>
+				<row>org.hy.xflow.engine.bean.FlowProcess</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+			<comment>用于对外查询，判定历次的汇总情况</comment>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_Process_Query_SummaryList_History"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.processID
+				       ,A.workID
+				       ,A.serviceDataID
+				       ,A.splitProcessID
+				       ,A.processNo
+				       ,A.currentActivityID
+				       ,A.currentActivityCode
+				       ,A.currentActivityName
+				       ,A.previousProcessID
+				       ,A.previousActivityID
+				       ,A.previousActivityCode
+				       ,A.previousActivityName
+				       ,A.previousOperateTypeID
+				       ,A.nextProcessID
+				       ,A.nextActivityID
+				       ,A.nextActivityCode
+				       ,A.nextActivityName
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.summary
+				       ,A.summaryPass
+				       ,A.counter
+				       ,A.counterPass
+				       ,A.passType
+				       ,A.limitUserID
+				       ,A.limitOrgID
+				       ,A.limitTime
+				       ,A.operateTime
+				       ,A.operateTimeLen
+				       ,A.operateTypeID
+				       ,A.operateType
+				       ,A.operateUserID
+				       ,A.operateUser
+				       ,A.operateOrgID
+				       ,A.operateOrg
+				       ,A.operateFiles
+				       ,A.operateDatas
+				       ,A.infoComment
+				  FROM  TProcess_History  A
+				 WHERE  A.operateTypeID = 'RT003'
+			  <[   AND  A.workID        = ':workID'          ]>
+			  <[   AND  A.serviceDataID = ':serviceDataID'   ]>
+				 ORDER  BY A.createTime  DESC
+				          ,A.operateTime DESC
+				]]>
+			</content>
+			
+			<result>
+				<table>org.hy.common.TablePartitionLink</table>
+				<fill>putRow(row.splitProcessID ,row)</fill>
+				<row>org.hy.xflow.engine.bean.FlowProcess</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+			<comment>用于对外查询，判定历次的汇总情况</comment>
 			
 		</sql>
 		

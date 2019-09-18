@@ -3,6 +3,7 @@ package org.hy.xflow.engine.service.impl;
 import java.util.List;
 
 import org.hy.common.Help;
+import org.hy.common.TablePartitionLink;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.User;
@@ -131,6 +132,54 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
     public FlowProcess querySummary(FlowProcess i_Process)
     {
         return this.flowProcessDAO.querySummary(i_Process);
+    }
+    
+    
+    
+    /**
+     * 查询历次的汇总情况。首次为最新的流转（即按时间顺序倒排的）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-18
+     * @version     v1.0
+     *
+     * @param i_WorkID  工作流实例ID
+     * @return          Map.key  按分单号分区的
+     */
+    public TablePartitionLink<String ,FlowProcess> querySummarysByWorkID(String i_WorkID)
+    {
+        TablePartitionLink<String ,FlowProcess> v_Ret = this.flowProcessDAO.querySummarysByWorkID(i_WorkID);
+        
+        if ( Help.isNull(v_Ret) )
+        {
+            v_Ret = this.flowProcessDAO.querySummarysByWorkIDHistory(i_WorkID);
+        }
+        
+        return v_Ret;
+    }
+    
+    
+    
+    /**
+     * 查询历次的汇总情况。首次为最新的流转（即按时间顺序倒排的）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-18
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return                 Map.key  按分单号分区的
+     */
+    public TablePartitionLink<String ,FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID)
+    {
+        TablePartitionLink<String ,FlowProcess> v_Ret = this.flowProcessDAO.querySummarysByServiceDataID(i_ServiceDataID);
+        
+        if ( Help.isNull(v_Ret) )
+        {
+            v_Ret = this.flowProcessDAO.querySummarysByServiceDataIDHistory(i_ServiceDataID);
+        }
+        
+        return v_Ret;
     }
     
 }
