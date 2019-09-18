@@ -1009,31 +1009,65 @@ public class XFlowEngine
         }
         else
         {
-            // 每个分支路由的汇总值，均记录在操作时间、操作类型、操作动作的那行记录上。
-            v_Previous.setSummary(i_ProcessExtra == null ? 0 : Help.NVL(i_ProcessExtra.getSummary()));
-            v_Previous.setSummaryPass(Help.NVL(v_RouteList.get(0).getNextActivity().getSummaryPass()));
-            
             v_ProcessList.get(0).setSplitProcessID(v_Previous.getSplitProcessID());
             
             if ( !Help.isNull(v_Previous.getSplitProcessID()) )
             {
-                FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Previous);
-                
-                if ( v_HistorySummary.getSummaryPass().doubleValue() > 0 )
+                ActivityInfo v_SummaryActivity = null;
+                if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Previous.getPreviousOperateTypeID())) )
                 {
-                    if ( v_HistorySummary.getSummary().doubleValue() + v_Previous.getSummary().doubleValue() >= v_Previous.getSummaryPass().doubleValue() )
+                    // 汇总活动向下流转，在当前节点就有汇总的条件、约束信息
+                    v_SummaryActivity = v_RouteList.get(0).getActivity();
+                }
+                else
+                {
+                    // 汇总路由的流转过程中，找下一活动节点即有汇总的条件、约束信息
+                    v_SummaryActivity = v_RouteList.get(0).getNextActivity();
+                }
+                
+                // 每个分支路由的汇总值，均记录在操作时间、操作类型、操作动作的那行记录上。
+                v_Previous.setSummary(i_ProcessExtra == null ? 0 : Help.NVL(i_ProcessExtra.getSummary()));
+                v_Previous.setCounter(i_ProcessExtra == null ? 1 : Help.NVL(i_ProcessExtra.getCounter()));
+                v_Previous.setCounter(v_Previous.getCounter() <= 0 ? 1 : v_Previous.getCounter());         // 最小为1，因为操作人也是提交人
+                v_Previous.setSummaryPass(v_SummaryActivity.getSummaryPass());
+                v_Previous.setCounterPass(v_SummaryActivity.getCounterPass());
+                
+                String      v_PassType       = v_SummaryActivity.getPassType();
+                FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Previous);
+                boolean     v_IsSummaryPass  = false;
+                boolean     v_IsCounterPass  = false;
+                
+                if ( v_SummaryActivity.getSummaryPass().doubleValue() > 0 )
+                {
+                    if ( v_HistorySummary.getSummary().doubleValue() + v_Previous.getSummary().doubleValue() >= v_SummaryActivity.getSummaryPass().doubleValue() )
                     {
-                        // 汇总通过
-                        v_Previous.setIsPass(1);
+                        v_IsSummaryPass = true;
+                    }
+                }
+                
+                if ( v_SummaryActivity.getCounterPass().intValue() > 0 )
+                {
+                    if ( v_HistorySummary.getCounter().intValue() + v_Previous.getCounter().intValue() >= v_SummaryActivity.getCounterPass().intValue() )
+                    {
+                        v_IsCounterPass = true;
+                    }
+                }
+                
+                if ( ("AND".equalsIgnoreCase(v_PassType) && (v_IsSummaryPass && v_IsCounterPass))
+                  || ("OR" .equalsIgnoreCase(v_PassType) && (v_IsSummaryPass || v_IsCounterPass)) )
+                {
+                    // 汇总通过
+                    v_Previous.setIsPass(1);
+                    
+                    if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Previous.getPreviousOperateTypeID())) )
+                    {
+                        // 汇总节点向后继续流转时
+                        v_Previous.setSummary(    v_HistorySummary.getSummary());
+                        v_Previous.setSummaryPass(v_HistorySummary.getSummaryPass());
+                        v_Previous.setCounter(    v_HistorySummary.getCounter());
+                        v_Previous.setCounterPass(v_HistorySummary.getCounterPass());
                         
-                        if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Previous.getPreviousOperateTypeID())) )
-                        {
-                            // 汇总节点向后继续流转时
-                            v_Previous.setSummary(    v_HistorySummary.getSummary());
-                            v_Previous.setSummaryPass(v_HistorySummary.getSummaryPass());
-                            
-                            v_ProcessList.get(0).setSplitProcessID("");
-                        }
+                        v_ProcessList.get(0).setSplitProcessID("");
                     }
                 }
             }

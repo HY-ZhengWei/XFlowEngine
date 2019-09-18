@@ -43,6 +43,9 @@
 				       ,createTime
 				       ,summary
 				       ,summaryPass
+				       ,counter
+				       ,counterPass
+				       ,passType
 				       ,limitUserID
 				       ,limitOrgID
 				       ,limitTime
@@ -83,6 +86,9 @@
 				       ,':process.createTime.fullMilli'
 				       ,':process.summary'
 				       ,':process.summaryPass'
+				       ,':process.counter'
+				       ,':process.counterPass'
+				       ,':process.passType'
 				       ,':process.limitUserID'
 				       ,':process.limitOrgID'
 				       ,':process.limitTime'
@@ -139,6 +145,9 @@
 				       ,createTime
 				       ,summary
 				       ,summaryPass
+				       ,counter
+				       ,counterPass
+				       ,passType
 				       ,limitUserID
 				       ,limitOrgID
 				       ,limitTime
@@ -179,6 +188,9 @@
 				       ,':createTime.fullMilli'
 				       ,':summary'
 				       ,':summaryPass'
+				       ,':counter'
+				       ,':counterPass'
+				       ,':passType'
 				       ,':limitUserID'
 				       ,':limitOrgID'
 				       ,':limitTime'
@@ -224,6 +236,9 @@
 				       ,operateOrg       = ':previous.operateOrg'
 				       ,summary          = ':previous.summary'
 				       ,summaryPass      = ':previous.summaryPass'
+				       ,counter          = ':previous.counter'
+				       ,counterPass      = ':previous.counterPass'
+				       ,passType         = ':previous.passType'
 				 WHERE  processID        = ':previous.processID'
 				]]>
 			</content>
@@ -254,6 +269,9 @@
 				       ,operateOrg            = ':previous.operateOrg'
 				       ,summary               = ':previous.summary'
 				       ,summaryPass           = ':previous.summaryPass'
+				       ,counter               = ':previous.counter'
+				       ,counterPass           = ':previous.counterPass'
+				       ,passType              = ':previous.passType'
 				 WHERE  splitProcessID        = ':previous.splitProcessID'
 				   AND  previousOperateTypeID = 'RT003'
 				   AND (nextProcessID        IS NULL
@@ -283,8 +301,8 @@
 				       ,operateType            = '汇签关闭'         
 				       ,operateUserID          = 'FLOW-SYSTEM'       
 				       ,operateUser            = 'FLOW-SYSTEM'         
-				       ,operateOrgID           = ''        
-				       ,operateOrg             = ''                   
+				       ,operateOrgID           = ''
+				       ,operateOrg             = ''
 				 WHERE  splitProcessID         = ':process.splitProcessID'
 				   AND  previousOperateTypeID != 'RT003'
 				   AND (nextProcessID         IS NULL
@@ -305,7 +323,9 @@
 				<![CDATA[
 				SELECT  SUM(A.summary)      AS summary
 				       ,MAX(A.summaryPass)  AS summaryPass
-				       ,COUNT(1)            AS summaryCount
+				       ,SUM(A.counter)      AS counter
+				       ,MAX(A.counterPass)  AS counterPass
+				       ,MAX(A.passType)     AS passType
 				  FROM  TProcess  A
 				 WHERE  splitProcessID  = ':splitProcessID'
 				   AND  operateTypeID   = 'RT003'
@@ -353,6 +373,9 @@
 				       ,A.createTime
 				       ,A.summary
 				       ,A.summaryPass
+				       ,A.counter
+				       ,A.counterPass
+				       ,A.passType
 				       ,A.limitUserID
 				       ,A.limitOrgID
 				       ,A.limitTime
@@ -368,6 +391,70 @@
 				       ,A.operateDatas
 				       ,A.infoComment
 				  FROM  TProcess  A
+			<[   WHERE  A.workID        = ':workID'          ]>
+			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+				 ORDER  BY A.createTime  DESC
+				          ,A.operateTime DESC
+				]]>
+			</content>
+			
+			<result>
+				<row>org.hy.xflow.engine.bean.FlowProcess</row>
+				<cfill>setter(colValue)</cfill>
+			</result>
+			
+		</sql>
+		
+		
+		
+		<sql id="XSQL_XFlow_ProcessHistory_QueryByWorkID_ServiceDataID"> 
+		
+			<dataSourceGroup ref="DSG_XFlow" />
+			
+			<content>
+				<![CDATA[
+				SELECT  A.processID
+				       ,A.workID
+				       ,A.serviceDataID
+				       ,A.splitProcessID
+				       ,A.processNo
+				       ,A.currentActivityID
+				       ,A.currentActivityCode
+				       ,A.currentActivityName
+				       ,A.previousProcessID
+				       ,A.previousActivityID
+				       ,A.previousActivityCode
+				       ,A.previousActivityName
+				       ,A.previousOperateTypeID
+				       ,A.nextProcessID
+				       ,A.nextActivityID
+				       ,A.nextActivityCode
+				       ,A.nextActivityName
+				       ,A.createrID
+				       ,A.creater
+				       ,A.createOrgID
+				       ,A.createOrg
+				       ,A.createTime
+				       ,A.summary
+				       ,A.summaryPass
+				       ,A.counter
+				       ,A.counterPass
+				       ,A.passType
+				       ,A.limitUserID
+				       ,A.limitOrgID
+				       ,A.limitTime
+				       ,A.operateTime
+				       ,A.operateTimeLen
+				       ,A.operateTypeID
+				       ,A.operateType
+				       ,A.operateUserID
+				       ,A.operateUser
+				       ,A.operateOrgID
+				       ,A.operateOrg
+				       ,A.operateFiles
+				       ,A.operateDatas
+				       ,A.infoComment
+				  FROM  TProcess_History  A
 			<[   WHERE  A.workID        = ':workID'          ]>
 			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
 				 ORDER  BY A.createTime  DESC
@@ -416,6 +503,9 @@
 				       ,createTime
 				       ,summary
 				       ,summaryPass
+				       ,counter
+				       ,counterPass
+				       ,passType
 				       ,limitUserID
 				       ,limitOrgID
 				       ,limitTime
@@ -455,6 +545,9 @@
 				       ,A.createTime
 				       ,A.summary
 				       ,A.summaryPass
+				       ,A.counter
+				       ,A.counterPass
+				       ,A.passType
 				       ,A.limitUserID
 				       ,A.limitOrgID
 				       ,A.limitTime

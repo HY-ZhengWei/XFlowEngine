@@ -153,6 +153,8 @@
                 ,fontColor          VARCHAR2(16)
                 ,infoComment        NVARCHAR2(2000)
                 ,summaryPass        NUMBER(18 ,2)
+                ,counterPass        NUMBER(10)
+                ,passType           VARCHAR2(3)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -183,6 +185,8 @@
                 COMMENT ON COLUMN TActivityInfo.fontColor                 IS '活动节点的文字颜色';/
                 COMMENT ON COLUMN TActivityInfo.infoComment               IS '备注说明';/
                 COMMENT ON COLUMN TActivityInfo.summaryPass               IS '汇总通过值。当大于等于此值后，才能继续向下流转';/
+                COMMENT ON COLUMN TActivityInfo.counterPass               IS '汇总人数的限制。当大于等于此值后，才能继续向下流转';/
+                COMMENT ON COLUMN TActivityInfo.passType                  IS '汇总类型。指summaryPass和counterPass的关系是与，还是或';/
                 COMMENT ON COLUMN TActivityInfo.createrID                 IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityInfo.creater                   IS '创建人员名称';/
                 COMMENT ON COLUMN TActivityInfo.createTime                IS '创建时间';/
@@ -213,6 +217,8 @@
                 ,fontColor          VARCHAR(16)                              COMMENT '活动节点的文字颜色'
                 ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
                 ,summaryPass        DECIMAL(18 ,4)                           COMMENT '汇总通过值。当大于等于此值后，才能继续向下流转'
+                ,counterPass        INT(10)                                  COMMENT '汇总人数的限制。当大于等于此值后，才能继续向下流转'
+                ,passType           VARCHAR(3)                               COMMENT '汇总类型。指summaryPass和counterPass的关系是与，还是或'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
@@ -250,6 +256,8 @@
                 ,fontColor          VARCHAR(16)
                 ,infoComment        NVARCHAR(2000)
                 ,summaryPass        DECIMAL(18 ,4)
+                ,counterPass        INT
+                ,passType           VARCHAR(3)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            NVARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
@@ -280,6 +288,8 @@
                 EXEC P_ColumnComment TActivityInfo ,fontColor                 ,'活动节点的文字颜色';/
                 EXEC P_ColumnComment TActivityInfo ,infoComment               ,'备注说明';/
                 EXEC P_ColumnComment TActivityInfo ,summaryPass               ,'汇总通过值。当大于等于此值后，才能继续向下流转';/
+                EXEC P_ColumnComment TActivityInfo ,counterPass               ,'汇总人数的限制。当大于等于此值后，才能继续向下流转';/
+                EXEC P_ColumnComment TActivityInfo ,passType                  ,'汇总类型。指summaryPass和counterPass的关系是与，还是或';/
                 EXEC P_ColumnComment TActivityInfo ,createrID                 ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityInfo ,creater                   ,'创建人员名称';/
                 EXEC P_ColumnComment TActivityInfo ,createTime                ,'创建时间';/

@@ -37,6 +37,8 @@
 				       ,A.fontColor
 				       ,A.infoComment
 				       ,A.summaryPass
+				       ,A.counterPass
+				       ,A.passType
 				       ,A.createrID
 				       ,A.creater
 				       ,A.createTime

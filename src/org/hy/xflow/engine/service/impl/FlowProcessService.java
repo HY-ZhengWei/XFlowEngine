@@ -2,6 +2,7 @@ package org.hy.xflow.engine.service.impl;
 
 import java.util.List;
 
+import org.hy.common.Help;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.User;
@@ -37,13 +38,21 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @author      ZhengWei(HY)
      * @createDate  2018-04-27
      * @version     v1.0
+     *              v2.0  2019-09-12  添加：历史单的查询
      *
      * @param i_WorkID  工作流实例ID
      * @return
      */
     public List<FlowProcess> queryByWorkID(String i_WorkID)
     {
-        return this.flowProcessDAO.queryByWorkID(i_WorkID);
+        List<FlowProcess> v_Ret = this.flowProcessDAO.queryByWorkID(i_WorkID);
+        
+        if ( Help.isNull(v_Ret) )
+        {
+            v_Ret = this.flowProcessDAO.queryHistoryByWorkID(i_WorkID);
+        }
+        
+        return v_Ret;
     }
     
     
@@ -56,13 +65,21 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @author      ZhengWei(HY)
      * @createDate  2018-04-27
      * @version     v1.0
+     *              v2.0  2019-09-12  添加：历史单的查询
      *
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
      * @return
      */
     public List<FlowProcess> queryByServiceDataID(String i_ServiceDataID)
     {
-        return this.flowProcessDAO.queryByServiceDataID(i_ServiceDataID);
+        List<FlowProcess> v_Ret = this.flowProcessDAO.queryByServiceDataID(i_ServiceDataID);
+        
+        if ( Help.isNull(v_Ret) )
+        {
+            v_Ret = this.flowProcessDAO.queryHistoryByServiceDataID(i_ServiceDataID);
+        }
+        
+        return v_Ret;
     }
     
     

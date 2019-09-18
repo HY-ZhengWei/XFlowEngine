@@ -31,7 +31,7 @@ public class JU_003 extends BaseJunit
     
     private User   mother;
     
-    private String serviceDataID = "能玩游戏吗003";
+    private String serviceDataID = "能玩游戏吗005";
     
     
     
@@ -209,6 +209,22 @@ public class JU_003 extends BaseJunit
     public void test_005_ToNextByExecute()
     {
         XFlowEngine.getInstance().toNextByServiceDataID(children ,serviceDataID ,null ,"执行");
+    }
+    
+    
+    
+    /**
+     * 完成流转
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-09-17
+     * @version     v1.0
+     *
+     */
+    @Test
+    public void test_006_ToFinisth()
+    {
+        XFlowEngine.getInstance().toNextByServiceDataID(children ,serviceDataID ,null ,"完成");
     }
     
 }

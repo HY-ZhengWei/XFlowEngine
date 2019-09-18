@@ -174,6 +174,9 @@
                 ,createTime             DATE                             NOT NULL
                 ,summary                NUMBER(18 ,4)
                 ,summaryPass            NUMBER(18 ,4)
+                ,counter                NUMBER(10)
+                ,counterPass            NUMBER(10)
+                ,passType               VARCHAR2(3)
                 ,limitUserID            VARCHAR2(64)
                 ,limitOrgID             VARCHAR2(64)
                 ,limitTime              DATE
@@ -217,6 +220,9 @@
                 COMMENT ON COLUMN TProcess.createTime                    IS '创建时间';/
                 COMMENT ON COLUMN TProcess.summary                       IS '汇总值';/
                 COMMENT ON COLUMN TProcess.summaryPass                   IS '汇总通过值。当大于等于此值后，才能继续向下流转';/
+                COMMENT ON COLUMN TProcess.counter                       IS '提交汇的人数';/
+                COMMENT ON COLUMN TProcess.counterPass                   IS '汇总人数的限制。当大于等于此值后，才能继续向下流转';/
+                COMMENT ON COLUMN TProcess.passType                      IS '汇总类型。指summaryPass和counterPass的关系是与，还是或';/
                 COMMENT ON COLUMN TProcess.limitUserID                   IS '限制操作人员ID';/
                 COMMENT ON COLUMN TProcess.limitOrgID                    IS '限制操作部门ID';/
                 COMMENT ON COLUMN TProcess.limitTime                     IS '限制操作时间';/
@@ -262,6 +268,9 @@
                 ,createTime             DATETIME(3)                     NOT NULL COMMENT '创建时间'
                 ,summary                DECIMAL(18 ,4)                           COMMENT '汇总值'
                 ,summaryPass            DECIMAL(18 ,4)                           COMMENT '汇总通过值。当大于等于此值后，才能继续向下流转'
+                ,counter                INT(10)                                  COMMENT '提交汇的人数'
+                ,counterPass            INT(10)                                  COMMENT '汇总人数的限制。当大于等于此值后，才能继续向下流转'
+                ,passType               VARCHAR(3)                               COMMENT '汇总类型。指summaryPass和counterPass的关系是与，还是或'
                 ,limitUserID            VARCHAR(64)                              COMMENT '限制操作人员ID'
                 ,limitOrgID             VARCHAR(64)                              COMMENT '限制操作部门ID'
                 ,limitTime              DATETIME                                 COMMENT '限制操作时间'
@@ -312,6 +321,9 @@
                 ,createTime              DATETIME                         NOT NULL
                 ,summary                 DECIMAL(18 ,4)
                 ,summaryPass             DECIMAL(18 ,4)
+                ,counter                 INT
+                ,counterPass             INT
+                ,passType                VARCHAR(3)
                 ,limitUserID             VARCHAR(64)
                 ,limitOrgID              VARCHAR(64)
                 ,limitTime               DATETIME
@@ -355,6 +367,9 @@
                 EXEC P_ColumnComment TProcess ,createTime                   ,'创建时间';/
                 EXEC P_ColumnComment TProcess ,summary                      ,'汇总值';/
                 EXEC P_ColumnComment TProcess ,summaryPass                  ,'汇总通过值。当大于等于此值后，才能继续向下流转';/
+                EXEC P_ColumnComment TProcess ,counter                      ,'提交汇的人数';/
+                EXEC P_ColumnComment TProcess ,counterPass                  ,'汇总人数的限制。当大于等于此值后，才能继续向下流转';/
+                EXEC P_ColumnComment TProcess ,passType                     ,'汇总类型。指summaryPass和counterPass的关系是与，还是或';/
                 EXEC P_ColumnComment TProcess ,limitUserID                  ,'限制操作人员ID';/
                 EXEC P_ColumnComment TProcess ,limitOrgID                   ,'限制操作部门ID';/
                 EXEC P_ColumnComment TProcess ,limitTime                    ,'限制操作时间';/
