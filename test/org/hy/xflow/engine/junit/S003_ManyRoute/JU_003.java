@@ -29,9 +29,11 @@ public class JU_003 extends BaseJunit
     
     private User   father;
     
+    private User   father_Else;
+    
     private User   mother;
     
-    private String serviceDataID = "能玩游戏吗011";
+    private String serviceDataID = "能玩游戏吗013";
     
     
     
@@ -53,6 +55,11 @@ public class JU_003 extends BaseJunit
         mother.setUserID("Mother-01");
         mother.setUserName("小明的妈妈");
         mother.addRole("Mother-Role" ,"妈妈的角色");
+        
+        father_Else = new User();
+        father_Else.setUserID("father_Else-02");
+        father_Else.setUserName("其它小朋友的爸爸");
+        father_Else.addRole("Father-Role" ,"爸爸的角色");
     }
     
     
@@ -121,7 +128,7 @@ public class JU_003 extends BaseJunit
     @Test
     public void test_004_QueryNextRoutes_ToFather()
     {
-        NextRoutes v_NextRoutes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(father ,serviceDataID);
+        NextRoutes v_NextRoutes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(father_Else ,serviceDataID);
         
         System.out.println("当前所在的活动节点：" + v_NextRoutes.getCurrentActivity().getActivityName());
         
@@ -173,7 +180,7 @@ public class JU_003 extends BaseJunit
         v_Process.setInfoComment("要学完英语才能玩");
         v_Process.setOperateFiles("这里是英语资料");
         v_Process.setOperateDatas("学的快，还有奖励");
-        v_Process.setSummary(50D);
+        v_Process.setSummary(100D);
         
         XFlowEngine.getInstance().toNextByServiceDataID(father ,serviceDataID ,v_Process ,"爸爸答复");
     }
