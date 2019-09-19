@@ -2,7 +2,6 @@ package org.hy.xflow.engine.service;
 
 import java.util.List;
 
-import org.hy.common.TablePartitionLink;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.User;
 
@@ -102,9 +101,9 @@ public interface IFlowProcessService
      * @version     v1.0
      *
      * @param i_WorkID  工作流实例ID
-     * @return          Map.key  按分单号分区的
+     * @return
      */
-    public TablePartitionLink<String ,FlowProcess> querySummarysByWorkID(String i_WorkID);
+    public List<FlowProcess> querySummarysByWorkID(String i_WorkID);
     
     
     
@@ -116,8 +115,8 @@ public interface IFlowProcessService
      * @version     v1.0
      *
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
-     * @return                 Map.key  按分单号分区的
+     * @return 
      */
-    public TablePartitionLink<String ,FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID);
+    public List<FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID);
     
 }

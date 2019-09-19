@@ -234,6 +234,9 @@
 				       ,operateUser      = ':previous.operateUser'         
 				       ,operateOrgID     = ':previous.operateOrgID'
 				       ,operateOrg       = ':previous.operateOrg'
+				       ,operateFiles     = ':previous.operateFiles'
+				       ,operateDatas     = ':previous.operateDatas'
+				       ,infoComment      = ':previous.infoComment'
 				       ,summary          = ':previous.summary'
 				       ,summaryPass      = ':previous.summaryPass'
 				       ,counter          = ':previous.counter'
@@ -267,6 +270,9 @@
 				       ,operateUser           = ':previous.operateUser'         
 				       ,operateOrgID          = ':previous.operateOrgID'        
 				       ,operateOrg            = ':previous.operateOrg'
+				       ,operateFiles          = ':previous.operateFiles'
+				       ,operateDatas          = ':previous.operateDatas'
+				       ,infoComment           = ':previous.infoComment'
 				       ,summary               = ':previous.summary'
 				       ,summaryPass           = ':previous.summaryPass'
 				       ,counter               = ':previous.counter'
@@ -402,8 +408,6 @@
 			</content>
 			
 			<result>
-				<table>org.hy.common.TablePartitionLink</table>
-				<fill>putRow(row.splitProcessID ,row)</fill>
 				<row>org.hy.xflow.engine.bean.FlowProcess</row>
 				<cfill>setter(colValue)</cfill>
 			</result>
@@ -471,8 +475,6 @@
 			</content>
 			
 			<result>
-				<table>org.hy.common.TablePartitionLink</table>
-				<fill>putRow(row.splitProcessID ,row)</fill>
 				<row>org.hy.xflow.engine.bean.FlowProcess</row>
 				<cfill>setter(colValue)</cfill>
 			</result>

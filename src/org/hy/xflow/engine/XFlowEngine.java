@@ -8,7 +8,6 @@ import org.hy.common.Help;
 import org.hy.common.PartitionMap;
 import org.hy.common.StringHelp;
 import org.hy.common.TablePartition;
-import org.hy.common.TablePartitionLink;
 import org.hy.common.xml.XJava;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
@@ -844,7 +843,7 @@ public class XFlowEngine
         NextRoutes v_NextRoutes = this.queryNextRoutes(i_User ,i_WorkID);
         if ( Help.isNull(v_NextRoutes.getRoutes()) )
         {
-            if ( v_NextRoutes.getCurrentProcess().getIsPass().intValue() == -1 )
+            if ( v_NextRoutes.getCurrentProcess().getIsPass() != null && v_NextRoutes.getCurrentProcess().getIsPass().intValue() == -1 )
             {
                 // 未满足汇总条件
                 throw new VerifyError("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
@@ -1009,15 +1008,15 @@ public class XFlowEngine
                 v_Process.setFutureParticipants(v_Process.getParticipants());
             }
             
-            if ( i_ProcessExtra != null )
-            {
-                v_Process.setOperateFiles(Help.NVL(i_ProcessExtra.getOperateFiles()));
-                v_Process.setOperateDatas(Help.NVL(i_ProcessExtra.getOperateDatas()));
-                v_Process.setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
-            }
-            
             v_ProcessList.add(v_Process);
             v_RouteList  .add(v_Route);
+        }
+        
+        if ( i_ProcessExtra != null )
+        {
+            v_Previous.setOperateFiles(Help.NVL(i_ProcessExtra.getOperateFiles()));
+            v_Previous.setOperateDatas(Help.NVL(i_ProcessExtra.getOperateDatas()));
+            v_Previous.setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
         }
         
         
@@ -1399,9 +1398,9 @@ public class XFlowEngine
      * @version     v1.0
      *
      * @param i_WorkID  工作流实例ID
-     * @return          Map.key  按分单号分区的
+     * @return          
      */
-    public TablePartitionLink<String ,FlowProcess> querySummarysByWorkID(String i_WorkID)
+    public List<FlowProcess> querySummarysByWorkID(String i_WorkID)
     {
         return this.flowProcessService.querySummarysByWorkID(i_WorkID);
     }
@@ -1416,9 +1415,9 @@ public class XFlowEngine
      * @version     v1.0
      *
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
-     * @return                 Map.key  按分单号分区的
+     * @return                
      */
-    public TablePartitionLink<String ,FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID)
+    public List<FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID)
     {
         return this.flowProcessService.querySummarysByServiceDataID(i_ServiceDataID);
     }

@@ -31,7 +31,7 @@ public class JU_003 extends BaseJunit
     
     private User   mother;
     
-    private String serviceDataID = "能玩游戏吗009";
+    private String serviceDataID = "能玩游戏吗011";
     
     
     
@@ -170,6 +170,9 @@ public class JU_003 extends BaseJunit
     {
         FlowProcess v_Process = new FlowProcess();
         
+        v_Process.setInfoComment("要学完英语才能玩");
+        v_Process.setOperateFiles("这里是英语资料");
+        v_Process.setOperateDatas("学的快，还有奖励");
         v_Process.setSummary(50D);
         
         XFlowEngine.getInstance().toNextByServiceDataID(father ,serviceDataID ,v_Process ,"爸爸答复");
@@ -190,6 +193,7 @@ public class JU_003 extends BaseJunit
     {
         FlowProcess v_Process = new FlowProcess();
         
+        v_Process.setInfoComment("要做完作业才能玩");
         v_Process.setSummary(50D);
         
         XFlowEngine.getInstance().toNextByServiceDataID(mother ,serviceDataID ,v_Process ,"妈妈答复");
