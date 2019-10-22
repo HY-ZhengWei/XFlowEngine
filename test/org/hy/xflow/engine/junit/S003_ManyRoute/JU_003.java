@@ -33,7 +33,7 @@ public class JU_003 extends BaseJunit
     
     private User   mother;
     
-    private String serviceDataID = "能玩游戏吗015";
+    private String serviceDataID = "能玩游戏吗017";
     
     
     
@@ -180,7 +180,7 @@ public class JU_003 extends BaseJunit
         v_Process.setInfoComment("要学完英语才能玩");
         v_Process.setOperateFiles("这里是英语资料");
         v_Process.setOperateDatas("学的快，还有奖励");
-        v_Process.setSummary(50D);
+        v_Process.setSummary(100D);
         
         XFlowEngine.getInstance().toNextByServiceDataID(father ,serviceDataID ,v_Process ,"爸爸答复");
     }

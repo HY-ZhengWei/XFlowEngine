@@ -1128,15 +1128,18 @@ public class XFlowEngine
         
         if ( v_Ret )
         {
-            for (ActivityRoute v_Route : v_RouteList)
+            if ( Help.isNull(v_Previous.getSplitProcessID()) || (v_Previous.getIsPass() != null && 1 == v_Previous.getIsPass().intValue()) )
             {
-                if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
-                  || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
+                for (ActivityRoute v_Route : v_RouteList)
                 {
-                    this.flowInfoService.toHistory(i_WorkID);
-                    this.futureOperatorService.delCacheToHistory(v_ProcessList.get(0));
-                    
-                    return v_ProcessList;
+                    if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
+                      || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
+                    {
+                        this.flowInfoService.toHistory(i_WorkID);
+                        this.futureOperatorService.delCacheToHistory(v_ProcessList.get(0));
+                        
+                        return v_ProcessList;
+                    }
                 }
             }
             
