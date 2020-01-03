@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="lib/jtds-1.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/XFlowEngineClient"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.xjava"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.net"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

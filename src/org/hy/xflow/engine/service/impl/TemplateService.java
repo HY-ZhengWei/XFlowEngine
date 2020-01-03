@@ -5,8 +5,13 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.hy.common.Date;
 import org.hy.common.Help;
 import org.hy.common.PartitionMap;
+import org.hy.common.net.CommunicationListener;
+import org.hy.common.net.data.CommunicationRequest;
+import org.hy.common.net.data.CommunicationResponse;
+import org.hy.common.xml.XJava;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
@@ -31,9 +36,10 @@ import org.hy.xflow.engine.service.ITemplateService;
  * @author      ZhengWei(HY)
  * @createDate  2018-04-19
  * @version     v1.0
+ *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
  */
 @Xjava
-public class TemplateService extends BaseService implements ITemplateService
+public class TemplateService extends BaseService implements ITemplateService ,CommunicationListener
 {
     
     /** 已解释合成的模板实例的高速缓存。Map.key值是TemplateID */
@@ -64,11 +70,18 @@ public class TemplateService extends BaseService implements ITemplateService
      * @author      ZhengWei(HY)
      * @createDate  2018-04-25
      * @version     v1.0
-     *
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
      */
     public static void clearCache()
     {
         $CacheTemplates.clear();
+        
+        TemplateService      v_This        = (TemplateService)XJava.getObject("TemplateService");
+        CommunicationRequest v_RequestData = new CommunicationRequest();
+        v_RequestData.setEventType(    v_This.getEventType());
+        v_RequestData.setDataOperation("clearCache");
+        v_RequestData.setDataXID(      Date.getNowTime().getFullMilli());
+        v_This.clusterSyncFlowCache(v_RequestData);
     }
     
     
@@ -106,11 +119,37 @@ public class TemplateService extends BaseService implements ITemplateService
      * @author      ZhengWei(HY)
      * @createDate  2018-04-19
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
      *
      * @param i_TemplateID
      * @return
      */
-    public synchronized Template queryByID(String i_TemplateID)
+    public Template queryByID(String i_TemplateID)
+    {
+        Template v_Template = queryByIDByTrue(i_TemplateID);
+        
+        CommunicationRequest v_RequestData = new CommunicationRequest();
+        v_RequestData.setEventType(    this.getEventType());
+        v_RequestData.setDataOperation("queryByID");
+        v_RequestData.setDataXID(      i_TemplateID);
+        this.clusterSyncFlowCache(v_RequestData);
+        
+        return v_Template;
+    }
+    
+    
+    
+    /**
+     * 按模板ID查询模板信息。内部组合生成关系数据网。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-19
+     * @version     v1.0
+     *
+     * @param i_TemplateID
+     * @return
+     */
+    private synchronized Template queryByIDByTrue(String i_TemplateID)
     {
         Template v_Template = $CacheTemplates.get(i_TemplateID);
         if ( v_Template != null )
@@ -199,6 +238,7 @@ public class TemplateService extends BaseService implements ITemplateService
      * @author      ZhengWei(HY)
      * @createDate  2018-11-17
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
      *
      * @param i_TemplateID
      * @return
@@ -208,8 +248,15 @@ public class TemplateService extends BaseService implements ITemplateService
         try
         {
             $CacheTemplates.remove(i_TemplateID);
-            Template v_Template = this.queryByID(i_TemplateID);
             
+            CommunicationRequest v_RequestData = new CommunicationRequest();
+            v_RequestData.setEventType(    this.getEventType());
+            v_RequestData.setDataOperation("refreshCache");
+            v_RequestData.setDataXID(      i_TemplateID);
+            this.clusterSyncFlowCache(v_RequestData);
+            
+            
+            Template v_Template = this.queryByID(i_TemplateID);
             if ( v_Template != null )
             {
                 return true;
@@ -252,6 +299,62 @@ public class TemplateService extends BaseService implements ITemplateService
         this.refreshCache(i_TemplateID);
         
         return true;
+    }
+    
+    
+    
+    /**
+     *  数据通讯的事件类型。即通知哪一个事件监听者来处理数据通讯（对应 ServerSocket.listeners 的分区标识）
+     *  
+     *  事件类型区分大小写
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2017-01-16
+     * @version     v1.0
+     *
+     * @return
+     */
+    public String getEventType()
+    {
+        return "CL_Template";
+    }
+    
+    
+    
+    /**
+     * 数据通讯事件的执行动作
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2020-01-02
+     * @version     v1.0
+     *
+     * @param i_RequestData
+     * @return
+     */
+    public CommunicationResponse communication(CommunicationRequest i_RequestData)
+    {
+        CommunicationResponse v_ResponseData = new CommunicationResponse();
+        
+        if ( Help.isNull(i_RequestData.getDataXID()) )
+        {
+            v_ResponseData.setResult(1);
+            return v_ResponseData;
+        }
+        
+        if ( "clearCache".equals(i_RequestData.getDataOperation()) )
+        {
+            $CacheTemplates.clear();
+        }
+        else if ( "refreshCache".equals(i_RequestData.getDataOperation()) )
+        {
+            $CacheTemplates.remove(i_RequestData.getDataXID());
+        }
+        else if ( "queryByID".equals(i_RequestData.getDataOperation()) )
+        {
+            this.queryByIDByTrue(i_RequestData.getDataXID());
+        }
+        
+        return v_ResponseData;
     }
     
 }

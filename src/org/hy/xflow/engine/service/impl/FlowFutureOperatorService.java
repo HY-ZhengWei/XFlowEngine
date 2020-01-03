@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.hy.common.Help;
 import org.hy.common.PartitionMap;
+import org.hy.common.net.CommunicationListener;
+import org.hy.common.net.data.CommunicationRequest;
+import org.hy.common.net.data.CommunicationResponse;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.FutureOperator;
@@ -29,9 +32,10 @@ import org.hy.xflow.engine.service.IFlowFutureOperatorService;
  * @version     v1.0
  *              v2.0  2019-09-12  1. 优化：从业务ID找工作流实例ID
  *                                2. 添加：支持多路并行路由的流程
+ *              v3.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
  */
 @Xjava
-public class FlowFutureOperatorService extends BaseService implements IFlowFutureOperatorService
+public class FlowFutureOperatorService extends BaseService implements IFlowFutureOperatorService ,CommunicationListener
 {
     
     /** 
@@ -165,7 +169,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @version     v1.0
      *
      */
-    public void initCaches()
+    public synchronized void initCaches()
     {
         if ( $FutureOperatorsByWorkID == null )
         {
@@ -200,10 +204,34 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
      *
      * @param i_Process
      */
-    public synchronized void addCache(FlowProcess i_Process)
+    public void addCache(FlowProcess i_Process)
+    {
+        addCacheByTrue(i_Process);
+        
+        CommunicationRequest v_RequestData = new CommunicationRequest();
+        v_RequestData.setEventType(    this.getEventType());
+        v_RequestData.setDataOperation("addCache");
+        v_RequestData.setDataXID(      i_Process.getWorkID());
+        v_RequestData.setData(         i_Process);
+        this.clusterSyncFlowCache(v_RequestData);
+    }
+    
+    
+    
+    /**
+     * 向缓存中添加未来操作人信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-15
+     * @version     v1.0
+     *
+     * @param i_Process
+     */
+    private synchronized void addCacheByTrue(FlowProcess i_Process)
     {
         if ( Help.isNull(i_Process.getServiceDataID()) )
         {
@@ -251,10 +279,34 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
      *
      * @param i_Process
      */
-    public synchronized void delCache(FlowProcess i_Process)
+    public void delCache(FlowProcess i_Process)
+    {
+        delCacheByTrue(i_Process);
+        
+        CommunicationRequest v_RequestData = new CommunicationRequest();
+        v_RequestData.setEventType(    this.getEventType());
+        v_RequestData.setDataOperation("delCache");
+        v_RequestData.setDataXID(      i_Process.getWorkID());
+        v_RequestData.setData(         i_Process);
+        this.clusterSyncFlowCache(v_RequestData);
+    }
+    
+    
+    
+    /**
+     * 删除缓存中的未来操作人信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-15
+     * @version     v1.0
+     *
+     * @param i_Process
+     */
+    private synchronized void delCacheByTrue(FlowProcess i_Process)
     {
         List<FutureOperator> v_FutureOperators = $FutureOperators_KeyWorkID.get(i_Process.getWorkID());
         
@@ -316,6 +368,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2019-09-11
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
      *
      * @param i_Process
      */
@@ -328,6 +381,12 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
         if ( !Help.isNull(i_Process.getServiceDataID()) )
         {
             $FutureOperators_SToWorkID.remove(i_Process.getServiceDataID());
+            
+            CommunicationRequest v_RequestData = new CommunicationRequest();
+            v_RequestData.setEventType(    this.getEventType());
+            v_RequestData.setDataOperation("delCacheToHistory");
+            v_RequestData.setDataXID(      i_Process.getServiceDataID());
+            this.clusterSyncFlowCache(v_RequestData);
         }
     }
     
@@ -425,6 +484,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2019-09-12
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
      *
      * @param i_WorkID         工作流实例ID
      * @param i_ServiceDataID  业务ID
@@ -432,6 +492,139 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     public void pushSToWorkID(String i_WorkID ,String i_ServiceDataID)
     {
         $FutureOperators_SToWorkID.put(i_ServiceDataID ,i_WorkID);
+        
+        CommunicationRequest v_RequestData = new CommunicationRequest();
+        v_RequestData.setEventType(    this.getEventType());
+        v_RequestData.setDataOperation("pushSToWorkID");
+        v_RequestData.setDataXID(      i_ServiceDataID);
+        v_RequestData.setData(         i_WorkID);
+        this.clusterSyncFlowCache(v_RequestData);
+    }
+    
+    
+    
+    /**
+     *  数据通讯的事件类型。即通知哪一个事件监听者来处理数据通讯（对应 ServerSocket.listeners 的分区标识）
+     *  
+     *  事件类型区分大小写
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2017-01-16
+     * @version     v1.0
+     *
+     * @return
+     */
+    public String getEventType()
+    {
+        return "CL_FlowFutureOperator";
+    }
+    
+    
+    
+    /**
+     * 数据通讯事件的执行动作
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2020-01-02
+     * @version     v1.0
+     *
+     * @param i_RequestData
+     * @return
+     */
+    public CommunicationResponse communication(CommunicationRequest i_RequestData)
+    {
+        CommunicationResponse v_ResponseData = new CommunicationResponse();
+        
+        if ( Help.isNull(i_RequestData.getDataXID()) )
+        {
+            v_ResponseData.setResult(1);
+            return v_ResponseData;
+        }
+        
+        if ( "pushSToWorkID".equals(i_RequestData.getDataOperation()) )
+        {
+            if ( i_RequestData.getData() == null )
+            {
+                v_ResponseData.setResult(2);
+                return v_ResponseData;
+            }
+            
+            while ( $FutureOperators_SToWorkID == null )
+            {
+                try
+                {
+                    Thread.sleep(50);
+                }
+                catch (Exception exce)
+                {
+                    // Nothing.
+                }
+            }
+            
+            $FutureOperators_SToWorkID.put(i_RequestData.getDataXID() ,i_RequestData.getData().toString());
+        }
+        else if ( "delCacheToHistory".equals(i_RequestData.getDataOperation()) )
+        {
+            while ( $FutureOperators_SToWorkID == null )
+            {
+                try
+                {
+                    Thread.sleep(50);
+                }
+                catch (Exception exce)
+                {
+                    // Nothing.
+                }
+            }
+            
+            $FutureOperators_SToWorkID.remove(i_RequestData.getDataXID());
+        }
+        else if ( "addCache".equals(i_RequestData.getDataOperation()) )
+        {
+            if ( i_RequestData.getData() == null )
+            {
+                v_ResponseData.setResult(2);
+                return v_ResponseData;
+            }
+            
+            while ( $FutureOperatorsByWorkID == null )
+            {
+                try
+                {
+                    Thread.sleep(50);
+                }
+                catch (Exception exce)
+                {
+                    // Nothing.
+                }
+            }
+            
+            this.addCacheByTrue((FlowProcess)i_RequestData.getData());
+        }
+        else if ( "delCache".equals(i_RequestData.getDataOperation()) )
+        {
+            if ( i_RequestData.getData() == null )
+            {
+                v_ResponseData.setResult(2);
+                return v_ResponseData;
+            }
+            
+            while ( $FutureOperatorsByWorkID == null )
+            {
+                try
+                {
+                    Thread.sleep(50);
+                }
+                catch (Exception exce)
+                {
+                    // Nothing.
+                }
+            }
+            
+            this.delCacheByTrue((FlowProcess)i_RequestData.getData());
+        }
+        
+        return v_ResponseData;
     }
     
 }
