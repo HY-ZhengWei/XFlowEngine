@@ -190,7 +190,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *
      * @param i_Process
      */
-    public synchronized void updateCache(FlowProcess i_Process)
+    public void updateCache(FlowProcess i_Process)
     {
         this.delCache(i_Process);
         this.addCache(i_Process);
@@ -246,8 +246,14 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 v_FO.setObjectID(      v_Part.getObjectID());
                 v_FO.setObjectType(    v_Part.getObjectType().getValue());
                 
-                $FutureOperators_KeyWorkID.putRow(i_Process.getWorkID() ,v_FO);
-                $FutureOperatorsByWorkID  .putRow(v_ID                  ,v_FO);
+                if ( $FutureOperators_KeyWorkID.getRow(i_Process.getWorkID() ,v_FO) == null )
+                {
+                    $FutureOperators_KeyWorkID.putRow(i_Process.getWorkID() ,v_FO);
+                }
+                if ( $FutureOperatorsByWorkID.getRow(v_ID ,v_FO) == null )
+                {
+                    $FutureOperatorsByWorkID.putRow(v_ID ,v_FO);
+                }
             }
         }
         else
@@ -265,8 +271,14 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 v_FO.setObjectID(      v_Part.getObjectID());
                 v_FO.setObjectType(    v_Part.getObjectType().getValue());
                 
-                $FutureOperators_KeyWorkID.putRow(i_Process.getWorkID() ,v_FO);
-                $FutureOperatorsByWorkID  .putRow(v_ID                  ,v_FO);
+                if ( $FutureOperators_KeyWorkID.getRow(i_Process.getWorkID() ,v_FO) == null )
+                {
+                    $FutureOperators_KeyWorkID.putRow(i_Process.getWorkID() ,v_FO);
+                }
+                if ( $FutureOperatorsByWorkID.getRow(v_ID ,v_FO) == null )
+                {
+                    $FutureOperatorsByWorkID.putRow(v_ID ,v_FO);
+                }
             }
         }
     }
@@ -322,7 +334,19 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                     
                     if ( i_Process.getWorkID().equals(v_FO.getWorkID()) && i_Process.getPreviousProcessID().equals(v_FO.getProcessID()) )
                     {
-                        $FutureOperatorsByWorkID.removeRow(v_ID ,i);
+                        List<FutureOperator> v_DelDatas = $FutureOperatorsByWorkID.get(v_ID);
+                        if ( !Help.isNull(v_DelDatas) )
+                        {
+                            for (int x=v_DelDatas.size() -1; x>=0; x--)
+                            {
+                                FutureOperator v_Del = v_DelDatas.get(x);
+                                if ( v_Del.equals(v_FO) && v_FO.getProcessID().equals(v_Del.getProcessID()) )
+                                {
+                                    v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
+                                    System.out.println(v_Del);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -333,9 +357,18 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                     FutureOperator v_FO = v_FutureOperators.get(i);
                     String         v_ID = v_FO.getObjectType() + ":" + v_FO.getObjectID();
                     
-                    if ( i_Process.getWorkID().equals(v_FO.getWorkID()) )
+                    List<FutureOperator> v_DelDatas = $FutureOperatorsByWorkID.get(v_ID);
+                    if ( !Help.isNull(v_DelDatas) )
                     {
-                        $FutureOperatorsByWorkID.removeRow(v_ID ,i);
+                        for (int x=v_DelDatas.size() -1; x>=0; x--)
+                        {
+                            FutureOperator v_Del = v_DelDatas.get(x);
+                            if ( v_Del.equals(v_FO) )
+                            {
+                                v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
+                                System.out.println(v_Del);
+                            }
+                        }
                     }
                 }
             }
@@ -350,7 +383,8 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 
                 if ( i_Process.getPreviousProcessID().equals(v_FO.getProcessID()) )
                 {
-                    $FutureOperators_KeyWorkID.removeRow(i_Process.getWorkID() ,i);
+                    FutureOperator v_Old = $FutureOperators_KeyWorkID.removeRow(i_Process.getWorkID() ,v_FO);
+                    System.out.println(v_Old);
                 }
             }
         }

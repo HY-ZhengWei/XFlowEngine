@@ -348,6 +348,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
         else if ( "refreshCache".equals(i_RequestData.getDataOperation()) )
         {
             $CacheTemplates.remove(i_RequestData.getDataXID());
+            this.queryByID(i_RequestData.getDataXID());
         }
         else if ( "queryByID".equals(i_RequestData.getDataOperation()) )
         {
