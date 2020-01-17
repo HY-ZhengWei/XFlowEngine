@@ -343,7 +343,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                                 if ( v_Del.equals(v_FO) && v_FO.getProcessID().equals(v_Del.getProcessID()) )
                                 {
                                     v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
-                                    System.out.println(v_Del);
                                 }
                             }
                         }
@@ -366,7 +365,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                             if ( v_Del.equals(v_FO) )
                             {
                                 v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
-                                System.out.println(v_Del);
                             }
                         }
                     }
