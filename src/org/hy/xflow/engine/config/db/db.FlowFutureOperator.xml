@@ -154,7 +154,7 @@
 			
 			<content if="MYSQL == DSG_XFlow.getDbProductType">
 				<![CDATA[
-				SELECT  CONCAT(A.objectType, '') + ':' + A.objectID AS objectID
+				SELECT  CONCAT(CONCAT(A.objectType , ':') ,A.objectID) AS objectID
 					   ,A.workID
 				       ,A.serviceDataID
 				       ,A.processID

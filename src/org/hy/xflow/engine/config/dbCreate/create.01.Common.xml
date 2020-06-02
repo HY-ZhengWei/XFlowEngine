@@ -48,7 +48,7 @@
 			</content>
 			
 			<comment>设置表注释的过程</comment>
-			<create>P_TableComment</create>
+			<create if="启用 == IsCreateDB.getValue">P_TableComment</create>
 			
 		</sql>
 		
@@ -93,7 +93,7 @@
 			</content>
 			
 			<comment>设置字段注释的过程</comment>
-			<create>P_ColumnComment</create>
+			<create if="启用 == IsCreateDB.getValue">P_ColumnComment</create>
 			
 		</sql>
 

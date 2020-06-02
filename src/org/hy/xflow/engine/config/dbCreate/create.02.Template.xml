@@ -58,19 +58,19 @@
 				<![CDATA[
                 CREATE TABLE TTemplate
                 (
-                 templateID         varchar(64)                      NOT NULL comment '模板ID'
-                ,versionNo          int(11)                          NOT NULL comment '模板版本号（数值递增型）'
-                ,version            varchar(32)                               comment '模板版本号'
-                ,templateName       varchar(128)                     NOT NULL comment '模板名称'
-                ,infoComment        varchar(2000)                             comment '备注说明'
-                ,createrID          varchar(64)                      NOT NULL comment '创建人员ID'
-                ,creater            varchar(128)                              comment '创建人员名称'
-                ,createTime         datetime                         NOT NULL comment '创建时间'
-                ,lastUserID         varchar(64)                      NOT NULL comment '最后修改人员ID'
-                ,lastUser           varchar(128)                              comment '最后修改人员名称'
-                ,lastTime           datetime                                  comment '最后修改时间'
-                ,isValid            int(1)                           NOT NULL comment '是否有效标记(0:无效；1:有效)'
-                ,isDelete           int(1)                           NOT NULL comment '是否删除标记(0:未删除；1:已删除)'
+                 templateID         VARCHAR(64)                      NOT NULL comment '模板ID'
+                ,versionNo          INT(11)                          NOT NULL comment '模板版本号（数值递增型）'
+                ,version            VARCHAR(32)                               comment '模板版本号'
+                ,templateName       VARCHAR(128)                     NOT NULL comment '模板名称'
+                ,infoComment        VARCHAR(2000)                             comment '备注说明'
+                ,createrID          VARCHAR(64)                      NOT NULL comment '创建人员ID'
+                ,creater            VARCHAR(128)                              comment '创建人员名称'
+                ,createTime         DATETIME                         NOT NULL comment '创建时间'
+                ,lastUserID         VARCHAR(64)                      NOT NULL comment '最后修改人员ID'
+                ,lastUser           VARCHAR(128)                              comment '最后修改人员名称'
+                ,lastTime           DATETIME                                  comment '最后修改时间'
+                ,isValid            INT(1)                           NOT NULL comment '是否有效标记(0:无效；1:有效)'
+                ,isDelete           INT(1)                           NOT NULL comment '是否删除标记(0:未删除；1:已删除)'
                 );/
                 
                 ALTER TABLE TTemplate ADD CONSTRAINT PK_TTemplate PRIMARY KEY (templateID);/
