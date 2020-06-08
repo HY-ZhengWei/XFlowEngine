@@ -4,7 +4,7 @@
 
   <groupId>org</groupId>
   <artifactId>hy.xflow.engine</artifactId>
-  <version>1.0.9</version>
+  <version>1.1.0</version>
   <packaging>jar</packaging>
 
   <name>hy.xflow.engine</name>
@@ -35,7 +35,7 @@
 	<dependency>
 	    <groupId>org</groupId>
 	    <artifactId>hy.xflow.engine-client</artifactId>
-	    <version>1.0.6</version>
+	    <version>1.0.7</version>
 	</dependency>
 	
   </dependencies>

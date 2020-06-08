@@ -2,118 +2,131 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 工作流活动组件(节点)信息表模块的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_XFlow_ActivityInfo_QueryByTemplateID"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.activityID
-				       ,A.activityCode
-				       ,A.templateID
-				       ,A.activityName
-				       ,A.activityTypeID
-				       ,B.activityTypeID  AS "activityType.activityTypeID"
-				       ,B.activityType    AS "activityType.activityType"
-				       ,B.infoComment     AS "activityType.infoComment"
-				       ,A.x
-				       ,A.y
-				       ,A.z
-				       ,A.height
-				       ,A.width
-				       ,A.iconURL
-				       ,A.backgroudColor
-				       ,A.lineColor
-				       ,A.flagColor
-				       ,A.fontColor
-				       ,A.infoComment
-				       ,A.summaryPass
-				       ,A.counterPass
-				       ,A.passType
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createTime
-				       ,A.lastUserID
-				       ,A.lastUser
-				       ,A.lastTime
-				  FROM  TActivityInfo  A
-				       ,TActivityType  B
-				 WHERE  A.activityTypeID = B.activityTypeID
-				   AND  A.templateID     = ':templateID'
-				 ORDER  BY B.orderNo ,A.activityID
-				]]>
-			</content>
-			
-			<result>
-				<table>java.util.LinkedHashMap</table>
-				<fill>put(row.activityCode ,row)</fill>
-				<row>org.hy.xflow.engine.bean.ActivityInfo</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_ActivityInfo_Saves"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				UPDATE  TActivityInfo
-				   SET  lastTime       = SYSDATE
-				       ,x              = :x
-				       ,y              = :y
-				       ,backgroudColor = :backgroudColor
-				       ,lineColor      = :lineColor
-				       ,flagColor      = :flagColor
-				       ,fontColor      = :fontColor
-				 WHERE  activityID     = :activityID
-				   AND  templateID     = :templateID
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				UPDATE  TActivityInfo
-				   SET  lastTime       = GETDATE()
-				       ,x              = :x
-				       ,y              = :y
-				       ,backgroudColor = :backgroudColor
-				       ,lineColor      = :lineColor
-				       ,flagColor      = :flagColor
-				       ,fontColor      = :fontColor
-				 WHERE  activityID     = :activityID
-				   AND  templateID     = :templateID
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				UPDATE  TActivityInfo
-				   SET  lastTime       = NOW()
-				       ,x              = :x
-				       ,y              = :y
-				       ,backgroudColor = :backgroudColor
-				       ,lineColor      = :lineColor
-				       ,flagColor      = :flagColor
-				       ,fontColor      = :fontColor
-				 WHERE  activityID     = :activityID
-				   AND  templateID     = :templateID
-				]]>
-			</content>
-		</sql>
-		
-	</sqls>
-	
+    <sqls>
+    
+        <sql id="XSQL_XFlow_ActivityInfo_QueryByTemplateID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.activityID
+                       ,A.activityCode
+                       ,A.templateID
+                       ,A.activityName
+                       ,A.activityTypeID
+                       ,B.activityTypeID  AS "activityType.activityTypeID"
+                       ,B.activityType    AS "activityType.activityType"
+                       ,B.infoComment     AS "activityType.infoComment"
+                       ,A.x
+                       ,A.y
+                       ,A.z
+                       ,A.height
+                       ,A.width
+                       ,A.iconURL
+                       ,A.backgroudColor
+                       ,A.lineColor
+                       ,A.flagColor
+                       ,A.fontColor
+                       ,A.infoComment
+                       ,A.summaryPass
+                       ,A.counterPass
+                       ,A.passType
+                       ,A.configPageURL
+                       ,A.configPageDatas
+                       ,A.xrouteConfig
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createTime
+                       ,A.lastUserID
+                       ,A.lastUser
+                       ,A.lastTime
+                  FROM  TActivityInfo  A
+                       ,TActivityType  B
+                 WHERE  A.activityTypeID = B.activityTypeID
+                   AND  A.templateID     = ':templateID'
+                 ORDER  BY B.orderNo ,A.activityID
+                ]]>
+            </content>
+            
+            <result>
+                <table>java.util.LinkedHashMap</table>
+                <fill>put(row.activityCode ,row)</fill>
+                <row>org.hy.xflow.engine.bean.ActivityInfo</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ActivityInfo_Saves"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                UPDATE  TActivityInfo
+                   SET  lastTime        = SYSDATE
+                       ,x               = :x
+                       ,y               = :y
+                       ,backgroudColor  = :backgroudColor
+                       ,lineColor       = :lineColor
+                       ,flagColor       = :flagColor
+                       ,fontColor       = :fontColor
+                       ,configPageURL   = :configPageURL
+                       ,configPageDatas = :configPageDatas
+                       ,xrouteConfig    = :xrouteConfig
+                       ,fontColor       = :fontColor
+                 WHERE  activityID      = :activityID
+                   AND  templateID      = :templateID
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                UPDATE  TActivityInfo
+                   SET  lastTime        = GETDATE()
+                       ,x               = :x
+                       ,y               = :y
+                       ,backgroudColor  = :backgroudColor
+                       ,lineColor       = :lineColor
+                       ,flagColor       = :flagColor
+                       ,fontColor       = :fontColor
+                       ,configPageURL   = :configPageURL
+                       ,configPageDatas = :configPageDatas
+                       ,xrouteConfig    = :xrouteConfig
+                 WHERE  activityID      = :activityID
+                   AND  templateID      = :templateID
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                UPDATE  TActivityInfo
+                   SET  lastTime        = NOW()
+                       ,x               = :x
+                       ,y               = :y
+                       ,backgroudColor  = :backgroudColor
+                       ,lineColor       = :lineColor
+                       ,flagColor       = :flagColor
+                       ,fontColor       = :fontColor
+                       ,configPageURL   = :configPageURL
+                       ,configPageDatas = :configPageDatas
+                       ,xrouteConfig    = :xrouteConfig
+                 WHERE  activityID      = :activityID
+                   AND  templateID      = :templateID
+                ]]>
+            </content>
+        </sql>
+        
+    </sqls>
+    
 </config>

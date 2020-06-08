@@ -2,27 +2,27 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 工作流定义数据的初始化对象创建（自动创建）的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_Create_TTemplate">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+    <sqls>
+    
+        <sql id="XSQL_Create_TTemplate">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TTemplate
                 (
                  templateID         VARCHAR2(64)                     NOT NULL
                 ,versionNo          NUMBER(10)                       NOT NULL
                 ,version            VARCHAR2(32)
                 ,templateName       NVARCHAR2(128)                   NOT NULL
-                ,infoComment        NVARCHAR2(2000)
+                ,infoComment        NVARCHAR2(4000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -51,18 +51,18 @@
                 COMMENT ON COLUMN TTemplate.lastTime                      IS '最后修改时间';/
                 COMMENT ON COLUMN TTemplate.isValid                       IS '是否有效标记(0:无效；1:有效)';/
                 COMMENT ON COLUMN TTemplate.isDelete                      IS '是否删除标记(0:未删除；1:已删除)';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TTemplate
                 (
                  templateID         VARCHAR(64)                      NOT NULL comment '模板ID'
                 ,versionNo          INT(11)                          NOT NULL comment '模板版本号（数值递增型）'
                 ,version            VARCHAR(32)                               comment '模板版本号'
                 ,templateName       VARCHAR(128)                     NOT NULL comment '模板名称'
-                ,infoComment        VARCHAR(2000)                             comment '备注说明'
+                ,infoComment        VARCHAR(4000)                             comment '备注说明'
                 ,createrID          VARCHAR(64)                      NOT NULL comment '创建人员ID'
                 ,creater            VARCHAR(128)                              comment '创建人员名称'
                 ,createTime         DATETIME                         NOT NULL comment '创建时间'
@@ -78,18 +78,18 @@
                 ALTER TABLE TTemplate ADD UNIQUE (templateName ,versionNo);/
                 
                 Alter TABLE TTemplate COMMENT                               = '工作流模板表';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TTemplate
                 (
                  templateID         VARCHAR(64)                      NOT NULL
                 ,versionNo          INT                              NOT NULL
                 ,version            VARCHAR(32)
                 ,templateName       NVARCHAR(128)                    NOT NULL
-                ,infoComment        NVARCHAR(2000)
+                ,infoComment        NVARCHAR(4000)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            NVARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
@@ -118,22 +118,22 @@
                 EXEC P_ColumnComment TTemplate ,lastTime                      ,'最后修改时间';/
                 EXEC P_ColumnComment TTemplate ,isValid                       ,'是否有效标记(0:无效；1:有效)';/
                 EXEC P_ColumnComment TTemplate ,isDelete                      ,'是否删除标记(0:未删除；1:已删除)';/
-				]]>
-			</content>
-			
-			<comment>工作流模板表</comment>
-			<create>TTemplate</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TActivityInfo">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流模板表</comment>
+            <create>TTemplate</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TActivityInfo">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityInfo
                 (
                  activityID         VARCHAR2(64)                     NOT NULL
@@ -151,10 +151,13 @@
                 ,lineColor          VARCHAR2(16)
                 ,flagColor          VARCHAR2(16)
                 ,fontColor          VARCHAR2(16)
-                ,infoComment        NVARCHAR2(2000)
+                ,infoComment        NVARCHAR2(4000)
                 ,summaryPass        NUMBER(18 ,2)
                 ,counterPass        NUMBER(10)
                 ,passType           VARCHAR2(3)
+                ,configPageURL      VARCHAR2(1000)
+                ,configPageDatas    VARCHAR2(4000)
+                ,xrouteConfig       VARCHAR2(4000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -187,17 +190,20 @@
                 COMMENT ON COLUMN TActivityInfo.summaryPass               IS '汇总通过值。当大于等于此值后，才能继续向下流转';/
                 COMMENT ON COLUMN TActivityInfo.counterPass               IS '汇总人数的限制。当大于等于此值后，才能继续向下流转';/
                 COMMENT ON COLUMN TActivityInfo.passType                  IS '汇总类型。指summaryPass和counterPass的关系是与，还是或';/
+                COMMENT ON COLUMN TActivityInfo.configPageURL             IS '配置页面的路径，可由终端用户决定配置页面的展示样子。用于配置阶段，并非实例流转';/
+                COMMENT ON COLUMN TActivityInfo.configPageDatas           IS '配置页面的数据。将保存配置页面中的数据到工作流系统中，当再次打开配置时，通过POST请求传递参数的方式给配置页面';/
+                COMMENT ON COLUMN TActivityInfo.xrouteConfig              IS '规则引擎的配置代码';/
                 COMMENT ON COLUMN TActivityInfo.createrID                 IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityInfo.creater                   IS '创建人员名称';/
                 COMMENT ON COLUMN TActivityInfo.createTime                IS '创建时间';/
                 COMMENT ON COLUMN TActivityInfo.lastUserID                IS '最后修改人员ID';/
                 COMMENT ON COLUMN TActivityInfo.lastUser                  IS '最后修改人员名称';/
                 COMMENT ON COLUMN TActivityInfo.lastTime                  IS '最后修改时间';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityInfo
                 (
                  activityID         VARCHAR(64)                     NOT NULL COMMENT '工作流活动ID'
@@ -215,10 +221,13 @@
                 ,lineColor          VARCHAR(16)                              COMMENT '活动节点的边框线颜色'
                 ,flagColor          VARCHAR(16)                              COMMENT '活动节点的标记块颜色'
                 ,fontColor          VARCHAR(16)                              COMMENT '活动节点的文字颜色'
-                ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
+                ,infoComment        VARCHAR(4000)                            COMMENT '备注说明'
                 ,summaryPass        DECIMAL(18 ,4)                           COMMENT '汇总通过值。当大于等于此值后，才能继续向下流转'
                 ,counterPass        INT(10)                                  COMMENT '汇总人数的限制。当大于等于此值后，才能继续向下流转'
                 ,passType           VARCHAR(3)                               COMMENT '汇总类型。指summaryPass和counterPass的关系是与，还是或'
+                ,configPageURL      VARCHAR(1000)                            COMMENT '配置页面的路径，可由终端用户决定配置页面的展示样子。用于配置阶段，并非实例流转'
+                ,configPageDatas    VARCHAR(4000)                            COMMENT '配置页面的数据。将保存配置页面中的数据到工作流系统中，当再次打开配置时，通过POST请求传递参数的方式给配置页面'
+                ,xrouteConfig       VARCHAR(4000)                            COMMENT '规则引擎的配置代码'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
@@ -232,11 +241,11 @@
                 ALTER TABLE TActivityInfo ADD UNIQUE (activityCode ,templateID);/
                 
                 Alter TABLE  TActivityInfo COMMENT                         = '工作流活动组件(节点)信息表';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityInfo
                 (
                  activityID         VARCHAR(64)                      NOT NULL
@@ -254,10 +263,13 @@
                 ,lineColor          VARCHAR(16)
                 ,flagColor          VARCHAR(16)
                 ,fontColor          VARCHAR(16)
-                ,infoComment        NVARCHAR(2000)
+                ,infoComment        NVARCHAR(4000)
                 ,summaryPass        DECIMAL(18 ,4)
                 ,counterPass        INT
                 ,passType           VARCHAR(3)
+                ,configPageURL      VARCHAR(1000)
+                ,configPageDatas    VARCHAR(4000)
+                ,xrouteConfig       VARCHAR(4000)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            NVARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
@@ -290,28 +302,31 @@
                 EXEC P_ColumnComment TActivityInfo ,summaryPass               ,'汇总通过值。当大于等于此值后，才能继续向下流转';/
                 EXEC P_ColumnComment TActivityInfo ,counterPass               ,'汇总人数的限制。当大于等于此值后，才能继续向下流转';/
                 EXEC P_ColumnComment TActivityInfo ,passType                  ,'汇总类型。指summaryPass和counterPass的关系是与，还是或';/
+                EXEC P_ColumnComment TActivityInfo ,configPageURL             ,'配置页面的路径，可由终端用户决定配置页面的展示样子。用于配置阶段，并非实例流转';/
+                EXEC P_ColumnComment TActivityInfo ,configPageDatas           ,'配置页面的数据。将保存配置页面中的数据到工作流系统中，当再次打开配置时，通过POST请求传递参数的方式给配置页面';/
+                EXEC P_ColumnComment TActivityInfo ,xrouteConfig              ,'规则引擎的配置代码';/
                 EXEC P_ColumnComment TActivityInfo ,createrID                 ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityInfo ,creater                   ,'创建人员名称';/
                 EXEC P_ColumnComment TActivityInfo ,createTime                ,'创建时间';/
                 EXEC P_ColumnComment TActivityInfo ,lastUserID                ,'最后修改人员ID';/
                 EXEC P_ColumnComment TActivityInfo ,lastUser                  ,'最后修改人员名称';/
                 EXEC P_ColumnComment TActivityInfo ,lastTime                  ,'最后修改时间';/
-				]]>
-			</content>
-			
-			<comment>工作流活动组件(节点)信息表</comment>
-			<create>TActivityInfo</create>
-			
-		</sql>
-		
-		
-		 
-		<sql id="XSQL_Create_TActivityRoute">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流活动组件(节点)信息表</comment>
+            <create>TActivityInfo</create>
+            
+        </sql>
+        
+        
+         
+        <sql id="XSQL_Create_TActivityRoute">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityRoute
                 (
                  activityRouteID    VARCHAR2(64)                     NOT NULL
@@ -327,7 +342,7 @@
                 ,conditionVType     NUMBER(2)
                 ,lineColor          VARCHAR2(16)
                 ,fontColor          VARCHAR2(16)
-                ,infoComment        NVARCHAR2(2000)
+                ,infoComment        NVARCHAR2(4000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            NVARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -361,11 +376,11 @@
                 COMMENT ON COLUMN TActivityRoute.lastUserID               IS '最后修改人员ID';/
                 COMMENT ON COLUMN TActivityRoute.lastUser                 IS '最后修改人员名称';/
                 COMMENT ON COLUMN TActivityRoute.lastTime                 IS '最后修改时间';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityRoute
                 (
                  activityRouteID    VARCHAR(64)                     NOT NULL COMMENT '主键ID'
@@ -381,7 +396,7 @@
                 ,conditionVType     INT(2)                                   COMMENT '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）'
                 ,lineColor          VARCHAR(16)                              COMMENT '路由连接线的颜色'
                 ,fontColor          VARCHAR(16)                              COMMENT '路由连接线的文字颜色'
-                ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
+                ,infoComment        VARCHAR(4000)                            COMMENT '备注说明'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
@@ -395,11 +410,11 @@
                 ALTER TABLE TActivityRoute ADD UNIQUE (activityID ,activityRouteCode);/
                 
                 ALTER TABLE  TActivityRoute   COMMENT                      = '工作流活动组件(节点)的路由表';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityRoute
                 (
                  activityRouteID    VARCHAR(64)                     NOT NULL
@@ -415,7 +430,7 @@
                 ,conditionVType     INT
                 ,lineColor          VARCHAR(16)
                 ,fontColor          VARCHAR(16)
-                ,infoComment        NVARCHAR(2000)
+                ,infoComment        NVARCHAR(4000)
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            NVARCHAR(128)
                 ,createTime         DATETIME                        NOT NULL
@@ -449,22 +464,22 @@
                 EXEC P_ColumnComment TActivityRoute ,lastUserID               ,'最后修改人员ID';/
                 EXEC P_ColumnComment TActivityRoute ,lastUser                 ,'最后修改人员名称';/
                 EXEC P_ColumnComment TActivityRoute ,lastTime                 ,'最后修改时间';/
-				]]>
-			</content>
-			
-			<comment>工作流活动组件(节点)的路由表</comment>
-			<create>TActivityRoute</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TActivityParticipants">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流活动组件(节点)的路由表</comment>
+            <create>TActivityRoute</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TActivityParticipants">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityParticipants
                 (
                  participantID      VARCHAR2(64)                     NOT NULL
@@ -494,11 +509,11 @@
                 COMMENT ON COLUMN TActivityParticipants.createrID          IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityParticipants.creater            IS '创建人员名称';/
                 COMMENT ON COLUMN TActivityParticipants.createTime         IS '创建时间';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityParticipants
                 (
                  participantID      varchar(64)                     NOT NULL comment '主键ID'
@@ -518,11 +533,11 @@
                 ALTER TABLE TActivityParticipants ADD UNIQUE (activityID ,objectType ,objectID);/
                 
                 ALTER TABLE  TActivityParticipants  COMMENT                = '工作流过程的实际参与人';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityParticipants
                 (
                  participantID      VARCHAR(64)                     NOT NULL
@@ -552,22 +567,22 @@
                 EXEC P_ColumnComment TActivityParticipants ,createrID          ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityParticipants ,creater            ,'创建人员名称';/
                 EXEC P_ColumnComment TActivityParticipants ,createTime         ,'创建时间';/
-				]]>
-			</content>
-			
-			<comment>工作流活动组件(节点)的参与人</comment>
-			<create>TActivityParticipants</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TActivityRouteParticipants">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流活动组件(节点)的参与人</comment>
+            <create>TActivityParticipants</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TActivityRouteParticipants">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityRouteParticipants
                 (
                  participantID      VARCHAR2(64)                     NOT NULL
@@ -597,11 +612,11 @@
                 COMMENT ON COLUMN TActivityRouteParticipants.createrID          IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityRouteParticipants.creater            IS '创建人员名称';/
                 COMMENT ON COLUMN TActivityRouteParticipants.createTime         IS '创建时间';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityRouteParticipants
                 (
                  participantID      varchar(64)                     NOT NULL comment '主键ID'
@@ -621,11 +636,11 @@
                 ALTER TABLE TActivityRouteParticipants ADD UNIQUE (activityRouteID ,objectType ,objectID);/
                 
                 ALTER TABLE TActivityRouteParticipants   COMMENT                 = '工作流过程的实际参与人';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityRouteParticipants
                 (
                  participantID      VARCHAR(64)                     NOT NULL
@@ -655,46 +670,46 @@
                 EXEC P_ColumnComment TActivityRouteParticipants ,createrID          ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,creater            ,'创建人员名称';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,createTime         ,'创建时间';/
-				]]>
-			</content>
-			
-			<comment>工作流活动组件(节点)路由的参与人</comment>
-			<create>TActivityRouteParticipants</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TActivityType_Init_Insert">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流活动组件(节点)路由的参与人</comment>
+            <create>TActivityRouteParticipants</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TActivityType_Init_Insert">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
                 INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT000' ,'开始' ,0);/
                 INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT001' ,'常规' ,1);/
                 INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT999' ,'结束' ,999);/
-				]]>
-			</content>
-			
-			<comment>工作流活动(节点)类型表的初始化数据</comment>
-			
-		</sql>
-		
-		
-		
-		<!-- 活动类型有：开始、结束、转派、分派、汇签、驳回、追回、回退、催办、限时自动流、自由流 -->
-		<sql id="XSQL_Create_TActivityType">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流活动(节点)类型表的初始化数据</comment>
+            
+        </sql>
+        
+        
+        
+        <!-- 活动类型有：开始、结束、转派、分派、汇签、驳回、追回、回退、催办、限时自动流、自由流 -->
+        <sql id="XSQL_Create_TActivityType">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityType
                 (
                  activityTypeID     VARCHAR2(64)                     NOT NULL
                 ,activityType       NVARCHAR2(128)                   NOT NULL
-                ,infoComment        NVARCHAR2(2000)
+                ,infoComment        NVARCHAR2(4000)
                 ,orderNo            NUMBER(10)
                 );/
                 
@@ -705,32 +720,32 @@
                 COMMENT ON COLUMN TActivityType.activityType              IS '工作流活动类型名称';/
                 COMMENT ON COLUMN TActivityType.infoComment               IS '备注说明';/
                 COMMENT ON COLUMN TActivityType.orderNo                   IS '排列顺序';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityType
                 (
                  activityTypeID     varchar(64)                    NOT NULL comment '工作流活动类型ID'
                 ,activityType       varchar(128)                   NOT NULL comment '工作流活动类型名称'
-                ,infoComment        varchar(2000)                           comment '备注说明'
+                ,infoComment        varchar(4000)                           comment '备注说明'
                 ,orderNo            int(10)                                 comment '排列顺序'
                 );/
                 
                 ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
                 
                 ALTER TABLE TActivityType   COMMENT                        = '工作流活动(节点)类型';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TActivityType
                 (
                  activityTypeID     VARCHAR(64)                     NOT NULL
                 ,activityType       NVARCHAR(128)                   NOT NULL
-                ,infoComment        NVARCHAR(2000)
+                ,infoComment        NVARCHAR(4000)
                 ,orderNo            INT
                 );/
                 
@@ -741,26 +756,26 @@
                 EXEC P_ColumnComment TActivityType ,activityType              ,'工作流活动类型名称';/
                 EXEC P_ColumnComment TActivityType ,infoComment               ,'备注说明';/
                 EXEC P_ColumnComment TActivityType ,orderNo                   ,'排列顺序';/
-				]]>
-			</content>
-			
-			<trigger>
-				<create ref="XSQL_Create_TActivityType_Init_Insert"/>
-			</trigger>
-			
-			<comment>工作流活动(节点)类型</comment>
-			<create>TActivityType</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TRouteType_Init_Insert">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <trigger>
+                <create ref="XSQL_Create_TActivityType_Init_Insert"/>
+            </trigger>
+            
+            <comment>工作流活动(节点)类型</comment>
+            <create>TActivityType</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TRouteType_Init_Insert">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT001' ,'转派'      ,1);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT002' ,'分派'      ,2);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003' ,'汇签'      ,3);/
@@ -772,26 +787,26 @@
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT050' ,'限时自动流' ,50);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT051' ,'自由流'     ,51);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT999' ,'结束'      ,999);/
-				]]>
-			</content>
-			
-			<comment>工作流路由类型的初始化数据</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TRouteType">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流路由类型的初始化数据</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TRouteType">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TRouteType
                 (
                  routeTypeID        VARCHAR2(64)                     NOT NULL
                 ,routeType          NVARCHAR2(128)                   NOT NULL
-                ,infoComment        NVARCHAR2(2000)
+                ,infoComment        NVARCHAR2(4000)
                 ,orderNo            NUMBER(10)
                 );/
                 
@@ -802,32 +817,32 @@
                 COMMENT ON COLUMN TRouteType.routeType                 IS '工作流路由类型名称';/
                 COMMENT ON COLUMN TRouteType.infoComment               IS '备注说明';/
                 COMMENT ON COLUMN TRouteType.orderNo                   IS '排列顺序';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TRouteType
                 (
                  routeTypeID        varchar(64)                    NOT NULL comment '工作流路由类型ID'
                 ,routeType          varchar(128)                   NOT NULL comment '工作流路由类型名称'
-                ,infoComment        varchar(2000)                           comment '备注说明'
+                ,infoComment        varchar(4000)                           comment '备注说明'
                 ,orderNo            int(10)                                 comment '排列顺序'
                 );/
                 
                 ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
                 
                 ALTER TABLE TRouteType     COMMENT                      = '工作流路由类型';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TRouteType
                 (
                  routeTypeID        VARCHAR(64)                     NOT NULL
                 ,routeType          NVARCHAR(128)                   NOT NULL
-                ,infoComment        NVARCHAR(2000)
+                ,infoComment        NVARCHAR(4000)
                 ,orderNo            INT
                 );/
                 
@@ -838,26 +853,26 @@
                 EXEC P_ColumnComment TRouteType ,routeType                 ,'工作流路由类型名称';/
                 EXEC P_ColumnComment TRouteType ,infoComment               ,'备注说明';/
                 EXEC P_ColumnComment TRouteType ,orderNo                   ,'排列顺序';/
-				]]>
-			</content>
-			
-			<trigger>
-				<create ref="XSQL_Create_TRouteType_Init_Insert"/>
-			</trigger>
-			
-			<comment>工作流路由类型</comment>
-			<create>TRouteType</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TParticipantType_Init_Insert">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <trigger>
+                <create ref="XSQL_Create_TRouteType_Init_Insert"/>
+            </trigger>
+            
+            <comment>工作流路由类型</comment>
+            <create>TRouteType</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TParticipantType_Init_Insert">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(1  ,'执行人'        ,1);/
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(2  ,'执行部门'      ,2);/
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(3  ,'执行角色'      ,3);/
@@ -866,26 +881,26 @@
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(13 ,'抄送角色'      ,13);/
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(21 ,'发起人'        ,21);/
                 INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(22 ,'活动实际操作人' ,22);/
-				]]>
-			</content>
-			
-			<comment>参与人类型的初始化数据</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TParticipantType">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>参与人类型的初始化数据</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TParticipantType">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TParticipantType
                 (
                  participantTypeID  NUMBER(2)                        NOT NULL
                 ,participantType    NVARCHAR2(128)                   NOT NULL
-                ,infoComment        NVARCHAR2(2000)
+                ,infoComment        NVARCHAR2(4000)
                 ,orderNo            NUMBER(10)
                 );/
                 
@@ -896,32 +911,32 @@
                 COMMENT ON COLUMN TParticipantType.participantType     IS '参与人类型名称';/
                 COMMENT ON COLUMN TParticipantType.infoComment         IS '备注说明';/
                 COMMENT ON COLUMN TParticipantType.orderNo             IS '排列顺序';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TParticipantType
                 (
                  participantTypeID  int(2)                         NOT NULL comment '参与人类型ID'
                 ,participantType    varchar(128)                   NOT NULL comment '参与人类型名称'
-                ,infoComment        varchar(2000)                           comment '备注说明'
+                ,infoComment        varchar(4000)                           comment '备注说明'
                 ,orderNo            int(10)                                 comment '排列顺序'
                 );/
                 
                 ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
                 
                 ALTER TABLE  TParticipantType   COMMENT                  = '参与人类型';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TParticipantType
                 (
                  participantTypeID  INT                             NOT NULL
                 ,participantType    NVARCHAR(128)                   NOT NULL
-                ,infoComment        NVARCHAR(2000)
+                ,infoComment        NVARCHAR(4000)
                 ,orderNo            INT
                 );/
                 
@@ -932,18 +947,18 @@
                 EXEC P_ColumnComment TParticipantType ,participantType    ,'参与人类型名称';/
                 EXEC P_ColumnComment TParticipantType ,infoComment        ,'备注说明';/
                 EXEC P_ColumnComment TParticipantType ,orderNo            ,'排列顺序';/
-				]]>
-			</content>
-			
-			<trigger>
-				<create ref="XSQL_Create_TParticipantType_Init_Insert"/>
-			</trigger>
-			
-			<comment>参与人类型</comment>
-			<create>TParticipantType</create>
-			
-		</sql>
-		
-	</sqls>
-	
+                ]]>
+            </content>
+            
+            <trigger>
+                <create ref="XSQL_Create_TParticipantType_Init_Insert"/>
+            </trigger>
+            
+            <comment>参与人类型</comment>
+            <create>TParticipantType</create>
+            
+        </sql>
+        
+    </sqls>
+    
 </config>
