@@ -568,7 +568,6 @@
                  workID             VARCHAR(64)                      NOT NULL
                 ,serviceDataID      VARCHAR(64)
                 ,processID          VARCHAR(64)                      NOT NULL
-                ,processID          VARCHAR(64)                      NOT NULL
                 ,operateTime        DATETIME                         NOT NULL
                 ,operateUserID      NVARCHAR(64)                     NOT NULL
                 ,operateUser        NVARCHAR(128)
