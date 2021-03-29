@@ -2,101 +2,101 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 数据库公共部分的初始化对象创建（自动创建）的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_Create_P_TableComment">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				CREATE PROCEDURE [dbo].[P_TableComment]
-				  @TableName   AS SYSNAME
-				 ,@Comment     AS SYSNAME
-				AS
-				BEGIN
-				
-				IF ((SELECT COUNT(*) FROM FN_ListExtendedProperty('MS_Description', 
-				'SCHEMA', 'dbo', 
-				'TABLE', @TableName, 
-				NULL, NULL)) >= 1)
-					EXEC SP_UpdateExtendedProperty 'MS_Description' 
-				                                   ,@Comment
-				                                   ,'SCHEMA'
-				                                   ,'dbo'
-				                                   ,'TABLE'
-				                                   ,@TableName
-				                                   ,NULL
-				                                   ,NULL
-				ELSE
-					EXEC SP_AddExtendedProperty 'MS_Description' 
-				                                ,@Comment
-				                                ,'SCHEMA'
-				                                ,'dbo'
-				                                ,'TABLE'
-				                                ,@TableName
-				                                ,NULL
-				                                ,NULL
-				END
-				]]>
-			</content>
-			
-			<comment>设置表注释的过程</comment>
-			<create if="启用 == IsCreateDB.getValue">P_TableComment</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_P_ColumnComment">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				CREATE PROCEDURE [dbo].[P_ColumnComment]
-				  @TableName   AS SYSNAME
-				 ,@ColumnName  AS SYSNAME
-				 ,@Comment     AS SYSNAME
-				AS
-				BEGIN
-				
-				IF ((SELECT COUNT(*) FROM FN_ListExtendedProperty('MS_Description', 
-				'SCHEMA', 'dbo', 
-				'TABLE', @TableName, 
-				'COLUMN', @ColumnName)) >= 1)
-					EXEC SP_UpdateExtendedProperty 'MS_Description' 
-				                                   ,@Comment
-				                                   ,'SCHEMA'
-				                                   ,'dbo'
-				                                   ,'TABLE'
-				                                   ,@TableName
-				                                   ,'COLUMN'
-				                                   ,@ColumnName
-				ELSE
-					EXEC SP_AddExtendedProperty 'MS_Description' 
-				                                ,@Comment
-				                                ,'SCHEMA'
-				                                ,'dbo'
-				                                ,'TABLE'
-				                                ,@TableName
-				                                ,'COLUMN'
-				                                ,@ColumnName
-				END
-				]]>
-			</content>
-			
-			<comment>设置字段注释的过程</comment>
-			<create if="启用 == IsCreateDB.getValue">P_ColumnComment</create>
-			
-		</sql>
+    <sqls>
+    
+        <sql id="XSQL_Create_P_TableComment">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE PROCEDURE [dbo].[P_TableComment]
+                  @TableName   AS SYSNAME
+                 ,@Comment     AS SYSNAME
+                AS
+                BEGIN
+                
+                IF ((SELECT COUNT(*) FROM FN_ListExtendedProperty('MS_Description', 
+                'SCHEMA', 'dbo', 
+                'TABLE', @TableName, 
+                NULL, NULL)) >= 1)
+                    EXEC SP_UpdateExtendedProperty 'MS_Description' 
+                                                   ,@Comment
+                                                   ,'SCHEMA'
+                                                   ,'dbo'
+                                                   ,'TABLE'
+                                                   ,@TableName
+                                                   ,NULL
+                                                   ,NULL
+                ELSE
+                    EXEC SP_AddExtendedProperty 'MS_Description' 
+                                                ,@Comment
+                                                ,'SCHEMA'
+                                                ,'dbo'
+                                                ,'TABLE'
+                                                ,@TableName
+                                                ,NULL
+                                                ,NULL
+                END
+                ]]>
+            </content>
+            
+            <comment>设置表注释的过程</comment>
+            <create if="启用 == IsCreateDB.getValue">P_TableComment</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_P_ColumnComment">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE PROCEDURE [dbo].[P_ColumnComment]
+                  @TableName   AS SYSNAME
+                 ,@ColumnName  AS SYSNAME
+                 ,@Comment     AS SYSNAME
+                AS
+                BEGIN
+                
+                IF ((SELECT COUNT(*) FROM FN_ListExtendedProperty('MS_Description', 
+                'SCHEMA', 'dbo', 
+                'TABLE', @TableName, 
+                'COLUMN', @ColumnName)) >= 1)
+                    EXEC SP_UpdateExtendedProperty 'MS_Description' 
+                                                   ,@Comment
+                                                   ,'SCHEMA'
+                                                   ,'dbo'
+                                                   ,'TABLE'
+                                                   ,@TableName
+                                                   ,'COLUMN'
+                                                   ,@ColumnName
+                ELSE
+                    EXEC SP_AddExtendedProperty 'MS_Description' 
+                                                ,@Comment
+                                                ,'SCHEMA'
+                                                ,'dbo'
+                                                ,'TABLE'
+                                                ,@TableName
+                                                ,'COLUMN'
+                                                ,@ColumnName
+                END
+                ]]>
+            </content>
+            
+            <comment>设置字段注释的过程</comment>
+            <create if="启用 == IsCreateDB.getValue">P_ColumnComment</create>
+            
+        </sql>
 
-	</sqls>
-	
+    </sqls>
+    
 </config>

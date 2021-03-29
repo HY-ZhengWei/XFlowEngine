@@ -361,17 +361,17 @@ public class XFlowEngine
         }
         if ( Help.isNull(i_Process.getTemplateID()) )
         {
-            throw new VerifyError("TemplateID is null.");
+            throw new NullPointerException("TemplateID is null.");
         }
         if ( Help.isNull(i_Process.getCurrentActivityCode()) )
         {
-            throw new VerifyError("CurrentActivityCode is null.");
+            throw new NullPointerException("CurrentActivityCode is null.");
         }
         
         Template v_Template = this.templateService.queryByID(i_Process.getTemplateID());
         if ( v_Template == null )
         {
-            throw new VerifyError("TemplateID[" + i_Process.getTemplateID() + "] is not exists.");
+            throw new RuntimeException("TemplateID[" + i_Process.getTemplateID() + "] is not exists.");
         }
         
         ActivityInfo v_Activity = v_Template.getActivityRouteTree().getActivity(i_Process.getCurrentActivityCode());
@@ -489,7 +489,7 @@ public class XFlowEngine
         Template v_Template = this.templateService.queryByNameMaxVersionNo(i_TemplateName ,i_VersionNo);
         if ( v_Template == null )
         {
-            throw new VerifyError("Template[" + i_TemplateName + "] is not exists.");
+            throw new RuntimeException("Template[" + i_TemplateName + "] is not exists.");
         }
         v_Template = this.templateService.queryByID(v_Template);
         
@@ -500,7 +500,7 @@ public class XFlowEngine
             
             if ( v_FlowInfo != null )
             {
-                throw new VerifyError("ServiceDataID[" + i_ServiceDataID + "] is exists.");
+                throw new RuntimeException("ServiceDataID[" + i_ServiceDataID + "] is exists.");
             }
         }
         
@@ -508,7 +508,7 @@ public class XFlowEngine
         Participant v_Participant = v_Template.getActivityRouteTree().getStartActivity().isParticipant(i_User);
         if ( v_Participant == null )
         {
-            throw new VerifyError("User[" + i_User.getUserID() + "] is not participants for TemplateName[" + i_TemplateName + "].");
+            throw new RuntimeException("User[" + i_User.getUserID() + "] is not participants for TemplateName[" + i_TemplateName + "].");
         }
         
         FlowInfo    v_Flow    = new FlowInfo(i_User ,v_Template ,i_ServiceDataID);
@@ -846,12 +846,12 @@ public class XFlowEngine
             if ( v_NextRoutes.getCurrentProcess().getIsPass() != null && v_NextRoutes.getCurrentProcess().getIsPass().intValue() == -1 )
             {
                 // 未满足汇总条件
-                throw new VerifyError("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
+                throw new RuntimeException("WorkID[" + i_WorkID + "] is not pass summary to User[" + i_User.getUserID() + "].");
             }
             else
             {
                 // 没有可走的路由
-                throw new VerifyError("WorkID[" + i_WorkID + "] is not find route to User[" + i_User.getUserID() + "].");
+                throw new RuntimeException("WorkID[" + i_WorkID + "] is not find route to User[" + i_User.getUserID() + "].");
             }
         }
         Template v_Template = this.templateService.queryByID(v_NextRoutes.getFlow().getFlowTemplateID());
@@ -876,7 +876,7 @@ public class XFlowEngine
                 if ( RouteTypeEnum.$ToMany != v_Route.getRouteTypeID() )
                 {
                     // 路由类型不是：分派路由时，不允许并发多路路由
-                    throw new VerifyError("ActivityRouteCode[" + v_ActivityRouteCode + "] routeType is not RouteTypeEnum.$ToMany. WorkID[" + i_WorkID + "] or User[" + i_User.getUserID() + "]");
+                    throw new RuntimeException("ActivityRouteCode[" + v_ActivityRouteCode + "] routeType is not RouteTypeEnum.$ToMany. WorkID[" + i_WorkID + "] or User[" + i_User.getUserID() + "]");
                 }
             }
             
@@ -892,7 +892,7 @@ public class XFlowEngine
             }
             if ( !v_AllowRoute )
             {
-                throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not Route. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is not Route. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
             }
             
             // 设置动态参与人
@@ -946,7 +946,7 @@ public class XFlowEngine
             {
                 if ( Help.isNull(v_OldProcesses) )
                 {
-                    throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                    throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is not reject. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
                 }
                 
                 if ( Help.isNull(v_Process.getParticipants()) )
@@ -985,7 +985,7 @@ public class XFlowEngine
                             }
                             else
                             {
-                                throw new VerifyError("WorkID[" + i_WorkID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                                throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is not find $ActivityUser. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
                             }
                         }
                         else
@@ -1026,7 +1026,7 @@ public class XFlowEngine
             if ( !Help.isNull(v_Previous.getSplitProcessID()) )
             {
                 // 已有多路并行的情况，未闭环前，不能再次发新的多路并行路流转。
-                throw new VerifyError("WorkID[" + i_WorkID + "] is have many SplitProcessID[" + v_Previous.getSplitProcessID() + "] to User[" + i_User.getUserID() + "].");
+                throw new RuntimeException("WorkID[" + i_WorkID + "] is have many SplitProcessID[" + v_Previous.getSplitProcessID() + "] to User[" + i_User.getUserID() + "].");
             }
             
             v_Previous.setNextProcessID   ("");

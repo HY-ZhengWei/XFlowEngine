@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
 
   <name>hy.xflow.engine</name>
-  <url>https://github.com/HY-ZhengWei/XFlowEngine</url>
+  <url>https://github.com/HY-ZhengWei/XFlowEngine</url> <!-- https://gitee.com/HY-ZhengWei/XFlowEngine -->
   
   <developers>
     <developer>
@@ -32,6 +32,7 @@
     </dependency>
     
 	<!-- https://github.com/HY-ZhengWei/XFlowEngineClient -->
+	<!-- https://gitee.com/HY-ZhengWei/XFlowEngineClient -->
 	<dependency>
 	    <groupId>org</groupId>
 	    <artifactId>hy.xflow.engine-client</artifactId>

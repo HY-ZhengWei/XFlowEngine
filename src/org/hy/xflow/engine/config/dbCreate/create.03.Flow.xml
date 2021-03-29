@@ -2,20 +2,20 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 工作流实例活动数据的初始化对象创建（自动创建）的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_Create_TFlowInfo">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+    <sqls>
+    
+        <sql id="XSQL_Create_TFlowInfo">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowInfo
                 (
                  workID             VARCHAR2(64)                     NOT NULL
@@ -57,11 +57,11 @@
                 COMMENT ON COLUMN TFlowInfo.lastProcessID                 IS '最后修改的过程ID';/
                 COMMENT ON COLUMN TFlowInfo.isValid                       IS '是否有效标记(0:无效；1:有效)';/
                 COMMENT ON COLUMN TFlowInfo.isDelete                      IS '是否删除标记(0:未删除；1:已删除)';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowInfo
                 (
                  workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
@@ -86,11 +86,11 @@
                 ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
                 
                 ALTER TABLE  TFlowInfo     COMMENT                          = '工作流信息表';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowInfo
                 (
                  workID             VARCHAR(64)                      NOT NULL
@@ -132,22 +132,22 @@
                 EXEC P_ColumnComment TFlowInfo ,lastProcessID             ,'最后修改的过程ID';/
                 EXEC P_ColumnComment TFlowInfo ,isValid                   ,'是否有效标记(0:无效；1:有效)';/
                 EXEC P_ColumnComment TFlowInfo ,isDelete                  ,'是否删除标记(0:未删除；1:已删除)';/
-				]]>
-			</content>
-			
-			<comment>工作流信息表</comment>
-			<create>TFlowInfo</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TProcess">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流信息表</comment>
+            <create>TFlowInfo</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TProcess">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcess
                 (
                  processID              VARCHAR2(64)                     NOT NULL
@@ -237,11 +237,11 @@
                 COMMENT ON COLUMN TProcess.operateFiles                  IS '操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
                 COMMENT ON COLUMN TProcess.operateDatas                  IS '操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
                 COMMENT ON COLUMN TProcess.infoComment                   IS '备注说明';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcess
                 (
                  processID              VARCHAR(64)                     NOT NULL COMMENT '工作流的过程ID'
@@ -290,11 +290,11 @@
                 ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
                 
                 ALTER TABLE TProcess COMMENT = '工作流过程表';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcess
                 (
                  processID               VARCHAR(64)                      NOT NULL
@@ -384,22 +384,22 @@
                 EXEC P_ColumnComment TProcess ,operateFiles                 ,'操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
                 EXEC P_ColumnComment TProcess ,operateDatas                 ,'操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
                 EXEC P_ColumnComment TProcess ,infoComment                  ,'备注说明';/
-				]]>
-			</content>
-			
-			<comment>工作流过程表</comment>
-			<create>TProcess</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TProcessParticipants">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流过程表</comment>
+            <create>TProcess</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TProcessParticipants">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcessParticipants
                 (
                  pwpID              VARCHAR2(64)                     NOT NULL
@@ -435,11 +435,11 @@
                 COMMENT ON COLUMN TProcessParticipants.createOrgID        IS '创建部门ID';/
                 COMMENT ON COLUMN TProcessParticipants.createOrg          IS '创建部门名称';/
                 COMMENT ON COLUMN TProcessParticipants.createTime         IS '创建时间';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcessParticipants
                 (
                  pwpID              VARCHAR(64)                     NOT NULL COMMENT '主键ID'
@@ -461,11 +461,11 @@
                 ALTER TABLE TProcessParticipants ADD CONSTRAINT PK_TProcessParticipants PRIMARY KEY (pwpID);/
                 
                 ALTER TABLE  TProcessParticipants   comment                 = '工作流过程的实际参与人';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcessParticipants
                 (
                  pwpID              VARCHAR(64)                     NOT NULL
@@ -501,22 +501,22 @@
                 EXEC P_ColumnComment TProcessParticipants ,createOrgID        ,'创建部门ID';/
                 EXEC P_ColumnComment TProcessParticipants ,createOrg          ,'创建部门名称';/
                 EXEC P_ColumnComment TProcessParticipants ,createTime         ,'创建时间';/
-				]]>
-			</content>
-			
-			<comment>工作流过程的动态参与人</comment>
-			<create>TProcessParticipants</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TFlowLastOperator">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流过程的动态参与人</comment>
+            <create>TProcessParticipants</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TFlowLastOperator">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowLastOperator
                 (
                  workID             VARCHAR2(64)                     NOT NULL
@@ -539,11 +539,11 @@
                 COMMENT ON COLUMN TFlowLastOperator.operateUser        IS '操作人员名称';/
                 COMMENT ON COLUMN TFlowLastOperator.operateOrgID       IS '操作部门ID';/
                 COMMENT ON COLUMN TFlowLastOperator.operateOrg         IS '操作部门名称';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowLastOperator
                 (
                  workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
@@ -558,11 +558,11 @@
                 
                 
                 ALTER  TABLE  TFlowLastOperator      COMMENT              = '工作流最后操作人(实时数据)';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowLastOperator
                 (
                  workID             VARCHAR(64)                      NOT NULL
@@ -585,22 +585,22 @@
                 EXEC P_ColumnComment TFlowLastOperator ,operateUser        ,'操作人员名称';/
                 EXEC P_ColumnComment TFlowLastOperator ,operateOrgID       ,'操作部门ID';/
                 EXEC P_ColumnComment TFlowLastOperator ,operateOrg         ,'操作部门名称';/
-				]]>
-			</content>
-			
-			<comment>工作流最后操作人(实时数据)</comment>
-			<create>TFlowLastOperator</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TFlowFutureOperator">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流最后操作人(实时数据)</comment>
+            <create>TFlowLastOperator</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TFlowFutureOperator">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowFutureOperator
                 (
                  workID             VARCHAR2(64)                     NOT NULL
@@ -633,11 +633,11 @@
                 COMMENT ON COLUMN TFlowFutureOperator.createOrgID         IS '创建部门ID';/
                 COMMENT ON COLUMN TFlowFutureOperator.createOrg           IS '创建部门名称';/
                 COMMENT ON COLUMN TFlowFutureOperator.createTime          IS '创建时间';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowFutureOperator
                 (
                  workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
@@ -657,11 +657,11 @@
                 
                 
                 ALTER  TABLE  TFlowFutureOperator    COMMENT                 = '工作流未来操作人(实时数据)';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowFutureOperator
                 (
                  workID             VARCHAR(64)                     NOT NULL
@@ -694,14 +694,14 @@
                 EXEC P_ColumnComment TFlowFutureOperator ,createOrgID        ,'创建部门ID';/
                 EXEC P_ColumnComment TFlowFutureOperator ,createOrg          ,'创建部门名称';/
                 EXEC P_ColumnComment TFlowFutureOperator ,createTime         ,'创建时间';/
-				]]>
-			</content>
-			
-			<comment>工作流未来操作人(实时数据)</comment>
-			<create>TFlowFutureOperator</create>
-			
-		</sql>
-		
-	</sqls>
-	
+                ]]>
+            </content>
+            
+            <comment>工作流未来操作人(实时数据)</comment>
+            <create>TFlowFutureOperator</create>
+            
+        </sql>
+        
+    </sqls>
+    
 </config>

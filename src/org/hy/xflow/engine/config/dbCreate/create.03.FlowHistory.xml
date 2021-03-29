@@ -2,20 +2,20 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
-	
-	
-	
-	<!-- 工作流实例历史数据的初始化对象创建（自动创建）的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_Create_TFlowInfo_History">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
+    
+    
+    
+    <!-- 工作流实例历史数据的初始化对象创建（自动创建）的相关SQL -->
+    <sqls>
+    
+        <sql id="XSQL_Create_TFlowInfo_History">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowInfo_History
                 (
                  workID             VARCHAR2(64)                     NOT NULL
@@ -57,11 +57,11 @@
                 COMMENT ON COLUMN TFlowInfo_History.lastProcessID         IS '最后修改的过程ID';/
                 COMMENT ON COLUMN TFlowInfo_History.isValid               IS '是否有效标记(0:无效；1:有效)';/
                 COMMENT ON COLUMN TFlowInfo_History.isDelete              IS '是否删除标记(0:未删除；1:已删除)';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowInfo_History
                 (
                  workID             varchar(64)                     NOT NULL comment '工作流实例ID'
@@ -86,11 +86,11 @@
                 ALTER TABLE TFlowInfo_History ADD CONSTRAINT PK_TFlowInfo_History PRIMARY KEY (workID);/
                 
                 ALTER TABLE  TFlowInfo_History     COMMENT                  = '工作流信息表';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TFlowInfo_History
                 (
                  workID             VARCHAR(64)                      NOT NULL
@@ -132,22 +132,22 @@
                 EXEC P_ColumnComment TFlowInfo_History ,lastProcessID      ,'最后修改的过程ID';/
                 EXEC P_ColumnComment TFlowInfo_History ,isValid            ,'是否有效标记(0:无效；1:有效)';/
                 EXEC P_ColumnComment TFlowInfo_History ,isDelete           ,'是否删除标记(0:未删除；1:已删除)';/
-				]]>
-			</content>
-			
-			<comment>工作流信息表(历史表)</comment>
-			<create>TFlowInfo_History</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TProcess_History">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流信息表(历史表)</comment>
+            <create>TFlowInfo_History</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TProcess_History">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcess_History
                 (
                  processID              VARCHAR2(64)                     NOT NULL
@@ -237,11 +237,11 @@
                 COMMENT ON COLUMN TProcess_History.operateFiles          IS '操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
                 COMMENT ON COLUMN TProcess_History.operateDatas          IS '操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
                 COMMENT ON COLUMN TProcess_History.infoComment           IS '备注说明';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcess_History
                 (
                  processID              VARCHAR(64)                     NOT NULL COMMENT '工作流的过程ID'
@@ -290,11 +290,11 @@
                 ALTER TABLE TProcess_History ADD CONSTRAINT PK_TProcess_History PRIMARY KEY (processID);/
                 
                 ALTER TABLE  TProcess_History    COMMENT                   = '工作流过程表';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcess_History
                 (
                  processID               VARCHAR(64)                      NOT NULL
@@ -384,22 +384,22 @@
                 EXEC P_ColumnComment TProcess_History ,operateFiles          ,'操作文件信息，由第三方使用者定义其内容（拓展性数据）';/
                 EXEC P_ColumnComment TProcess_History ,operateDatas          ,'操作数据信息，由第三方使用者定义其内容（拓展性数据）';/
                 EXEC P_ColumnComment TProcess_History ,infoComment           ,'备注说明';/
-				]]>
-			</content>
-			
-			<comment>工作流过程表(历史表)</comment>
-			<create>TProcess_History</create>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_Create_TProcessParticipants_History">
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content if="ORACLE == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <comment>工作流过程表(历史表)</comment>
+            <create>TProcess_History</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TProcessParticipants_History">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcessParticipants_History
                 (
                  pwpID              VARCHAR2(64)                     NOT NULL
@@ -435,11 +435,11 @@
                 COMMENT ON COLUMN TProcessParticipants_History.createOrgID    IS '创建部门ID';/
                 COMMENT ON COLUMN TProcessParticipants_History.createOrg      IS '创建部门名称';/
                 COMMENT ON COLUMN TProcessParticipants_History.createTime     IS '创建时间';/
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcessParticipants_History
                 (
                  pwpID              VARCHAR(64)                     NOT NULL COMMENT '主键ID'
@@ -461,11 +461,11 @@
                 ALTER TABLE TProcessParticipants_History ADD CONSTRAINT PK_TProcessParticipants_History PRIMARY KEY (pwpID);/
                 
                 ALTER TABLE  TProcessParticipants_History    COMMENT            = '工作流过程的实际参与人';/
-				]]>
-			</content>
-			
-			<content if="SQLSERVER == DSG_XFlow.getDbProductType">
-				<![CDATA[
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
                 CREATE TABLE TProcessParticipants_History
                 (
                  pwpID              VARCHAR(64)                     NOT NULL
@@ -501,14 +501,14 @@
                 EXEC P_ColumnComment TProcessParticipants_History ,createOrgID    ,'创建部门ID';/
                 EXEC P_ColumnComment TProcessParticipants_History ,createOrg      ,'创建部门名称';/
                 EXEC P_ColumnComment TProcessParticipants_History ,createTime     ,'创建时间';/
-				]]>
-			</content>
-			
-			<comment>工作流过程的动态参与人(历史表)</comment>
-			<create>TProcessParticipants_History</create>
-			
-		</sql>
-		
-	</sqls>
-	
+                ]]>
+            </content>
+            
+            <comment>工作流过程的动态参与人(历史表)</comment>
+            <create>TProcessParticipants_History</create>
+            
+        </sql>
+        
+    </sqls>
+    
 </config>
