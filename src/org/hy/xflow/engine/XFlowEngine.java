@@ -13,10 +13,10 @@ import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
 import org.hy.xflow.engine.bean.FlowInfo;
-import org.hy.xflow.engine.bean.Participant;
-import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
+import org.hy.xflow.engine.bean.Participant;
+import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.bean.UserParticipant;
@@ -35,7 +35,7 @@ import org.hy.xflow.engine.service.ITemplateService;
 
 
 /**
- * 工作流引擎 
+ * 工作流引擎
  *
  * @author      ZhengWei(HY)
  * @createDate  2017-03-10
@@ -99,7 +99,7 @@ public class XFlowEngine
      * 
      * 各种参与人在活动节点上的级别划分如下：
      *   指定动态参与人 》 活动实际操作人  》  发起人 》 活动参与人
-     *  
+     * 
      * 路由可以不设定参与人的要求，但当路由设定参与人要求时，无论哪种参与人类型，均要符合路由对参与人的要求。
      * 
      * @author      ZhengWei(HY)
@@ -164,7 +164,7 @@ public class XFlowEngine
      * 
      * 各种参与人在活动节点上的级别划分如下：
      *   指定动态参与人 》 活动实际操作人  》  发起人 》 活动参与人
-     *  
+     * 
      * 路由可以不设定参与人的要求，但当路由设定参与人要求时，无论哪种参与人类型，均要符合路由对参与人的要求。
      * 
      * @author      ZhengWei(HY)
@@ -220,7 +220,7 @@ public class XFlowEngine
                 }
             }
         }
-        // 情况1. 活动节点的参与人是之前另一个活动的实际操作人 
+        // 情况1. 活动节点的参与人是之前另一个活动的实际操作人
         // 情况2. 活动节点的参与人有发起人的情况
         // 情况3. 常规工作流模板定义的参与人
         else
@@ -539,7 +539,7 @@ public class XFlowEngine
      * @createDate  2018-05-02
      * @version     v1.0
      *
-     * @param i_User                用户 
+     * @param i_User                用户
      * @param i_WorkID              工作流ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @return                      是否有可走的路由，要通过 NextRoutes.getRoutes() 来判定
@@ -676,7 +676,7 @@ public class XFlowEngine
      * @createDate  2018-05-02
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
      * @return
      */
@@ -700,7 +700,7 @@ public class XFlowEngine
      * @createDate  2018-05-08
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_WorkID              工作流ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCode   走的路由编码
@@ -720,7 +720,7 @@ public class XFlowEngine
      * @createDate  2018-05-08
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_WorkID              工作流ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCode   走的路由编码
@@ -752,7 +752,7 @@ public class XFlowEngine
      * @createDate  2018-05-07
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_WorkID              工作流ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCode   走的路由编码
@@ -782,7 +782,7 @@ public class XFlowEngine
      * @createDate  2019-09-12
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_WorkID              工作流ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCodes  走的多个发并路由编码
@@ -811,7 +811,7 @@ public class XFlowEngine
      * @createDate  2019-09-10
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_WorkID              工作流ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCodes  Map.Partition  走的路由编码，
@@ -1110,6 +1110,14 @@ public class XFlowEngine
                         v_ProcessList.get(0).setSplitProcessID("");
                     }
                 }
+                else
+                {
+                    // 汇总未通过时，删除未来操作人
+                    for (FlowProcess v_FPItem : v_ProcessList)
+                    {
+                        v_FPItem.setParticipants(new ArrayList<ProcessParticipant>());
+                    }
+                }
             }
         }
         
@@ -1152,9 +1160,9 @@ public class XFlowEngine
         }
         else
         {
-            throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is error. ActivityCode[" 
+            throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is error. ActivityCode["
                                      + StringHelp.toString(Help.toList(v_RouteList ,"activityCode"))
-                                     + "]  ActivityRouteCode[" + StringHelp.toString(Help.toListKeys(i_ActivityRouteCodes)) 
+                                     + "]  ActivityRouteCode[" + StringHelp.toString(Help.toListKeys(i_ActivityRouteCodes))
                                      + "] User[" + i_User.getUserID() + "]");
         }
     }
@@ -1168,7 +1176,7 @@ public class XFlowEngine
      * @createDate  2018-05-08
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
      * @param i_ActivityRouteCode   走的路由编码
      * @return
@@ -1187,7 +1195,7 @@ public class XFlowEngine
      * @createDate  2018-05-08
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCode   走的路由编码
@@ -1217,7 +1225,7 @@ public class XFlowEngine
      * @createDate  2018-05-07
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCode   走的路由编码
@@ -1247,7 +1255,7 @@ public class XFlowEngine
      * @createDate  2019-09-12
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCodes  走的多个发并路由编码
@@ -1273,7 +1281,7 @@ public class XFlowEngine
      * @createDate  2019-09-10
      * @version     v1.0
      *
-     * @param i_User                操作用户 
+     * @param i_User                操作用户
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCodes  Map.Partition  走的路由编码，
@@ -1401,7 +1409,7 @@ public class XFlowEngine
      * @version     v1.0
      *
      * @param i_WorkID  工作流实例ID
-     * @return          
+     * @return
      */
     public List<FlowProcess> querySummarysByWorkID(String i_WorkID)
     {
@@ -1418,7 +1426,7 @@ public class XFlowEngine
      * @version     v1.0
      *
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
-     * @return                
+     * @return
      */
     public List<FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID)
     {

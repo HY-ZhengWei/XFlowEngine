@@ -17,10 +17,10 @@
 	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="lib/jtds-1.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/XFlowEngineClient"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.xjava"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.net"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/junit-4.13.1.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/hy.common.xjava"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

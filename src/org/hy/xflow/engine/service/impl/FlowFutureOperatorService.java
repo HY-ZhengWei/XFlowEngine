@@ -38,17 +38,17 @@ import org.hy.xflow.engine.service.IFlowFutureOperatorService;
 public class FlowFutureOperatorService extends BaseService implements IFlowFutureOperatorService ,CommunicationListener
 {
     
-    /** 
+    /**
      * 用人找实例的高速缓存。
-     *   Map.key分区为参与人的形式的值：objectType:objectID 
+     *   Map.key分区为参与人的形式的值：objectType:objectID
      *   Map.value元素为工作流实例ID：workID
      */
     private static PartitionMap<String ,FutureOperator> $FutureOperatorsByWorkID          = null;
     
-    /** 
+    /**
      * 用实例找人的高速缓存。
      *   Map.key分区为工作流实例ID：workID
-     *   Map.value元素为参与人的形式的值：objectType:objectID 
+     *   Map.value元素为参与人的形式的值：objectType:objectID
      */
     private static PartitionMap<String ,FutureOperator> $FutureOperators_KeyWorkID        = null;
     
@@ -80,6 +80,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @param i_User
      * @return
      */
+    @Override
     public List<String> queryWorkIDs(User i_User)
     {
         return queryIDs(i_User ,"workID");
@@ -101,6 +102,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @param i_User
      * @return
      */
+    @Override
     public List<String> queryServiceDataIDs(User i_User)
     {
         return queryIDs(i_User ,"serviceDataID");
@@ -169,6 +171,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @version     v1.0
      *
      */
+    @Override
     public synchronized void initCaches()
     {
         if ( $FutureOperatorsByWorkID == null )
@@ -190,6 +193,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *
      * @param i_Process
      */
+    @Override
     public void updateCache(FlowProcess i_Process)
     {
         this.delCache(i_Process);
@@ -208,6 +212,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *
      * @param i_Process
      */
+    @Override
     public void addCache(FlowProcess i_Process)
     {
         addCacheByTrue(i_Process);
@@ -295,6 +300,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *
      * @param i_Process
      */
+    @Override
     public void delCache(FlowProcess i_Process)
     {
         delCacheByTrue(i_Process);
@@ -404,6 +410,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *
      * @param i_Process
      */
+    @Override
     public synchronized void delCacheToHistory(FlowProcess i_Process)
     {
         i_Process.setSplitProcessID("");
@@ -427,7 +434,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     /**
      * 查询所有未来操作人，并分区保存，用于高速缓存查询
      * 
-     *   Map.key分区为参与人的形式的值：objectType:objectID 
+     *   Map.key分区为参与人的形式的值：objectType:objectID
      *   Map.value元素为工作流实例ID：workID
      * 
      * @author      ZhengWei(HY)
@@ -436,6 +443,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *
      * @return
      */
+    @Override
     public PartitionMap<String ,FutureOperator> queryAllByWorkID()
     {
         if ( $FutureOperatorsByWorkID == null )
@@ -450,7 +458,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     /**
      * 查询所有未来操作人，并分区保存，用于高速缓存查询
      * 
-     *   Map.key    分区为参与人的形式的值：objectType:objectID 
+     *   Map.key    分区为参与人的形式的值：objectType:objectID
      *   Map.value  元素为工作流未来操作人对象
      * 
      * @author      ZhengWei(HY)
@@ -503,6 +511,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @param i_ServiceDataID  业务ID
      * @return                 返回工作流ID
      */
+    @Override
     public String querySToWorkID(String i_ServiceDataID)
     {
         return $FutureOperators_SToWorkID.get(i_ServiceDataID);
@@ -521,6 +530,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @param i_WorkID         工作流实例ID
      * @param i_ServiceDataID  业务ID
      */
+    @Override
     public void pushSToWorkID(String i_WorkID ,String i_ServiceDataID)
     {
         $FutureOperators_SToWorkID.put(i_ServiceDataID ,i_WorkID);
@@ -537,7 +547,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     
     /**
      *  数据通讯的事件类型。即通知哪一个事件监听者来处理数据通讯（对应 ServerSocket.listeners 的分区标识）
-     *  
+     * 
      *  事件类型区分大小写
      * 
      * @author      ZhengWei(HY)
@@ -546,6 +556,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *
      * @return
      */
+    @Override
     public String getEventType()
     {
         return "CL_FlowFutureOperator";

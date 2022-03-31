@@ -15,8 +15,8 @@ import org.hy.common.xml.XJava;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
-import org.hy.xflow.engine.bean.Participant;
 import org.hy.xflow.engine.bean.ActivityRouteTree;
+import org.hy.xflow.engine.bean.Participant;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.common.BaseService;
 import org.hy.xflow.engine.dao.IActivityInfoDAO;
@@ -95,6 +95,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      *
      * @return
      */
+    @Override
     public synchronized List<Template> queryAll()
     {
         List<Template> v_Tempaltes = this.templateDAO.queryAll();
@@ -124,6 +125,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      * @param i_TemplateID
      * @return
      */
+    @Override
     public Template queryByID(String i_TemplateID)
     {
         Template v_Template = queryByIDByTrue(i_TemplateID);
@@ -188,6 +190,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      * @param i_Template
      * @return
      */
+    @Override
     public Template queryByID(Template i_Template)
     {
         return this.queryByID(i_Template.getTemplateID());
@@ -207,6 +210,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      *
      * @return
      */
+    @Override
     public Template queryByNameMaxVersionNo(String i_TemplateName ,Integer i_VersionNo)
     {
         return this.templateDAO.queryByNameMaxVersionNo(i_TemplateName ,i_VersionNo);
@@ -225,6 +229,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      *
      * @return
      */
+    @Override
     public Template queryByNameMaxVersionNo(Template i_Template)
     {
         return this.templateDAO.queryByNameMaxVersionNo(i_Template);
@@ -243,6 +248,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      * @param i_TemplateID
      * @return
      */
+    @Override
     public boolean refreshCache(String i_TemplateID)
     {
         try
@@ -285,6 +291,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      * @param i_Routes      活动路由的集合
      * @return
      */
+    @Override
     public boolean saves(String i_TemplateID ,List<ActivityInfo> i_Activitys ,List<ActivityRoute> i_Routes)
     {
         Help.setValues(i_Activitys ,"templateID" ,i_TemplateID);
@@ -305,7 +312,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
     
     /**
      *  数据通讯的事件类型。即通知哪一个事件监听者来处理数据通讯（对应 ServerSocket.listeners 的分区标识）
-     *  
+     * 
      *  事件类型区分大小写
      * 
      * @author      ZhengWei(HY)
@@ -314,6 +321,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      *
      * @return
      */
+    @Override
     public String getEventType()
     {
         return "CL_Template";
