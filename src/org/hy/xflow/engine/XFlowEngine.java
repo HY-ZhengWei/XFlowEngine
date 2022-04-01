@@ -1115,7 +1115,7 @@ public class XFlowEngine
                     // 汇总未通过时，删除未来操作人
                     for (FlowProcess v_FPItem : v_ProcessList)
                     {
-                        v_FPItem.setParticipants(new ArrayList<ProcessParticipant>());
+                        v_FPItem.setFutureParticipants(new ArrayList<ProcessParticipant>());
                     }
                 }
             }
