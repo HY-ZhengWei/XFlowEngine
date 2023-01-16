@@ -4,7 +4,7 @@
 
   <groupId>org</groupId>
   <artifactId>hy.xflow.engine</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <packaging>jar</packaging>
 
   <name>hy.xflow.engine</name>
@@ -27,17 +27,17 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
     
-	<!-- https://github.com/HY-ZhengWei/XFlowEngineClient -->
-	<!-- https://gitee.com/HY-ZhengWei/XFlowEngineClient -->
-	<dependency>
-	    <groupId>org</groupId>
-	    <artifactId>hy.xflow.engine-client</artifactId>
-	    <version>1.0.7</version>
-	</dependency>
-	
+    <!-- https://github.com/HY-ZhengWei/XFlowEngineClient -->
+    <!-- https://gitee.com/HY-ZhengWei/XFlowEngineClient -->
+    <dependency>
+        <groupId>org</groupId>
+        <artifactId>hy.xflow.engine-client</artifactId>
+        <version>1.0.7</version>
+    </dependency>
+    
   </dependencies>
 </project>

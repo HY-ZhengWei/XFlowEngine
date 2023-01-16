@@ -1112,10 +1112,14 @@ public class XFlowEngine
                 }
                 else
                 {
-                    // 汇总未通过时，删除未来操作人
-                    for (FlowProcess v_FPItem : v_ProcessList)
+                    // 只有转流的路由是“汇总”路由时
+                    if ( RouteTypeEnum.$ToSum.equals(v_RouteList.get(0).getRouteTypeID()) )
                     {
-                        v_FPItem.setFutureParticipants(new ArrayList<ProcessParticipant>());
+                        // 汇总未通过时，删除未来操作人
+                        for (FlowProcess v_FPItem : v_ProcessList)
+                        {
+                            v_FPItem.setFutureParticipants(new ArrayList<ProcessParticipant>());
+                        }
                     }
                 }
             }

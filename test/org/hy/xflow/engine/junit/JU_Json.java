@@ -1,7 +1,6 @@
 package org.hy.xflow.engine.junit;
 
 import org.hy.common.xml.XJSON;
-import org.hy.common.xml.junit.JU_XJSON;
 import org.hy.common.xml.log.Logger;
 import org.hy.xflow.engine.bean.NextRoutes;
 import org.junit.Test;
@@ -13,7 +12,7 @@ import org.junit.Test;
 public class JU_Json
 {
     
-    private static final Logger $Logger = new Logger(JU_XJSON.class ,true);
+    private static final Logger $Logger = new Logger(JU_Json.class ,true);
     
     
     
