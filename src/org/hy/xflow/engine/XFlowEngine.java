@@ -638,11 +638,14 @@ public class XFlowEngine
                             {
                                 // 汇总未通过
                                 v_Process.setIsPass(-1);
+                                continue;
+                                /*
                                 return new NextRoutes(v_FlowInfo
                                                      ,v_Process
                                                      ,v_Activity
                                                      ,null
                                                      ,new ArrayList<ActivityRoute>());
+                                */
                             }
                         }
                     }
