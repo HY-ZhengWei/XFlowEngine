@@ -2,51 +2,51 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 工作流活动组件(节点)的参与人模块的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_XFlow_ActivityParticipants_QueryByTemplateID"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.participantID
-				       ,A.templateID
-				       ,A.activityID
-				       ,B.participantTypeID  AS "participantType.participantTypeID"
-				       ,B.participantType    AS "participantType.participantType"
-				       ,B.infoComment        AS "participantType.infoComment"
-				       ,A.objectType
-				       ,A.objectID 
-				       ,A.objectName
-				       ,A.objectNo
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createTime
-				  FROM  TActivityParticipants  A
-				       ,TParticipantType       B
-				 WHERE  A.objectType = B.participantTypeID
-				   AND  A.templateID = ':templateID'
-				 ORDER  BY A.activityID ,B.orderNo ,A.objectNo
-				]]>
-			</content>
-			
-			<result>
-				<table>org.hy.common.TablePartition</table>
-				<fill>putRow(row.activityID ,row)</fill>
-				<row>org.hy.xflow.engine.bean.Participant</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-		</sql>
-		
-	</sqls>
-	
+    <sqls>
+    
+        <sql id="XSQL_XFlow_ActivityParticipants_QueryByTemplateID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.participantID
+                       ,A.templateID
+                       ,A.activityID
+                       ,B.participantTypeID  AS "participantType.participantTypeID"
+                       ,B.participantType    AS "participantType.participantType"
+                       ,B.infoComment        AS "participantType.infoComment"
+                       ,A.objectType
+                       ,A.objectID 
+                       ,A.objectName
+                       ,A.objectNo
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createTime
+                  FROM  TActivityParticipants  A
+                       ,TParticipantType       B
+                 WHERE  A.objectType = B.participantTypeID
+                   AND  A.templateID = ':templateID'
+                 ORDER  BY A.activityID ,B.orderNo ,A.objectNo
+                ]]>
+            </content>
+            
+            <result>
+                <table>org.hy.common.TablePartition</table>
+                <fill>putRow(row.activityID ,row)</fill>
+                <row>org.hy.xflow.engine.bean.Participant</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+    </sqls>
+    
 </config>

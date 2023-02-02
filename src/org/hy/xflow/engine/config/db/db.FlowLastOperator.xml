@@ -2,133 +2,133 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 工作流最后操作人(实时数据)模块的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_XFlow_TFlowLastOperator_Del"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				DELETE  TFlowLastOperator
-			     WHERE  workID = ':process.workID'
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				DELETE FROM TFlowLastOperator
-			     WHERE  workID = ':process.workID'
-				]]>
-			</content>
-			
-			<comment>用于创建实例时：删除工作流实例的最后操作人</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_TFlowLastOperator_GoOn_Del"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				DELETE  TFlowLastOperator
-			     WHERE  workID = ':workID'
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				DELETE FROM TFlowLastOperator
-			     WHERE  workID = ':workID'
-				]]>
-			</content>
-			
-			<comment>用于流转实例时：删除工作流实例的最后操作人</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_TFlowLastOperator_Insert"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TFlowLastOperator
-				       (
-				        workID       
-				       ,serviceDataID
-				       ,processID
-				       ,operateTime  
-				       ,operateUserID
-				       ,operateUser  
-				       ,operateOrgID 
-				       ,operateOrg   
-				       )
-                VALUES (
-				        ':process.workID'
-				       ,':process.serviceDataID'
-				       ,':process.processID'
-				       ,':process.operateTime.fullMilli'
-				       ,':process.operateUserID'
-				       ,':process.operateUser'
-				       ,':process.operateOrgID' 
-				       ,':process.operateOrg'
+    <sqls>
+    
+        <sql id="XSQL_XFlow_TFlowLastOperator_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowLastOperator
+                 WHERE  workID = ':process.workID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowLastOperator
+                 WHERE  workID = ':process.workID'
+                ]]>
+            </content>
+            
+            <comment>用于创建实例时：删除工作流实例的最后操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowLastOperator_GoOn_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowLastOperator
+                 WHERE  workID = ':workID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowLastOperator
+                 WHERE  workID = ':workID'
+                ]]>
+            </content>
+            
+            <comment>用于流转实例时：删除工作流实例的最后操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowLastOperator_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowLastOperator
+                       (
+                        workID       
+                       ,serviceDataID
+                       ,processID
+                       ,operateTime  
+                       ,operateUserID
+                       ,operateUser  
+                       ,operateOrgID 
+                       ,operateOrg   
                        )
-				]]>
-			</content>
-			
-			<comment>用于创建实例时：添加最后操作人</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_TFlowLastOperator_GoOn_Insert"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TFlowLastOperator
-				       (
-				        workID       
-				       ,serviceDataID
-				       ,processID
-				       ,operateTime  
-				       ,operateUserID
-				       ,operateUser  
-				       ,operateOrgID 
-				       ,operateOrg   
-				       )
                 VALUES (
-				        ':workID'
-				       ,':serviceDataID'
-				       ,':processID'
-				       ,':operateTime.fullMilli'
-				       ,':operateUserID'
-				       ,':operateUser'
-				       ,':operateOrgID' 
-				       ,':operateOrg'
+                        ':process.workID'
+                       ,':process.serviceDataID'
+                       ,':process.processID'
+                       ,':process.operateTime.fullMilli'
+                       ,':process.operateUserID'
+                       ,':process.operateUser'
+                       ,':process.operateOrgID' 
+                       ,':process.operateOrg'
                        )
-				]]>
-			</content>
-			
-			<comment>用于流转实例时：添加最后操作人</comment>
-			
-		</sql>
-		
-	</sqls>
-	
+                ]]>
+            </content>
+            
+            <comment>用于创建实例时：添加最后操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowLastOperator_GoOn_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowLastOperator
+                       (
+                        workID       
+                       ,serviceDataID
+                       ,processID
+                       ,operateTime  
+                       ,operateUserID
+                       ,operateUser  
+                       ,operateOrgID 
+                       ,operateOrg   
+                       )
+                VALUES (
+                        ':workID'
+                       ,':serviceDataID'
+                       ,':processID'
+                       ,':operateTime.fullMilli'
+                       ,':operateUserID'
+                       ,':operateUser'
+                       ,':operateOrgID' 
+                       ,':operateOrg'
+                       )
+                ]]>
+            </content>
+            
+            <comment>用于流转实例时：添加最后操作人</comment>
+            
+        </sql>
+        
+    </sqls>
+    
 </config>

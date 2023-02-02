@@ -2,177 +2,177 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 工作流过程参与人表模块的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_XFlow_ProcessParticipants_Insert"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TProcessParticipants
-				       (
-				        pwpID
-				       ,processID
-				       ,splitProcessID
-				       ,workID
-				       ,serviceDataID
-				       ,objectID
-				       ,objectName
-				       ,objectNo
-				       ,objectType
-				       ,createOrgID
-				       ,createOrg
-				       ,createTime
-				       ,createrID
-				       ,creater
-				       )
-				VALUES (
-				        :pwpID
-				       ,:processID
-				       ,:splitProcessID
-				       ,:workID
-				       ,:serviceDataID
-				       ,:objectID
-				       ,:objectName
-				       ,:objectNo
-				       ,:objectType.value
-				       ,:createOrgID
-				       ,:createOrg
-				       ,:createTime
-				       ,:createrID
-				       ,:creater
-				       )
-				]]>
-			</content>
-			
-			<comment>新增工作流流转过程的动态参与人信息</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_ProcessParticipants_QueryByWorkID_ServiceDataID"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.pwpID
-				       ,A.processID
-				       ,A.splitProcessID
-				       ,A.workID
-				       ,A.serviceDataID
-				       ,A.objectID
-				       ,A.objectName
-				       ,A.objectNo
-				       ,A.objectType
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.createrID
-				       ,A.creater
-				  FROM  TProcessParticipants  A
-			<[   WHERE  A.workID        = ':workID'          ]>
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-				 ORDER  BY A.processID
-				          ,A.objectNo
-				]]>
-			</content>
-			
-			<result>
-				<table>org.hy.common.TablePartition</table>
-				<fill>putRow(row.processID ,row)</fill>
-				<row>org.hy.xflow.engine.bean.ProcessParticipant</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-			<comment>查询工作流流转过程的动态参与人信息</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_ProcessParticipants_ToHistory"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TProcessParticipants_History
-				       (
-				        pwpID
-				       ,processID
-				       ,splitProcessID
-				       ,workID
-				       ,serviceDataID
-				       ,objectID
-				       ,objectName
-				       ,objectNo
-				       ,objectType
-				       ,createOrgID
-				       ,createOrg
-				       ,createTime
-				       ,createrID
-				       ,creater
-				       )
+    <sqls>
+    
+        <sql id="XSQL_XFlow_ProcessParticipants_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcessParticipants
+                       (
+                        pwpID
+                       ,processID
+                       ,splitProcessID
+                       ,workID
+                       ,serviceDataID
+                       ,objectID
+                       ,objectName
+                       ,objectNo
+                       ,objectType
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       ,createrID
+                       ,creater
+                       )
+                VALUES (
+                        :pwpID
+                       ,:processID
+                       ,:splitProcessID
+                       ,:workID
+                       ,:serviceDataID
+                       ,:objectID
+                       ,:objectName
+                       ,:objectNo
+                       ,:objectType.value
+                       ,:createOrgID
+                       ,:createOrg
+                       ,:createTime
+                       ,:createrID
+                       ,:creater
+                       )
+                ]]>
+            </content>
+            
+            <comment>新增工作流流转过程的动态参与人信息</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessParticipants_QueryByWorkID_ServiceDataID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
                 SELECT  A.pwpID
-				       ,A.processID
-				       ,A.splitProcessID
-				       ,A.workID
-				       ,A.serviceDataID
-				       ,A.objectID
-				       ,A.objectName
-				       ,A.objectNo
-				       ,A.objectType
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.createrID
-				       ,A.creater
+                       ,A.processID
+                       ,A.splitProcessID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.objectID
+                       ,A.objectName
+                       ,A.objectNo
+                       ,A.objectType
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.createrID
+                       ,A.creater
                   FROM  TProcessParticipants  A
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  A.workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<comment>全流转结束后转历史</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_ProcessParticipants_ToHistory_Del"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				DELETE  TProcessParticipants
-			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				DELETE FROM TProcessParticipants
-			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<comment>删除前转历史</comment>
-			
-		</sql>
-		
-	</sqls>
-	
+            <[   WHERE  A.workID        = ':workID'          ]>
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+                 ORDER  BY A.processID
+                          ,A.objectNo
+                ]]>
+            </content>
+            
+            <result>
+                <table>org.hy.common.TablePartition</table>
+                <fill>putRow(row.processID ,row)</fill>
+                <row>org.hy.xflow.engine.bean.ProcessParticipant</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询工作流流转过程的动态参与人信息</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessParticipants_ToHistory"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcessParticipants_History
+                       (
+                        pwpID
+                       ,processID
+                       ,splitProcessID
+                       ,workID
+                       ,serviceDataID
+                       ,objectID
+                       ,objectName
+                       ,objectNo
+                       ,objectType
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       ,createrID
+                       ,creater
+                       )
+                SELECT  A.pwpID
+                       ,A.processID
+                       ,A.splitProcessID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.objectID
+                       ,A.objectName
+                       ,A.objectNo
+                       ,A.objectType
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.createrID
+                       ,A.creater
+                  FROM  TProcessParticipants  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>全流转结束后转历史</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessParticipants_ToHistory_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TProcessParticipants
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TProcessParticipants
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>删除前转历史</comment>
+            
+        </sql>
+        
+    </sqls>
+    
 </config>

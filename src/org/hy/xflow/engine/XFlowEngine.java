@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hy.common.Date;
 import org.hy.common.Help;
+import org.hy.common.ListMap;
 import org.hy.common.PartitionMap;
 import org.hy.common.StringHelp;
 import org.hy.common.TablePartition;
@@ -44,6 +45,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  *              v1.2  2018-09-05  添加：1.通过工作流流转信息，获取当前活动节点的信息
  *              v2.0  2019-09-12  添加：1.支持多路并行路由的流程
  *                                优化：2.统一所有 toNextByServiceDataID() 系列的方法，均从 toNext() 方法走。
+ *              v2.0  2023-02-02  添加：查询用户可以走的路由 queryNextRoutes 方法，当未动态指定参与人时，返回模板上定义的参与人
  */
 @Xjava
 public class XFlowEngine
@@ -170,6 +172,7 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2018-05-09
      * @version     v1.0
+     *              v2.0  2023-02-02  添加：查询用户可以走的路由 queryNextRoutes 方法，当未动态指定参与人时，返回模板上定义的参与人
      *
      * @param i_User      用户
      * @param i_Flow      工作流实例。内部有此实例的所有流转信息
@@ -226,6 +229,7 @@ public class XFlowEngine
         else
         {
             PartitionMap<String ,FlowProcess> v_OldProcessMap = i_Flow.getProcessActivityMap();
+            io_Process.setParticipants(new ArrayList<ProcessParticipant>());
             
             for (ActivityRoute v_Route : v_Routes)
             {
@@ -246,6 +250,15 @@ public class XFlowEngine
                     {
                         v_RetRoutes.add(v_Route);
                     }
+                    
+                    // 将模板上设定的参与人给 工作流流转过程 对象
+                    if ( !Help.isNull(i_Activity.getParticipants()) )
+                    {
+                        for (Participant v_ActivityParticipant : i_Activity.getParticipants())
+                        {
+                            io_Process.getParticipants().add((ProcessParticipant)v_ActivityParticipant);
+                        }
+                    }
                 }
                 else
                 {
@@ -263,6 +276,15 @@ public class XFlowEngine
                     else if ( v_Route.isParticipant(i_User) != null )
                     {
                         v_RetRoutes.add(v_Route);
+                    }
+                    
+                    // 将模板上设定的参与人给 工作流流转过程 对象
+                    if ( !Help.isNull(v_Route.getParticipants()) )
+                    {
+                        for (Participant v_RouteParticipant : v_Route.getParticipants())
+                        {
+                            io_Process.getParticipants().add((ProcessParticipant)v_RouteParticipant);
+                        }
                     }
                 }
             }
@@ -541,7 +563,6 @@ public class XFlowEngine
      *
      * @param i_User                用户
      * @param i_WorkID              工作流ID
-     * @param i_ProcessExtra        流转的附加信息。非必填
      * @return                      是否有可走的路由，要通过 NextRoutes.getRoutes() 来判定
      */
     public NextRoutes queryNextRoutes(User i_User ,String i_WorkID)
@@ -692,6 +713,50 @@ public class XFlowEngine
         }
         
         return this.queryNextRoutes(i_User ,v_WorkID);
+    }
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * 曾经去过哪？配合驳回功能的使用
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-01
+     * @version     v1.0
+     *
+     * @param i_User      用户
+     * @param i_Flow      工作流实例。内部有此实例的所有流转信息
+     * @param io_Process  流转过程。它上可指定动态参与人。
+     * @param i_Activity  当前活动
+     * @param i_Template  工作流模板
+     * @return
+     */
+    public static List<ActivityInfo> onceTo(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityInfo i_Activity ,Template i_Template)
+    {
+        ListMap<String ,ActivityInfo> v_Activitys = new ListMap<String ,ActivityInfo>();
+        
+        for (int v_PIndex=0; v_PIndex < i_Flow.getProcesses().size(); v_PIndex++)
+        {
+            FlowProcess v_FProcess = i_Flow.getProcesses().get(v_PIndex);
+            
+            if ( !Help.isNull(v_FProcess.getNextActivityID()) )
+            {
+                if ( !v_Activitys.containsKey(v_FProcess.getCurrentActivityID()) )
+                {
+                    ActivityInfo v_Activity = i_Template.getActivityRouteTree().getActivity(v_FProcess.getCurrentActivityCode());
+                    if ( v_Activity != null )
+                    {
+                        v_Activitys.put(v_FProcess.getCurrentActivityID() ,v_Activity);
+                    }
+                }
+            }
+        }
+        
+        return v_Activitys.getValues();
     }
     
     
@@ -1308,6 +1373,10 @@ public class XFlowEngine
         
         return this.toNext(i_User ,v_WorkID ,i_ProcessExtra ,i_ActivityRouteCodes);
     }
+    
+    
+    
+
     
     
     

@@ -2,266 +2,266 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 工作流信息表模块的相关SQL -->
-	<sqls>
-		
-		<sql id="XSQL_XFlow_FlowInfo_QueryByTemplateID_ForActivity"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.workID
-				       ,A.workFatherID
-				       ,A.flowTemplateID
-				       ,A.serviceDataID
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.lastUserID
-				       ,A.lastUser
-				       ,A.lastTime
-				       ,A.lastOrgID
-				       ,A.lastOrg
-				       ,A.lastProcessID
-				       ,A.isValid
-				       ,A.isDelete
-				  FROM  TFlowInfo  A
-			     WHERE  A.flowTemplateID = ':flowTemplateID'
-			     ORDER  BY A.createTime DESC
-				]]>
-			</content>
-			
-			<result>
-				<row>org.hy.xflow.engine.bean.FlowInfo</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-		</sql>
-		
-	
-	
-		<sql id="XSQL_XFlow_FlowInfo_QueryByWorkID_ServiceDataID"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.workID
-				       ,A.workFatherID
-				       ,A.flowTemplateID
-				       ,A.serviceDataID
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.lastUserID
-				       ,A.lastUser
-				       ,A.lastTime
-				       ,A.lastOrgID
-				       ,A.lastOrg
-				       ,A.lastProcessID
-				       ,A.isValid
-				       ,A.isDelete
-				  FROM  TFlowInfo  A
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  A.workID        = ':workID'          ]>
-			     UNION
-				SELECT  A.workID
-				       ,A.workFatherID
-				       ,A.flowTemplateID
-				       ,A.serviceDataID
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.lastUserID
-				       ,A.lastUser
-				       ,A.lastTime
-				       ,A.lastOrgID
-				       ,A.lastOrg
-				       ,A.lastProcessID
-				       ,A.isValid
-				       ,A.isDelete
-				  FROM  TFlowInfo_History  A
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  A.workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<result>
-				<row>org.hy.xflow.engine.bean.FlowInfo</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_FlowInfo_Insert"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TFlowInfo
-				       (
-				        workID
-				       ,workFatherID
-				       ,flowTemplateID
-				       ,serviceDataID
-				       ,createrID
-				       ,creater
-				       ,createOrgID
-				       ,createOrg
-				       ,createTime
-				       ,lastUserID
-				       ,lastUser
-				       ,lastTime
-				       ,lastOrgID
-				       ,lastOrg
-				       ,lastProcessID
-				       ,isValid
-				       ,isDelete
-				       )
+    <sqls>
+        
+        <sql id="XSQL_XFlow_FlowInfo_QueryByTemplateID_ForActivity"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.workID
+                       ,A.workFatherID
+                       ,A.flowTemplateID
+                       ,A.serviceDataID
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.lastUserID
+                       ,A.lastUser
+                       ,A.lastTime
+                       ,A.lastOrgID
+                       ,A.lastOrg
+                       ,A.lastProcessID
+                       ,A.isValid
+                       ,A.isDelete
+                  FROM  TFlowInfo  A
+                 WHERE  A.flowTemplateID = ':flowTemplateID'
+                 ORDER  BY A.createTime DESC
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FlowInfo</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+    
+    
+        <sql id="XSQL_XFlow_FlowInfo_QueryByWorkID_ServiceDataID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.workID
+                       ,A.workFatherID
+                       ,A.flowTemplateID
+                       ,A.serviceDataID
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.lastUserID
+                       ,A.lastUser
+                       ,A.lastTime
+                       ,A.lastOrgID
+                       ,A.lastOrg
+                       ,A.lastProcessID
+                       ,A.isValid
+                       ,A.isDelete
+                  FROM  TFlowInfo  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                 UNION
+                SELECT  A.workID
+                       ,A.workFatherID
+                       ,A.flowTemplateID
+                       ,A.serviceDataID
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.lastUserID
+                       ,A.lastUser
+                       ,A.lastTime
+                       ,A.lastOrgID
+                       ,A.lastOrg
+                       ,A.lastProcessID
+                       ,A.isValid
+                       ,A.isDelete
+                  FROM  TFlowInfo_History  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FlowInfo</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_FlowInfo_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowInfo
+                       (
+                        workID
+                       ,workFatherID
+                       ,flowTemplateID
+                       ,serviceDataID
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       ,lastUserID
+                       ,lastUser
+                       ,lastTime
+                       ,lastOrgID
+                       ,lastOrg
+                       ,lastProcessID
+                       ,isValid
+                       ,isDelete
+                       )
                 VALUES (
                         ':flow.workID'
-				       ,':flow.workFatherID'
-				       ,':flow.flowTemplateID'
-				       ,':flow.serviceDataID'
-				       ,':flow.createrID'
-				       ,':flow.creater'
-				       ,':flow.createOrgID'
-				       ,':flow.createOrg'
-				       ,':flow.createTime.fullMilli'
-				       ,':flow.lastUserID'
-				       ,':flow.lastUser'
-				       ,':flow.lastTime.fullMilli'
-				       ,':flow.lastOrgID'
-				       ,':flow.lastOrg'
-				       ,':flow.lastProcessID'
-				       , :flow.isValid
-				       , :flow.isDelete
+                       ,':flow.workFatherID'
+                       ,':flow.flowTemplateID'
+                       ,':flow.serviceDataID'
+                       ,':flow.createrID'
+                       ,':flow.creater'
+                       ,':flow.createOrgID'
+                       ,':flow.createOrg'
+                       ,':flow.createTime.fullMilli'
+                       ,':flow.lastUserID'
+                       ,':flow.lastUser'
+                       ,':flow.lastTime.fullMilli'
+                       ,':flow.lastOrgID'
+                       ,':flow.lastOrg'
+                       ,':flow.lastProcessID'
+                       , :flow.isValid
+                       , :flow.isDelete
                        )
-				]]>
-			</content>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_FlowInfo_UpdateLast"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				UPDATE  TFlowInfo
-				   SET  lastTime      = ':flow.lastTime.fullMilli'
-				       ,lastUserID    = ':flow.lastUserID'
-				       ,lastUser      = ':flow.lastUser'
-				       ,lastOrgID     = ':flow.lastOrgID'
-				       ,lastOrg       = ':flow.lastOrg'
-				       ,lastProcessID = ':flow.lastProcessID'
-				 WHERE  workID        = ':flow.workID'
-				]]>
-			</content>
-			
-			<comment>更新最后操作信息</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_FlowInfo_ToHistory"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TFlowInfo_History
-				       (
-				        workID
-				       ,workFatherID
-				       ,flowTemplateID
-				       ,serviceDataID
-				       ,createrID
-				       ,creater
-				       ,createOrgID
-				       ,createOrg
-				       ,createTime
-				       ,lastUserID
-				       ,lastUser
-				       ,lastTime
-				       ,lastOrgID
-				       ,lastOrg
-				       ,lastProcessID
-				       ,isValid
-				       ,isDelete
-				       )
+                ]]>
+            </content>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_FlowInfo_UpdateLast"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                UPDATE  TFlowInfo
+                   SET  lastTime      = ':flow.lastTime.fullMilli'
+                       ,lastUserID    = ':flow.lastUserID'
+                       ,lastUser      = ':flow.lastUser'
+                       ,lastOrgID     = ':flow.lastOrgID'
+                       ,lastOrg       = ':flow.lastOrg'
+                       ,lastProcessID = ':flow.lastProcessID'
+                 WHERE  workID        = ':flow.workID'
+                ]]>
+            </content>
+            
+            <comment>更新最后操作信息</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_FlowInfo_ToHistory"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowInfo_History
+                       (
+                        workID
+                       ,workFatherID
+                       ,flowTemplateID
+                       ,serviceDataID
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       ,lastUserID
+                       ,lastUser
+                       ,lastTime
+                       ,lastOrgID
+                       ,lastOrg
+                       ,lastProcessID
+                       ,isValid
+                       ,isDelete
+                       )
                 SELECT  A.workID
-				       ,A.workFatherID
-				       ,A.flowTemplateID
-				       ,A.serviceDataID
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.lastUserID
-				       ,A.lastUser
-				       ,A.lastTime
-				       ,A.lastOrgID
-				       ,A.lastOrg
-				       ,A.lastProcessID
-				       ,A.isValid
-				       ,A.isDelete
+                       ,A.workFatherID
+                       ,A.flowTemplateID
+                       ,A.serviceDataID
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.lastUserID
+                       ,A.lastUser
+                       ,A.lastTime
+                       ,A.lastOrgID
+                       ,A.lastOrg
+                       ,A.lastProcessID
+                       ,A.isValid
+                       ,A.isDelete
                   FROM  TFlowInfo  A
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  A.workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<comment>全流转结束后转历史</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_FlowInfo_ToHistory_Del"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				DELETE  TFlowInfo
-			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				DELETE FROM TFlowInfo
-			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<comment>删除前转历史</comment>
-			
-		</sql>
-		
-	</sqls>
-	
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>全流转结束后转历史</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_FlowInfo_ToHistory_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowInfo
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowInfo
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>删除前转历史</comment>
+            
+        </sql>
+        
+    </sqls>
+    
 </config>

@@ -2,798 +2,798 @@
 
 <config>
 
-	<import name="sqls"            class="java.util.ArrayList" />
-	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
-	<import name="sql"             class="org.hy.common.xml.XSQL" />
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
 
 
 
     <!-- 工作流过程表模块的相关SQL -->
-	<sqls>
-	
-		<sql id="XSQL_XFlow_Process_Insert"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TProcess
-				       (
-				        processID
-				       ,workID
-				       ,serviceDataID
-				       ,splitProcessID
-				       ,processNo
-				       ,currentActivityID
-				       ,currentActivityCode
-				       ,currentActivityName
-				       ,previousProcessID
-				       ,previousActivityID
-				       ,previousActivityCode
-				       ,previousActivityName
-				       ,previousOperateTypeID
-				       ,nextProcessID
-				       ,nextActivityID
-				       ,nextActivityCode
-				       ,nextActivityName
-				       ,createrID
-				       ,creater
-				       ,createOrgID
-				       ,createOrg
-				       ,createTime
-				       ,summary
-				       ,summaryPass
-				       ,counter
-				       ,counterPass
-				       ,passType
-				       ,limitUserID
-				       ,limitOrgID
-				       ,limitTime
-				       ,operateTime
-				       ,operateTimeLen
-				       ,operateTypeID
-				       ,operateType
-				       ,operateUserID
-				       ,operateUser
-				       ,operateOrgID
-				       ,operateOrg
-				       ,operateFiles
-				       ,operateDatas
-				       ,infoComment
-				       )
-				VALUES (
-				        ':process.processID'
-				       ,':process.workID'
-				       ,':process.serviceDataID'
-				       ,':process.splitProcessID'
-				       , :process.processNo
-				       ,':process.currentActivityID'
-				       ,':process.currentActivityCode'
-				       ,':process.currentActivityName'
-				       ,':process.previousProcessID'
-				       ,':process.previousActivityID'
-				       ,':process.previousActivityCode'
-				       ,':process.previousActivityName'
-				       ,':process.previousOperateTypeID'
-				       ,':process.nextProcessID'
-				       ,':process.nextActivityID'
-				       ,':process.nextActivityCode'
-				       ,':process.nextActivityName'
-				       ,':process.createrID'
-				       ,':process.creater'
-				       ,':process.createOrgID'
-				       ,':process.createOrg'
-				       ,':process.createTime.fullMilli'
-				       ,':process.summary'
-				       ,':process.summaryPass'
-				       ,':process.counter'
-				       ,':process.counterPass'
-				       ,':process.passType'
-				       ,':process.limitUserID'
-				       ,':process.limitOrgID'
-				       ,':process.limitTime'
-				       ,':process.operateTime.fullMilli'
-				       , :process.operateTimeLen
-				       ,':process.operateTypeID'
-				       ,':process.operateType'
-				       ,':process.operateUserID'
-				       ,':process.operateUser'
-				       ,':process.operateOrgID'
-				       ,':process.operateOrg'
-				       ,':process.operateFiles'
-				       ,':process.operateDatas'
-				       ,':process.infoComment'
-				       )
-				]]>
-			</content>
-			
-			<comment>用于创建实例时：新增工作流流转过程</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_Insert_GoOn"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TProcess
-				       (
-				        processID
-				       ,workID
-				       ,serviceDataID
-				       ,splitProcessID
-				       ,processNo
-				       ,currentActivityID
-				       ,currentActivityCode
-				       ,currentActivityName
-				       ,previousProcessID
-				       ,previousActivityID
-				       ,previousActivityCode
-				       ,previousActivityName
-				       ,previousOperateTypeID
-				       ,nextProcessID
-				       ,nextActivityID
-				       ,nextActivityCode
-				       ,nextActivityName
-				       ,createrID
-				       ,creater
-				       ,createOrgID
-				       ,createOrg
-				       ,createTime
-				       ,summary
-				       ,summaryPass
-				       ,counter
-				       ,counterPass
-				       ,passType
-				       ,limitUserID
-				       ,limitOrgID
-				       ,limitTime
-				       ,operateTime
-				       ,operateTimeLen
-				       ,operateTypeID
-				       ,operateType
-				       ,operateUserID
-				       ,operateUser
-				       ,operateOrgID
-				       ,operateOrg
-				       ,operateFiles
-				       ,operateDatas
-				       ,infoComment
-				       )
-				VALUES (
-				        ':processID'
-				       ,':workID'
-				       ,':serviceDataID'
-				       ,':splitProcessID'
-				       , :processNo
-				       ,':currentActivityID'
-				       ,':currentActivityCode'
-				       ,':currentActivityName'
-				       ,':previousProcessID'
-				       ,':previousActivityID'
-				       ,':previousActivityCode'
-				       ,':previousActivityName'
-				       ,':previousOperateTypeID'
-				       ,':nextProcessID'
-				       ,':nextActivityID'
-				       ,':nextActivityCode'
-				       ,':nextActivityName'
-				       ,':createrID'
-				       ,':creater'
-				       ,':createOrgID'
-				       ,':createOrg'
-				       ,':createTime.fullMilli'
-				       ,':summary'
-				       ,':summaryPass'
-				       ,':counter'
-				       ,':counterPass'
-				       ,':passType'
-				       ,':limitUserID'
-				       ,':limitOrgID'
-				       ,':limitTime'
-				       ,':operateTime.fullMilli'
-				       , :operateTimeLen
-				       ,':operateTypeID'
-				       ,':operateType'
-				       ,':operateUserID'
-				       ,':operateUser'
-				       ,':operateOrgID'
-				       ,':operateOrg'
-				       ,':operateFiles'
-				       ,':operateDatas'
-				       ,':infoComment'
-				       )
-				]]>
-			</content>
-			
-			<comment>用于流转实例时：新增工作流流转过程</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_UpdatePrevious"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				UPDATE  TProcess
-				   SET  nextProcessID    = ':previous.nextProcessID'       
-				       ,nextActivityID   = ':previous.nextActivityID'
-				       ,nextActivityCode = ':previous.nextActivityCode'
-				       ,nextActivityName = ':previous.nextActivityName'    
-				       ,operateTime      = ':previous.operateTime.fullMilli'         
-				       ,operateTimeLen   =  :previous.operateTimeLen       
-				       ,operateTypeID    = ':previous.operateTypeID'       
-				       ,operateType      = ':previous.operateType'         
-				       ,operateUserID    = ':previous.operateUserID'       
-				       ,operateUser      = ':previous.operateUser'         
-				       ,operateOrgID     = ':previous.operateOrgID'
-				       ,operateOrg       = ':previous.operateOrg'
-				       ,operateFiles     = ':previous.operateFiles'
-				       ,operateDatas     = ':previous.operateDatas'
-				       ,infoComment      = ':previous.infoComment'
-				       ,summary          = ':previous.summary'
-				       ,summaryPass      = ':previous.summaryPass'
-				       ,counter          = ':previous.counter'
-				       ,counterPass      = ':previous.counterPass'
-				       ,passType         = ':previous.passType'
-				 WHERE  processID        = ':previous.processID'
-				]]>
-			</content>
-			
-			<comment>更新前一个工作流流转过程</comment>
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_UpdatePrevious_Summary"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				UPDATE  TProcess
-				   SET  nextProcessID         = ':previous.nextProcessID'       
-				       ,nextActivityID        = ':previous.nextActivityID'
-				       ,nextActivityCode      = ':previous.nextActivityCode'
-				       ,nextActivityName      = ':previous.nextActivityName'    
-				       ,operateTime           = ':previous.operateTime.fullMilli'         
-				       ,operateTimeLen        =  :previous.operateTimeLen       
-				       ,operateTypeID         = ':previous.operateTypeID'       
-				       ,operateType           = ':previous.operateType'         
-				       ,operateUserID         = ':previous.operateUserID'       
-				       ,operateUser           = ':previous.operateUser'         
-				       ,operateOrgID          = ':previous.operateOrgID'        
-				       ,operateOrg            = ':previous.operateOrg'
-				       ,operateFiles          = ':previous.operateFiles'
-				       ,operateDatas          = ':previous.operateDatas'
-				       ,infoComment           = ':previous.infoComment'
-				       ,summary               = ':previous.summary'
-				       ,summaryPass           = ':previous.summaryPass'
-				       ,counter               = ':previous.counter'
-				       ,counterPass           = ':previous.counterPass'
-				       ,passType              = ':previous.passType'
-				 WHERE  splitProcessID        = ':previous.splitProcessID'
-				   AND  previousOperateTypeID = 'RT003'
-				   AND (nextProcessID        IS NULL
-				    OR  nextProcessID         = '')
-				]]>
-			</content>
-			
-			<comment>分单多路后的汇总，汇总节点向下一节点流转时，更新之前所有汇总流转路由</comment>
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_Update_SummaryToClose"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				UPDATE  TProcess
-				   SET  nextProcessID          = 'FLOW-SYSTEM'       
-				       ,nextActivityID         = 'FLOW-SYSTEM'
-				       ,nextActivityCode       = 'FLOW-SYSTEM'
-				       ,nextActivityName       = 'FLOW-SYSTEM'    
-				       ,operateTime            = ':process.operateTime.fullMilli'         
-				       ,operateTimeLen         =  0       
-				       ,operateTypeID          = 'RT004'       
-				       ,operateType            = '汇签关闭'         
-				       ,operateUserID          = 'FLOW-SYSTEM'       
-				       ,operateUser            = 'FLOW-SYSTEM'         
-				       ,operateOrgID           = ''
-				       ,operateOrg             = ''
-				 WHERE  splitProcessID         = ':process.splitProcessID'
-				   AND  previousOperateTypeID != 'RT003'
-				   AND (nextProcessID         IS NULL
-				    OR  nextProcessID          = '')
-				]]>
-			</content>
-			
-			<comment>分单多路后的汇总，在汇总条件满足时，将未执行的其它路由更新系统关闭</comment>
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_Summary"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  SUM(A.summary)         AS summary
-				       ,MAX(A.summaryPass)     AS summaryPass
-				       ,SUM(A.counter)         AS counter
-				       ,MAX(A.counterPass)     AS counterPass
-				       ,MAX(A.passType)        AS passType
-				  FROM  TProcess  A
-				 WHERE  A.splitProcessID = ':splitProcessID'
-				   AND  A.operateTypeID  = 'RT003'
-			  <[   AND  A.workID         = ':workID'          ]>
-			  <[   AND  A.serviceDataID  = ':serviceDataID'   ]>
-				]]>
-			</content>
-			
-			<result>
-				<row>org.hy.xflow.engine.bean.FlowProcess</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-			<comment>用于流转时，判定是否满足了汇总条件</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_Query_SummaryList"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.processID
-				       ,A.workID
-				       ,A.serviceDataID
-				       ,A.splitProcessID
-				       ,A.processNo
-				       ,A.currentActivityID
-				       ,A.currentActivityCode
-				       ,A.currentActivityName
-				       ,A.previousProcessID
-				       ,A.previousActivityID
-				       ,A.previousActivityCode
-				       ,A.previousActivityName
-				       ,A.previousOperateTypeID
-				       ,A.nextProcessID
-				       ,A.nextActivityID
-				       ,A.nextActivityCode
-				       ,A.nextActivityName
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.summary
-				       ,A.summaryPass
-				       ,A.counter
-				       ,A.counterPass
-				       ,A.passType
-				       ,A.limitUserID
-				       ,A.limitOrgID
-				       ,A.limitTime
-				       ,A.operateTime
-				       ,A.operateTimeLen
-				       ,A.operateTypeID
-				       ,A.operateType
-				       ,A.operateUserID
-				       ,A.operateUser
-				       ,A.operateOrgID
-				       ,A.operateOrg
-				       ,A.operateFiles
-				       ,A.operateDatas
-				       ,A.infoComment
-				  FROM  TProcess  A
-				 WHERE  A.operateTypeID = 'RT003'
-			  <[   AND  A.workID        = ':workID'          ]>
-			  <[   AND  A.serviceDataID = ':serviceDataID'   ]>
-				 ORDER  BY A.createTime  DESC
-				          ,A.operateTime DESC
-				]]>
-			</content>
-			
-			<result>
-				<row>org.hy.xflow.engine.bean.FlowProcess</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-			<comment>用于对外查询，判定历次的汇总情况</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_Query_SummaryList_History"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.processID
-				       ,A.workID
-				       ,A.serviceDataID
-				       ,A.splitProcessID
-				       ,A.processNo
-				       ,A.currentActivityID
-				       ,A.currentActivityCode
-				       ,A.currentActivityName
-				       ,A.previousProcessID
-				       ,A.previousActivityID
-				       ,A.previousActivityCode
-				       ,A.previousActivityName
-				       ,A.previousOperateTypeID
-				       ,A.nextProcessID
-				       ,A.nextActivityID
-				       ,A.nextActivityCode
-				       ,A.nextActivityName
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.summary
-				       ,A.summaryPass
-				       ,A.counter
-				       ,A.counterPass
-				       ,A.passType
-				       ,A.limitUserID
-				       ,A.limitOrgID
-				       ,A.limitTime
-				       ,A.operateTime
-				       ,A.operateTimeLen
-				       ,A.operateTypeID
-				       ,A.operateType
-				       ,A.operateUserID
-				       ,A.operateUser
-				       ,A.operateOrgID
-				       ,A.operateOrg
-				       ,A.operateFiles
-				       ,A.operateDatas
-				       ,A.infoComment
-				  FROM  TProcess_History  A
-				 WHERE  A.operateTypeID = 'RT003'
-			  <[   AND  A.workID        = ':workID'          ]>
-			  <[   AND  A.serviceDataID = ':serviceDataID'   ]>
-				 ORDER  BY A.createTime  DESC
-				          ,A.operateTime DESC
-				]]>
-			</content>
-			
-			<result>
-				<row>org.hy.xflow.engine.bean.FlowProcess</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-			<comment>用于对外查询，判定历次的汇总情况</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_QueryByWorkID_ServiceDataID"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.processID
-				       ,A.workID
-				       ,A.serviceDataID
-				       ,A.splitProcessID
-				       ,A.processNo
-				       ,A.currentActivityID
-				       ,A.currentActivityCode
-				       ,A.currentActivityName
-				       ,A.previousProcessID
-				       ,A.previousActivityID
-				       ,A.previousActivityCode
-				       ,A.previousActivityName
-				       ,A.previousOperateTypeID
-				       ,A.nextProcessID
-				       ,A.nextActivityID
-				       ,A.nextActivityCode
-				       ,A.nextActivityName
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.summary
-				       ,A.summaryPass
-				       ,A.counter
-				       ,A.counterPass
-				       ,A.passType
-				       ,A.limitUserID
-				       ,A.limitOrgID
-				       ,A.limitTime
-				       ,A.operateTime
-				       ,A.operateTimeLen
-				       ,A.operateTypeID
-				       ,A.operateType
-				       ,A.operateUserID
-				       ,A.operateUser
-				       ,A.operateOrgID
-				       ,A.operateOrg
-				       ,A.operateFiles
-				       ,A.operateDatas
-				       ,A.infoComment
-				  FROM  TProcess  A
-			<[   WHERE  A.workID        = ':workID'          ]>
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-				 ORDER  BY A.createTime  DESC
-				          ,A.operateTime DESC
-				]]>
-			</content>
-			
-			<result>
-				<row>org.hy.xflow.engine.bean.FlowProcess</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_ProcessHistory_QueryByWorkID_ServiceDataID"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  A.processID
-				       ,A.workID
-				       ,A.serviceDataID
-				       ,A.splitProcessID
-				       ,A.processNo
-				       ,A.currentActivityID
-				       ,A.currentActivityCode
-				       ,A.currentActivityName
-				       ,A.previousProcessID
-				       ,A.previousActivityID
-				       ,A.previousActivityCode
-				       ,A.previousActivityName
-				       ,A.previousOperateTypeID
-				       ,A.nextProcessID
-				       ,A.nextActivityID
-				       ,A.nextActivityCode
-				       ,A.nextActivityName
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.summary
-				       ,A.summaryPass
-				       ,A.counter
-				       ,A.counterPass
-				       ,A.passType
-				       ,A.limitUserID
-				       ,A.limitOrgID
-				       ,A.limitTime
-				       ,A.operateTime
-				       ,A.operateTimeLen
-				       ,A.operateTypeID
-				       ,A.operateType
-				       ,A.operateUserID
-				       ,A.operateUser
-				       ,A.operateOrgID
-				       ,A.operateOrg
-				       ,A.operateFiles
-				       ,A.operateDatas
-				       ,A.infoComment
-				  FROM  TProcess_History  A
-			<[   WHERE  A.workID        = ':workID'          ]>
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-				 ORDER  BY A.createTime  DESC
-				          ,A.operateTime DESC
-				]]>
-			</content>
-			
-			<result>
-				<row>org.hy.xflow.engine.bean.FlowProcess</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_ToHistory"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				INSERT  INTO TProcess_History
-				       (
-				        processID
-				       ,workID
-				       ,serviceDataID
-				       ,splitProcessID
-				       ,processNo
-				       ,currentActivityID
-				       ,currentActivityCode
-				       ,currentActivityName
-				       ,previousProcessID
-				       ,previousActivityID
-				       ,previousActivityCode
-				       ,previousActivityName
-				       ,previousOperateTypeID
-				       ,nextProcessID
-				       ,nextActivityID
-				       ,nextActivityCode
-				       ,nextActivityName
-				       ,createrID
-				       ,creater
-				       ,createOrgID
-				       ,createOrg
-				       ,createTime
-				       ,summary
-				       ,summaryPass
-				       ,counter
-				       ,counterPass
-				       ,passType
-				       ,limitUserID
-				       ,limitOrgID
-				       ,limitTime
-				       ,operateTime
-				       ,operateTimeLen
-				       ,operateTypeID
-				       ,operateType
-				       ,operateUserID
-				       ,operateUser
-				       ,operateOrgID
-				       ,operateOrg
-				       ,operateFiles
-				       ,operateDatas
-				       ,infoComment
-				       )
-                SELECT  A.processID
-				       ,A.workID
-				       ,A.serviceDataID
-				       ,A.splitProcessID
-				       ,A.processNo
-				       ,A.currentActivityID
-				       ,A.currentActivityCode
-				       ,A.currentActivityName
-				       ,A.previousProcessID
-				       ,A.previousActivityID
-				       ,A.previousActivityCode
-				       ,A.previousActivityName
-				       ,A.previousOperateTypeID
-				       ,A.nextProcessID
-				       ,A.nextActivityID
-				       ,A.nextActivityCode
-				       ,A.nextActivityName
-				       ,A.createrID
-				       ,A.creater
-				       ,A.createOrgID
-				       ,A.createOrg
-				       ,A.createTime
-				       ,A.summary
-				       ,A.summaryPass
-				       ,A.counter
-				       ,A.counterPass
-				       ,A.passType
-				       ,A.limitUserID
-				       ,A.limitOrgID
-				       ,A.limitTime
-				       ,A.operateTime
-				       ,A.operateTimeLen
-				       ,A.operateTypeID
-				       ,A.operateType
-				       ,A.operateUserID
-				       ,A.operateUser
-				       ,A.operateOrgID
-				       ,A.operateOrg
-				       ,A.operateFiles
-				       ,A.operateDatas
-				       ,A.infoComment
+    <sqls>
+    
+        <sql id="XSQL_XFlow_Process_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcess
+                       (
+                        processID
+                       ,workID
+                       ,serviceDataID
+                       ,splitProcessID
+                       ,processNo
+                       ,currentActivityID
+                       ,currentActivityCode
+                       ,currentActivityName
+                       ,previousProcessID
+                       ,previousActivityID
+                       ,previousActivityCode
+                       ,previousActivityName
+                       ,previousOperateTypeID
+                       ,nextProcessID
+                       ,nextActivityID
+                       ,nextActivityCode
+                       ,nextActivityName
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       ,summary
+                       ,summaryPass
+                       ,counter
+                       ,counterPass
+                       ,passType
+                       ,limitUserID
+                       ,limitOrgID
+                       ,limitTime
+                       ,operateTime
+                       ,operateTimeLen
+                       ,operateTypeID
+                       ,operateType
+                       ,operateUserID
+                       ,operateUser
+                       ,operateOrgID
+                       ,operateOrg
+                       ,operateFiles
+                       ,operateDatas
+                       ,infoComment
+                       )
+                VALUES (
+                        ':process.processID'
+                       ,':process.workID'
+                       ,':process.serviceDataID'
+                       ,':process.splitProcessID'
+                       , :process.processNo
+                       ,':process.currentActivityID'
+                       ,':process.currentActivityCode'
+                       ,':process.currentActivityName'
+                       ,':process.previousProcessID'
+                       ,':process.previousActivityID'
+                       ,':process.previousActivityCode'
+                       ,':process.previousActivityName'
+                       ,':process.previousOperateTypeID'
+                       ,':process.nextProcessID'
+                       ,':process.nextActivityID'
+                       ,':process.nextActivityCode'
+                       ,':process.nextActivityName'
+                       ,':process.createrID'
+                       ,':process.creater'
+                       ,':process.createOrgID'
+                       ,':process.createOrg'
+                       ,':process.createTime.fullMilli'
+                       ,':process.summary'
+                       ,':process.summaryPass'
+                       ,':process.counter'
+                       ,':process.counterPass'
+                       ,':process.passType'
+                       ,':process.limitUserID'
+                       ,':process.limitOrgID'
+                       ,':process.limitTime'
+                       ,':process.operateTime.fullMilli'
+                       , :process.operateTimeLen
+                       ,':process.operateTypeID'
+                       ,':process.operateType'
+                       ,':process.operateUserID'
+                       ,':process.operateUser'
+                       ,':process.operateOrgID'
+                       ,':process.operateOrg'
+                       ,':process.operateFiles'
+                       ,':process.operateDatas'
+                       ,':process.infoComment'
+                       )
+                ]]>
+            </content>
+            
+            <comment>用于创建实例时：新增工作流流转过程</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_Insert_GoOn"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcess
+                       (
+                        processID
+                       ,workID
+                       ,serviceDataID
+                       ,splitProcessID
+                       ,processNo
+                       ,currentActivityID
+                       ,currentActivityCode
+                       ,currentActivityName
+                       ,previousProcessID
+                       ,previousActivityID
+                       ,previousActivityCode
+                       ,previousActivityName
+                       ,previousOperateTypeID
+                       ,nextProcessID
+                       ,nextActivityID
+                       ,nextActivityCode
+                       ,nextActivityName
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       ,summary
+                       ,summaryPass
+                       ,counter
+                       ,counterPass
+                       ,passType
+                       ,limitUserID
+                       ,limitOrgID
+                       ,limitTime
+                       ,operateTime
+                       ,operateTimeLen
+                       ,operateTypeID
+                       ,operateType
+                       ,operateUserID
+                       ,operateUser
+                       ,operateOrgID
+                       ,operateOrg
+                       ,operateFiles
+                       ,operateDatas
+                       ,infoComment
+                       )
+                VALUES (
+                        ':processID'
+                       ,':workID'
+                       ,':serviceDataID'
+                       ,':splitProcessID'
+                       , :processNo
+                       ,':currentActivityID'
+                       ,':currentActivityCode'
+                       ,':currentActivityName'
+                       ,':previousProcessID'
+                       ,':previousActivityID'
+                       ,':previousActivityCode'
+                       ,':previousActivityName'
+                       ,':previousOperateTypeID'
+                       ,':nextProcessID'
+                       ,':nextActivityID'
+                       ,':nextActivityCode'
+                       ,':nextActivityName'
+                       ,':createrID'
+                       ,':creater'
+                       ,':createOrgID'
+                       ,':createOrg'
+                       ,':createTime.fullMilli'
+                       ,':summary'
+                       ,':summaryPass'
+                       ,':counter'
+                       ,':counterPass'
+                       ,':passType'
+                       ,':limitUserID'
+                       ,':limitOrgID'
+                       ,':limitTime'
+                       ,':operateTime.fullMilli'
+                       , :operateTimeLen
+                       ,':operateTypeID'
+                       ,':operateType'
+                       ,':operateUserID'
+                       ,':operateUser'
+                       ,':operateOrgID'
+                       ,':operateOrg'
+                       ,':operateFiles'
+                       ,':operateDatas'
+                       ,':infoComment'
+                       )
+                ]]>
+            </content>
+            
+            <comment>用于流转实例时：新增工作流流转过程</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_UpdatePrevious"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                UPDATE  TProcess
+                   SET  nextProcessID    = ':previous.nextProcessID'       
+                       ,nextActivityID   = ':previous.nextActivityID'
+                       ,nextActivityCode = ':previous.nextActivityCode'
+                       ,nextActivityName = ':previous.nextActivityName'    
+                       ,operateTime      = ':previous.operateTime.fullMilli'         
+                       ,operateTimeLen   =  :previous.operateTimeLen       
+                       ,operateTypeID    = ':previous.operateTypeID'       
+                       ,operateType      = ':previous.operateType'         
+                       ,operateUserID    = ':previous.operateUserID'       
+                       ,operateUser      = ':previous.operateUser'         
+                       ,operateOrgID     = ':previous.operateOrgID'
+                       ,operateOrg       = ':previous.operateOrg'
+                       ,operateFiles     = ':previous.operateFiles'
+                       ,operateDatas     = ':previous.operateDatas'
+                       ,infoComment      = ':previous.infoComment'
+                       ,summary          = ':previous.summary'
+                       ,summaryPass      = ':previous.summaryPass'
+                       ,counter          = ':previous.counter'
+                       ,counterPass      = ':previous.counterPass'
+                       ,passType         = ':previous.passType'
+                 WHERE  processID        = ':previous.processID'
+                ]]>
+            </content>
+            
+            <comment>更新前一个工作流流转过程</comment>
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_UpdatePrevious_Summary"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                UPDATE  TProcess
+                   SET  nextProcessID         = ':previous.nextProcessID'       
+                       ,nextActivityID        = ':previous.nextActivityID'
+                       ,nextActivityCode      = ':previous.nextActivityCode'
+                       ,nextActivityName      = ':previous.nextActivityName'    
+                       ,operateTime           = ':previous.operateTime.fullMilli'         
+                       ,operateTimeLen        =  :previous.operateTimeLen       
+                       ,operateTypeID         = ':previous.operateTypeID'       
+                       ,operateType           = ':previous.operateType'         
+                       ,operateUserID         = ':previous.operateUserID'       
+                       ,operateUser           = ':previous.operateUser'         
+                       ,operateOrgID          = ':previous.operateOrgID'        
+                       ,operateOrg            = ':previous.operateOrg'
+                       ,operateFiles          = ':previous.operateFiles'
+                       ,operateDatas          = ':previous.operateDatas'
+                       ,infoComment           = ':previous.infoComment'
+                       ,summary               = ':previous.summary'
+                       ,summaryPass           = ':previous.summaryPass'
+                       ,counter               = ':previous.counter'
+                       ,counterPass           = ':previous.counterPass'
+                       ,passType              = ':previous.passType'
+                 WHERE  splitProcessID        = ':previous.splitProcessID'
+                   AND  previousOperateTypeID = 'RT003'
+                   AND (nextProcessID        IS NULL
+                    OR  nextProcessID         = '')
+                ]]>
+            </content>
+            
+            <comment>分单多路后的汇总，汇总节点向下一节点流转时，更新之前所有汇总流转路由</comment>
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_Update_SummaryToClose"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                UPDATE  TProcess
+                   SET  nextProcessID          = 'FLOW-SYSTEM'       
+                       ,nextActivityID         = 'FLOW-SYSTEM'
+                       ,nextActivityCode       = 'FLOW-SYSTEM'
+                       ,nextActivityName       = 'FLOW-SYSTEM'    
+                       ,operateTime            = ':process.operateTime.fullMilli'         
+                       ,operateTimeLen         =  0       
+                       ,operateTypeID          = 'RT004'       
+                       ,operateType            = '汇签关闭'         
+                       ,operateUserID          = 'FLOW-SYSTEM'       
+                       ,operateUser            = 'FLOW-SYSTEM'         
+                       ,operateOrgID           = ''
+                       ,operateOrg             = ''
+                 WHERE  splitProcessID         = ':process.splitProcessID'
+                   AND  previousOperateTypeID != 'RT003'
+                   AND (nextProcessID         IS NULL
+                    OR  nextProcessID          = '')
+                ]]>
+            </content>
+            
+            <comment>分单多路后的汇总，在汇总条件满足时，将未执行的其它路由更新系统关闭</comment>
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_Summary"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  SUM(A.summary)         AS summary
+                       ,MAX(A.summaryPass)     AS summaryPass
+                       ,SUM(A.counter)         AS counter
+                       ,MAX(A.counterPass)     AS counterPass
+                       ,MAX(A.passType)        AS passType
                   FROM  TProcess  A
-			<[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  A.workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<comment>全流转结束后转历史</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_ToHistory_Del"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				DELETE  TProcess
-			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<content if="MYSQL == DSG_XFlow.getDbProductType">
-				<![CDATA[
-				DELETE FROM TProcess
-			<[   WHERE  serviceDataID = ':serviceDataID'   ]>
-			<[   WHERE  workID        = ':workID'          ]>
-				]]>
-			</content>
-			
-			<comment>删除前转历史</comment>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_queryWorkIDsByDone"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  DISTINCT A.workID
-				  FROM  TProcess  A
-				 WHERE  A.operateUserID = ':userID'
-				 UNION  ALL
-				SELECT  DISTINCT A.workID
-				  FROM  TProcess_History  A
-				 WHERE  A.operateUserID = ':userID'
-				]]>
-			</content>
-			
-			<result>
-				<table>java.util.ArrayList</table>
-				<fill>add(row.workID)</fill>
-				<row>org.hy.xflow.engine.bean.FlowProcess</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-		</sql>
-		
-		
-		
-		<sql id="XSQL_XFlow_Process_queryServiceDataIDsByDone"> 
-		
-			<dataSourceGroup ref="DSG_XFlow" />
-			
-			<content>
-				<![CDATA[
-				SELECT  DISTINCT A.serviceDataID
-				  FROM  TProcess  A
-				 WHERE  A.operateUserID = ':userID'
-				 UNION  ALL
-				SELECT  DISTINCT A.serviceDataID
-				  FROM  TProcess_History  A
-				 WHERE  A.operateUserID = ':userID'
-				]]>
-			</content>
-			
-			<result>
-				<table>java.util.ArrayList</table>
-				<fill>add(row.serviceDataID)</fill>
-				<row>org.hy.xflow.engine.bean.FlowProcess</row>
-				<cfill>setter(colValue)</cfill>
-			</result>
-			
-		</sql>
-		
-	</sqls>
-	
+                 WHERE  A.splitProcessID = ':splitProcessID'
+                   AND  A.operateTypeID  = 'RT003'
+              <[   AND  A.workID         = ':workID'          ]>
+              <[   AND  A.serviceDataID  = ':serviceDataID'   ]>
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FlowProcess</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>用于流转时，判定是否满足了汇总条件</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_Query_SummaryList"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.processID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.splitProcessID
+                       ,A.processNo
+                       ,A.currentActivityID
+                       ,A.currentActivityCode
+                       ,A.currentActivityName
+                       ,A.previousProcessID
+                       ,A.previousActivityID
+                       ,A.previousActivityCode
+                       ,A.previousActivityName
+                       ,A.previousOperateTypeID
+                       ,A.nextProcessID
+                       ,A.nextActivityID
+                       ,A.nextActivityCode
+                       ,A.nextActivityName
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.summary
+                       ,A.summaryPass
+                       ,A.counter
+                       ,A.counterPass
+                       ,A.passType
+                       ,A.limitUserID
+                       ,A.limitOrgID
+                       ,A.limitTime
+                       ,A.operateTime
+                       ,A.operateTimeLen
+                       ,A.operateTypeID
+                       ,A.operateType
+                       ,A.operateUserID
+                       ,A.operateUser
+                       ,A.operateOrgID
+                       ,A.operateOrg
+                       ,A.operateFiles
+                       ,A.operateDatas
+                       ,A.infoComment
+                  FROM  TProcess  A
+                 WHERE  A.operateTypeID = 'RT003'
+              <[   AND  A.workID        = ':workID'          ]>
+              <[   AND  A.serviceDataID = ':serviceDataID'   ]>
+                 ORDER  BY A.createTime  DESC
+                          ,A.operateTime DESC
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FlowProcess</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>用于对外查询，判定历次的汇总情况</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_Query_SummaryList_History"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.processID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.splitProcessID
+                       ,A.processNo
+                       ,A.currentActivityID
+                       ,A.currentActivityCode
+                       ,A.currentActivityName
+                       ,A.previousProcessID
+                       ,A.previousActivityID
+                       ,A.previousActivityCode
+                       ,A.previousActivityName
+                       ,A.previousOperateTypeID
+                       ,A.nextProcessID
+                       ,A.nextActivityID
+                       ,A.nextActivityCode
+                       ,A.nextActivityName
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.summary
+                       ,A.summaryPass
+                       ,A.counter
+                       ,A.counterPass
+                       ,A.passType
+                       ,A.limitUserID
+                       ,A.limitOrgID
+                       ,A.limitTime
+                       ,A.operateTime
+                       ,A.operateTimeLen
+                       ,A.operateTypeID
+                       ,A.operateType
+                       ,A.operateUserID
+                       ,A.operateUser
+                       ,A.operateOrgID
+                       ,A.operateOrg
+                       ,A.operateFiles
+                       ,A.operateDatas
+                       ,A.infoComment
+                  FROM  TProcess_History  A
+                 WHERE  A.operateTypeID = 'RT003'
+              <[   AND  A.workID        = ':workID'          ]>
+              <[   AND  A.serviceDataID = ':serviceDataID'   ]>
+                 ORDER  BY A.createTime  DESC
+                          ,A.operateTime DESC
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FlowProcess</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>用于对外查询，判定历次的汇总情况</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_QueryByWorkID_ServiceDataID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.processID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.splitProcessID
+                       ,A.processNo
+                       ,A.currentActivityID
+                       ,A.currentActivityCode
+                       ,A.currentActivityName
+                       ,A.previousProcessID
+                       ,A.previousActivityID
+                       ,A.previousActivityCode
+                       ,A.previousActivityName
+                       ,A.previousOperateTypeID
+                       ,A.nextProcessID
+                       ,A.nextActivityID
+                       ,A.nextActivityCode
+                       ,A.nextActivityName
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.summary
+                       ,A.summaryPass
+                       ,A.counter
+                       ,A.counterPass
+                       ,A.passType
+                       ,A.limitUserID
+                       ,A.limitOrgID
+                       ,A.limitTime
+                       ,A.operateTime
+                       ,A.operateTimeLen
+                       ,A.operateTypeID
+                       ,A.operateType
+                       ,A.operateUserID
+                       ,A.operateUser
+                       ,A.operateOrgID
+                       ,A.operateOrg
+                       ,A.operateFiles
+                       ,A.operateDatas
+                       ,A.infoComment
+                  FROM  TProcess  A
+            <[   WHERE  A.workID        = ':workID'          ]>
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+                 ORDER  BY A.createTime  DESC
+                          ,A.operateTime DESC
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FlowProcess</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessHistory_QueryByWorkID_ServiceDataID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.processID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.splitProcessID
+                       ,A.processNo
+                       ,A.currentActivityID
+                       ,A.currentActivityCode
+                       ,A.currentActivityName
+                       ,A.previousProcessID
+                       ,A.previousActivityID
+                       ,A.previousActivityCode
+                       ,A.previousActivityName
+                       ,A.previousOperateTypeID
+                       ,A.nextProcessID
+                       ,A.nextActivityID
+                       ,A.nextActivityCode
+                       ,A.nextActivityName
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.summary
+                       ,A.summaryPass
+                       ,A.counter
+                       ,A.counterPass
+                       ,A.passType
+                       ,A.limitUserID
+                       ,A.limitOrgID
+                       ,A.limitTime
+                       ,A.operateTime
+                       ,A.operateTimeLen
+                       ,A.operateTypeID
+                       ,A.operateType
+                       ,A.operateUserID
+                       ,A.operateUser
+                       ,A.operateOrgID
+                       ,A.operateOrg
+                       ,A.operateFiles
+                       ,A.operateDatas
+                       ,A.infoComment
+                  FROM  TProcess_History  A
+            <[   WHERE  A.workID        = ':workID'          ]>
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+                 ORDER  BY A.createTime  DESC
+                          ,A.operateTime DESC
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FlowProcess</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_ToHistory"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcess_History
+                       (
+                        processID
+                       ,workID
+                       ,serviceDataID
+                       ,splitProcessID
+                       ,processNo
+                       ,currentActivityID
+                       ,currentActivityCode
+                       ,currentActivityName
+                       ,previousProcessID
+                       ,previousActivityID
+                       ,previousActivityCode
+                       ,previousActivityName
+                       ,previousOperateTypeID
+                       ,nextProcessID
+                       ,nextActivityID
+                       ,nextActivityCode
+                       ,nextActivityName
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       ,summary
+                       ,summaryPass
+                       ,counter
+                       ,counterPass
+                       ,passType
+                       ,limitUserID
+                       ,limitOrgID
+                       ,limitTime
+                       ,operateTime
+                       ,operateTimeLen
+                       ,operateTypeID
+                       ,operateType
+                       ,operateUserID
+                       ,operateUser
+                       ,operateOrgID
+                       ,operateOrg
+                       ,operateFiles
+                       ,operateDatas
+                       ,infoComment
+                       )
+                SELECT  A.processID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.splitProcessID
+                       ,A.processNo
+                       ,A.currentActivityID
+                       ,A.currentActivityCode
+                       ,A.currentActivityName
+                       ,A.previousProcessID
+                       ,A.previousActivityID
+                       ,A.previousActivityCode
+                       ,A.previousActivityName
+                       ,A.previousOperateTypeID
+                       ,A.nextProcessID
+                       ,A.nextActivityID
+                       ,A.nextActivityCode
+                       ,A.nextActivityName
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,A.summary
+                       ,A.summaryPass
+                       ,A.counter
+                       ,A.counterPass
+                       ,A.passType
+                       ,A.limitUserID
+                       ,A.limitOrgID
+                       ,A.limitTime
+                       ,A.operateTime
+                       ,A.operateTimeLen
+                       ,A.operateTypeID
+                       ,A.operateType
+                       ,A.operateUserID
+                       ,A.operateUser
+                       ,A.operateOrgID
+                       ,A.operateOrg
+                       ,A.operateFiles
+                       ,A.operateDatas
+                       ,A.infoComment
+                  FROM  TProcess  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>全流转结束后转历史</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_ToHistory_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TProcess
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TProcess
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>删除前转历史</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_queryWorkIDsByDone"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  DISTINCT A.workID
+                  FROM  TProcess  A
+                 WHERE  A.operateUserID = ':userID'
+                 UNION  ALL
+                SELECT  DISTINCT A.workID
+                  FROM  TProcess_History  A
+                 WHERE  A.operateUserID = ':userID'
+                ]]>
+            </content>
+            
+            <result>
+                <table>java.util.ArrayList</table>
+                <fill>add(row.workID)</fill>
+                <row>org.hy.xflow.engine.bean.FlowProcess</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_Process_queryServiceDataIDsByDone"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  DISTINCT A.serviceDataID
+                  FROM  TProcess  A
+                 WHERE  A.operateUserID = ':userID'
+                 UNION  ALL
+                SELECT  DISTINCT A.serviceDataID
+                  FROM  TProcess_History  A
+                 WHERE  A.operateUserID = ':userID'
+                ]]>
+            </content>
+            
+            <result>
+                <table>java.util.ArrayList</table>
+                <fill>add(row.serviceDataID)</fill>
+                <row>org.hy.xflow.engine.bean.FlowProcess</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+    </sqls>
+    
 </config>

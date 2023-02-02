@@ -26,7 +26,7 @@ public interface IProcessParticipantsService
      * @version     v1.0
      *
      * @param i_WorkID  工作流实例ID
-     * @return
+     * @return          Map.分区为：工作流的过程ID
      */
     public PartitionMap<String ,ProcessParticipant> queryByWorkID(String i_WorkID);
     
@@ -40,7 +40,7 @@ public interface IProcessParticipantsService
      * @version     v1.0
      *
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
-     * @return
+     * @return                 Map.分区为：工作流的过程ID
      */
     public PartitionMap<String ,ProcessParticipant> queryByServiceDataID(String i_ServiceDataID);
     
