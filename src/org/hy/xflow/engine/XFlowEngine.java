@@ -17,6 +17,7 @@ import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.Participant;
+import org.hy.xflow.engine.bean.ProcessActivitys;
 import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
@@ -256,7 +257,7 @@ public class XFlowEngine
                     {
                         for (Participant v_ActivityParticipant : i_Activity.getParticipants())
                         {
-                            io_Process.getParticipants().add((ProcessParticipant)v_ActivityParticipant);
+                            io_Process.getParticipants().add(new ProcessParticipant().init(v_ActivityParticipant));
                         }
                     }
                 }
@@ -283,7 +284,7 @@ public class XFlowEngine
                     {
                         for (Participant v_RouteParticipant : v_Route.getParticipants())
                         {
-                            io_Process.getParticipants().add((ProcessParticipant)v_RouteParticipant);
+                            io_Process.getParticipants().add(new ProcessParticipant().init(v_RouteParticipant));
                         }
                     }
                 }
@@ -598,11 +599,12 @@ public class XFlowEngine
             throw new NullPointerException("WorkID[" + i_WorkID + "] ProcessList is not exists.");
         }
         
-        int                                      v_PIndex          = 0;
-        FlowProcess                              v_Process         = null;  // 默认当前流转就在0下标的位置。但时间精度不高、操作及快时，会出现排序规则失效的情况，所以通过下面for处理
-        ActivityInfo                             v_Activity        = null;
-        PartitionMap<String ,ProcessParticipant> v_AllProcessParts = null;
-        List<ActivityRoute>                      v_WhereTo         = null;
+        int                                      v_PIndex                 = 0;
+        FlowProcess                              v_Process                = null;  // 默认当前流转就在0下标的位置。但时间精度不高、操作及快时，会出现排序规则失效的情况，所以通过下面for处理
+        ActivityInfo                             v_Activity               = null;
+        PartitionMap<String ,ProcessParticipant> v_AllProcessParts        = null;
+        List<ActivityRoute>                      v_WhereTo                = null;
+        ParticipantTypeEnum                      v_QueryerParticipantType = this.futureOperatorService.queryParticipantType(i_User ,i_WorkID);
         for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
             if ( Help.isNull(v_FlowInfo.getProcesses().get(v_PIndex).getNextProcessID()) )
@@ -675,7 +677,8 @@ public class XFlowEngine
                                          ,v_Process
                                          ,v_Activity
                                          ,v_AllProcessParts
-                                         ,v_WhereTo);
+                                         ,v_WhereTo
+                                         ,v_QueryerParticipantType);
                 }
             }
         }
@@ -688,7 +691,8 @@ public class XFlowEngine
                              ,v_Process
                              ,v_Activity
                              ,v_AllProcessParts
-                             ,v_WhereTo);
+                             ,v_WhereTo
+                             ,v_QueryerParticipantType);
     }
     
     
@@ -717,7 +721,142 @@ public class XFlowEngine
     
     
     
-    
+    /**
+     * 查询工作流实例曾经流转过的节点
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-01-31
+     * @version     v1.0
+     *
+     * @param i_User    用户
+     * @param i_WorkID  工作流ID
+     * @return
+     */
+    public ProcessActivitys queryProcessActivitys(User i_User ,String i_WorkID)
+    {
+        if ( i_User == null )
+        {
+            throw new NullPointerException("User is null.");
+        }
+        else if ( Help.isNull(i_User.getUserID()) )
+        {
+            throw new NullPointerException("UserID is null.");
+        }
+        else if ( Help.isNull(i_WorkID) )
+        {
+            throw new NullPointerException("WorkID is null.");
+        }
+        
+        FlowInfo v_FlowInfo = this.flowInfoService.queryByWorkID(i_WorkID);
+        if ( v_FlowInfo == null || Help.isNull(v_FlowInfo.getWorkID()))
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] is not exists.");
+        }
+        
+        Template v_Template = this.templateService.queryByID(v_FlowInfo.getFlowTemplateID());
+        if ( v_Template == null )
+        {
+            throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not exists.");
+        }
+        
+        v_FlowInfo.setProcesses(this.flowProcessService.queryByWorkID(i_WorkID));
+        if ( Help.isNull(v_FlowInfo.getProcesses()) )
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] ProcessList is not exists.");
+        }
+        
+        int                                      v_PIndex          = 0;
+        FlowProcess                              v_Process         = null;  // 默认当前流转就在0下标的位置。但时间精度不高、操作及快时，会出现排序规则失效的情况，所以通过下面for处理
+        ActivityInfo                             v_Activity        = null;
+        PartitionMap<String ,ProcessParticipant> v_AllProcessParts = null;
+        List<ActivityInfo>                       v_OnceTo          = null;
+        for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
+        {
+            if ( Help.isNull(v_FlowInfo.getProcesses().get(v_PIndex).getNextProcessID()) )
+            {
+                v_Process  = v_FlowInfo.getProcesses().get(v_PIndex);
+                v_Activity = v_Template.getActivityRouteTree().getActivity(v_Process.getCurrentActivityCode());
+                
+                // 查询动态参与人
+                v_AllProcessParts = processParticipantsService.queryByWorkID(i_WorkID);
+                v_Process.setParticipants(v_AllProcessParts.get(v_Process.getProcessID()));
+                
+                v_OnceTo = onceTo(i_User ,v_FlowInfo ,v_Process ,v_Activity ,v_Template);
+                
+                if ( !Help.isNull(v_OnceTo) )
+                {
+                    if ( !Help.isNull(v_Process.getPreviousOperateTypeID()) )
+                    {
+                        // 判定：当前流转是否是从“汇总路由”过来的
+                        if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Process.getPreviousOperateTypeID())) )
+                        {
+                            FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Process);
+                            String      v_PassType       = v_Activity.getPassType();
+                            boolean     v_IsSummaryPass  = false;
+                            boolean     v_IsCounterPass  = false;
+                            
+                            if ( v_HistorySummary.getSummaryPass().doubleValue() > 0 )
+                            {
+                                if ( v_HistorySummary.getSummary().doubleValue() >= v_HistorySummary.getSummaryPass().doubleValue() )
+                                {
+                                    v_IsSummaryPass = true;
+                                }
+                            }
+                            
+                            if ( v_HistorySummary.getCounterPass().intValue() > 0 )
+                            {
+                                if ( v_HistorySummary.getCounter().intValue() >= v_HistorySummary.getCounterPass().intValue() )
+                                {
+                                    v_IsCounterPass = true;
+                                }
+                            }
+                            
+                            v_Process.setSummary(    v_HistorySummary.getSummary());
+                            v_Process.setSummaryPass(v_HistorySummary.getSummaryPass());
+                            v_Process.setCounter(    v_HistorySummary.getCounter());
+                            v_Process.setCounterPass(v_HistorySummary.getCounterPass());
+                            
+                            if ( ("AND".equalsIgnoreCase(v_PassType) && (v_IsSummaryPass && v_IsCounterPass))
+                              || ("OR" .equalsIgnoreCase(v_PassType) && (v_IsSummaryPass || v_IsCounterPass)) )
+                            {
+                                // 汇总通过
+                                v_Process.setIsPass(1);
+                            }
+                            else
+                            {
+                                // 汇总未通过
+                                v_Process.setIsPass(-1);
+                                continue;
+                                /*
+                                return new NextRoutes(v_FlowInfo
+                                                     ,v_Process
+                                                     ,v_Activity
+                                                     ,null
+                                                     ,new ArrayList<ActivityRoute>());
+                                */
+                            }
+                        }
+                    }
+                    
+                    return new ProcessActivitys(v_FlowInfo
+                                               ,v_Process
+                                               ,v_Activity
+                                               ,v_AllProcessParts
+                                               ,v_OnceTo);
+                }
+            }
+        }
+        if ( v_Process == null )
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
+        }
+        
+        return new ProcessActivitys(v_FlowInfo
+                                   ,v_Process
+                                   ,v_Activity
+                                   ,v_AllProcessParts
+                                   ,v_OnceTo);
+    }
     
     
     
@@ -1376,7 +1515,27 @@ public class XFlowEngine
     
     
     
-
+    /**
+     * 驳回类型的节点流转（支持多路由并发执行）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-01-31
+     * @version     v1.0
+     *
+     * @param i_User           操作用户
+     * @param i_WorkID         工作流ID
+     * @param i_ProcessExtra   流转的附加信息。非必填
+     * @param i_ActivityUsers  Map.Partition  曾经走过的活动节点的编码，
+     *                         Map.value      指定每个路由的下一活动的动态参与人，可选项。
+     *                                        指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
+     *                                        指定动态参与人时，同时也受限于路由上设定的参与人。
+     *                                        但当路由上没有设定参与人时，动态参与人将畅通无阻
+     * @return
+     */
+    public List<FlowProcess> toReject(User i_User ,String i_WorkID ,FlowProcess i_ProcessExtra ,PartitionMap<String ,UserParticipant> i_ActivityUsers)
+    {
+        return null;
+    }
     
     
     
@@ -1386,6 +1545,10 @@ public class XFlowEngine
      *   1. 通过用户ID查询
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
+     * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
@@ -1407,6 +1570,10 @@ public class XFlowEngine
      *   1. 通过用户ID查询
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
+     * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15

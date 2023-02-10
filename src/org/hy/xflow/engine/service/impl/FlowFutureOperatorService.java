@@ -73,6 +73,10 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
      * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
+     * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
@@ -95,6 +99,10 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
      * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
+     * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
@@ -116,10 +124,15 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *   1. 通过用户ID查询
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
+     * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
      *
      * @author      ZhengWei(HY)
      * @createDate  2019-09-11
      * @version     v1.0
+     *              v2.0  2023-02-10  添加三种角色的抄送功能
      *
      * @param i_User
      * @param i_IDName  实例ID或业务ID的属性名称。它决定着函数返回的是实例ID，还是业务ID。
@@ -137,9 +150,21 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
         }
         
+        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$UserSend.getValue() + ":" + i_User.getUserID());
+        if ( !Help.isNull(v_Temp) )
+        {
+            v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+        }
+        
         if ( !Help.isNull(i_User.getOrgID()) )
         {
             v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$Org.getValue() + ":" + i_User.getOrgID());
+            if ( !Help.isNull(v_Temp) )
+            {
+                v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+            }
+            
+            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$OrgSend.getValue() + ":" + i_User.getOrgID());
             if ( !Help.isNull(v_Temp) )
             {
                 v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
@@ -155,10 +180,174 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 {
                     v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
                 }
+                
+                v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$RoleSend.getValue() + ":" + v_Role.getRoleID());
+                if ( !Help.isNull(v_Temp) )
+                {
+                    v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+                }
             }
         }
         
         return Help.toDistinct(v_IDs);
+    }
+    
+    
+    
+    /**
+     * 查询人员的参与类型，是执行类型还是抄送类型
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-10
+     * @version     v1.0
+     *
+     * @param i_User    参与人
+     * @param i_WorkID  工作流实例ID
+     * @return
+     */
+    @Override
+    public ParticipantTypeEnum queryParticipantType(User i_User ,String i_WorkID)
+    {
+        List<FutureOperator> v_Temp = null;
+        
+        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID());
+        if ( !Help.isNull(v_Temp) )
+        {
+            for (FutureOperator v_FutureOpt : v_Temp)
+            {
+                if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                {
+                    v_Temp.clear();
+                    v_Temp = null;
+                    return ParticipantTypeEnum.$User;
+                }
+            }
+        }
+        
+        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$CreateUser.getValue() + ":" + i_User.getUserID());
+        if ( !Help.isNull(v_Temp) )
+        {
+            for (FutureOperator v_FutureOpt : v_Temp)
+            {
+                if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                {
+                    v_Temp.clear();
+                    v_Temp = null;
+                    return ParticipantTypeEnum.$CreateUser;
+                }
+            }
+        }
+        
+        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$ActivityUser.getValue() + ":" + i_User.getUserID());
+        if ( !Help.isNull(v_Temp) )
+        {
+            for (FutureOperator v_FutureOpt : v_Temp)
+            {
+                if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                {
+                    v_Temp.clear();
+                    v_Temp = null;
+                    return ParticipantTypeEnum.$ActivityUser;
+                }
+            }
+        }
+        
+        if ( !Help.isNull(i_User.getOrgID()) )
+        {
+            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$Org.getValue() + ":" + i_User.getOrgID());
+            if ( !Help.isNull(v_Temp) )
+            {
+                for (FutureOperator v_FutureOpt : v_Temp)
+                {
+                    if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                    {
+                        v_Temp.clear();
+                        v_Temp = null;
+                        return ParticipantTypeEnum.$Org;
+                    }
+                }
+            }
+        }
+        
+        if ( !Help.isNull(i_User.getRoles()) )
+        {
+            for (UserRole v_Role : i_User.getRoles())
+            {
+                v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$Role.getValue() + ":" + v_Role.getRoleID());
+                if ( !Help.isNull(v_Temp) )
+                {
+                    for (FutureOperator v_FutureOpt : v_Temp)
+                    {
+                        if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                        {
+                            v_Temp.clear();
+                            v_Temp = null;
+                            return ParticipantTypeEnum.$Role;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // 先判定是否为执行人，当判定无果时，再判定是否为抄送人，即：执行类 > 抄送类
+        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$UserSend.getValue() + ":" + i_User.getUserID());
+        if ( !Help.isNull(v_Temp) )
+        {
+            for (FutureOperator v_FutureOpt : v_Temp)
+            {
+                if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                {
+                    v_Temp.clear();
+                    v_Temp = null;
+                    return ParticipantTypeEnum.$UserSend;
+                }
+            }
+        }
+        
+        if ( !Help.isNull(i_User.getOrgID()) )
+        {
+            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$OrgSend.getValue() + ":" + i_User.getOrgID());
+            if ( !Help.isNull(v_Temp) )
+            {
+                for (FutureOperator v_FutureOpt : v_Temp)
+                {
+                    if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                    {
+                        v_Temp.clear();
+                        v_Temp = null;
+                        return ParticipantTypeEnum.$OrgSend;
+                    }
+                }
+            }
+        }
+        
+        if ( !Help.isNull(i_User.getRoles()) )
+        {
+            for (UserRole v_Role : i_User.getRoles())
+            {
+                v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$RoleSend.getValue() + ":" + v_Role.getRoleID());
+                if ( !Help.isNull(v_Temp) )
+                {
+                    for (FutureOperator v_FutureOpt : v_Temp)
+                    {
+                        if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                        {
+                            v_Temp.clear();
+                            v_Temp = null;
+                            return ParticipantTypeEnum.$RoleSend;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ( !Help.isNull(v_Temp) )
+        {
+            v_Temp.clear();
+            v_Temp = null;
+        }
+        
+        return null;
     }
     
     
@@ -574,6 +763,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @param i_RequestData
      * @return
      */
+    @Override
     public CommunicationResponse communication(CommunicationRequest i_RequestData)
     {
         CommunicationResponse v_ResponseData = new CommunicationResponse();

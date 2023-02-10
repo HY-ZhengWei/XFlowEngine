@@ -6,6 +6,7 @@ import org.hy.common.PartitionMap;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.FutureOperator;
 import org.hy.xflow.engine.bean.User;
+import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
 
 
@@ -29,6 +30,10 @@ public interface IFlowFutureOperatorService
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
      * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
+     * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
@@ -47,6 +52,10 @@ public interface IFlowFutureOperatorService
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
      * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
+     * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
@@ -55,6 +64,21 @@ public interface IFlowFutureOperatorService
      * @return
      */
     public List<String> queryServiceDataIDs(User i_User);
+    
+    
+    
+    /**
+     * 查询人员的参与类型，是执行类型还是抄送类型
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-10
+     * @version     v1.0
+     *
+     * @param i_User    参与人
+     * @param i_WorkID  工作流实例ID
+     * @return
+     */
+    public ParticipantTypeEnum queryParticipantType(User i_User ,String i_WorkID);
     
     
     
@@ -125,7 +149,7 @@ public interface IFlowFutureOperatorService
     /**
      * 查询所有未来操作人，并分区保存，用于高速缓存查询
      * 
-     *   Map.key    分区为参与人的形式的值：objectType:objectID 
+     *   Map.key    分区为参与人的形式的值：objectType:objectID
      *   Map.value  元素为工作流未来操作人对象
      * 
      * @author      ZhengWei(HY)
