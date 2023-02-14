@@ -725,6 +725,30 @@ public class XFlowEngine
      * 查询工作流实例曾经流转过的节点
      * 
      * @author      ZhengWei(HY)
+     * @createDate  2023-02-14
+     * @version     v1.0
+     *
+     * @param i_User    用户
+     * @param i_WorkID  工作流ID
+     * @return
+     */
+    public ProcessActivitys queryProcessActivitysByServiceDataID(User i_User ,String i_ServiceDataID)
+    {
+        String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
+        if ( Help.isNull(v_WorkID) )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
+        }
+        
+        return this.queryProcessActivitys(i_User ,v_WorkID);
+    }
+    
+    
+    
+    /**
+     * 查询工作流实例曾经流转过的节点
+     * 
+     * @author      ZhengWei(HY)
      * @createDate  2023-01-31
      * @version     v1.0
      *
@@ -765,11 +789,12 @@ public class XFlowEngine
             throw new NullPointerException("WorkID[" + i_WorkID + "] ProcessList is not exists.");
         }
         
-        int                                      v_PIndex          = 0;
-        FlowProcess                              v_Process         = null;  // 默认当前流转就在0下标的位置。但时间精度不高、操作及快时，会出现排序规则失效的情况，所以通过下面for处理
-        ActivityInfo                             v_Activity        = null;
-        PartitionMap<String ,ProcessParticipant> v_AllProcessParts = null;
-        List<ActivityInfo>                       v_OnceTo          = null;
+        int                                      v_PIndex                 = 0;
+        FlowProcess                              v_Process                = null;  // 默认当前流转就在0下标的位置。但时间精度不高、操作及快时，会出现排序规则失效的情况，所以通过下面for处理
+        ActivityInfo                             v_Activity               = null;
+        PartitionMap<String ,ProcessParticipant> v_AllProcessParts        = null;
+        List<ActivityInfo>                       v_OnceTo                 = null;
+        ParticipantTypeEnum                      v_QueryerParticipantType = this.futureOperatorService.queryParticipantType(i_User ,i_WorkID);
         for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
             if ( Help.isNull(v_FlowInfo.getProcesses().get(v_PIndex).getNextProcessID()) )
@@ -785,64 +810,12 @@ public class XFlowEngine
                 
                 if ( !Help.isNull(v_OnceTo) )
                 {
-                    if ( !Help.isNull(v_Process.getPreviousOperateTypeID()) )
-                    {
-                        // 判定：当前流转是否是从“汇总路由”过来的
-                        if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(v_Process.getPreviousOperateTypeID())) )
-                        {
-                            FlowProcess v_HistorySummary = this.flowProcessService.querySummary(v_Process);
-                            String      v_PassType       = v_Activity.getPassType();
-                            boolean     v_IsSummaryPass  = false;
-                            boolean     v_IsCounterPass  = false;
-                            
-                            if ( v_HistorySummary.getSummaryPass().doubleValue() > 0 )
-                            {
-                                if ( v_HistorySummary.getSummary().doubleValue() >= v_HistorySummary.getSummaryPass().doubleValue() )
-                                {
-                                    v_IsSummaryPass = true;
-                                }
-                            }
-                            
-                            if ( v_HistorySummary.getCounterPass().intValue() > 0 )
-                            {
-                                if ( v_HistorySummary.getCounter().intValue() >= v_HistorySummary.getCounterPass().intValue() )
-                                {
-                                    v_IsCounterPass = true;
-                                }
-                            }
-                            
-                            v_Process.setSummary(    v_HistorySummary.getSummary());
-                            v_Process.setSummaryPass(v_HistorySummary.getSummaryPass());
-                            v_Process.setCounter(    v_HistorySummary.getCounter());
-                            v_Process.setCounterPass(v_HistorySummary.getCounterPass());
-                            
-                            if ( ("AND".equalsIgnoreCase(v_PassType) && (v_IsSummaryPass && v_IsCounterPass))
-                              || ("OR" .equalsIgnoreCase(v_PassType) && (v_IsSummaryPass || v_IsCounterPass)) )
-                            {
-                                // 汇总通过
-                                v_Process.setIsPass(1);
-                            }
-                            else
-                            {
-                                // 汇总未通过
-                                v_Process.setIsPass(-1);
-                                continue;
-                                /*
-                                return new NextRoutes(v_FlowInfo
-                                                     ,v_Process
-                                                     ,v_Activity
-                                                     ,null
-                                                     ,new ArrayList<ActivityRoute>());
-                                */
-                            }
-                        }
-                    }
-                    
                     return new ProcessActivitys(v_FlowInfo
                                                ,v_Process
                                                ,v_Activity
                                                ,v_AllProcessParts
-                                               ,v_OnceTo);
+                                               ,v_OnceTo
+                                               ,v_QueryerParticipantType);
                 }
             }
         }
@@ -855,7 +828,8 @@ public class XFlowEngine
                                    ,v_Process
                                    ,v_Activity
                                    ,v_AllProcessParts
-                                   ,v_OnceTo);
+                                   ,v_OnceTo
+                                   ,v_QueryerParticipantType);
     }
     
     

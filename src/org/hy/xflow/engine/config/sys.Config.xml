@@ -2,25 +2,25 @@
 
 <config>
 
-	<import name="xconfig"         class="java.util.ArrayList" />
-	<import name="xparam"          class="java.util.Hashtable" />
-	<import name="item"            class="org.hy.common.app.Param" />
-	
-	
-	
-	<!-- 系统配置参数信息 -->
-	<xconfig>
-		
-	    <xparam id="SYSParam" key="name">
-	    
-	    	<item id="XFlow_RootPackageName">
-	            <name>XFlow_RootPackageName</name>
-				<value>org.hy.xflow.engine</value>
-				<comment>顶级包的路径。用于初始化。一般不修改</comment>
-	        </item>
-	        
-		</xparam>
-		
-	</xconfig>
-	
+    <import name="xconfig"         class="java.util.ArrayList" />
+    <import name="xparam"          class="java.util.Hashtable" />
+    <import name="item"            class="org.hy.common.app.Param" />
+    
+    
+    
+    <!-- 系统配置参数信息 -->
+    <xconfig>
+        
+        <xparam id="SYSParam" key="name">
+        
+            <item id="XFlow_RootPackageName">
+                <name>XFlow_RootPackageName</name>
+                <value>org.hy.xflow.engine</value>
+                <comment>顶级包的路径。用于初始化。一般不修改</comment>
+            </item>
+            
+        </xparam>
+        
+    </xconfig>
+    
 </config>
