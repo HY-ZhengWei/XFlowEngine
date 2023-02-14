@@ -217,8 +217,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             {
                 if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
                 {
-                    v_Temp.clear();
-                    v_Temp = null;
                     return ParticipantTypeEnum.$User;
                 }
             }
@@ -231,8 +229,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             {
                 if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
                 {
-                    v_Temp.clear();
-                    v_Temp = null;
                     return ParticipantTypeEnum.$CreateUser;
                 }
             }
@@ -245,8 +241,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             {
                 if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
                 {
-                    v_Temp.clear();
-                    v_Temp = null;
                     return ParticipantTypeEnum.$ActivityUser;
                 }
             }
@@ -261,8 +255,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 {
                     if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
                     {
-                        v_Temp.clear();
-                        v_Temp = null;
                         return ParticipantTypeEnum.$Org;
                     }
                 }
@@ -280,8 +272,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                     {
                         if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
                         {
-                            v_Temp.clear();
-                            v_Temp = null;
                             return ParticipantTypeEnum.$Role;
                         }
                     }
@@ -297,8 +287,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             {
                 if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
                 {
-                    v_Temp.clear();
-                    v_Temp = null;
                     return ParticipantTypeEnum.$UserSend;
                 }
             }
@@ -313,8 +301,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 {
                     if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
                     {
-                        v_Temp.clear();
-                        v_Temp = null;
                         return ParticipantTypeEnum.$OrgSend;
                     }
                 }
@@ -332,19 +318,11 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                     {
                         if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
                         {
-                            v_Temp.clear();
-                            v_Temp = null;
                             return ParticipantTypeEnum.$RoleSend;
                         }
                     }
                 }
             }
-        }
-        
-        if ( !Help.isNull(v_Temp) )
-        {
-            v_Temp.clear();
-            v_Temp = null;
         }
         
         return null;
