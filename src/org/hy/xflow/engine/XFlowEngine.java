@@ -106,13 +106,58 @@ public class XFlowEngine
      * 路由可以不设定参与人的要求，但当路由设定参与人要求时，无论哪种参与人类型，均要符合路由对参与人的要求。
      * 
      * @author      ZhengWei(HY)
+     * @createDate  2023-02-15
+     * @version     v1.0
+     *
+     * @param i_User      用户
+     * @param i_Flow      工作流实例。内部有此实例的所有流转信息
+     * @param i_Activity  模板的活动
+     * @return
+     */
+    public static Participant isParticipant(User i_User ,FlowInfo i_Flow ,ActivityInfo i_Activity)
+    {
+        boolean                           v_IsCreater     = i_User.getUserID().equals(i_Flow.getCreaterID());
+        PartitionMap<String ,FlowProcess> v_OldProcessMap = i_Flow.getProcessActivityMap();
+        Participant                       v_Participant   = null;
+        
+        // 是之前工作流流转过程的活动实际操作人时
+        v_Participant = whereTo_ParticipantTypeEnum_ActivityUser(i_User ,i_Activity ,v_OldProcessMap);
+        if ( v_Participant == null )
+        {
+            // 为发起人时
+            if ( i_Activity.getParticipantByCreater() != null && v_IsCreater )
+            {
+                v_Participant = i_Activity.getParticipantByCreater();
+            }
+            else
+            {
+                v_Participant = i_Activity.isParticipant(i_User);
+            }
+        }
+        
+        return v_Participant;
+    }
+    
+    
+    
+    /**
+     * 判定用户参与人之一。
+     * 
+     * 联合动态参与人、活动实际操作人、发起人、活动节点、活动路由一起判定。
+     * 
+     * 各种参与人在活动节点上的级别划分如下：
+     *   指定动态参与人 》 活动实际操作人  》  发起人 》 活动参与人
+     * 
+     * 路由可以不设定参与人的要求，但当路由设定参与人要求时，无论哪种参与人类型，均要符合路由对参与人的要求。
+     * 
+     * @author      ZhengWei(HY)
      * @createDate  2018-05-08
      * @version     v1.0
      *
      * @param i_User      用户
      * @param i_Flow      工作流实例。内部有此实例的所有流转信息
      * @param io_Process  流转过程。它上可指定动态参与人。
-     * @param i_Activity  模板的活动
+     * @param i_Route     活动路由
      * @return
      */
     public static Participant isParticipant(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityRoute i_Route)
@@ -793,7 +838,7 @@ public class XFlowEngine
         FlowProcess                              v_Process                = null;  // 默认当前流转就在0下标的位置。但时间精度不高、操作及快时，会出现排序规则失效的情况，所以通过下面for处理
         ActivityInfo                             v_Activity               = null;
         PartitionMap<String ,ProcessParticipant> v_AllProcessParts        = null;
-        List<ActivityInfo>                       v_OnceTo                 = null;
+        List<FlowProcess>                        v_OnceTo                 = null;
         ParticipantTypeEnum                      v_QueryerParticipantType = this.futureOperatorService.queryParticipantType(i_User ,i_WorkID);
         for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
@@ -848,9 +893,9 @@ public class XFlowEngine
      * @param i_Template  工作流模板
      * @return
      */
-    public static List<ActivityInfo> onceTo(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityInfo i_Activity ,Template i_Template)
+    public static List<FlowProcess> onceTo(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityInfo i_Activity ,Template i_Template)
     {
-        ListMap<String ,ActivityInfo> v_Activitys = new ListMap<String ,ActivityInfo>();
+        ListMap<String ,FlowProcess> v_Activitys = new ListMap<String ,FlowProcess>();
         
         for (int v_PIndex=0; v_PIndex < i_Flow.getProcesses().size(); v_PIndex++)
         {
@@ -863,7 +908,7 @@ public class XFlowEngine
                     ActivityInfo v_Activity = i_Template.getActivityRouteTree().getActivity(v_FProcess.getCurrentActivityCode());
                     if ( v_Activity != null )
                     {
-                        v_Activitys.put(v_FProcess.getCurrentActivityID() ,v_Activity);
+                        v_Activitys.put(v_FProcess.getCurrentActivityID() ,v_FProcess);
                     }
                 }
             }
@@ -1490,16 +1535,108 @@ public class XFlowEngine
     
     
     /**
-     * 驳回类型的节点流转（支持多路由并发执行）
+     * 自由驳回（未在工作流模板上预先配置驳回路由）（支持多路由并发执行）
+     * 
+     * 模板上预先配置驳回路由的方式：可用toNext()方法。
+     * 自由驳回是对toNext()方法的专项定制扩展
      * 
      * @author      ZhengWei(HY)
-     * @createDate  2023-01-31
+     * @createDate  2023-02-15
+     * @version     v1.0
+     *
+     * @param i_User                操作用户
+     * @param i_WorkID              工作流ID
+     * @param i_ProcessExtra        流转的附加信息。非必填
+     * @param i_ActivityCode        驳回到的活动节点的编码
+     * @return
+     */
+    public List<FlowProcess> toReject(User i_User ,String i_WorkID ,FlowProcess i_ProcessExtra ,String i_ActivityCode)
+    {
+        TablePartition<String ,UserParticipant> v_ActivityCodes = new TablePartition<String ,UserParticipant>();
+        
+        v_ActivityCodes.putRow(i_ActivityCode ,null);
+        
+        return this.toReject(i_User ,i_WorkID ,i_ProcessExtra ,v_ActivityCodes);
+    }
+    
+    
+    
+    /**
+     * 自由驳回（未在工作流模板上预先配置驳回路由）（支持多路由并发执行）
+     * 
+     * 模板上预先配置驳回路由的方式：可用toNext()方法。
+     * 自由驳回是对toNext()方法的专项定制扩展
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-15
+     * @version     v1.0
+     *
+     * @param i_User                操作用户
+     * @param i_ServiceDataID       第三方使用系统的业务数据ID
+     * @param i_ProcessExtra        流转的附加信息。非必填
+     * @param i_ActivityCode        驳回到的活动节点的编码
+     * @return
+     */
+    public List<FlowProcess> toRejectByServiceDataID(User i_User ,String i_ServiceDataID ,FlowProcess i_ProcessExtra ,String i_ActivityCode)
+    {
+        String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
+        if ( Help.isNull(v_WorkID) )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
+        }
+        
+        return toReject(i_User ,v_WorkID ,i_ProcessExtra ,i_ActivityCode);
+    }
+    
+    
+    
+    /**
+     * 自由驳回（未在工作流模板上预先配置驳回路由）（支持多路由并发执行）
+     * 
+     * 模板上预先配置驳回路由的方式：可用toNext()方法。
+     * 自由驳回是对toNext()方法的专项定制扩展
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-15
+     * @version     v1.0
+     *
+     * @param i_User           操作用户
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID
+     * @param i_ProcessExtra   流转的附加信息。非必填
+     * @param i_ActivityUsers  Map.Partition  曾经走过的活动节点的编码，也是准备驳回到活动节点
+     *                         Map.value      指定每个路由的下一活动的动态参与人，可选项。
+     *                                        指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
+     *                                        指定动态参与人时，同时也受限于路由上设定的参与人。
+     *                                        但当路由上没有设定参与人时，动态参与人将畅通无阻
+     * @return
+     */
+    public List<FlowProcess> toRejectByServiceDataID(User i_User ,String i_ServiceDataID ,FlowProcess i_ProcessExtra ,PartitionMap<String ,UserParticipant> i_ActivityUsers)
+    {
+        String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
+        if ( Help.isNull(v_WorkID) )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
+        }
+        
+        return toReject(i_User ,v_WorkID ,i_ProcessExtra ,i_ActivityUsers);
+    }
+    
+    
+    
+    /**
+     * 自由驳回（未在工作流模板上预先配置驳回路由）（支持多路由并发执行）
+     * 
+     * 模板上预先配置驳回路由的方式：可用toNext()方法。
+     * 自由驳回是对toNext()方法的专项定制扩展
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-15
      * @version     v1.0
      *
      * @param i_User           操作用户
      * @param i_WorkID         工作流ID
      * @param i_ProcessExtra   流转的附加信息。非必填
-     * @param i_ActivityUsers  Map.Partition  曾经走过的活动节点的编码，
+     * @param i_ActivityUsers  Map.Partition  曾经走过的活动节点的编码，也是准备驳回到活动节点
      *                         Map.value      指定每个路由的下一活动的动态参与人，可选项。
      *                                        指定动态参与人时，其级别高于活动设定的参与人，即活动上设定的参与人将失效。
      *                                        指定动态参与人时，同时也受限于路由上设定的参与人。
@@ -1508,7 +1645,129 @@ public class XFlowEngine
      */
     public List<FlowProcess> toReject(User i_User ,String i_WorkID ,FlowProcess i_ProcessExtra ,PartitionMap<String ,UserParticipant> i_ActivityUsers)
     {
-        return null;
+        if ( i_User == null )
+        {
+            throw new NullPointerException("User is null.");
+        }
+        else if ( Help.isNull(i_User.getUserID()) )
+        {
+            throw new NullPointerException("UserID is null.");
+        }
+        else if ( Help.isNull(i_WorkID) )
+        {
+            throw new NullPointerException("WorkID is null.");
+        }
+        else if ( Help.isNull(i_ActivityUsers) )
+        {
+            throw new NullPointerException("ActivityUsers is null.");
+        }
+        
+        ProcessActivitys v_ProcessActivitys = this.queryProcessActivitys(i_User ,i_WorkID);
+        if ( Help.isNull(v_ProcessActivitys.getActivitys()) )
+        {
+            throw new RuntimeException("WorkID[" + i_WorkID + "] is not any reject activity for User [" + i_User.getUserID() + "].");
+        }
+        Template v_Template = this.templateService.queryByID(v_ProcessActivitys.getFlow().getFlowTemplateID());
+        if ( v_Template == null )
+        {
+            throw new NullPointerException("Template[" + v_ProcessActivitys.getFlow().getFlowTemplateID() + "] is not exists. WorkID[" + i_WorkID + "] for User[" + i_User.getUserID() + "]");
+        }
+        
+        // 判定当前接口操作人，是否为参与人
+        Participant v_Participant = isParticipant(i_User ,v_ProcessActivitys.getFlow() ,v_ProcessActivitys.getCurrentActivity());
+        if ( v_Participant == null )
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
+        }
+        
+        List<FlowProcess> v_ProcessList = new ArrayList<FlowProcess>();
+        for (String v_ActivityCode : i_ActivityUsers.keySet())
+        {
+            ActivityInfo v_Activity = v_Template.getActivityRouteTree().getActivity(v_ActivityCode);
+            if ( v_Activity == null )
+            {
+                // 没有找到活动节点
+                throw new RuntimeException("WorkID[" + i_WorkID + "] is not find activity[" + v_ActivityCode + "] for User [" + i_User.getUserID() + "].");
+            }
+            
+            FlowProcess v_Process = null;
+            for (FlowProcess v_Item : v_ProcessActivitys.getActivitys())
+            {
+                if ( v_ActivityCode.equals(v_Item.getCurrentActivityCode()) )
+                {
+                    v_Process = v_Item;
+                    break;
+                }
+            }
+            
+            if ( v_Process == null )
+            {
+                // 没有找到曾经流转过的活动节点
+                throw new RuntimeException("WorkID[" + i_WorkID + "] is not allow reject activity[" + v_ActivityCode + "] for User [" + i_User.getUserID() + "].");
+            }
+            
+            List<UserParticipant> v_UserParticipants = i_ActivityUsers.get(v_ActivityCode);
+            if ( !Help.isNull(v_UserParticipants) )
+            {
+                // TODO: 放在之后，看是否有真正需求而定再开发
+            }
+            
+            FlowProcess v_NewProcess = new FlowProcess();
+            v_NewProcess.init_ToReject(i_User ,v_ProcessActivitys.getFlow() ,v_ProcessActivitys.getCurrentProcess() ,v_Activity);
+            
+            // 未来操作人：是驳回节点的当时的实际操作人
+            UserParticipant    v_UserParticipant = new UserParticipant();
+            ProcessParticipant v_FuturePart      = new ProcessParticipant();
+            
+            v_UserParticipant.setObjectID(  v_Process.getOperateUserID());   // 用当时操作人为本次驳回的未来操作人：即驳回给当初操作人处理
+            v_UserParticipant.setObjectName(v_Process.getOperateUser());
+            v_UserParticipant.setObjectType(ParticipantTypeEnum.$User);
+            v_UserParticipant.setObjectNo(0);
+            v_FuturePart.init(i_User ,v_NewProcess ,v_UserParticipant);
+            
+            v_NewProcess.setFutureParticipants(new ArrayList<ProcessParticipant>());
+            v_NewProcess.getFutureParticipants().add(v_FuturePart);
+            
+            if ( i_ProcessExtra != null )
+            {
+                // 驳回原因或附加数据，应当记录到当前流转中，而不是下一条流转中
+                v_ProcessActivitys.getCurrentProcess().setOperateFiles(Help.NVL(i_ProcessExtra.getOperateFiles()));
+                v_ProcessActivitys.getCurrentProcess().setOperateDatas(Help.NVL(i_ProcessExtra.getOperateDatas()));
+                v_ProcessActivitys.getCurrentProcess().setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
+            }
+            
+            v_ProcessList.add(v_NewProcess);
+        }
+        
+        
+        FlowInfo v_Flow = new FlowInfo();
+        
+        v_Flow.setWorkID(       v_ProcessActivitys.getCurrentProcess().getWorkID());
+        v_Flow.setLastProcessID(v_ProcessActivitys.getCurrentProcess().getProcessID());
+        v_Flow.setLastTime(new Date());
+        v_Flow.setLastUserID(       i_User.getUserID());
+        v_Flow.setLastUser(Help.NVL(i_User.getUserName()));
+        v_Flow.setLastOrgID(        i_User.getOrgID());
+        v_Flow.setLastOrg(Help.NVL( i_User.getOrgName()));
+        
+        boolean v_Ret = this.flowInfoService.toNext(v_Flow ,v_ProcessList ,v_ProcessActivitys.getCurrentProcess());
+        
+        if ( v_Ret )
+        {
+            for (FlowProcess v_Process : v_ProcessList)
+            {
+                this.futureOperatorService.updateCache(v_Process);
+            }
+            
+            return v_ProcessList;
+        }
+        else
+        {
+            throw new RuntimeException("WorkID[" + i_WorkID + "] to reject process is error. CurrentActivityCode["
+                                     + v_ProcessActivitys.getCurrentActivity().getActivityCode()
+                                     + "]  RejectActivityCode[" + StringHelp.toString(Help.toListKeys(i_ActivityUsers))
+                                     + "] User[" + i_User.getUserID() + "]");
+        }
     }
     
     
