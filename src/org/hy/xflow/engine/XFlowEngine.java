@@ -1,7 +1,9 @@
 package org.hy.xflow.engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hy.common.Date;
 import org.hy.common.Help;
@@ -274,6 +276,7 @@ public class XFlowEngine
         // 情况3. 常规工作流模板定义的参与人
         else
         {
+            Map<String ,Object>               v_ObjectKeys    = new HashMap<String ,Object>();  // 防止重复添加参与人
             PartitionMap<String ,FlowProcess> v_OldProcessMap = i_Flow.getProcessActivityMap();
             io_Process.setParticipants(new ArrayList<ProcessParticipant>());
             
@@ -302,7 +305,12 @@ public class XFlowEngine
                     {
                         for (Participant v_ActivityParticipant : i_Activity.getParticipants())
                         {
-                            io_Process.getParticipants().add(new ProcessParticipant().init(v_ActivityParticipant));
+                            String v_ObjectKey = v_ActivityParticipant.getObjectType() + "@" + v_ActivityParticipant.getObjectID();
+                            if ( !v_ObjectKeys.containsKey(v_ObjectKey) )
+                            {
+                                io_Process.getParticipants().add(new ProcessParticipant().init(v_ActivityParticipant));
+                                v_ObjectKeys.put(v_ObjectKey ,v_ObjectKey);
+                            }
                         }
                     }
                 }
@@ -329,11 +337,19 @@ public class XFlowEngine
                     {
                         for (Participant v_RouteParticipant : v_Route.getParticipants())
                         {
-                            io_Process.getParticipants().add(new ProcessParticipant().init(v_RouteParticipant));
+                            String v_ObjectKey = v_RouteParticipant.getObjectType() + "@" + v_RouteParticipant.getObjectID();
+                            if ( !v_ObjectKeys.containsKey(v_ObjectKey) )
+                            {
+                                io_Process.getParticipants().add(new ProcessParticipant().init(v_RouteParticipant));
+                                v_ObjectKeys.put(v_ObjectKey ,v_ObjectKey);
+                            }
                         }
                     }
                 }
             }
+            
+            v_ObjectKeys.clear();
+            v_ObjectKeys = null;
         }
         
         return v_RetRoutes;
@@ -649,6 +665,7 @@ public class XFlowEngine
         ActivityInfo                             v_Activity               = null;
         PartitionMap<String ,ProcessParticipant> v_AllProcessParts        = null;
         List<ActivityRoute>                      v_WhereTo                = null;
+        List<FlowProcess>                        v_OnceTo                 = null;
         ParticipantTypeEnum                      v_QueryerParticipantType = this.futureOperatorService.queryParticipantType(i_User ,i_WorkID);
         for (; v_PIndex < v_FlowInfo.getProcesses().size(); v_PIndex++)
         {
@@ -662,6 +679,7 @@ public class XFlowEngine
                 v_Process.setParticipants(v_AllProcessParts.get(v_Process.getProcessID()));
                 
                 v_WhereTo = whereTo(i_User ,v_FlowInfo ,v_Process ,v_Activity);
+                v_OnceTo  = onceTo (i_User ,v_FlowInfo ,v_Process ,v_Activity ,v_Template);
                 
                 if ( !Help.isNull(v_WhereTo) )
                 {
@@ -723,6 +741,7 @@ public class XFlowEngine
                                          ,v_Activity
                                          ,v_AllProcessParts
                                          ,v_WhereTo
+                                         ,v_OnceTo
                                          ,v_QueryerParticipantType);
                 }
             }
@@ -737,6 +756,7 @@ public class XFlowEngine
                              ,v_Activity
                              ,v_AllProcessParts
                              ,v_WhereTo
+                             ,v_OnceTo
                              ,v_QueryerParticipantType);
     }
     
@@ -772,11 +792,13 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2023-02-14
      * @version     v1.0
+     *              v2.0  2023-02-16  删除：与queryNextRoutes()方法整合为一个方法，减少接口数量，减轻开发用户的负担
      *
      * @param i_User    用户
      * @param i_WorkID  工作流ID
      * @return
      */
+    @Deprecated
     public ProcessActivitys queryProcessActivitysByServiceDataID(User i_User ,String i_ServiceDataID)
     {
         String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
@@ -796,11 +818,13 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2023-01-31
      * @version     v1.0
+     *              v2.0  2023-02-16  删除：与queryNextRoutes()方法整合为一个方法，减少接口数量，减轻开发用户的负担
      *
      * @param i_User    用户
      * @param i_WorkID  工作流ID
      * @return
      */
+    @Deprecated
     public ProcessActivitys queryProcessActivitys(User i_User ,String i_WorkID)
     {
         if ( i_User == null )
@@ -882,6 +906,8 @@ public class XFlowEngine
     /**
      * 曾经去过哪？配合驳回功能的使用
      * 
+     * 不包含：当前活动节点，否则会出现自己流转自己的情况
+     * 
      * @author      ZhengWei(HY)
      * @createDate  2023-02-01
      * @version     v1.0
@@ -901,7 +927,8 @@ public class XFlowEngine
         {
             FlowProcess v_FProcess = i_Flow.getProcesses().get(v_PIndex);
             
-            if ( !Help.isNull(v_FProcess.getNextActivityID()) )
+            if ( !Help.isNull(v_FProcess.getNextActivityID())
+              && !Help.isNull(i_Activity.getActivityID().equals(v_FProcess.getCurrentActivityID())) )
             {
                 if ( !v_Activitys.containsKey(v_FProcess.getCurrentActivityID()) )
                 {
@@ -1408,12 +1435,13 @@ public class XFlowEngine
      *
      * @param i_User                操作用户
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
+     * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityRouteCode   走的路由编码
      * @return
      */
-    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,FlowProcess i_Process ,String i_ActivityRouteCode)
+    public FlowProcess toNextByServiceDataID(User i_User ,String i_ServiceDataID ,FlowProcess i_ProcessExtra ,String i_ActivityRouteCode)
     {
-        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_Process ,i_ActivityRouteCode ,(List<UserParticipant>)null);
+        return this.toNextByServiceDataID(i_User ,i_ServiceDataID ,i_ProcessExtra ,i_ActivityRouteCode ,(List<UserParticipant>)null);
     }
     
     
@@ -1662,19 +1690,19 @@ public class XFlowEngine
             throw new NullPointerException("ActivityUsers is null.");
         }
         
-        ProcessActivitys v_ProcessActivitys = this.queryProcessActivitys(i_User ,i_WorkID);
-        if ( Help.isNull(v_ProcessActivitys.getActivitys()) )
+        NextRoutes v_NextRoutes = this.queryNextRoutes(i_User ,i_WorkID);
+        if ( Help.isNull(v_NextRoutes.getActivitys()) )
         {
             throw new RuntimeException("WorkID[" + i_WorkID + "] is not any reject activity for User [" + i_User.getUserID() + "].");
         }
-        Template v_Template = this.templateService.queryByID(v_ProcessActivitys.getFlow().getFlowTemplateID());
+        Template v_Template = this.templateService.queryByID(v_NextRoutes.getFlow().getFlowTemplateID());
         if ( v_Template == null )
         {
-            throw new NullPointerException("Template[" + v_ProcessActivitys.getFlow().getFlowTemplateID() + "] is not exists. WorkID[" + i_WorkID + "] for User[" + i_User.getUserID() + "]");
+            throw new NullPointerException("Template[" + v_NextRoutes.getFlow().getFlowTemplateID() + "] is not exists. WorkID[" + i_WorkID + "] for User[" + i_User.getUserID() + "]");
         }
         
         // 判定当前接口操作人，是否为参与人
-        Participant v_Participant = isParticipant(i_User ,v_ProcessActivitys.getFlow() ,v_ProcessActivitys.getCurrentActivity());
+        Participant v_Participant = isParticipant(i_User ,v_NextRoutes.getFlow() ,v_NextRoutes.getCurrentActivity());
         if ( v_Participant == null )
         {
             throw new NullPointerException("WorkID[" + i_WorkID + "] is not grant to User[" + i_User.getUserID() + "].");
@@ -1691,7 +1719,7 @@ public class XFlowEngine
             }
             
             FlowProcess v_Process = null;
-            for (FlowProcess v_Item : v_ProcessActivitys.getActivitys())
+            for (FlowProcess v_Item : v_NextRoutes.getActivitys())
             {
                 if ( v_ActivityCode.equals(v_Item.getCurrentActivityCode()) )
                 {
@@ -1713,7 +1741,7 @@ public class XFlowEngine
             }
             
             FlowProcess v_NewProcess = new FlowProcess();
-            v_NewProcess.init_ToReject(i_User ,v_ProcessActivitys.getFlow() ,v_ProcessActivitys.getCurrentProcess() ,v_Activity);
+            v_NewProcess.init_ToReject(i_User ,v_NextRoutes.getFlow() ,v_NextRoutes.getCurrentProcess() ,v_Activity);
             
             // 未来操作人：是驳回节点的当时的实际操作人
             UserParticipant    v_UserParticipant = new UserParticipant();
@@ -1731,9 +1759,9 @@ public class XFlowEngine
             if ( i_ProcessExtra != null )
             {
                 // 驳回原因或附加数据，应当记录到当前流转中，而不是下一条流转中
-                v_ProcessActivitys.getCurrentProcess().setOperateFiles(Help.NVL(i_ProcessExtra.getOperateFiles()));
-                v_ProcessActivitys.getCurrentProcess().setOperateDatas(Help.NVL(i_ProcessExtra.getOperateDatas()));
-                v_ProcessActivitys.getCurrentProcess().setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
+                v_NextRoutes.getCurrentProcess().setOperateFiles(Help.NVL(i_ProcessExtra.getOperateFiles()));
+                v_NextRoutes.getCurrentProcess().setOperateDatas(Help.NVL(i_ProcessExtra.getOperateDatas()));
+                v_NextRoutes.getCurrentProcess().setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
             }
             
             v_ProcessList.add(v_NewProcess);
@@ -1742,15 +1770,15 @@ public class XFlowEngine
         
         FlowInfo v_Flow = new FlowInfo();
         
-        v_Flow.setWorkID(       v_ProcessActivitys.getCurrentProcess().getWorkID());
-        v_Flow.setLastProcessID(v_ProcessActivitys.getCurrentProcess().getProcessID());
+        v_Flow.setWorkID(       v_NextRoutes.getCurrentProcess().getWorkID());
+        v_Flow.setLastProcessID(v_NextRoutes.getCurrentProcess().getProcessID());
         v_Flow.setLastTime(new Date());
         v_Flow.setLastUserID(       i_User.getUserID());
         v_Flow.setLastUser(Help.NVL(i_User.getUserName()));
         v_Flow.setLastOrgID(        i_User.getOrgID());
         v_Flow.setLastOrg(Help.NVL( i_User.getOrgName()));
         
-        boolean v_Ret = this.flowInfoService.toNext(v_Flow ,v_ProcessList ,v_ProcessActivitys.getCurrentProcess());
+        boolean v_Ret = this.flowInfoService.toNext(v_Flow ,v_ProcessList ,v_NextRoutes.getCurrentProcess());
         
         if ( v_Ret )
         {
@@ -1764,7 +1792,7 @@ public class XFlowEngine
         else
         {
             throw new RuntimeException("WorkID[" + i_WorkID + "] to reject process is error. CurrentActivityCode["
-                                     + v_ProcessActivitys.getCurrentActivity().getActivityCode()
+                                     + v_NextRoutes.getCurrentActivity().getActivityCode()
                                      + "]  RejectActivityCode[" + StringHelp.toString(Help.toListKeys(i_ActivityUsers))
                                      + "] User[" + i_User.getUserID() + "]");
         }

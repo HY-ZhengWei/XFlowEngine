@@ -4,9 +4,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.hy.common.Help;
+import org.hy.common.xml.log.Logger;
 import org.hy.xflow.engine.XFlowEngine;
+import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
-import org.hy.xflow.engine.bean.ProcessActivitys;
+import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseJunit;
 import org.junit.FixMethodOrder;
@@ -27,6 +30,8 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JU_005 extends BaseJunit
 {
+    private static final Logger $Logger       = new Logger(JU_005.class ,true);
+    
     private static final String $TemplateName = "自由驳回";
     
     /** 产品经理 */
@@ -39,7 +44,7 @@ public class JU_005 extends BaseJunit
     private User   checker02;
     
     /** 业务流转ID */
-    private String serviceDataID = "20230214-002";
+    private String serviceDataID = "20230214-003";
     
     
     
@@ -66,6 +71,84 @@ public class JU_005 extends BaseJunit
     
     
     /**
+     * 创建流程实例
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-09-05
+     * @version     v1.0
+     */
+    @Test
+    public void test_创建流程实例()
+    {
+        FlowInfo v_FlowInfo = null;
+        
+        try
+        {
+            v_FlowInfo = XFlowEngine.getInstance().createByName(manager ,$TemplateName ,serviceDataID);
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_FlowInfo != null);
+    }
+    
+    
+    
+    /**
+     * 执行喷涂工艺
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-16
+     * @version     v1.0
+     */
+    @Test
+    public void test_执行喷涂工艺()
+    {
+        FlowProcess v_FlowProcess = null;
+        
+        try
+        {
+            v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(manager ,serviceDataID ,null ,"R-S005-001-R001");
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_FlowProcess != null);
+    }
+    
+    
+    
+    /**
+     * 启动流程实例
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-16
+     * @version     v1.0
+     */
+    @Test
+    public void test_执行X光探伤()
+    {
+        FlowProcess v_FlowProcess = null;
+        
+        try
+        {
+            v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(checker01 ,serviceDataID ,null ,"R-S005-001-R002");
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_FlowProcess != null);
+    }
+    
+    
+    
+    /**
      * 查询查曾经流转过的节点
      * 
      * @author      ZhengWei(HY)
@@ -76,15 +159,15 @@ public class JU_005 extends BaseJunit
     @Test
     public void test_查曾经流转过的节点()
     {
-        ProcessActivitys v_ProcessActivitys = XFlowEngine.getInstance().queryProcessActivitysByServiceDataID(checker02 ,serviceDataID);
+        NextRoutes v_NextRoutes = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(checker02 ,serviceDataID);
         
-        assertTrue(v_ProcessActivitys != null);
+        assertTrue(!Help.isNull(v_NextRoutes.getActivitys()));
     }
     
     
     
     /**
-     * 查询查曾经流转过的节点
+     * 驳回到上级
      * 
      * @author      ZhengWei(HY)
      * @createDate  2023-02-15
@@ -97,9 +180,32 @@ public class JU_005 extends BaseJunit
         FlowProcess v_RejectInfo = new FlowProcess();
         v_RejectInfo.setInfoComment("驳回的原因是：xxx xxx");
         
-        ProcessActivitys  v_ProcessActivitys = XFlowEngine.getInstance().queryProcessActivitysByServiceDataID(checker02 ,serviceDataID);
-        String            v_RejectACode      = v_ProcessActivitys.getActivitys().get(0).getCurrentActivityCode();
-        List<FlowProcess> v_RejectRet        = XFlowEngine.getInstance().toRejectByServiceDataID(checker02 ,serviceDataID ,v_RejectInfo ,v_RejectACode);
+        NextRoutes        v_NextRoutes  = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(checker02 ,serviceDataID);
+        String            v_RejectACode = v_NextRoutes.getActivitys().get(0).getCurrentActivityCode();
+        List<FlowProcess> v_RejectRet   = XFlowEngine.getInstance().toRejectByServiceDataID(checker02 ,serviceDataID ,v_RejectInfo ,v_RejectACode);
+        
+        assertTrue(v_RejectRet != null);
+    }
+    
+    
+    
+    /**
+     * 驳回到上级的上级
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-15
+     * @version     v1.0
+     *
+     */
+    @Test
+    public void test_驳回到上级的上级()
+    {
+        FlowProcess v_RejectInfo = new FlowProcess();
+        v_RejectInfo.setInfoComment("驳回的原因是：yyy yyy");
+        
+        NextRoutes        v_NextRoutes  = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(checker02 ,serviceDataID);
+        String            v_RejectACode = v_NextRoutes.getActivitys().get(1).getCurrentActivityCode();
+        List<FlowProcess> v_RejectRet   = XFlowEngine.getInstance().toRejectByServiceDataID(checker02 ,serviceDataID ,v_RejectInfo ,v_RejectACode);
         
         assertTrue(v_RejectRet != null);
     }
