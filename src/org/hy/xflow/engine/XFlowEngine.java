@@ -923,14 +923,14 @@ public class XFlowEngine
     {
         ListMap<String ,FlowProcess> v_Activitys = new ListMap<String ,FlowProcess>();
         
-        for (int v_PIndex=0; v_PIndex < i_Flow.getProcesses().size(); v_PIndex++)
+        for (int v_PIndex=0; v_PIndex < i_Flow.getProcesses().size(); v_PIndex++)         // 时间倒序：最后操作的排在前
         {
             FlowProcess v_FProcess = i_Flow.getProcesses().get(v_PIndex);
             
             if ( !Help.isNull(v_FProcess.getNextActivityID())
-              && !Help.isNull(i_Activity.getActivityID().equals(v_FProcess.getCurrentActivityID())) )
+              && !i_Activity.getActivityID().equals(v_FProcess.getCurrentActivityID()) )  // 不包含：当前活动节点
             {
-                if ( !v_Activitys.containsKey(v_FProcess.getCurrentActivityID()) )
+                if ( !v_Activitys.containsKey(v_FProcess.getCurrentActivityID()) )        // 防止重复
                 {
                     ActivityInfo v_Activity = i_Template.getActivityRouteTree().getActivity(v_FProcess.getCurrentActivityCode());
                     if ( v_Activity != null )
@@ -1566,7 +1566,7 @@ public class XFlowEngine
      * 自由驳回（未在工作流模板上预先配置驳回路由）（支持多路由并发执行）
      * 
      * 模板上预先配置驳回路由的方式：可用toNext()方法。
-     * 自由驳回是对toNext()方法的专项定制扩展
+     * 自由驳回是对toNext()方法的专项定制扩展，允许未在模板上定义驳回路由
      * 
      * @author      ZhengWei(HY)
      * @createDate  2023-02-15
@@ -1593,7 +1593,7 @@ public class XFlowEngine
      * 自由驳回（未在工作流模板上预先配置驳回路由）（支持多路由并发执行）
      * 
      * 模板上预先配置驳回路由的方式：可用toNext()方法。
-     * 自由驳回是对toNext()方法的专项定制扩展
+     * 自由驳回是对toNext()方法的专项定制扩展，允许未在模板上定义驳回路由
      * 
      * @author      ZhengWei(HY)
      * @createDate  2023-02-15
@@ -1622,7 +1622,7 @@ public class XFlowEngine
      * 自由驳回（未在工作流模板上预先配置驳回路由）（支持多路由并发执行）
      * 
      * 模板上预先配置驳回路由的方式：可用toNext()方法。
-     * 自由驳回是对toNext()方法的专项定制扩展
+     * 自由驳回是对toNext()方法的专项定制扩展，允许未在模板上定义驳回路由
      * 
      * @author      ZhengWei(HY)
      * @createDate  2023-02-15
@@ -1655,7 +1655,7 @@ public class XFlowEngine
      * 自由驳回（未在工作流模板上预先配置驳回路由）（支持多路由并发执行）
      * 
      * 模板上预先配置驳回路由的方式：可用toNext()方法。
-     * 自由驳回是对toNext()方法的专项定制扩展
+     * 自由驳回是对toNext()方法的专项定制扩展，允许未在模板上定义驳回路由
      * 
      * @author      ZhengWei(HY)
      * @createDate  2023-02-15

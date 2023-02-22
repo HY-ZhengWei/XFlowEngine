@@ -513,7 +513,15 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                             for (int x=v_DelDatas.size() -1; x>=0; x--)
                             {
                                 FutureOperator v_Del = v_DelDatas.get(x);
+                                
+                                // 未来参与人全相等时
                                 if ( v_Del.equals(v_FO) && v_FO.getProcessID().equals(v_Del.getProcessID()) )
+                                {
+                                    v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
+                                }
+                                // 缓存中的流转信息是上一个流转信息
+                                else if ( !Help.isNull(i_Process.getPreviousProcessID())
+                                        && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
                                 {
                                     v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
                                 }
@@ -535,7 +543,15 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                         for (int x=v_DelDatas.size() -1; x>=0; x--)
                         {
                             FutureOperator v_Del = v_DelDatas.get(x);
+                            
+                            // 未来参与人全相等时
                             if ( v_Del.equals(v_FO) )
+                            {
+                                v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
+                            }
+                            // 缓存中的流转信息是上一个流转信息
+                            else if ( !Help.isNull(i_Process.getPreviousProcessID())
+                                    && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
                             {
                                 v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
                             }
@@ -552,10 +568,10 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             {
                 FutureOperator v_FO = v_FutureOperators.get(i);
                 
-                if ( i_Process.getPreviousProcessID().equals(v_FO.getProcessID()) )
+                if ( !Help.isNull(i_Process.getPreviousProcessID())
+                   && i_Process.getPreviousProcessID().equals(v_FO.getProcessID()) )
                 {
-                    FutureOperator v_Old = $FutureOperators_KeyWorkID.removeRow(i_Process.getWorkID() ,v_FO);
-                    System.out.println(v_Old);
+                    $FutureOperators_KeyWorkID.removeRow(i_Process.getWorkID() ,v_FO);
                 }
             }
         }
