@@ -915,27 +915,47 @@ public class XFlowEngine
      * @param i_User      用户
      * @param i_Flow      工作流实例。内部有此实例的所有流转信息
      * @param io_Process  流转过程。它上可指定动态参与人。
-     * @param i_Activity  当前活动
+     * @param i_Activity  当前活动节点
      * @param i_Template  工作流模板
      * @return
      */
     public static List<FlowProcess> onceTo(User i_User ,FlowInfo i_Flow ,FlowProcess io_Process ,ActivityInfo i_Activity ,Template i_Template)
     {
-        ListMap<String ,FlowProcess> v_Activitys = new ListMap<String ,FlowProcess>();
+        ListMap<String ,FlowProcess> v_Activitys         = new ListMap<String ,FlowProcess>();
+        boolean                      v_IsFindA           = false;                         // 是否已定位到当前活动节点
+        String                       v_PreviousProcessID = null;                          // 上一过程ID
         
         for (int v_PIndex=0; v_PIndex < i_Flow.getProcesses().size(); v_PIndex++)         // 时间倒序：最后操作的排在前
         {
             FlowProcess v_FProcess = i_Flow.getProcesses().get(v_PIndex);
             
-            if ( !Help.isNull(v_FProcess.getNextActivityID())
-              && !i_Activity.getActivityID().equals(v_FProcess.getCurrentActivityID()) )  // 不包含：当前活动节点
+            // 先定位当前活动节点
+            if ( !v_IsFindA )
             {
-                if ( !v_Activitys.containsKey(v_FProcess.getCurrentActivityID()) )        // 防止重复
+                if ( i_Activity.getActivityID().equals(v_FProcess.getCurrentActivityID()) )
                 {
-                    ActivityInfo v_Activity = i_Template.getActivityRouteTree().getActivity(v_FProcess.getCurrentActivityCode());
-                    if ( v_Activity != null )
+                    v_PreviousProcessID = v_FProcess.getPreviousProcessID();
+                    v_IsFindA           = true;
+                }
+                
+                continue;
+            }
+            
+            // 路由链逐一依次向上查找
+            if ( v_PreviousProcessID.equals(v_FProcess.getProcessID()) )
+            {
+                v_PreviousProcessID = v_FProcess.getPreviousProcessID();
+                
+                if ( !Help.isNull(v_FProcess.getNextActivityID())                             // 不包含：待办节点
+                  && !i_Activity.getActivityID().equals(v_FProcess.getCurrentActivityID()) )  // 不包含：当前活动节点
+                {
+                    if ( !v_Activitys.containsKey(v_FProcess.getCurrentActivityID()) )        // 防止重复
                     {
-                        v_Activitys.put(v_FProcess.getCurrentActivityID() ,v_FProcess);
+                        ActivityInfo v_Activity = i_Template.getActivityRouteTree().getActivity(v_FProcess.getCurrentActivityCode());
+                        if ( v_Activity != null )
+                        {
+                            v_Activitys.put(v_FProcess.getCurrentActivityID() ,v_FProcess);
+                        }
                     }
                 }
             }
