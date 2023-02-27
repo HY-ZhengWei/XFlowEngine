@@ -276,6 +276,9 @@ INSERT  INTO TActivityInfo
        ,width
        ,iconURL
        ,infoComment
+       ,summaryPass
+       ,counterPass
+       ,passType
        ,createrID
        ,creater
        ,createTime
@@ -296,6 +299,9 @@ VALUES (
        ,64
        ,'http://'
        ,''
+       ,100
+       ,2
+       ,'OR'
        ,'USER-00001'
        ,'ZhengWei(HY)'
        ,'2023-02-22 01:01:01'

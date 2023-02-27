@@ -12,6 +12,7 @@ import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseJunit;
+import org.hy.xflow.engine.enums.RejectModeEnum;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -182,7 +183,7 @@ public class JU_005 extends BaseJunit
         
         NextRoutes        v_NextRoutes  = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(checker02 ,serviceDataID);
         String            v_RejectACode = v_NextRoutes.getActivitys().get(0).getCurrentActivityCode();
-        List<FlowProcess> v_RejectRet   = XFlowEngine.getInstance().toRejectByServiceDataID(checker02 ,serviceDataID ,v_RejectInfo ,v_RejectACode);
+        List<FlowProcess> v_RejectRet   = XFlowEngine.getInstance().toRejectByServiceDataID(checker02 ,serviceDataID ,RejectModeEnum.$Auto ,v_RejectInfo ,v_RejectACode);
         
         assertTrue(v_RejectRet != null);
     }
@@ -205,7 +206,7 @@ public class JU_005 extends BaseJunit
         
         NextRoutes        v_NextRoutes  = XFlowEngine.getInstance().queryNextRoutesByServiceDataID(checker02 ,serviceDataID);
         String            v_RejectACode = v_NextRoutes.getActivitys().get(1).getCurrentActivityCode();
-        List<FlowProcess> v_RejectRet   = XFlowEngine.getInstance().toRejectByServiceDataID(checker02 ,serviceDataID ,v_RejectInfo ,v_RejectACode);
+        List<FlowProcess> v_RejectRet   = XFlowEngine.getInstance().toRejectByServiceDataID(checker02 ,serviceDataID ,RejectModeEnum.$Auto ,v_RejectInfo ,v_RejectACode);
         
         assertTrue(v_RejectRet != null);
     }

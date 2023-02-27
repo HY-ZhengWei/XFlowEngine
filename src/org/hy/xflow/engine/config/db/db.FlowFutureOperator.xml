@@ -89,6 +89,30 @@
         
         
         
+        <sql id="XSQL_XFlow_TFlowFutureOperator_Del_RejectTeam"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                ]]>
+            </content>
+            
+            <comment>自由驳回_协同模式：删除工作流实例的所有的未来操作人</comment>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_XFlow_TFlowFutureOperator_Insert"> 
         
             <dataSourceGroup ref="DSG_XFlow" />

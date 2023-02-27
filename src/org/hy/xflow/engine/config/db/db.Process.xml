@@ -251,6 +251,44 @@
         
         
         
+        <sql id="XSQL_XFlow_Process_UpdatePrevious_RejectTeam"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                UPDATE  TProcess
+                   SET  nextProcessID         = ':previous.nextProcessID'       
+                       ,nextActivityID        = ':previous.nextActivityID'
+                       ,nextActivityCode      = ':previous.nextActivityCode'
+                       ,nextActivityName      = ':previous.nextActivityName'    
+                       ,operateTime           = ':previous.operateTime.fullMilli'         
+                       ,operateTimeLen        =  :previous.operateTimeLen       
+                       ,operateTypeID         = ':previous.operateTypeID'       
+                       ,operateType           = ':previous.operateType'         
+                       ,operateUserID         = ':previous.operateUserID'       
+                       ,operateUser           = ':previous.operateUser'         
+                       ,operateOrgID          = ':previous.operateOrgID'        
+                       ,operateOrg            = ':previous.operateOrg'
+                       ,operateFiles          = ':previous.operateFiles'
+                       ,operateDatas          = ':previous.operateDatas'
+                       ,infoComment           = ':previous.infoComment'
+                       ,summary               = ':previous.summary'
+                       ,summaryPass           = ':previous.summaryPass'
+                       ,counter               = ':previous.counter'
+                       ,counterPass           = ':previous.counterPass'
+                       ,passType              = ':previous.passType'
+                 WHERE  splitProcessID        = ':previous.splitProcessID'
+                   AND (nextProcessID        IS NULL
+                    OR  nextProcessID         = '')
+                ]]>
+            </content>
+            
+            <comment>分单多路后的自由驳回（协同模式），驳回到指定节点，更新之前所有多路流转路由</comment>
+        </sql>
+        
+        
+        
         <sql id="XSQL_XFlow_Process_UpdatePrevious_Summary"> 
         
             <dataSourceGroup ref="DSG_XFlow" />

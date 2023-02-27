@@ -776,17 +776,19 @@
             
             <content>
                 <![CDATA[
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT001' ,'转派'      ,1);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT002' ,'分派'      ,2);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003' ,'汇签'      ,3);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT004' ,'汇签关闭'  ,4);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020' ,'驳回'      ,20);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT021' ,'追回'      ,21);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT022' ,'回退'      ,22);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT030' ,'催办'      ,30);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT050' ,'限时自动流' ,50);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT051' ,'自由流'     ,51);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT999' ,'结束'      ,999);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT001'     ,'转派'             ,1);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT002'     ,'分派'             ,2);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003'     ,'汇签'             ,3);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT004'     ,'汇签关闭'         ,4);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020'     ,'驳回'             ,20);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020AUTO' ,'自由驳回_自动模式' ,20);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020TEAM' ,'自由驳回_协同模式' ,20);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT021'     ,'追回'             ,21);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT022'     ,'回退'             ,22);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT030'     ,'催办'             ,30);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT050'     ,'限时自动流'        ,50);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT051'     ,'自由流'           ,51);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT999'     ,'结束'             ,999);/
                 ]]>
             </content>
             

@@ -27,6 +27,7 @@ import org.hy.xflow.engine.bean.UserParticipant;
 import org.hy.xflow.engine.config.InitConfig;
 import org.hy.xflow.engine.enums.ActivityTypeEnum;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
+import org.hy.xflow.engine.enums.RejectModeEnum;
 import org.hy.xflow.engine.enums.RouteTypeEnum;
 import org.hy.xflow.engine.service.IFlowFutureOperatorService;
 import org.hy.xflow.engine.service.IFlowInfoService;
@@ -1594,17 +1595,18 @@ public class XFlowEngine
      *
      * @param i_User                操作用户
      * @param i_WorkID              工作流ID
+     * @param i_RejectMode          驳回模式
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityCode        驳回到的活动节点的编码
      * @return
      */
-    public List<FlowProcess> toReject(User i_User ,String i_WorkID ,FlowProcess i_ProcessExtra ,String i_ActivityCode)
+    public List<FlowProcess> toReject(User i_User ,String i_WorkID ,RejectModeEnum i_RejectMode ,FlowProcess i_ProcessExtra ,String i_ActivityCode)
     {
         TablePartition<String ,UserParticipant> v_ActivityCodes = new TablePartition<String ,UserParticipant>();
         
         v_ActivityCodes.putRow(i_ActivityCode ,null);
         
-        return this.toReject(i_User ,i_WorkID ,i_ProcessExtra ,v_ActivityCodes);
+        return this.toReject(i_User ,i_WorkID ,i_RejectMode ,i_ProcessExtra ,v_ActivityCodes);
     }
     
     
@@ -1621,11 +1623,12 @@ public class XFlowEngine
      *
      * @param i_User                操作用户
      * @param i_ServiceDataID       第三方使用系统的业务数据ID
+     * @param i_RejectMode          驳回模式
      * @param i_ProcessExtra        流转的附加信息。非必填
      * @param i_ActivityCode        驳回到的活动节点的编码
      * @return
      */
-    public List<FlowProcess> toRejectByServiceDataID(User i_User ,String i_ServiceDataID ,FlowProcess i_ProcessExtra ,String i_ActivityCode)
+    public List<FlowProcess> toRejectByServiceDataID(User i_User ,String i_ServiceDataID ,RejectModeEnum i_RejectMode ,FlowProcess i_ProcessExtra ,String i_ActivityCode)
     {
         String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
         if ( Help.isNull(v_WorkID) )
@@ -1633,7 +1636,7 @@ public class XFlowEngine
             throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
         }
         
-        return toReject(i_User ,v_WorkID ,i_ProcessExtra ,i_ActivityCode);
+        return toReject(i_User ,v_WorkID ,i_RejectMode ,i_ProcessExtra ,i_ActivityCode);
     }
     
     
@@ -1650,6 +1653,7 @@ public class XFlowEngine
      *
      * @param i_User           操作用户
      * @param i_ServiceDataID  第三方使用系统的业务数据ID
+     * @param i_RejectMode     驳回模式
      * @param i_ProcessExtra   流转的附加信息。非必填
      * @param i_ActivityUsers  Map.Partition  曾经走过的活动节点的编码，也是准备驳回到活动节点
      *                         Map.value      指定每个路由的下一活动的动态参与人，可选项。
@@ -1658,7 +1662,7 @@ public class XFlowEngine
      *                                        但当路由上没有设定参与人时，动态参与人将畅通无阻
      * @return
      */
-    public List<FlowProcess> toRejectByServiceDataID(User i_User ,String i_ServiceDataID ,FlowProcess i_ProcessExtra ,PartitionMap<String ,UserParticipant> i_ActivityUsers)
+    public List<FlowProcess> toRejectByServiceDataID(User i_User ,String i_ServiceDataID ,RejectModeEnum i_RejectMode ,FlowProcess i_ProcessExtra ,PartitionMap<String ,UserParticipant> i_ActivityUsers)
     {
         String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
         if ( Help.isNull(v_WorkID) )
@@ -1666,7 +1670,7 @@ public class XFlowEngine
             throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
         }
         
-        return toReject(i_User ,v_WorkID ,i_ProcessExtra ,i_ActivityUsers);
+        return toReject(i_User ,v_WorkID ,i_RejectMode ,i_ProcessExtra ,i_ActivityUsers);
     }
     
     
@@ -1683,6 +1687,7 @@ public class XFlowEngine
      *
      * @param i_User           操作用户
      * @param i_WorkID         工作流ID
+     * @param i_RejectMode     驳回模式
      * @param i_ProcessExtra   流转的附加信息。非必填
      * @param i_ActivityUsers  Map.Partition  曾经走过的活动节点的编码，也是准备驳回到活动节点
      *                         Map.value      指定每个路由的下一活动的动态参与人，可选项。
@@ -1691,7 +1696,7 @@ public class XFlowEngine
      *                                        但当路由上没有设定参与人时，动态参与人将畅通无阻
      * @return
      */
-    public List<FlowProcess> toReject(User i_User ,String i_WorkID ,FlowProcess i_ProcessExtra ,PartitionMap<String ,UserParticipant> i_ActivityUsers)
+    public List<FlowProcess> toReject(User i_User ,String i_WorkID ,RejectModeEnum i_RejectMode ,FlowProcess i_ProcessExtra ,PartitionMap<String ,UserParticipant> i_ActivityUsers)
     {
         if ( i_User == null )
         {
@@ -1729,6 +1734,7 @@ public class XFlowEngine
         }
         
         List<FlowProcess> v_ProcessList = new ArrayList<FlowProcess>();
+        boolean           v_RejectTeam  = false;
         for (String v_ActivityCode : i_ActivityUsers.keySet())
         {
             ActivityInfo v_Activity = v_Template.getActivityRouteTree().getActivity(v_ActivityCode);
@@ -1738,12 +1744,22 @@ public class XFlowEngine
                 throw new RuntimeException("WorkID[" + i_WorkID + "] is not find activity[" + v_ActivityCode + "] for User [" + i_User.getUserID() + "].");
             }
             
-            FlowProcess v_Process = null;
-            for (FlowProcess v_Item : v_NextRoutes.getActivitys())
+            FlowProcess v_Process     = null;
+            boolean     v_IsPassMany  = false;    // 驳回目地节点是否经过分派节点
+            boolean     v_IsMany      = false;    // 驳回目地节点是否就为分派节点
+            for (FlowProcess v_PItem : v_NextRoutes.getActivitys())
             {
-                if ( v_ActivityCode.equals(v_Item.getCurrentActivityCode()) )
+                boolean v_ToMany = false;
+                if ( !v_IsPassMany && RouteTypeEnum.$ToMany.getValue().equalsIgnoreCase(v_PItem.getOperateTypeID()) )
                 {
-                    v_Process = v_Item;
+                    v_IsPassMany  = true;
+                    v_ToMany      = true;
+                }
+                
+                if ( v_ActivityCode.equals(v_PItem.getCurrentActivityCode()) )
+                {
+                    v_Process = v_PItem;
+                    v_IsMany  = v_ToMany;
                     break;
                 }
             }
@@ -1757,7 +1773,7 @@ public class XFlowEngine
             List<UserParticipant> v_UserParticipants = i_ActivityUsers.get(v_ActivityCode);
             if ( !Help.isNull(v_UserParticipants) )
             {
-                // TODO: 放在之后，看是否有真正需求而定再开发
+                // TODO: 放在之后实现，看是否有真正需求而定再开发
             }
             
             FlowProcess v_NewProcess = new FlowProcess();
@@ -1776,15 +1792,38 @@ public class XFlowEngine
             v_NewProcess.setFutureParticipants(new ArrayList<ProcessParticipant>());
             v_NewProcess.getFutureParticipants().add(v_FuturePart);
             
-            if ( i_ProcessExtra != null )
+            // 驳回目地节点是否经过分派节点
+            if ( v_IsPassMany )
             {
-                // 驳回原因或附加数据，应当记录到当前流转中，而不是下一条流转中
-                v_NextRoutes.getCurrentProcess().setOperateFiles(Help.NVL(i_ProcessExtra.getOperateFiles()));
-                v_NextRoutes.getCurrentProcess().setOperateDatas(Help.NVL(i_ProcessExtra.getOperateDatas()));
-                v_NextRoutes.getCurrentProcess().setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
+                // 协同多条路由线路一同驳回
+                // 情况1：接口要求协同模式
+                // 情况2：回目地节点经过分派节点，无论是否为协同模式均要按协同模式处理
+                // 情况3：当前节点为汇签，无论是否为协同模式均要按协同模式处理
+                if ( RejectModeEnum.$Team == i_RejectMode
+                  || !v_IsMany
+                  || RouteTypeEnum.$ToSum.getValue().equalsIgnoreCase(v_NextRoutes.getCurrentProcess().getPreviousOperateTypeID()) )
+                {
+                    v_NewProcess.setSplitProcessID("");  // 清除之前的分单ID
+                    v_NewProcess.setPreviousOperateTypeID(            RouteTypeEnum.$Reject_Team.getValue());
+                    v_NextRoutes.getCurrentProcess().setOperateTypeID(RouteTypeEnum.$Reject_Team.getValue());
+                    v_NextRoutes.getCurrentProcess().setOperateType(  RouteTypeEnum.$Reject_Team.getDesc());
+                    v_ProcessList.clear();               // 清空之前的添加的流转信息
+                    v_ProcessList.add(v_NewProcess);
+                    v_RejectTeam = true;
+                    break;
+                }
             }
             
             v_ProcessList.add(v_NewProcess);
+        }
+        
+        
+        // 驳回原因或附加数据，应当记录到当前流转中，而不是下一条流转中
+        if ( i_ProcessExtra != null )
+        {
+            v_NextRoutes.getCurrentProcess().setOperateFiles(Help.NVL(i_ProcessExtra.getOperateFiles()));
+            v_NextRoutes.getCurrentProcess().setOperateDatas(Help.NVL(i_ProcessExtra.getOperateDatas()));
+            v_NextRoutes.getCurrentProcess().setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
         }
         
         
@@ -1802,9 +1841,17 @@ public class XFlowEngine
         
         if ( v_Ret )
         {
-            for (FlowProcess v_Process : v_ProcessList)
+            if ( v_RejectTeam )
             {
-                this.futureOperatorService.updateCache(v_Process);
+                this.futureOperatorService.delCacheByAll(v_ProcessList.get(0));
+                this.futureOperatorService.addCache(     v_ProcessList.get(0));
+            }
+            else
+            {
+                for (FlowProcess v_Process : v_ProcessList)
+                {
+                    this.futureOperatorService.updateCache(v_Process);
+                }
             }
             
             return v_ProcessList;

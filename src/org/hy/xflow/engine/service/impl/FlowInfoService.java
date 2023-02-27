@@ -40,6 +40,7 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      * @param i_TemplateID  工作流模板ID
      * @return
      */
+    @Override
     public List<FlowInfo> queryActivitys(String i_TemplateID)
     {
         return this.flowInfoDAO.queryActivitys(i_TemplateID);
@@ -57,6 +58,7 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      * @param i_WorkID  工作流实例ID
      * @return
      */
+    @Override
     public FlowInfo queryByWorkID(String i_WorkID)
     {
         return this.flowInfoDAO.queryByWorkID(i_WorkID);
@@ -74,6 +76,7 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
      * @return
      */
+    @Override
     public FlowInfo queryByServiceDataID(String i_ServiceDataID)
     {
         return this.flowInfoDAO.queryByServiceDataID(i_ServiceDataID);
@@ -92,6 +95,7 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      * @param i_Process
      * @return
      */
+    @Override
     public boolean createFlow(FlowInfo i_FlowInfo ,FlowProcess i_Process)
     {
         return this.flowInfoDAO.createFlow(i_FlowInfo ,i_Process);
@@ -111,6 +115,7 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      * @param i_Previous      前一个流转的过程信息
      * @return
      */
+    @Override
     public boolean toNext(FlowInfo i_Flow ,List<FlowProcess> i_ProcessList ,FlowProcess i_Previous)
     {
         if ( i_ProcessList.size() == 1 )
@@ -118,6 +123,10 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
             if ( RouteTypeEnum.$ToSum.equals(RouteTypeEnum.get(i_Previous.getOperateTypeID())) )
             {
                 return this.flowInfoDAO.toNextSummary(i_Flow ,i_ProcessList.get(0) ,i_Previous);
+            }
+            else if ( RouteTypeEnum.$Reject_Team.equals(RouteTypeEnum.get(i_Previous.getOperateTypeID())) )
+            {
+                return this.flowInfoDAO.toNextRejectTeam(i_Flow ,i_ProcessList.get(0) ,i_Previous);
             }
             else
             {
@@ -142,6 +151,7 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      * @param i_WorkID  工作流实例ID
      * @return
      */
+    @Override
     public boolean toHistory(String i_WorkID)
     {
         return this.flowInfoDAO.toHistory(i_WorkID);
@@ -159,6 +169,7 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
      * @return
      */
+    @Override
     public boolean toHistoryByServiceDataID(String i_ServiceDataID)
     {
         return this.flowInfoDAO.toHistoryByServiceDataID(i_ServiceDataID);

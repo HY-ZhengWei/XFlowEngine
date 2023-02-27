@@ -82,7 +82,7 @@ public interface IFlowInfoDAO
      * @return
      */
     @Xsql("GXSQL_Flow_Create")
-    public boolean createFlow(@Xparam("flow")    FlowInfo    i_FlowInfo 
+    public boolean createFlow(@Xparam("flow")    FlowInfo    i_FlowInfo
                              ,@Xparam("process") FlowProcess i_Process);
     
     
@@ -143,6 +143,24 @@ public interface IFlowInfoDAO
                                 ,@Xparam("process")  FlowProcess i_Process
                                 ,@Xparam("previous") FlowProcess i_Previous);
     
+    
+    
+    /**
+     * 分单多路后的自由驳回（协同模式），驳回到指定节点，更新之前所有多路流转路由
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-27
+     * @version     v1.0
+     *
+     * @param i_Flow      工作流实例对象
+     * @param i_Process   新流转的过程集合信息（分单时会有多个，正常情况下均只有一个元素）
+     * @param i_Previous  前一个流转的过程信息
+     * @return
+     */
+    @Xsql("GXSQL_Flow_ToNext_RejectTeam")
+    public boolean toNextRejectTeam(@Xparam("flow")     FlowInfo    i_Flow
+                                   ,@Xparam("process")  FlowProcess i_Process
+                                   ,@Xparam("previous") FlowProcess i_Previous);
     
     
     /**

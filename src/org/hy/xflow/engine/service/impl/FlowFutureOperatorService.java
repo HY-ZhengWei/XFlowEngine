@@ -584,6 +584,70 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     
     
     /**
+     * 删除缓存中的当前工作流的所有未来操作人信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-27
+     * @version     v1.0
+     *
+     * @param i_Process
+     */
+    @Override
+    public void delCacheByAll(FlowProcess i_Process)
+    {
+        delCacheByAllTrue(i_Process);
+        
+        CommunicationRequest v_RequestData = new CommunicationRequest();
+        v_RequestData.setEventType(    this.getEventType());
+        v_RequestData.setDataOperation("delCacheByAll");
+        v_RequestData.setDataXID(      i_Process.getWorkID());
+        v_RequestData.setData(         i_Process);
+        this.clusterSyncFlowCache(v_RequestData);
+    }
+    
+    
+    
+    /**
+     * 删除缓存中的当前工作流的所有未来操作人信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-27
+     * @version     v1.0
+     *
+     * @param i_Process
+     */
+    private synchronized void delCacheByAllTrue(FlowProcess i_Process)
+    {
+        List<FutureOperator> v_FutureOperators = $FutureOperators_KeyWorkID.get(i_Process.getWorkID());
+        
+        if ( !Help.isNull(v_FutureOperators) )
+        {
+            for (int i=v_FutureOperators.size()-1; i>=0; i--)
+            {
+                FutureOperator v_FO = v_FutureOperators.get(i);
+                String         v_ID = v_FO.getObjectType() + ":" + v_FO.getObjectID();
+                
+                List<FutureOperator> v_DelDatas = $FutureOperatorsByWorkID.get(v_ID);
+                if ( !Help.isNull(v_DelDatas) )
+                {
+                    for (int x=v_DelDatas.size() -1; x>=0; x--)
+                    {
+                        FutureOperator v_Del = v_DelDatas.get(x);
+                        if ( v_FO.getWorkID().equals(v_Del.getWorkID()) )
+                        {
+                            v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
+                        }
+                    }
+                }
+            }
+            
+            $FutureOperators_KeyWorkID.remove(i_Process.getWorkID());
+        }
+    }
+    
+    
+    
+    /**
      * 删除缓存中的未来操作人信息。在转历史单时触发。
      * 
      * @author      ZhengWei(HY)

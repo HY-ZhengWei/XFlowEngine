@@ -134,6 +134,19 @@ public interface IFlowFutureOperatorService
     
     
     /**
+     * 删除缓存中的当前工作流的所有未来操作人信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-02-27
+     * @version     v1.0
+     *
+     * @param i_Process
+     */
+    public void delCacheByAll(FlowProcess i_Process);
+    
+    
+    
+    /**
      * 删除缓存中的未来操作人信息。在转历史单时触发。
      * 
      * @author      ZhengWei(HY)
