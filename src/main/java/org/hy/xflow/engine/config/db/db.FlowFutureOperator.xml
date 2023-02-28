@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流未来操作人(实时数据)模块的相关SQL -->
+    <sqls>
+    
+        <sql id="XSQL_XFlow_TFlowFutureOperator_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                   AND  processID = ':previous.processID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                   AND  processID = ':previous.processID'
+                ]]>
+            </content>
+            
+            <comment>用于转历史单时：删除工作流实例的未来操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_Del_Split"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                   AND  processID = ':previous.processID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                   AND  processID = ':previous.processID'
+                ]]>
+            </content>
+            
+            <comment>用于分单多路由流转时：删除工作流实例的未来操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_Del_Summary"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                   AND  processID = ':previous.processID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                   AND  processID = ':previous.processID'
+                ]]>
+            </content>
+            
+            <comment>用于分单多路由流转时：删除工作流实例的未来操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_Del_RejectTeam"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowFutureOperator
+                 WHERE  workID    = ':previous.workID'
+                ]]>
+            </content>
+            
+            <comment>自由驳回_协同模式：删除工作流实例的所有的未来操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowFutureOperator
+                       (
+                        workID
+                       ,serviceDataID
+                       ,processID
+                       ,splitProcessID
+                       ,objectType
+                       ,objectID
+                       ,objectName
+                       ,objectNo
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       )
+                VALUES (
+                        :workID     
+                       ,:serviceDataID
+                       ,:processID
+                       ,:splitProcessID
+                       ,:objectType.value
+                       ,:objectID
+                       ,:objectName
+                       ,:objectNo
+                       ,:createrID
+                       ,:creater
+                       ,:createOrgID
+                       ,:createOrg
+                       ,:createTime.fullMilli
+                       )
+                ]]>
+            </content>
+            
+            <comment>添加未来操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_QueryAllByWorkID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                SELECT  CONVERT(VARCHAR(10) ,A.objectType) + ':' + A.objectID  AS objectID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.processID
+                       ,A.splitProcessID
+                       ,A.objectType
+                  FROM  TFlowFutureOperator  A
+                 ORDER  BY A.objectID
+                          ,A.objectType
+                          ,A.workID
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                SELECT  CONCAT(CONCAT(A.objectType , ':') ,A.objectID) AS objectID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.processID
+                       ,A.splitProcessID
+                       ,A.objectType
+                  FROM  TFlowFutureOperator  A
+                 ORDER  BY A.objectID
+                          ,A.objectType
+                          ,A.workID
+                ]]>
+            </content>
+            
+            <result>
+                <table>org.hy.common.TablePartition</table>
+                <fill>putRow(row.objectID ,row)</fill>
+                <row>org.hy.xflow.engine.bean.FutureOperator</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询所有未来操作人，并分区保存，用于高速缓存查询</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_QueryAll_KeyWorkID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.workID
+                       ,A.serviceDataID
+                       ,A.processID
+                       ,A.splitProcessID
+                       ,A.objectType
+                       ,A.objectID
+                  FROM  TFlowFutureOperator  A
+                 ORDER  BY A.workID
+                          ,A.processID
+                          ,A.objectID
+                          ,A.objectType
+                ]]>
+            </content>
+            
+            <result>
+                <table>org.hy.common.TablePartition</table>
+                <fill>putRow(row.workID ,row)</fill>
+                <row>org.hy.xflow.engine.bean.FutureOperator</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询所有未来操作人，并分区保存，用于高速缓存查询</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_QueryAll_SToWorkID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.workID
+                       ,A.serviceDataID
+                  FROM  TFlowInfo  A
+                 WHERE  A.serviceDataID IS NOT NULL
+                   AND  A.serviceDataID != ''
+                 ORDER  BY A.serviceDataID
+                ]]>
+            </content>
+            
+            <result>
+                <table>java.util.HashMap</table>
+                <fill>put(row.serviceDataID ,row.workID)</fill>
+                <row>org.hy.xflow.engine.bean.FutureOperator</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询所有未来操作人，用业务ID找实例ID</comment>
+            
+        </sql>
+        
+    </sqls>
+    
+</config>

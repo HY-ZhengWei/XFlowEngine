@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<import name="sqls"            class="java.util.ArrayList" />
+	<import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+	<import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流模板及活动、路由的组合业务的相关SQL -->
+	<sqls>
+	
+		<sqlGroup id="GXSQL_XFlow_Activity_Route_Save">
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_ActivityInfo_Saves" />
+				<type ref="this.$Type_CollectionToExecuteUpdate" />
+				<collectionID>Activitys</collectionID>
+			</sqlNode>
+			
+			<sqlNode>
+				<sql  ref="XSQL_XFlow_ActivityRoute_Saves" />
+				<type ref="this.$Type_CollectionToExecuteUpdate" />
+				<collectionID>Routes</collectionID>
+			</sqlNode>
+			
+			<comment>活动节点及活动路由的保存</comment>
+		</sqlGroup>
+		
+	</sqls>
+	
+</config>

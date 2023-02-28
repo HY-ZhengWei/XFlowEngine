@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="dataSource"      class="com.mchange.v2.c3p0.ComboPooledDataSource" />
+    <import name="dataSourceGroup" class="org.hy.common.db.DataSourceGroup" />
+    <import name="xparam"          class="java.util.Hashtable" />
+    <import name="item"            class="org.hy.common.app.Param" />
+
+
+
+    <!-- 数据库配置信息（本配置应交由外界初始化并提供，这里只做测试用） -->
+    <sqls>
+    
+        <item id="XFlow_DataSourceType">
+            <name>XFlow_DataSourceType</name>
+            <value>MYSQL</value>
+            <comment>配置数据库是什么类型的。详见：org.hy.common.db.DataSourceGroup</comment>
+        </item>
+        
+    
+        <!-- Oracle数据库 -->
+        <dataSource id="DS_XFlow_01" if="ORACLE == XFlow_DataSourceType.getValue">
+            <driverClass>oracle.jdbc.driver.OracleDriver</driverClass>
+            <jdbcUrl>jdbc:oracle:thin:@127.0.0.1:1521:orcl</jdbcUrl>
+            <user>XFlow</user>
+            <password encrypt="true">xflow</password>             <!-- 明文自动加密成密文 -->
+            <maxPoolSize>100</maxPoolSize>
+            <initialPoolSize>2</initialPoolSize>
+            <checkoutTimeout>10000</checkoutTimeout>
+        </dataSource>
+        
+    
+        <!-- MySQL数据库 -->
+        <dataSource id="DS_XFlow_01" if="MYSQL == XFlow_DataSourceType.getValue">
+            <driverClass>com.mysql.cj.jdbc.Driver</driverClass>
+            <jdbcUrl>jdbc:mysql://10.1.20.202:3307/service_change?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
+            <user>root</user>
+            <password>wzybVM9114</password>        <!-- 明文自动加密成密文 -->
+            <maxPoolSize>100</maxPoolSize>
+            <initialPoolSize>2</initialPoolSize>
+            <checkoutTimeout>30000</checkoutTimeout>
+        </dataSource>
+        
+        
+        <!-- SQL Server数据库 -->
+        <dataSource id="DS_XFlow_01" if="SQLSERVER == XFlow_DataSourceType.getValue">
+            <driverClass>net.sourceforge.jtds.jdbc.Driver</driverClass>
+            <jdbcUrl>jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=XFlow</jdbcUrl>
+            <user>sa</user>
+            <password encrypt="true">sa123</password>             <!-- 明文自动加密成密文 -->
+            <maxPoolSize>100</maxPoolSize>
+            <initialPoolSize>2</initialPoolSize>
+            <checkoutTimeout>10000</checkoutTimeout>
+        </dataSource>
+        
+        
+        
+        <!-- 数据库连接池组 -->
+        <dataSourceGroup id="DSG_XFlow">
+            <call name="add">
+                <dataSource ref="DS_XFlow_01" />
+            </call>
+        </dataSourceGroup>
+        
+    </sqls>
+    
+</config>
