@@ -1270,6 +1270,9 @@ public class XFlowEngine
                         v_FuturePart.setSplitProcessID(v_SplitProcessID);
                         v_Process.getFutureParticipants().add(v_FuturePart);
                     }
+                    
+                    // 未指定参与人时，默认为工作流模板中定义的参与人
+                    v_Process.setParticipants(v_Process.getFutureParticipants());
                 }
                 else
                 {
@@ -1951,6 +1954,74 @@ public class XFlowEngine
     public List<String> queryServiceDataIDsByDone(User i_User)
     {
         return this.flowProcessService.queryServiceDataIDsByDone(i_User);
+    }
+    
+    
+    
+    /**
+     * 获取用户督办（抄送的）的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
+     * 
+     * 思路：
+     *     1. 查流程模板上配置的抄送信息，即默认抄送信息
+     *     2. 查流程实例上指定的抄送信息，即指定抄送信息
+     *     3. 指定抄送>默认抄送，整合为流程实例的"全流程抄送"信息
+     *     4. 通过请求参数查询"全流程抄送"信息
+     *     5. 任意节点抄送一次即为督办
+     *     6. 督办的生命周期是：开始于抄送，完成在流程实例的结束
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<String> querySuperviseWorkIDs(User i_User)
+    {
+        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervise(i_User) ,"workID");
+    }
+    
+    
+    
+    /**
+     * 获取用户督办（抄送的）的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     * 
+     *   4. 通过用户ID查询抄送
+     *   5. 通过部门ID查询抄送
+     *   6. 通过角色ID查询抄送，支持多角色。
+     * 
+     * 思路：
+     *     1. 查流程模板上配置的抄送信息，即默认抄送信息
+     *     2. 查流程实例上指定的抄送信息，即指定抄送信息
+     *     3. 指定抄送>默认抄送，整合为流程实例的"全流程抄送"信息
+     *     4. 通过请求参数查询"全流程抄送"信息
+     *     5. 任意节点抄送一次即为督办
+     *     6. 督办的生命周期是：开始于抄送，完成在流程实例的结束
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<String> querySuperviseServiceDataIDs(User i_User)
+    {
+        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervise(i_User) ,"serviceDataID");
     }
     
     

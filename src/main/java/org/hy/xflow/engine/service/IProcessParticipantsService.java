@@ -1,7 +1,10 @@
 package org.hy.xflow.engine.service;
 
+import java.util.List;
+
 import org.hy.common.PartitionMap;
 import org.hy.xflow.engine.bean.ProcessParticipant;
+import org.hy.xflow.engine.bean.User;
 
 
 
@@ -43,5 +46,19 @@ public interface IProcessParticipantsService
      * @return                 Map.分区为：工作流的过程ID
      */
     public PartitionMap<String ,ProcessParticipant> queryByServiceDataID(String i_ServiceDataID);
+    
+    
+    
+    /**
+     * 查询工作流流转过程抄送人相关的流程信息（督办）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<ProcessParticipant> queryBySupervise(User i_User);
     
 }

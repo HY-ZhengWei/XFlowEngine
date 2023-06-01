@@ -1,8 +1,11 @@
 package org.hy.xflow.engine.service.impl;
 
+import java.util.List;
+
 import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.ProcessParticipant;
+import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseService;
 import org.hy.xflow.engine.dao.IProcessParticipantsDAO;
 import org.hy.xflow.engine.service.IProcessParticipantsService;
@@ -59,6 +62,23 @@ public class ProcessParticipantsService extends BaseService implements IProcessP
     public PartitionMap<String ,ProcessParticipant> queryByServiceDataID(String i_ServiceDataID)
     {
         return this.processParticipantsDAO.queryByServiceDataID(i_ServiceDataID);
+    }
+    
+    
+    
+    /**
+     * 查询工作流流转过程抄送人相关的流程信息（督办）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<ProcessParticipant> queryBySupervise(User i_User)
+    {
+        return this.processParticipantsDAO.queryBySupervise(i_User);
     }
     
 }

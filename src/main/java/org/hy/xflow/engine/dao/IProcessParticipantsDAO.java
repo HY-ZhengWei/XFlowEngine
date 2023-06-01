@@ -1,11 +1,14 @@
 package org.hy.xflow.engine.dao;
 
+import java.util.List;
+
 import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
 import org.hy.common.xml.annotation.Xsql;
 import org.hy.xflow.engine.bean.ProcessParticipant;
+import org.hy.xflow.engine.bean.User;
 
 
 
@@ -49,5 +52,20 @@ public interface IProcessParticipantsDAO
      */
     @Xsql("XSQL_XFlow_ProcessParticipants_QueryByWorkID_ServiceDataID")
     public PartitionMap<String ,ProcessParticipant> queryByServiceDataID(@Xparam(id="serviceDataID" ,notNull=true) String i_ServiceDataID);
+    
+    
+    
+    /**
+     * 查询工作流流转过程抄送人相关的流程信息（督办）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    @Xsql("XSQL_XFlow_ProcessParticipants_QueryBySupervise")
+    public List<ProcessParticipant> queryBySupervise(User i_User);
     
 }

@@ -65,7 +65,7 @@
                        ,A.isValid
                        ,A.isDelete
                   FROM  TTemplate  A
-                 WHERE  1 = 1
+                 WHERE  
               <[   AND  A.templateID   = ':templateID'   ]>
               <[   AND  A.templateName = ':templateName'
                    AND  A.versionNo    = ':versionNo'      ]>
