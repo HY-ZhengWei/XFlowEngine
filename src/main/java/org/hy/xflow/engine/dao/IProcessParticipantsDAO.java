@@ -68,4 +68,19 @@ public interface IProcessParticipantsDAO
     @Xsql("XSQL_XFlow_ProcessParticipants_QueryBySupervise")
     public List<ProcessParticipant> queryBySupervise(User i_User);
     
+    
+    
+    /**
+     * 查询历史工作流流转过程抄送人相关的流程信息（督查）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    @Xsql("XSQL_XFlow_ProcessParticipants_QueryBySupervision")
+    public List<ProcessParticipant> queryBySupervision(User i_User);
+    
 }

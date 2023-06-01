@@ -41,6 +41,11 @@ import org.hy.xflow.engine.service.ITemplateService;
 
 /**
  * 工作流引擎
+ * 
+ * 待办：要做什么
+ * 已办：做过什么
+ * 督办：监督、协同他人正在做的。抄送一次，全流程随时查
+ * 督查：复查督办全流程已完结的
  *
  * @author      ZhengWei(HY)
  * @createDate  2017-03-10
@@ -49,7 +54,9 @@ import org.hy.xflow.engine.service.ITemplateService;
  *              v1.2  2018-09-05  添加：1.通过工作流流转信息，获取当前活动节点的信息
  *              v2.0  2019-09-12  添加：1.支持多路并行路由的流程
  *                                优化：2.统一所有 toNextByServiceDataID() 系列的方法，均从 toNext() 方法走。
- *              v2.0  2023-02-02  添加：查询用户可以走的路由 queryNextRoutes 方法，当未动态指定参与人时，返回模板上定义的参与人
+ *              v3.0  2023-02-02  添加：1.查询用户可以走的路由 queryNextRoutes 方法，当未动态指定参与人时，返回模板上定义的参与人
+ *              v4.0  2023-06-01  添加：1.督办的相关查询接口
+ *                                     2.督查的相关查询接口
  */
 @Xjava
 public class XFlowEngine
@@ -2006,6 +2013,50 @@ public class XFlowEngine
     public List<String> querySuperviseServiceDataIDs(User i_User)
     {
         return (List<String>) Help.toList(this.processParticipantsService.queryBySupervise(i_User) ,"serviceDataID");
+    }
+    
+    
+    
+    /**
+     * 获取用户历史督办（抄送的）的已完结的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询抄送
+     *   2. 通过部门ID查询抄送
+     *   3. 通过角色ID查询抄送，支持多角色。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<String> queryBySupervisionWorkIDs(User i_User)
+    {
+        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervision(i_User) ,"workID");
+    }
+    
+    
+    
+    /**
+     * 获取用户历史督办（抄送的）的已完结的工作流实例ID对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询抄送
+     *   2. 通过部门ID查询抄送
+     *   3. 通过角色ID查询抄送，支持多角色。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<String> queryBySupervisionServiceDataIDs(User i_User)
+    {
+        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervision(i_User) ,"serviceDataID");
     }
     
     

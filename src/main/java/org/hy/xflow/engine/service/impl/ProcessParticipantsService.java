@@ -76,9 +76,27 @@ public class ProcessParticipantsService extends BaseService implements IProcessP
      * @param i_User
      * @return
      */
+    @Override
     public List<ProcessParticipant> queryBySupervise(User i_User)
     {
         return this.processParticipantsDAO.queryBySupervise(i_User);
+    }
+    
+    
+    
+    /**
+     * 查询历史工作流流转过程抄送人相关的流程信息（督查）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-06-01
+     * @version     v1.0
+     *
+     * @param i_User
+     * @return
+     */
+    public List<ProcessParticipant> queryBySupervision(User i_User)
+    {
+        return this.processParticipantsDAO.queryBySupervision(i_User);
     }
     
 }

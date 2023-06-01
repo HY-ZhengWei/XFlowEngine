@@ -133,6 +133,39 @@
         
         
         
+        <sql id="XSQL_XFlow_ProcessParticipants_QueryBySupervision"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  DISTINCT 
+                        A.workID
+                       ,A.serviceDataID
+                  FROM  TProcessParticipants_History  A
+                       ,TParticipantType              B
+                 WHERE  B.participantType LIKE '%抄送%'
+                   AND  A.objectType         = B.participantTypeID 
+                   AND (
+                        A.objectID           = ':userID'
+             <[     OR  A.objectID           = ':orgID'     ]>
+             <[     OR  A.objectID          IN (:roleIDs)   ]>
+                       )
+                 ORDER  BY A.workID
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.ProcessParticipant</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询历史工作流流转过程抄送人相关的流程信息（督查）</comment>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_XFlow_ProcessParticipants_ToHistory"> 
         
             <dataSourceGroup ref="DSG_XFlow" />
