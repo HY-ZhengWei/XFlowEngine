@@ -73,10 +73,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
      * 
-     *   4. 通过用户ID查询抄送
-     *   5. 通过部门ID查询抄送
-     *   6. 通过角色ID查询抄送，支持多角色。
-     * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
@@ -98,10 +94,6 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *   1. 通过用户ID查询
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
-     * 
-     *   4. 通过用户ID查询抄送
-     *   5. 通过部门ID查询抄送
-     *   6. 通过角色ID查询抄送，支持多角色。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
@@ -125,14 +117,11 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
      * 
-     *   4. 通过用户ID查询抄送
-     *   5. 通过部门ID查询抄送
-     *   6. 通过角色ID查询抄送，支持多角色。
-     *
      * @author      ZhengWei(HY)
      * @createDate  2019-09-11
      * @version     v1.0
-     *              v2.0  2023-02-10  添加三种角色的抄送功能
+     *              v2.0  2023-02-10  添加：三种角色的抄送功能
+     *              v3.0  2023-06-01  删除：使用 "督办" 查询接口代替 "抄送"
      *
      * @param i_User
      * @param i_IDName  实例ID或业务ID的属性名称。它决定着函数返回的是实例ID，还是业务ID。
@@ -150,11 +139,14 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
         }
         
+        // 使用督办查询接口代替  2023-06-01 Del
+        /*
         v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$UserSend.getValue() + ":" + i_User.getUserID());
         if ( !Help.isNull(v_Temp) )
         {
             v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
         }
+        */
         
         if ( !Help.isNull(i_User.getOrgID()) )
         {
@@ -164,11 +156,14 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
             }
             
+            // 使用督办查询接口代替  2023-06-01 Del
+            /*
             v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$OrgSend.getValue() + ":" + i_User.getOrgID());
             if ( !Help.isNull(v_Temp) )
             {
                 v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
             }
+            */
         }
         
         if ( !Help.isNull(i_User.getRoles()) )
@@ -181,11 +176,14 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                     v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
                 }
                 
+                // 使用督办查询接口代替  2023-06-01 Del
+                /*
                 v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$RoleSend.getValue() + ":" + v_Role.getRoleID());
                 if ( !Help.isNull(v_Temp) )
                 {
                     v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
                 }
+                */
             }
         }
         

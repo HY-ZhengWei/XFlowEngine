@@ -30,10 +30,6 @@ public interface IFlowFutureOperatorService
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
      * 
-     *   4. 通过用户ID查询抄送
-     *   5. 通过部门ID查询抄送
-     *   6. 通过角色ID查询抄送，支持多角色。
-     * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
@@ -51,10 +47,6 @@ public interface IFlowFutureOperatorService
      *   1. 通过用户ID查询
      *   2. 通过部门ID查询
      *   3. 通过角色ID查询，支持多角色。
-     * 
-     *   4. 通过用户ID查询抄送
-     *   5. 通过部门ID查询抄送
-     *   6. 通过角色ID查询抄送，支持多角色。
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
