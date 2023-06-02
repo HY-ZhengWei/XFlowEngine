@@ -44,7 +44,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  * 
  * 待办：要做什么
  * 已办：做过什么
- * 督办：监督、协同他人正在做的。抄送一次，全流程随时查
+ * 督办：监督、协同他人正在做的。抄送一次，流程完结前全流程随时可查
  * 督查：复查督办全流程已完结的
  *
  * @author      ZhengWei(HY)
