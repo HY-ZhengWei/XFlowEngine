@@ -10,6 +10,310 @@
     <!-- 工作流定义数据的初始化对象创建（自动创建）的相关SQL -->
     <sqls>
     
+        <sql id="XSQL_Create_TActivityType_Init_Insert">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT000' ,'开始' ,0);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT001' ,'常规' ,1);/
+                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT999' ,'结束' ,999);/
+                ]]>
+            </content>
+            
+            <comment>工作流活动(节点)类型表的初始化数据</comment>
+            
+        </sql>
+        
+        
+        
+        <!-- 活动类型有：开始、结束、转派、分派、汇签、驳回、追回、回退、催办、限时自动流、自由流 -->
+        <sql id="XSQL_Create_TActivityType">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TActivityType
+                (
+                 activityTypeID     VARCHAR2(64)                     NOT NULL
+                ,activityType       VARCHAR2(128)                    NOT NULL
+                ,infoComment        VARCHAR2(4000)
+                ,orderNo            NUMBER(10)
+                );/
+                
+                ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
+                
+                COMMENT ON TABLE  TActivityType                           IS '工作流活动(节点)类型';/
+                COMMENT ON COLUMN TActivityType.activityTypeID            IS '工作流活动类型ID';/
+                COMMENT ON COLUMN TActivityType.activityType              IS '工作流活动类型名称';/
+                COMMENT ON COLUMN TActivityType.infoComment               IS '备注说明';/
+                COMMENT ON COLUMN TActivityType.orderNo                   IS '排列顺序';/
+                
+                CREATE TABLE TUpgrade20230726
+                (
+                 id                         VARCHAR2(64)  NOT NULL
+                ,createTime                 DATE          NOT NULL
+                ,updateTime                 DATE
+                );/
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TActivityType
+                (
+                 activityTypeID     VARCHAR(64)                    NOT NULL comment '工作流活动类型ID'
+                ,activityType       VARCHAR(128)                   NOT NULL comment '工作流活动类型名称'
+                ,infoComment        VARCHAR(4000)                           comment '备注说明'
+                ,orderNo            INT(10)                                 comment '排列顺序'
+                );/
+                
+                ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
+                
+                ALTER TABLE TActivityType   COMMENT                        = '工作流活动(节点)类型';/
+                
+                CREATE TABLE TUpgrade20230726
+                (
+                 id                         VARCHAR(64)   NOT NULL COMMENT '主键'
+                ,createTime                 DATETIME      NOT NULL COMMENT '创建时间'
+                ,updateTime                 DATETIME               COMMENT '修改时间'
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;/
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TActivityType
+                (
+                 activityTypeID     VARCHAR(64)                     NOT NULL
+                ,activityType       VARCHAR(128)                    NOT NULL
+                ,infoComment        VARCHAR(4000)
+                ,orderNo            INT
+                );/
+                
+                ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
+                
+                EXEC P_TableComment  TActivityType                            ,'工作流活动(节点)类型';/
+                EXEC P_ColumnComment TActivityType ,activityTypeID            ,'工作流活动类型ID';/
+                EXEC P_ColumnComment TActivityType ,activityType              ,'工作流活动类型名称';/
+                EXEC P_ColumnComment TActivityType ,infoComment               ,'备注说明';/
+                EXEC P_ColumnComment TActivityType ,orderNo                   ,'排列顺序';/
+                
+                CREATE TABLE TUpgrade20230726
+                (
+                 id                         VARCHAR(64)   NOT NULL
+                ,createTime                 DATETIME      NOT NULL
+                ,updateTime                 DATETIME
+                );/
+                ]]>
+            </content>
+            
+            <trigger>
+                <create ref="XSQL_Create_TActivityType_Init_Insert"/>
+            </trigger>
+            
+            <comment>工作流活动(节点)类型</comment>
+            <create>TActivityType</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TRouteType_Init_Insert">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT001'     ,'转派'             ,1);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT002'     ,'分派'             ,2);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003'     ,'汇签'             ,3);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT004'     ,'汇签关闭'         ,4);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020'     ,'驳回'             ,20);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020AUTO' ,'自由驳回_自动模式' ,20);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020TEAM' ,'自由驳回_协同模式' ,20);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT021'     ,'追回'             ,21);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT022'     ,'回退'             ,22);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT030'     ,'催办'             ,30);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT050'     ,'限时自动流'        ,50);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT051'     ,'自由流'           ,51);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT999'     ,'结束'             ,999);/
+                ]]>
+            </content>
+            
+            <comment>工作流路由类型的初始化数据</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TRouteType">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TRouteType
+                (
+                 routeTypeID        VARCHAR2(64)                     NOT NULL
+                ,routeType          VARCHAR2(128)                    NOT NULL
+                ,infoComment        VARCHAR2(4000)
+                ,orderNo            NUMBER(10)
+                );/
+                
+                ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
+                
+                COMMENT ON TABLE  TRouteType                           IS '工作流路由类型';/
+                COMMENT ON COLUMN TRouteType.routeTypeID               IS '工作流路由类型ID';/
+                COMMENT ON COLUMN TRouteType.routeType                 IS '工作流路由类型名称';/
+                COMMENT ON COLUMN TRouteType.infoComment               IS '备注说明';/
+                COMMENT ON COLUMN TRouteType.orderNo                   IS '排列顺序';/
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TRouteType
+                (
+                 routeTypeID        VARCHAR(64)                    NOT NULL comment '工作流路由类型ID'
+                ,routeType          VARCHAR(128)                   NOT NULL comment '工作流路由类型名称'
+                ,infoComment        VARCHAR(4000)                           comment '备注说明'
+                ,orderNo            INT(10)                                 comment '排列顺序'
+                );/
+                
+                ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
+                
+                ALTER TABLE TRouteType     COMMENT                      = '工作流路由类型';/
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TRouteType
+                (
+                 routeTypeID        VARCHAR(64)                     NOT NULL
+                ,routeType          VARCHAR(128)                    NOT NULL
+                ,infoComment        VARCHAR(4000)
+                ,orderNo            INT
+                );/
+                
+                ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
+                
+                EXEC P_TableComment  TRouteType                            ,'工作流路由类型';/
+                EXEC P_ColumnComment TRouteType ,routeTypeID               ,'工作流路由类型ID';/
+                EXEC P_ColumnComment TRouteType ,routeType                 ,'工作流路由类型名称';/
+                EXEC P_ColumnComment TRouteType ,infoComment               ,'备注说明';/
+                EXEC P_ColumnComment TRouteType ,orderNo                   ,'排列顺序';/
+                ]]>
+            </content>
+            
+            <trigger>
+                <create ref="XSQL_Create_TRouteType_Init_Insert"/>
+            </trigger>
+            
+            <comment>工作流路由类型</comment>
+            <create>TRouteType</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TParticipantType_Init_Insert">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(1  ,'执行人'        ,1);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(2  ,'执行部门'      ,2);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(3  ,'执行角色'      ,3);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(11 ,'抄送人'        ,11);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(12 ,'抄送部门'      ,12);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(13 ,'抄送角色'      ,13);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(21 ,'发起人'        ,21);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(22 ,'活动实际操作人' ,22);/
+                ]]>
+            </content>
+            
+            <comment>参与人类型的初始化数据</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TParticipantType">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TParticipantType
+                (
+                 participantTypeID  NUMBER(2)                        NOT NULL
+                ,participantType    VARCHAR2(128)                    NOT NULL
+                ,infoComment        VARCHAR2(4000)
+                ,orderNo            NUMBER(10)
+                );/
+                
+                ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
+                
+                COMMENT ON TABLE  TParticipantType                     IS '参与人类型';/
+                COMMENT ON COLUMN TParticipantType.participantTypeID   IS '参与人类型ID';/
+                COMMENT ON COLUMN TParticipantType.participantType     IS '参与人类型名称';/
+                COMMENT ON COLUMN TParticipantType.infoComment         IS '备注说明';/
+                COMMENT ON COLUMN TParticipantType.orderNo             IS '排列顺序';/
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TParticipantType
+                (
+                 participantTypeID  INT(2)                         NOT NULL comment '参与人类型ID'
+                ,participantType    VARCHAR(128)                   NOT NULL comment '参与人类型名称'
+                ,infoComment        VARCHAR(4000)                           comment '备注说明'
+                ,orderNo            INT(10)                                 comment '排列顺序'
+                );/
+                
+                ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
+                
+                ALTER TABLE  TParticipantType   COMMENT                  = '参与人类型';/
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TParticipantType
+                (
+                 participantTypeID  INT                             NOT NULL
+                ,participantType    VARCHAR(128)                    NOT NULL
+                ,infoComment        VARCHAR(4000)
+                ,orderNo            INT
+                );/
+                
+                ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
+                
+                EXEC P_TableComment  TParticipantType                     ,'参与人类型';/
+                EXEC P_ColumnComment TParticipantType ,participantTypeID  ,'参与人类型ID';/
+                EXEC P_ColumnComment TParticipantType ,participantType    ,'参与人类型名称';/
+                EXEC P_ColumnComment TParticipantType ,infoComment        ,'备注说明';/
+                EXEC P_ColumnComment TParticipantType ,orderNo            ,'排列顺序';/
+                ]]>
+            </content>
+            
+            <trigger>
+                <create ref="XSQL_Create_TParticipantType_Init_Insert"/>
+            </trigger>
+            
+            <comment>参与人类型</comment>
+            <create>TParticipantType</create>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_Create_TTemplate">
         
             <dataSourceGroup ref="DSG_XFlow" />
@@ -21,13 +325,13 @@
                  templateID         VARCHAR2(64)                     NOT NULL
                 ,versionNo          NUMBER(10)                       NOT NULL
                 ,version            VARCHAR2(32)
-                ,templateName       NVARCHAR2(128)                   NOT NULL
-                ,infoComment        NVARCHAR2(4000)
+                ,templateName       VARCHAR2(128)                    NOT NULL
+                ,infoComment        VARCHAR2(4000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
-                ,creater            NVARCHAR2(128)
+                ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
                 ,lastUserID         VARCHAR2(64)                     NOT NULL
-                ,lastUser           NVARCHAR2(128)
+                ,lastUser           VARCHAR2(128)
                 ,lastTime           DATE
                 ,isValid            NUMBER(1)                        NOT NULL
                 ,isDelete           NUMBER(1)                        NOT NULL
@@ -88,13 +392,13 @@
                  templateID         VARCHAR(64)                      NOT NULL
                 ,versionNo          INT                              NOT NULL
                 ,version            VARCHAR(32)
-                ,templateName       NVARCHAR(128)                    NOT NULL
-                ,infoComment        NVARCHAR(4000)
+                ,templateName       VARCHAR(128)                     NOT NULL
+                ,infoComment        VARCHAR(4000)
                 ,createrID          VARCHAR(64)                      NOT NULL
-                ,creater            NVARCHAR(128)
+                ,creater            VARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
                 ,lastUserID         VARCHAR(64)                      NOT NULL
-                ,lastUser           NVARCHAR(128)
+                ,lastUser           VARCHAR(128)
                 ,lastTime           DATETIME
                 ,isValid            INT                              NOT NULL
                 ,isDelete           INT                              NOT NULL
@@ -139,7 +443,7 @@
                  activityID         VARCHAR2(64)                     NOT NULL
                 ,activityCode       VARCHAR2(64)                     NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL                   
-                ,activityName       NVARCHAR2(128)                   NOT NULL
+                ,activityName       VARCHAR2(128)                    NOT NULL
                 ,activityTypeID     VARCHAR2(64)                     NOT NULL
                 ,x                  NUMBER(10 ,2)
                 ,y                  NUMBER(10 ,2)
@@ -151,7 +455,7 @@
                 ,lineColor          VARCHAR2(16)
                 ,flagColor          VARCHAR2(16)
                 ,fontColor          VARCHAR2(16)
-                ,infoComment        NVARCHAR2(4000)
+                ,infoComment        VARCHAR2(4000)
                 ,summaryPass        NUMBER(18 ,2)
                 ,counterPass        NUMBER(10)
                 ,passType           VARCHAR2(3)
@@ -159,16 +463,19 @@
                 ,configPageDatas    VARCHAR2(4000)
                 ,xrouteConfig       VARCHAR2(4000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
-                ,creater            NVARCHAR2(128)
+                ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
                 ,lastUserID         VARCHAR2(64)                     NOT NULL
-                ,lastUser           NVARCHAR2(128)
+                ,lastUser           VARCHAR2(128)
                 ,lastTime           DATE
                 );/
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT PK_TActivityInfo PRIMARY KEY (activityID);/
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT IDX_Activity_AC_TID UNIQUE (activityCode ,templateID);/
+                
+                ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
+                ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityATID FOREIGN KEY (activityTypeID) REFERENCES TActivityType (activityTypeID);/
                 
                 COMMENT ON TABLE  TActivityInfo                           IS '工作流活动组件(节点)信息表';/
                 COMMENT ON COLUMN TActivityInfo.activityID                IS '工作流活动ID';/
@@ -240,6 +547,9 @@
                 
                 ALTER TABLE TActivityInfo ADD UNIQUE (activityCode ,templateID);/
                 
+                ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
+                ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityATID FOREIGN KEY (activityTypeID) REFERENCES TActivityType (activityTypeID);/
+                
                 Alter TABLE  TActivityInfo COMMENT                         = '工作流活动组件(节点)信息表';/
                 ]]>
             </content>
@@ -251,7 +561,7 @@
                  activityID         VARCHAR(64)                      NOT NULL
                 ,activityCode       VARCHAR(64)                      NOT NULL
                 ,templateID         VARCHAR(64)                      NOT NULL                   
-                ,activityName       NVARCHAR(128)                    NOT NULL
+                ,activityName       VARCHAR(128)                     NOT NULL
                 ,activityTypeID     VARCHAR(64)                      NOT NULL
                 ,x                  DECIMAL
                 ,y                  DECIMAL
@@ -263,7 +573,7 @@
                 ,lineColor          VARCHAR(16)
                 ,flagColor          VARCHAR(16)
                 ,fontColor          VARCHAR(16)
-                ,infoComment        NVARCHAR(4000)
+                ,infoComment        VARCHAR(4000)
                 ,summaryPass        DECIMAL(18 ,4)
                 ,counterPass        INT
                 ,passType           VARCHAR(3)
@@ -271,16 +581,19 @@
                 ,configPageDatas    VARCHAR(4000)
                 ,xrouteConfig       VARCHAR(4000)
                 ,createrID          VARCHAR(64)                      NOT NULL
-                ,creater            NVARCHAR(128)
+                ,creater            VARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
                 ,lastUserID         VARCHAR(64)                      NOT NULL
-                ,lastUser           NVARCHAR(128)
+                ,lastUser           VARCHAR(128)
                 ,lastTime           DATETIME
                 );/
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT PK_TActivityInfo PRIMARY KEY (activityID);/
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT IDX_Activity_AC_TID UNIQUE (activityCode ,templateID);/
+                
+                ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
+                ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityATID FOREIGN KEY (activityTypeID) REFERENCES TActivityType (activityTypeID);/
                 
                 EXEC P_TableComment  TActivityInfo                            ,'工作流活动组件(节点)信息表';/
                 EXEC P_ColumnComment TActivityInfo ,activityID                ,'工作流活动ID';/
@@ -331,7 +644,7 @@
                 (
                  activityRouteID    VARCHAR2(64)                     NOT NULL
                 ,activityRouteCode  VARCHAR2(64)                     NOT NULL
-                ,activityRouteName  NVARCHAR2(128)                   NOT NULL
+                ,activityRouteName  VARCHAR2(128)                    NOT NULL
                 ,templateID         VARCHAR2(64)                     NOT NULL
                 ,routeTypeID        VARCHAR2(64)                     NOT NULL
                 ,activityID         VARCHAR2(64)                     NOT NULL
@@ -342,18 +655,24 @@
                 ,conditionVType     NUMBER(2)
                 ,lineColor          VARCHAR2(16)
                 ,fontColor          VARCHAR2(16)
-                ,infoComment        NVARCHAR2(4000)
+                ,infoComment        VARCHAR2(4000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
-                ,creater            NVARCHAR2(128)
+                ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
                 ,lastUserID         VARCHAR2(64)                     NOT NULL
-                ,lastUser           NVARCHAR2(128)
+                ,lastUser           VARCHAR2(128)
                 ,lastTime           DATE
                 );/
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT PK_TActivityRoute PRIMARY KEY (activityRouteID);/
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT IDX_AR_AID_ARouteCode UNIQUE (activityID ,activityRouteCode);/
+                
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteRTID FOREIGN KEY (routeTypeID)    REFERENCES TRouteType    (routeTypeID);/
+                
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteAID  FOREIGN KEY (activityID)     REFERENCES TActivityInfo (activityID);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteNAID FOREIGN KEY (nextActivityID) REFERENCES TActivityInfo (activityID);/
                 
                 COMMENT ON TABLE  TActivityRoute                          IS '工作流活动组件(节点)的路由表';/
                 COMMENT ON COLUMN TActivityRoute.activityRouteID          IS '主键ID';/
@@ -409,6 +728,12 @@
                 
                 ALTER TABLE TActivityRoute ADD UNIQUE (activityID ,activityRouteCode);/
                 
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteRTID FOREIGN KEY (routeTypeID)    REFERENCES TRouteType    (routeTypeID);/
+                
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteAID  FOREIGN KEY (activityID)     REFERENCES TActivityInfo (activityID);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteNAID FOREIGN KEY (nextActivityID) REFERENCES TActivityInfo (activityID);/
+                
                 ALTER TABLE  TActivityRoute   COMMENT                      = '工作流活动组件(节点)的路由表';/
                 ]]>
             </content>
@@ -419,7 +744,7 @@
                 (
                  activityRouteID    VARCHAR(64)                     NOT NULL
                 ,activityRouteCode  VARCHAR(64)                     NOT NULL
-                ,activityRouteName  NVARCHAR(128)                   NOT NULL
+                ,activityRouteName  VARCHAR(128)                    NOT NULL
                 ,templateID         VARCHAR(64)                     NOT NULL
                 ,routeTypeID        VARCHAR(64)                     NOT NULL
                 ,activityID         VARCHAR(64)                     NOT NULL
@@ -430,18 +755,24 @@
                 ,conditionVType     INT
                 ,lineColor          VARCHAR(16)
                 ,fontColor          VARCHAR(16)
-                ,infoComment        NVARCHAR(4000)
+                ,infoComment        VARCHAR(4000)
                 ,createrID          VARCHAR(64)                     NOT NULL
-                ,creater            NVARCHAR(128)
+                ,creater            VARCHAR(128)
                 ,createTime         DATETIME                        NOT NULL
                 ,lastUserID         VARCHAR(64)                     NOT NULL
-                ,lastUser           NVARCHAR(128)
+                ,lastUser           VARCHAR(128)
                 ,lastTime           DATETIME
                 );/
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT PK_TActivityRoute PRIMARY KEY (activityRouteID);/
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT IDX_AR_AID_ARouteCode UNIQUE (activityID ,activityRouteCode);/
+                
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteRTID FOREIGN KEY (routeTypeID)    REFERENCES TRouteType    (routeTypeID);/
+                
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteAID  FOREIGN KEY (activityID)     REFERENCES TActivityInfo (activityID);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteNAID FOREIGN KEY (nextActivityID) REFERENCES TActivityInfo (activityID);/
                 
                 EXEC P_TableComment  TActivityRoute                           ,'工作流活动组件(节点)的路由表';/
                 EXEC P_ColumnComment TActivityRoute ,activityRouteID          ,'主键ID';/
@@ -487,16 +818,20 @@
                 ,activityID         VARCHAR2(64)                     NOT NULL
                 ,objectType         NUMBER(2)                        NOT NULL
                 ,objectID           VARCHAR2(64)                     NOT NULL
-                ,objectName         NVARCHAR2(128)
+                ,objectName         VARCHAR2(128)
                 ,objectNo           NUMBER(10)                       NOT NULL
                 ,createrID          VARCHAR2(64)                     NOT NULL
-                ,creater            NVARCHAR2(128)
+                ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
                 );/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT PK_TActivityParticipants PRIMARY KEY (participantID);/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT IDX_AP_AID_OType_OID UNIQUE (activityID ,objectType ,objectID);/
+                
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartTID FOREIGN KEY (templateID) REFERENCES TTemplate        (templateID);/
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartAID FOREIGN KEY (activityID) REFERENCES TActivityInfo    (activityID);/
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartOT  FOREIGN KEY (objectType) REFERENCES TParticipantType (participantTypeID);/
                 
                 COMMENT ON TABLE  TActivityParticipants                    IS '工作流过程的实际参与人';/
                 COMMENT ON COLUMN TActivityParticipants.participantID      IS '主键ID';/
@@ -516,21 +851,25 @@
                 <![CDATA[
                 CREATE TABLE TActivityParticipants
                 (
-                 participantID      varchar(64)                     NOT NULL comment '主键ID'
-                ,templateID         varchar(64)                     NOT NULL comment '工作流的模板ID'
-                ,activityID         varchar(64)                     NOT NULL comment '活动（节点）ID'
-                ,objectType         int(2)                          NOT NULL comment '参与者类型'
-                ,objectID           varchar(64)                     NOT NULL comment '参与者ID'
-                ,objectName         varchar(128)                             comment '参与者名称'
-                ,objectNo           int(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
-                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
-                ,creater            varchar(128)                             comment '创建人员名称'
-                ,createTime         datetime                        NOT NULL comment '创建时间'
+                 participantID      VARCHAR(64)                     NOT NULL comment '主键ID'
+                ,templateID         VARCHAR(64)                     NOT NULL comment '工作流的模板ID'
+                ,activityID         VARCHAR(64)                     NOT NULL comment '活动（节点）ID'
+                ,objectType         INT(2)                          NOT NULL comment '参与者类型'
+                ,objectID           VARCHAR(64)                     NOT NULL comment '参与者ID'
+                ,objectName         VARCHAR(128)                             comment '参与者名称'
+                ,objectNo           INT(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
+                ,createrID          VARCHAR(64)                     NOT NULL comment '创建人员ID'
+                ,creater            VARCHAR(128)                             comment '创建人员名称'
+                ,createTime         DATETIME                        NOT NULL comment '创建时间'
                 );/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT PK_TActivityParticipants PRIMARY KEY (participantID);/
                 
                 ALTER TABLE TActivityParticipants ADD UNIQUE (activityID ,objectType ,objectID);/
+                
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartTID FOREIGN KEY (templateID) REFERENCES TTemplate        (templateID);/
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartAID FOREIGN KEY (activityID) REFERENCES TActivityInfo    (activityID);/
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartOT  FOREIGN KEY (objectType) REFERENCES TParticipantType (participantTypeID);/
                 
                 ALTER TABLE  TActivityParticipants  COMMENT                = '工作流过程的实际参与人';/
                 ]]>
@@ -545,16 +884,20 @@
                 ,activityID         VARCHAR(64)                     NOT NULL
                 ,objectType         INT                             NOT NULL
                 ,objectID           VARCHAR(64)                     NOT NULL
-                ,objectName         NVARCHAR(128)
+                ,objectName         VARCHAR(128)
                 ,objectNo           INT                             NOT NULL
                 ,createrID          VARCHAR(64)                     NOT NULL
-                ,creater            NVARCHAR(128)
+                ,creater            VARCHAR(128)
                 ,createTime         DATETIME                        NOT NULL
                 );/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT PK_TActivityParticipants PRIMARY KEY (participantID);/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT IDX_AP_AID_OType_OID UNIQUE (activityID ,objectType ,objectID);/
+                
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartTID FOREIGN KEY (templateID) REFERENCES TTemplate        (templateID);/
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartAID FOREIGN KEY (activityID) REFERENCES TActivityInfo    (activityID);/
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartOT  FOREIGN KEY (objectType) REFERENCES TParticipantType (participantTypeID);/
                 
                 EXEC P_TableComment  TActivityParticipants                     ,'工作流活动组件(节点)路由的参与人';/
                 EXEC P_ColumnComment TActivityParticipants ,participantID      ,'主键ID';/
@@ -590,16 +933,20 @@
                 ,activityRouteID    VARCHAR2(64)                     NOT NULL
                 ,objectType         NUMBER(2)                        NOT NULL
                 ,objectID           VARCHAR2(64)                     NOT NULL
-                ,objectName         NVARCHAR2(128)
+                ,objectName         VARCHAR2(128)
                 ,objectNo           NUMBER(10)                       NOT NULL
                 ,createrID          VARCHAR2(64)                     NOT NULL
-                ,creater            NVARCHAR2(128)
+                ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
                 );/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (participantID);/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT IDX_ARP_ARID_OType_OID UNIQUE (activityRouteID ,objectType ,objectID);/
+                
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartTID  FOREIGN KEY (templateID)      REFERENCES TTemplate        (templateID);/
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartARID FOREIGN KEY (activityRouteID) REFERENCES TActivityRoute   (activityRouteID);/
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartOT   FOREIGN KEY (objectType)      REFERENCES TParticipantType (participantTypeID);/
                 
                 COMMENT ON TABLE  TActivityRouteParticipants                    IS '工作流过程的实际参与人';/
                 COMMENT ON COLUMN TActivityRouteParticipants.participantID      IS '主键ID';/
@@ -619,21 +966,25 @@
                 <![CDATA[
                 CREATE TABLE TActivityRouteParticipants
                 (
-                 participantID      varchar(64)                     NOT NULL comment '主键ID'
-                ,templateID         varchar(64)                     NOT NULL comment '工作流的模板ID'
-                ,activityRouteID    varchar(64)                     NOT NULL comment '活动路由ID'
-                ,objectType         int(2)                          NOT NULL comment '参与者类型'
-                ,objectID           varchar(64)                     NOT NULL comment '参与者ID'
-                ,objectName         varchar(128)                             comment '参与者名称'
-                ,objectNo           int(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
-                ,createrID          varchar(64)                     NOT NULL comment '创建人员ID'
-                ,creater            varchar(128)                             comment '创建人员名称'
-                ,createTime         datetime                        NOT NULL comment '创建时间'
+                 participantID      VARCHAR(64)                     NOT NULL comment '主键ID'
+                ,templateID         VARCHAR(64)                     NOT NULL comment '工作流的模板ID'
+                ,activityRouteID    VARCHAR(64)                     NOT NULL comment '活动路由ID'
+                ,objectType         INT(2)                          NOT NULL comment '参与者类型'
+                ,objectID           VARCHAR(64)                     NOT NULL comment '参与者ID'
+                ,objectName         VARCHAR(128)                             comment '参与者名称'
+                ,objectNo           INT(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
+                ,createrID          VARCHAR(64)                     NOT NULL comment '创建人员ID'
+                ,creater            VARCHAR(128)                             comment '创建人员名称'
+                ,createTime         DATETIME                        NOT NULL comment '创建时间'
                 );/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (participantID);/
                 
                 ALTER TABLE TActivityRouteParticipants ADD UNIQUE (activityRouteID ,objectType ,objectID);/
+                
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartTID  FOREIGN KEY (templateID)      REFERENCES TTemplate        (templateID);/
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartARID FOREIGN KEY (activityRouteID) REFERENCES TActivityRoute   (activityRouteID);/
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartOT   FOREIGN KEY (objectType)      REFERENCES TParticipantType (participantTypeID);/
                 
                 ALTER TABLE TActivityRouteParticipants   COMMENT                 = '工作流过程的实际参与人';/
                 ]]>
@@ -648,16 +999,20 @@
                 ,activityRouteID    VARCHAR(64)                     NOT NULL
                 ,objectType         INT                             NOT NULL
                 ,objectID           VARCHAR(64)                     NOT NULL
-                ,objectName         NVARCHAR(128)
+                ,objectName         VARCHAR(128)
                 ,objectNo           INT                             NOT NULL
                 ,createrID          VARCHAR(64)                     NOT NULL
-                ,creater            NVARCHAR(128)
+                ,creater            VARCHAR(128)
                 ,createTime         DATETIME                        NOT NULL
                 );/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (participantID);/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT IDX_ARP_ARID_OType_OID UNIQUE (activityRouteID ,objectType ,objectID);/
+                
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartTID  FOREIGN KEY (templateID)      REFERENCES TTemplate        (templateID);/
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartARID FOREIGN KEY (activityRouteID) REFERENCES TActivityRoute   (activityRouteID);/
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartOT   FOREIGN KEY (objectType)      REFERENCES TParticipantType (participantTypeID);/
                 
                 EXEC P_TableComment  TActivityRouteParticipants                     ,'工作流活动组件(节点)路由的参与人';/
                 EXEC P_ColumnComment TActivityRouteParticipants ,participantID      ,'主键ID';/
@@ -675,289 +1030,6 @@
             
             <comment>工作流活动组件(节点)路由的参与人</comment>
             <create>TActivityRouteParticipants</create>
-            
-        </sql>
-        
-        
-        
-        <sql id="XSQL_Create_TActivityType_Init_Insert">
-        
-            <dataSourceGroup ref="DSG_XFlow" />
-            
-            <content>
-                <![CDATA[
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT000' ,'开始' ,0);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT001' ,'常规' ,1);/
-                INSERT  INTO TActivityType(activityTypeID ,activityType ,orderNo) VALUES('AT999' ,'结束' ,999);/
-                ]]>
-            </content>
-            
-            <comment>工作流活动(节点)类型表的初始化数据</comment>
-            
-        </sql>
-        
-        
-        
-        <!-- 活动类型有：开始、结束、转派、分派、汇签、驳回、追回、回退、催办、限时自动流、自由流 -->
-        <sql id="XSQL_Create_TActivityType">
-        
-            <dataSourceGroup ref="DSG_XFlow" />
-            
-            <content if="ORACLE == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TActivityType
-                (
-                 activityTypeID     VARCHAR2(64)                     NOT NULL
-                ,activityType       NVARCHAR2(128)                   NOT NULL
-                ,infoComment        NVARCHAR2(4000)
-                ,orderNo            NUMBER(10)
-                );/
-                
-                ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
-                
-                COMMENT ON TABLE  TActivityType                           IS '工作流活动(节点)类型';/
-                COMMENT ON COLUMN TActivityType.activityTypeID            IS '工作流活动类型ID';/
-                COMMENT ON COLUMN TActivityType.activityType              IS '工作流活动类型名称';/
-                COMMENT ON COLUMN TActivityType.infoComment               IS '备注说明';/
-                COMMENT ON COLUMN TActivityType.orderNo                   IS '排列顺序';/
-                ]]>
-            </content>
-            
-            <content if="MYSQL == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TActivityType
-                (
-                 activityTypeID     varchar(64)                    NOT NULL comment '工作流活动类型ID'
-                ,activityType       varchar(128)                   NOT NULL comment '工作流活动类型名称'
-                ,infoComment        varchar(4000)                           comment '备注说明'
-                ,orderNo            int(10)                                 comment '排列顺序'
-                );/
-                
-                ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
-                
-                ALTER TABLE TActivityType   COMMENT                        = '工作流活动(节点)类型';/
-                ]]>
-            </content>
-            
-            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TActivityType
-                (
-                 activityTypeID     VARCHAR(64)                     NOT NULL
-                ,activityType       NVARCHAR(128)                   NOT NULL
-                ,infoComment        NVARCHAR(4000)
-                ,orderNo            INT
-                );/
-                
-                ALTER TABLE TActivityType ADD CONSTRAINT PK_TActivityType PRIMARY KEY (activityTypeID);/
-                
-                EXEC P_TableComment  TActivityType                            ,'工作流活动(节点)类型';/
-                EXEC P_ColumnComment TActivityType ,activityTypeID            ,'工作流活动类型ID';/
-                EXEC P_ColumnComment TActivityType ,activityType              ,'工作流活动类型名称';/
-                EXEC P_ColumnComment TActivityType ,infoComment               ,'备注说明';/
-                EXEC P_ColumnComment TActivityType ,orderNo                   ,'排列顺序';/
-                ]]>
-            </content>
-            
-            <trigger>
-                <create ref="XSQL_Create_TActivityType_Init_Insert"/>
-            </trigger>
-            
-            <comment>工作流活动(节点)类型</comment>
-            <create>TActivityType</create>
-            
-        </sql>
-        
-        
-        
-        <sql id="XSQL_Create_TRouteType_Init_Insert">
-        
-            <dataSourceGroup ref="DSG_XFlow" />
-            
-            <content>
-                <![CDATA[
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT001'     ,'转派'             ,1);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT002'     ,'分派'             ,2);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003'     ,'汇签'             ,3);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT004'     ,'汇签关闭'         ,4);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020'     ,'驳回'             ,20);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020AUTO' ,'自由驳回_自动模式' ,20);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020TEAM' ,'自由驳回_协同模式' ,20);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT021'     ,'追回'             ,21);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT022'     ,'回退'             ,22);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT030'     ,'催办'             ,30);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT050'     ,'限时自动流'        ,50);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT051'     ,'自由流'           ,51);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT999'     ,'结束'             ,999);/
-                ]]>
-            </content>
-            
-            <comment>工作流路由类型的初始化数据</comment>
-            
-        </sql>
-        
-        
-        
-        <sql id="XSQL_Create_TRouteType">
-        
-            <dataSourceGroup ref="DSG_XFlow" />
-            
-            <content if="ORACLE == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TRouteType
-                (
-                 routeTypeID        VARCHAR2(64)                     NOT NULL
-                ,routeType          NVARCHAR2(128)                   NOT NULL
-                ,infoComment        NVARCHAR2(4000)
-                ,orderNo            NUMBER(10)
-                );/
-                
-                ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
-                
-                COMMENT ON TABLE  TRouteType                           IS '工作流路由类型';/
-                COMMENT ON COLUMN TRouteType.routeTypeID               IS '工作流路由类型ID';/
-                COMMENT ON COLUMN TRouteType.routeType                 IS '工作流路由类型名称';/
-                COMMENT ON COLUMN TRouteType.infoComment               IS '备注说明';/
-                COMMENT ON COLUMN TRouteType.orderNo                   IS '排列顺序';/
-                ]]>
-            </content>
-            
-            <content if="MYSQL == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TRouteType
-                (
-                 routeTypeID        varchar(64)                    NOT NULL comment '工作流路由类型ID'
-                ,routeType          varchar(128)                   NOT NULL comment '工作流路由类型名称'
-                ,infoComment        varchar(4000)                           comment '备注说明'
-                ,orderNo            int(10)                                 comment '排列顺序'
-                );/
-                
-                ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
-                
-                ALTER TABLE TRouteType     COMMENT                      = '工作流路由类型';/
-                ]]>
-            </content>
-            
-            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TRouteType
-                (
-                 routeTypeID        VARCHAR(64)                     NOT NULL
-                ,routeType          NVARCHAR(128)                   NOT NULL
-                ,infoComment        NVARCHAR(4000)
-                ,orderNo            INT
-                );/
-                
-                ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
-                
-                EXEC P_TableComment  TRouteType                            ,'工作流路由类型';/
-                EXEC P_ColumnComment TRouteType ,routeTypeID               ,'工作流路由类型ID';/
-                EXEC P_ColumnComment TRouteType ,routeType                 ,'工作流路由类型名称';/
-                EXEC P_ColumnComment TRouteType ,infoComment               ,'备注说明';/
-                EXEC P_ColumnComment TRouteType ,orderNo                   ,'排列顺序';/
-                ]]>
-            </content>
-            
-            <trigger>
-                <create ref="XSQL_Create_TRouteType_Init_Insert"/>
-            </trigger>
-            
-            <comment>工作流路由类型</comment>
-            <create>TRouteType</create>
-            
-        </sql>
-        
-        
-        
-        <sql id="XSQL_Create_TParticipantType_Init_Insert">
-        
-            <dataSourceGroup ref="DSG_XFlow" />
-            
-            <content>
-                <![CDATA[
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(1  ,'执行人'        ,1);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(2  ,'执行部门'      ,2);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(3  ,'执行角色'      ,3);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(11 ,'抄送人'        ,11);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(12 ,'抄送部门'      ,12);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(13 ,'抄送角色'      ,13);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(21 ,'发起人'        ,21);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(22 ,'活动实际操作人' ,22);/
-                ]]>
-            </content>
-            
-            <comment>参与人类型的初始化数据</comment>
-            
-        </sql>
-        
-        
-        
-        <sql id="XSQL_Create_TParticipantType">
-        
-            <dataSourceGroup ref="DSG_XFlow" />
-            
-            <content if="ORACLE == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TParticipantType
-                (
-                 participantTypeID  NUMBER(2)                        NOT NULL
-                ,participantType    NVARCHAR2(128)                   NOT NULL
-                ,infoComment        NVARCHAR2(4000)
-                ,orderNo            NUMBER(10)
-                );/
-                
-                ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
-                
-                COMMENT ON TABLE  TParticipantType                     IS '参与人类型';/
-                COMMENT ON COLUMN TParticipantType.participantTypeID   IS '参与人类型ID';/
-                COMMENT ON COLUMN TParticipantType.participantType     IS '参与人类型名称';/
-                COMMENT ON COLUMN TParticipantType.infoComment         IS '备注说明';/
-                COMMENT ON COLUMN TParticipantType.orderNo             IS '排列顺序';/
-                ]]>
-            </content>
-            
-            <content if="MYSQL == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TParticipantType
-                (
-                 participantTypeID  int(2)                         NOT NULL comment '参与人类型ID'
-                ,participantType    varchar(128)                   NOT NULL comment '参与人类型名称'
-                ,infoComment        varchar(4000)                           comment '备注说明'
-                ,orderNo            int(10)                                 comment '排列顺序'
-                );/
-                
-                ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
-                
-                ALTER TABLE  TParticipantType   COMMENT                  = '参与人类型';/
-                ]]>
-            </content>
-            
-            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
-                <![CDATA[
-                CREATE TABLE TParticipantType
-                (
-                 participantTypeID  INT                             NOT NULL
-                ,participantType    NVARCHAR(128)                   NOT NULL
-                ,infoComment        NVARCHAR(4000)
-                ,orderNo            INT
-                );/
-                
-                ALTER TABLE TParticipantType ADD CONSTRAINT PK_TParticipantType PRIMARY KEY (participantTypeID);/
-                
-                EXEC P_TableComment  TParticipantType                     ,'参与人类型';/
-                EXEC P_ColumnComment TParticipantType ,participantTypeID  ,'参与人类型ID';/
-                EXEC P_ColumnComment TParticipantType ,participantType    ,'参与人类型名称';/
-                EXEC P_ColumnComment TParticipantType ,infoComment        ,'备注说明';/
-                EXEC P_ColumnComment TParticipantType ,orderNo            ,'排列顺序';/
-                ]]>
-            </content>
-            
-            <trigger>
-                <create ref="XSQL_Create_TParticipantType_Init_Insert"/>
-            </trigger>
-            
-            <comment>参与人类型</comment>
-            <create>TParticipantType</create>
             
         </sql>
         

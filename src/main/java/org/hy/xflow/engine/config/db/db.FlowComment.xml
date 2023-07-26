@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流备注模块的相关SQL -->
+    <sqls>
+        
+        <sql id="XSQL_XFlow_FlowComment_QueryByWorkID_ServiceDataID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.fcID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.commentType
+                       ,A.commentTitle
+                       ,A.comment
+                       ,A.commentImages
+                       ,A.commentFiles
+                       ,A.objectType
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                  FROM  TFlowComment  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                 UNION  ALL
+                SELECT  A.fcID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.commentType
+                       ,A.commentTitle
+                       ,A.comment
+                       ,A.commentImages
+                       ,A.commentFiles
+                       ,A.objectType
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                  FROM  TFlowComment_History  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                 ORDER  BY A.createTime DESC
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FlowComment</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+        </sql>
+        
+    
+    
+        <sql id="XSQL_XFlow_FlowComment_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowComment
+                       (
+                        fcID         
+                       ,workID       
+                       ,serviceDataID
+                       ,commentType  
+                       ,commentTitle 
+                       ,comment      
+                       ,commentImages
+                       ,commentFiles 
+                       ,objectType   
+                       ,createrID    
+                       ,creater      
+                       ,createOrgID  
+                       ,createOrg    
+                       ,createTime   
+                       )
+                VALUES (
+                        ':fcID'
+                       ,':workID'
+                       ,':serviceDataID'
+                       ,':commentType'
+                       ,':commentTitle'
+                       ,':comment'
+                       ,':commentImages'
+                       ,':commentFiles'
+                       ,':objectType'
+                       ,':createrID'
+                       ,':creater'
+                       ,':createOrgID'
+                       ,':createOrg'
+                       ,':createTime.fullMilli'
+                       )
+                ]]>
+            </content>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_FlowComment_ToHistory"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowComment_History
+                       (
+                        fcID         
+                       ,workID       
+                       ,serviceDataID
+                       ,commentType  
+                       ,commentTitle 
+                       ,comment      
+                       ,commentImages
+                       ,commentFiles 
+                       ,objectType   
+                       ,createrID    
+                       ,creater      
+                       ,createOrgID  
+                       ,createOrg    
+                       ,createTime   
+                       )
+                SELECT  A.fcID         
+                       ,A.workID       
+                       ,A.serviceDataID
+                       ,A.commentType  
+                       ,A.commentTitle 
+                       ,A.comment      
+                       ,A.commentImages
+                       ,A.commentFiles 
+                       ,A.objectType   
+                       ,A.createrID    
+                       ,A.creater      
+                       ,A.createOrgID  
+                       ,A.createOrg    
+                       ,A.createTime   
+                  FROM  TFlowComment  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>全流转结束后转历史</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_FlowComment_ToHistory_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowComment
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowComment
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>删除前转历史</comment>
+            
+        </sql>
+        
+    </sqls>
+    
+</config>

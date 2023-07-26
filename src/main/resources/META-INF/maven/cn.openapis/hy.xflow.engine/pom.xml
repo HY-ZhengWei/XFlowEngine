@@ -6,7 +6,7 @@
 
     <groupId>org</groupId>
     <artifactId>hy.xflow.engine</artifactId>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
     <packaging>jar</packaging>
 
     <name>cn.openapis.hy.xflow.engine</name>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>cn.openapis</groupId>
             <artifactId>hy.xflow.engine-client</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <scope>provided</scope>
         </dependency>
         

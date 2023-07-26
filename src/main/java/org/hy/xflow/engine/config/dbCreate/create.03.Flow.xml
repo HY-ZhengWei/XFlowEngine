@@ -23,21 +23,23 @@
                 ,flowTemplateID     VARCHAR2(64)                     NOT NULL
                 ,serviceDataID      VARCHAR2(64)
                 ,createrID          VARCHAR2(64)                     NOT NULL
-                ,creater            NVARCHAR2(128)
+                ,creater            VARCHAR2(128)
                 ,createOrgID        VARCHAR2(64)
-                ,createOrg          NVARCHAR2(128)
+                ,createOrg          VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
                 ,lastUserID         VARCHAR2(64)                     NOT NULL
-                ,lastUser           NVARCHAR2(128)
+                ,lastUser           VARCHAR2(128)
                 ,lastTime           DATE
                 ,lastOrgID          VARCHAR2(64)
-                ,lastOrg            NVARCHAR2(128)
+                ,lastOrg            VARCHAR2(128)
                 ,lastProcessID      VARCHAR2(64)                     NOT NULL
                 ,isValid            NUMBER(1)                        NOT NULL
                 ,isDelete           NUMBER(1)                        NOT NULL
                 );/
                 
                 ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
+                
+                ALTER TABLE TFlowInfo ADD CONSTRAINT FK_FlowInfoTID FOREIGN KEY (flowTemplateID) REFERENCES TTemplate (templateID);/
                 
                 COMMENT ON TABLE  TFlowInfo                               IS '工作流信息表';/
                 COMMENT ON COLUMN TFlowInfo.workID                        IS '工作流实例ID';/
@@ -85,6 +87,8 @@
                 
                 ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
                 
+                ALTER TABLE TFlowInfo ADD CONSTRAINT FK_FlowInfoTID FOREIGN KEY (flowTemplateID) REFERENCES TTemplate (templateID);/
+                
                 ALTER TABLE  TFlowInfo     COMMENT                          = '工作流信息表';/
                 ]]>
             </content>
@@ -98,21 +102,23 @@
                 ,flowTemplateID     VARCHAR(64)                      NOT NULL
                 ,serviceDataID      VARCHAR(64)
                 ,createrID          VARCHAR(64)                      NOT NULL
-                ,creater            NVARCHAR(128)
+                ,creater            VARCHAR(128)
                 ,createOrgID        VARCHAR(64)
-                ,createOrg          NVARCHAR(128)
+                ,createOrg          VARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
                 ,lastUserID         VARCHAR(64)                      NOT NULL
-                ,lastUser           NVARCHAR(128)
+                ,lastUser           VARCHAR(128)
                 ,lastTime           DATETIME
                 ,lastOrgID          VARCHAR(64)
-                ,lastOrg            NVARCHAR(128)
+                ,lastOrg            VARCHAR(128)
                 ,lastProcessID      VARCHAR(64)                      NOT NULL
                 ,isValid            INT                              NOT NULL
                 ,isDelete           INT                              NOT NULL
                 );/
                 
                 ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
+                
+                ALTER TABLE TFlowInfo ADD CONSTRAINT FK_FlowInfoTID FOREIGN KEY (flowTemplateID) REFERENCES TTemplate (templateID);/
                 
                 EXEC P_TableComment  TFlowInfo                            ,'工作流信息表';/
                 EXEC P_ColumnComment TFlowInfo ,workID                    ,'工作流实例ID';/
@@ -142,6 +148,132 @@
         
         
         
+        <sql id="XSQL_Create_TFlowComment">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TFlowComment
+                (
+                 fcID               VARCHAR2(64)                     NOT NULL
+                ,workID             VARCHAR2(64)                     NOT NULL
+                ,serviceDataID      VARCHAR2(64)
+                ,commentType        VARCHAR2(64)
+                ,commentTitle       VARCHAR2(100)
+                ,comment            VARCHAR2(4000)
+                ,commentImages      VARCHAR2(4000)
+                ,commentFiles       VARCHAR2(4000)
+                ,objectType         NUMBER(2)                        NOT NULL
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            VARCHAR2(128)
+                ,createOrgID        VARCHAR2(64)
+                ,createOrg          VARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                );/
+                
+                ALTER TABLE TFlowComment ADD CONSTRAINT PK_FlowComment PRIMARY KEY (fcID);/
+                
+                ALTER TABLE TFlowComment ADD CONSTRAINT FK_FlowCommentWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowComment ADD CONSTRAINT FK_FlowCommentSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
+                
+                COMMENT ON TABLE  TFlowComment                    IS '工作流备注（参与人均可添加备注）';/
+                COMMENT ON COLUMN TFlowComment.fcID               IS '工作流备注主键ID';/
+                COMMENT ON COLUMN TFlowComment.workID             IS '工作流实例ID';/
+                COMMENT ON COLUMN TFlowComment.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                COMMENT ON COLUMN TFlowComment.commentType        IS '工作流备注分类';/
+                COMMENT ON COLUMN TFlowComment.commentTitle       IS '工作流备注标题';/
+                COMMENT ON COLUMN TFlowComment.comment            IS '工作流备注内容';/
+                COMMENT ON COLUMN TFlowComment.commentImages      IS '工作流备注图片';/
+                COMMENT ON COLUMN TFlowComment.commentFiles       IS '工作流备注文件';/
+                COMMENT ON COLUMN TFlowComment.objectType         IS '参与者类型';/
+                COMMENT ON COLUMN TFlowComment.createrID          IS '创建人员ID';/
+                COMMENT ON COLUMN TFlowComment.creater            IS '创建人员名称';/
+                COMMENT ON COLUMN TFlowComment.createOrgID        IS '创建部门ID';/
+                COMMENT ON COLUMN TFlowComment.createOrg          IS '创建部门名称';/
+                COMMENT ON COLUMN TFlowComment.createTime         IS '创建时间';/
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TFlowComment
+                (
+                 fcID               VARCHAR(64)                     NOT NULL COMMENT '工作流备注主键ID'
+                ,workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
+                ,serviceDataID      VARCHAR(64)                              COMMENT '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,commentType        VARCHAR(64)                              COMMENT '工作流备注分类'
+                ,commentTitle       VARCHAR(100)                             COMMENT '工作流备注标题'
+                ,comment            VARCHAR(4000)                            COMMENT '工作流备注内容'
+                ,commentImages      VARCHAR(4000)                            COMMENT '工作流备注图片'
+                ,commentFiles       VARCHAR(4000)                            COMMENT '工作流备注文件'
+                ,objectType         INT(2)                          NOT NULL COMMENT '参与者类型'
+                ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
+                ,createOrgID        VARCHAR(64)                              COMMENT '创建部门ID'
+                ,createOrg          VARCHAR(128)                             COMMENT '创建部门名称'
+                ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
+                );/
+                
+                ALTER TABLE TFlowComment ADD CONSTRAINT PK_FlowComment PRIMARY KEY (fcID);/
+                
+                ALTER TABLE TFlowComment ADD CONSTRAINT FK_FlowCommentWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowComment ADD CONSTRAINT FK_FlowCommentSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
+                
+                ALTER TABLE TFlowComment COMMENT                 = '工作流备注（参与人均可添加备注）';/
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TFlowComment
+                (
+                 fcID               VARCHAR(64)                     NOT NULL
+                ,workID             VARCHAR(64)                     NOT NULL
+                ,serviceDataID      VARCHAR(64)
+                ,commentType        VARCHAR(64) 
+                ,commentTitle       VARCHAR(64)
+                ,comment            VARCHAR(4000) 
+                ,commentImages      VARCHAR(4000) 
+                ,commentFiles       VARCHAR(4000) 
+                ,objectType         INT                             NOT NULL
+                ,createrID          VARCHAR(64)                     NOT NULL
+                ,creater            VARCHAR(128)
+                ,createOrgID        VARCHAR(64)
+                ,createOrg          VARCHAR(128)
+                ,createTime         DATETIME                        NOT NULL
+                );/
+                
+                ALTER TABLE TFlowComment ADD CONSTRAINT PK_FlowComment PRIMARY KEY (fcID);/
+                
+                ALTER TABLE TFlowComment ADD CONSTRAINT FK_FlowCommentWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowComment ADD CONSTRAINT FK_FlowCommentSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
+                
+                EXEC P_TableComment  TFlowComment                     ,'工作流备注（参与人均可添加备注）';/                                   
+                EXEC P_ColumnComment TFlowComment ,fcID               ,'工作流备注主键ID';/                                          
+                EXEC P_ColumnComment TFlowComment ,workID             ,'工作流实例ID';/                                            
+                EXEC P_ColumnComment TFlowComment ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/                  
+                EXEC P_ColumnComment TFlowComment ,commentType        ,'工作流备注分类';/                                            
+                EXEC P_ColumnComment TFlowComment ,commentTitle       ,'工作流备注标题';/
+                EXEC P_ColumnComment TFlowComment ,comment            ,'工作流备注内容';/                                            
+                EXEC P_ColumnComment TFlowComment ,commentImages      ,'工作流备注图片';/                                            
+                EXEC P_ColumnComment TFlowComment ,commentFiles       ,'工作流备注文件';/                                            
+                EXEC P_ColumnComment TFlowComment ,objectType         ,'参与者类型';/                                              
+                EXEC P_ColumnComment TFlowComment ,createrID          ,'创建人员ID';/                                             
+                EXEC P_ColumnComment TFlowComment ,creater            ,'创建人员名称';/                                             
+                EXEC P_ColumnComment TFlowComment ,createOrgID        ,'创建部门ID';/                                             
+                EXEC P_ColumnComment TFlowComment ,createOrg          ,'创建部门名称';/                                             
+                EXEC P_ColumnComment TFlowComment ,createTime         ,'创建时间';/                                               
+                ]]>
+            </content>
+            
+            <comment>工作流备注（参与人均可添加备注）</comment>
+            <create>TFlowComment</create>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_Create_TProcess">
         
             <dataSourceGroup ref="DSG_XFlow" />
@@ -157,20 +289,20 @@
                 ,processNo              NUMBER(10)                       NOT NULL
                 ,currentActivityID      VARCHAR2(64)                     NOT NULL
                 ,currentActivityCode    VARCHAR2(64)                     NOT NULL
-                ,currentActivityName    NVARCHAR2(64)                    NOT NULL
+                ,currentActivityName    VARCHAR2(64)                     NOT NULL
                 ,previousProcessID      VARCHAR2(64)
                 ,previousActivityID     VARCHAR2(64)
                 ,previousActivityCode   VARCHAR2(64)
-                ,previousActivityName   NVARCHAR2(64)
+                ,previousActivityName   VARCHAR2(64)
                 ,previousOperateTypeID  VARCHAR2(64)
                 ,nextProcessID          VARCHAR2(4000)
                 ,nextActivityID         VARCHAR2(4000)
                 ,nextActivityCode       VARCHAR2(4000)
-                ,nextActivityName       NVARCHAR2(4000)
+                ,nextActivityName       VARCHAR2(4000)
                 ,createrID              VARCHAR2(64)                     NOT NULL
-                ,creater                NVARCHAR2(128)
+                ,creater                VARCHAR2(128)
                 ,createOrgID            VARCHAR2(64)
-                ,createOrg              NVARCHAR2(128)
+                ,createOrg              VARCHAR2(128)
                 ,createTime             DATE                             NOT NULL
                 ,summary                NUMBER(18 ,4)
                 ,summaryPass            NUMBER(18 ,4)
@@ -183,17 +315,20 @@
                 ,operateTime            DATE
                 ,operateTimeLen         NUMBER(10)
                 ,operateTypeID          VARCHAR2(64)
-                ,operateType            NVARCHAR2(128)
+                ,operateType            VARCHAR2(128)
                 ,operateUserID          VARCHAR2(64)
-                ,operateUser            NVARCHAR2(128)
+                ,operateUser            VARCHAR2(128)
                 ,operateOrgID           VARCHAR2(64)
-                ,operateOrg             NVARCHAR2(128)
+                ,operateOrg             VARCHAR2(128)
                 ,operateFiles           VARCHAR2(2000)
                 ,operateDatas           VARCHAR2(2000)
-                ,infoComment            NVARCHAR2(2000)
+                ,infoComment            VARCHAR2(2000)
                 );/
                 
-                ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
+                ALTER TABLE TProcess ADD CONSTRAINT PK_Process PRIMARY KEY (processID);/
+                
+                ALTER TABLE TProcess ADD CONSTRAINT FK_ProcessWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcess ADD CONSTRAINT FK_ProcessSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 COMMENT ON TABLE  TProcess                               IS '工作流过程表';/
                 COMMENT ON COLUMN TProcess.processID                     IS '工作流的过程ID';/
@@ -289,6 +424,9 @@
                 
                 ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
                 
+                ALTER TABLE TProcess ADD CONSTRAINT FK_ProcessWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcess ADD CONSTRAINT FK_ProcessSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
+                
                 ALTER TABLE TProcess COMMENT = '工作流过程表';/
                 ]]>
             </content>
@@ -304,20 +442,20 @@
                 ,processNo               INT                              NOT NULL
                 ,currentActivityID       VARCHAR(64)                      NOT NULL
                 ,currentActivityCode     VARCHAR(64)                      NOT NULL
-                ,currentActivityName     NVARCHAR(64)                     NOT NULL
+                ,currentActivityName     VARCHAR(64)                      NOT NULL
                 ,previousProcessID       VARCHAR(64)
                 ,previousActivityID      VARCHAR(64)
                 ,previousActivityCode    VARCHAR(64)
-                ,previousActivityName    NVARCHAR(64)
+                ,previousActivityName    VARCHAR(64)
                 ,previousOperateTypeID   VARCHAR(64)
                 ,nextProcessID           VARCHAR(4000)
                 ,nextActivityID          VARCHAR(4000)
                 ,nextActivityCode        VARCHAR(4000)
-                ,nextActivityName        NVARCHAR(4000)
+                ,nextActivityName        VARCHAR(4000)
                 ,createrID               VARCHAR(64)                      NOT NULL
-                ,creater                 NVARCHAR(128)
+                ,creater                 VARCHAR(128)
                 ,createOrgID             VARCHAR(64)
-                ,createOrg               NVARCHAR(128)
+                ,createOrg               VARCHAR(128)
                 ,createTime              DATETIME                         NOT NULL
                 ,summary                 DECIMAL(18 ,4)
                 ,summaryPass             DECIMAL(18 ,4)
@@ -330,17 +468,20 @@
                 ,operateTime             DATETIME
                 ,operateTimeLen          INT
                 ,operateTypeID           VARCHAR(64)
-                ,operateType             NVARCHAR(128)
+                ,operateType             VARCHAR(128)
                 ,operateUserID           VARCHAR(64)
-                ,operateUser             NVARCHAR(128)
+                ,operateUser             VARCHAR(128)
                 ,operateOrgID            VARCHAR(64)
-                ,operateOrg              NVARCHAR(128)
+                ,operateOrg              VARCHAR(128)
                 ,operateFiles            VARCHAR(2000)
                 ,operateDatas            VARCHAR(2000)
-                ,infoComment             NVARCHAR(2000)
+                ,infoComment             VARCHAR(2000)
                 );/
                 
                 ALTER TABLE TProcess ADD CONSTRAINT PK_TProcess PRIMARY KEY (processID);/
+                
+                ALTER TABLE TProcess ADD CONSTRAINT FK_ProcessWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcess ADD CONSTRAINT FK_ProcessSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 EXEC P_TableComment  TProcess                               ,'工作流过程表';/
                 EXEC P_ColumnComment TProcess ,processID                    ,'工作流的过程ID';/
@@ -409,16 +550,20 @@
                 ,serviceDataID      VARCHAR2(64)
                 ,objectType         NUMBER(2)                        NOT NULL
                 ,objectID           VARCHAR2(64)                     NOT NULL
-                ,objectName         NVARCHAR2(128)
+                ,objectName         VARCHAR2(128)
                 ,objectNo           NUMBER(10)                       NOT NULL
                 ,createrID          VARCHAR2(64)                     NOT NULL
-                ,creater            NVARCHAR2(128)
+                ,creater            VARCHAR2(128)
                 ,createOrgID        VARCHAR2(64)
-                ,createOrg          NVARCHAR2(128)
+                ,createOrg          VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
                 );/
                 
                 ALTER TABLE TProcessParticipants ADD CONSTRAINT PK_TProcessParticipants PRIMARY KEY (pwpID);/
+                
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 COMMENT ON TABLE  TProcessParticipants                    IS '工作流过程的实际参与人';/
                 COMMENT ON COLUMN TProcessParticipants.pwpID              IS '主键ID';/
@@ -460,6 +605,10 @@
                 
                 ALTER TABLE TProcessParticipants ADD CONSTRAINT PK_TProcessParticipants PRIMARY KEY (pwpID);/
                 
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
+                
                 ALTER TABLE  TProcessParticipants   comment                 = '工作流过程的实际参与人';/
                 ]]>
             </content>
@@ -475,16 +624,20 @@
                 ,serviceDataID      VARCHAR(64)
                 ,objectType         INT                             NOT NULL
                 ,objectID           VARCHAR(64)                     NOT NULL
-                ,objectName         NVARCHAR(128)
+                ,objectName         VARCHAR(128)
                 ,objectNo           INT                             NOT NULL
                 ,createrID          VARCHAR(64)                     NOT NULL
-                ,creater            NVARCHAR(128)
+                ,creater            VARCHAR(128)
                 ,createOrgID        VARCHAR(64)
-                ,createOrg          NVARCHAR(128)
+                ,createOrg          VARCHAR(128)
                 ,createTime         DATETIME                        NOT NULL
                 );/
                 
                 ALTER TABLE TProcessParticipants ADD CONSTRAINT PK_TProcessParticipants PRIMARY KEY (pwpID);/
+                
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcessParticipants ADD CONSTRAINT FK_ProcessPartSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 EXEC P_TableComment  TProcessParticipants                     ,'工作流过程的实际参与人';/
                 EXEC P_ColumnComment TProcessParticipants ,pwpID              ,'主键ID';/
@@ -523,12 +676,15 @@
                 ,serviceDataID      VARCHAR2(64)
                 ,processID          VARCHAR2(64)                     NOT NULL
                 ,operateTime        DATE                             NOT NULL
-                ,operateUserID      NVARCHAR2(64)                    NOT NULL
-                ,operateUser        NVARCHAR2(128)
+                ,operateUserID      VARCHAR2(64)                     NOT NULL
+                ,operateUser        VARCHAR2(128)
                 ,operateOrgID       VARCHAR2(64)
-                ,operateOrg         NVARCHAR2(128)
+                ,operateOrg         VARCHAR2(128)
                 );/
                 
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 COMMENT ON TABLE  TFlowLastOperator                    IS '工作流最后操作人(实时数据)';/
                 COMMENT ON COLUMN TFlowLastOperator.workID             IS '工作流实例ID';/
@@ -556,6 +712,9 @@
                 ,operateOrg         VARCHAR(128)                             COMMENT '操作部门名称'
                 );/
                 
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 ALTER  TABLE  TFlowLastOperator      COMMENT              = '工作流最后操作人(实时数据)';/
                 ]]>
@@ -569,12 +728,15 @@
                 ,serviceDataID      VARCHAR(64)
                 ,processID          VARCHAR(64)                      NOT NULL
                 ,operateTime        DATETIME                         NOT NULL
-                ,operateUserID      NVARCHAR(64)                     NOT NULL
-                ,operateUser        NVARCHAR(128)
+                ,operateUserID      VARCHAR(64)                      NOT NULL
+                ,operateUser        VARCHAR(128)
                 ,operateOrgID       VARCHAR(64)
-                ,operateOrg         NVARCHAR(128)
+                ,operateOrg         VARCHAR(128)
                 );/
                 
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowLastOperator ADD CONSTRAINT FK_FlowLastOperSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 EXEC P_TableComment  TFlowLastOperator                     ,'工作流最后操作人(实时数据)';/
                 EXEC P_ColumnComment TFlowLastOperator ,workID             ,'工作流实例ID';/
@@ -609,15 +771,18 @@
                 ,splitProcessID     VARCHAR2(64)
                 ,objectType         NUMBER(2)                        NOT NULL
                 ,objectID           VARCHAR2(64)                     NOT NULL
-                ,objectName         NVARCHAR2(128)
+                ,objectName         VARCHAR2(128)
                 ,objectNo           NUMBER(10)                       NOT NULL
                 ,createrID          VARCHAR2(64)                     NOT NULL
-                ,creater            NVARCHAR2(128)
+                ,creater            VARCHAR2(128)
                 ,createOrgID        VARCHAR2(64)
-                ,createOrg          NVARCHAR2(128)
+                ,createOrg          VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
                 );/
                 
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 COMMENT ON TABLE  TFlowFutureOperator                     IS '工作流未来操作人(实时数据)';/
                 COMMENT ON COLUMN TFlowFutureOperator.workID              IS '工作流实例ID';/
@@ -655,6 +820,9 @@
                 ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
                 );/
                 
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 ALTER  TABLE  TFlowFutureOperator    COMMENT                 = '工作流未来操作人(实时数据)';/
                 ]]>
@@ -670,15 +838,18 @@
                 ,splitProcessID     VARCHAR(64)
                 ,objectType         INT                             NOT NULL
                 ,objectID           VARCHAR(64)                     NOT NULL
-                ,objectName         NVARCHAR(128)
+                ,objectName         VARCHAR(128)
                 ,objectNo           INT                             NOT NULL
                 ,createrID          VARCHAR(64)                     NOT NULL
-                ,creater            NVARCHAR(128)
+                ,creater            VARCHAR(128)
                 ,createOrgID        VARCHAR(64)
-                ,createOrg          NVARCHAR(128)
+                ,createOrg          VARCHAR(128)
                 ,createTime         DATETIME                        NOT NULL
                 );/
                 
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TFlowFutureOperator ADD CONSTRAINT FK_FlowFutureOperSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
                 
                 EXEC P_TableComment  TFlowFutureOperator                     ,'工作流未来操作人(实时数据)';/
                 EXEC P_ColumnComment TFlowFutureOperator ,workID             ,'工作流实例ID';/

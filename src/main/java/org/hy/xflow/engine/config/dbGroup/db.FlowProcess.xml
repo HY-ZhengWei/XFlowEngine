@@ -278,6 +278,11 @@
             </sqlNode>
             
             <sqlNode>
+                <sql  ref="XSQL_XFlow_FlowComment_ToHistory" />
+                <type ref="this.$Type_ExecuteUpdate" />
+            </sqlNode>
+            
+            <sqlNode>
                 <sql  ref="XSQL_XFlow_Process_ToHistory" />
                 <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
@@ -287,18 +292,10 @@
                 <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
-            <sqlNode>
-                <sql  ref="XSQL_XFlow_FlowInfo_ToHistory_Del" />
-                <type ref="this.$Type_ExecuteUpdate" />
-            </sqlNode>
+            
             
             <sqlNode>
-                <sql  ref="XSQL_XFlow_Process_ToHistory_Del" />
-                <type ref="this.$Type_ExecuteUpdate" />
-            </sqlNode>
-            
-            <sqlNode>
-                <sql  ref="XSQL_XFlow_ProcessParticipants_ToHistory_Del" />
+                <sql  ref="XSQL_XFlow_TFlowFutureOperator_Del" />
                 <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
@@ -308,7 +305,22 @@
             </sqlNode>
             
             <sqlNode>
-                <sql  ref="XSQL_XFlow_TFlowFutureOperator_Del" />
+                <sql  ref="XSQL_XFlow_ProcessParticipants_ToHistory_Del" />
+                <type ref="this.$Type_ExecuteUpdate" />
+            </sqlNode>
+            
+            <sqlNode>
+                <sql  ref="XSQL_XFlow_Process_ToHistory_Del" />
+                <type ref="this.$Type_ExecuteUpdate" />
+            </sqlNode>
+            
+            <sqlNode>
+                <sql  ref="XSQL_XFlow_FlowComment_ToHistory_Del" />
+                <type ref="this.$Type_ExecuteUpdate" />
+            </sqlNode>
+            
+            <sqlNode>
+                <sql  ref="XSQL_XFlow_FlowInfo_ToHistory_Del" />
                 <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
