@@ -13,8 +13,10 @@ import org.hy.common.StringHelp;
 import org.hy.common.TablePartition;
 import org.hy.common.xml.XJava;
 import org.hy.common.xml.annotation.Xjava;
+import org.hy.common.xml.log.Logger;
 import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
+import org.hy.xflow.engine.bean.FlowComment;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
@@ -57,10 +59,15 @@ import org.hy.xflow.engine.service.ITemplateService;
  *              v3.0  2023-02-02  添加：1.查询用户可以走的路由 queryNextRoutes 方法，当未动态指定参与人时，返回模板上定义的参与人
  *              v4.0  2023-06-01  添加：1.督办的相关查询接口
  *                                     2.督查的相关查询接口
+ *              v5.0  2023-07-27  添加：1.工作流备注查询接口两个
+ *                                添加：2.工作流备注添加接口
  */
 @Xjava
 public class XFlowEngine
 {
+    private static final Logger $Logger = new Logger(XFlowEngine.class);
+    
+    
     
     @Xjava
     private ITemplateService            templateService;
@@ -2108,6 +2115,129 @@ public class XFlowEngine
     public List<FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID)
     {
         return this.flowProcessService.querySummarysByServiceDataID(i_ServiceDataID);
+    }
+    
+    
+    
+    /**
+     * 工作流实例ID，查询工作流备注信息（活动及历史的均查询）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     * @param i_WorkID  工作流实例ID
+     * @return
+     */
+    public List<FlowComment> queryCommentByWorkID(String i_WorkID)
+    {
+        return this.flowInfoService.queryCommentByWorkID(i_WorkID);
+    }
+    
+    
+    
+    /**
+     * 按第三方使用系统的业务数据ID，查询工作流备注信息（活动及历史的均查询）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return
+     */
+    public List<FlowComment> queryCommentByServiceDataID(String i_ServiceDataID)
+    {
+        return this.flowInfoService.queryCommentByServiceDataID(i_ServiceDataID);
+    }
+    
+    
+    
+    /**
+     * 添加工作流备注信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     * @param io_FlowComment   注1：WorkID和ServiceDataID两选一传值即可添加备注，都传递也行。
+     *                         注2：备注标题、内容、文件、图片四选一必填
+     *                         注3：备注创建人，必须是工作流实例的参与人之一
+     * @return
+     */
+    public boolean addComment(FlowComment io_FlowComment)
+    {
+        if ( io_FlowComment == null )
+        {
+            return false;
+        }
+        
+        if ( Help.isNull(io_FlowComment.getWorkID()) || Help.isNull(io_FlowComment.getServiceDataID()) )
+        {
+            $Logger.warn("WorkID and ServiceDataID is null.");
+            return false;
+        }
+        
+        if ( io_FlowComment.getCreateUser() == null || Help.isNull(io_FlowComment.getCreateUser().getUserID()) )
+        {
+            $Logger.warn("CreateUser is null.");
+            return false;
+        }
+        
+        if ( Help.isNull(io_FlowComment.getCommentTitle())
+          || Help.isNull(io_FlowComment.getComment())
+          || Help.isNull(io_FlowComment.getCommentFiles())
+          || Help.isNull(io_FlowComment.getCommentImages()) )
+        {
+            $Logger.warn("Comment is null.");
+            return false;
+        }
+        
+        // 验证WorkID和ServiceDataID是否真实存在，并相互验证是否有效。
+        // 同时对入参对象赋值，达到可用两者任何一个即能添加备注的功能
+        FlowInfo v_Flow = null;
+        if ( !Help.isNull(io_FlowComment.getWorkID()) )
+        {
+            v_Flow = this.flowInfoService.queryByWorkID(io_FlowComment.getWorkID());
+            if ( v_Flow == null )
+            {
+                $Logger.warn("WorkID[" + io_FlowComment.getWorkID() + "] is not find.");
+                return false;
+            }
+            
+            if ( Help.isNull(io_FlowComment.getServiceDataID())
+              || Help.isNull(v_Flow        .getServiceDataID()) )
+            {
+                io_FlowComment.setServiceDataID(v_Flow.getServiceDataID());
+            }
+            else if ( !v_Flow.getServiceDataID().equals(io_FlowComment.getServiceDataID()) )
+            {
+                $Logger.warn("WorkID[" + io_FlowComment.getWorkID() + "] and ServiceDataID[" + io_FlowComment.getServiceDataID() + "] is error.");
+                return false;
+            }
+        }
+        else
+        {
+            v_Flow = this.flowInfoService.queryByServiceDataID(io_FlowComment.getServiceDataID());
+            if ( v_Flow == null )
+            {
+                $Logger.warn("ServiceDataID[" + io_FlowComment.getServiceDataID() + "] is not find.");
+                return false;
+            }
+            
+            io_FlowComment.setWorkID(v_Flow.getWorkID());
+        }
+        
+        // 备注创建人，必须是工作流实例的参与人之一
+        ProcessParticipant v_PPObjectType = this.processParticipantsService.queryByMinObjectType(io_FlowComment);
+        if ( v_PPObjectType == null )
+        {
+            $Logger.warn("WorkID[" + io_FlowComment.getWorkID() + "] User[" + io_FlowComment.getCreaterID() + "] is not participant.");
+            return false;
+        }
+        io_FlowComment.setObjectType(v_PPObjectType.getObjectType());
+        
+        return this.flowInfoService.addComment(io_FlowComment);
     }
     
 }

@@ -789,7 +789,7 @@
                 SELECT  DISTINCT A.workID
                   FROM  TProcess  A
                  WHERE  A.operateUserID = ':userID'
-                 UNION  ALL
+                 UNION
                 SELECT  DISTINCT A.workID
                   FROM  TProcess_History  A
                  WHERE  A.operateUserID = ':userID'
@@ -816,7 +816,7 @@
                 SELECT  DISTINCT A.serviceDataID
                   FROM  TProcess  A
                  WHERE  A.operateUserID = ':userID'
-                 UNION  ALL
+                 UNION
                 SELECT  DISTINCT A.serviceDataID
                   FROM  TProcess_History  A
                  WHERE  A.operateUserID = ':userID'

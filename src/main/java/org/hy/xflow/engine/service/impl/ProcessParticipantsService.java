@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hy.common.PartitionMap;
 import org.hy.common.xml.annotation.Xjava;
+import org.hy.xflow.engine.bean.FlowComment;
 import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseService;
@@ -94,9 +95,28 @@ public class ProcessParticipantsService extends BaseService implements IProcessP
      * @param i_User
      * @return
      */
+    @Override
     public List<ProcessParticipant> queryBySupervision(User i_User)
     {
         return this.processParticipantsDAO.queryBySupervision(i_User);
+    }
+    
+    
+    
+    /**
+     * 查询人员在工作流实例中的最大参与者角色是什么
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     * @param i_FlowComment
+     * @return
+     */
+    @Override
+    public ProcessParticipant queryByMinObjectType(FlowComment i_FlowComment)
+    {
+        return this.processParticipantsDAO.queryByMinObjectType(i_FlowComment);
     }
     
 }

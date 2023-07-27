@@ -61,8 +61,7 @@
         <dependency>
             <groupId>cn.openapis</groupId>
             <artifactId>hy.xflow.engine-client</artifactId>
-            <version>1.1.1</version>
-            <scope>provided</scope>
+            <version>1.1.2</version>
         </dependency>
         
         <dependency>
@@ -107,10 +106,25 @@
                 <directory>src/main/java</directory>
                 <filtering>true</filtering>
                 <includes>
+                    <include>**/LICENSE</include>
                     <include>**/*.xml</include>
                     <include>**/*.html</include>
                     <include>**/*.txt</include>
                     <include>**/*.ini</include>
+                    <include>**/*.json</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.md</include>
+                    <include>**/*.MF</include>
+                    <include>**/*.js</include>
+                    <include>**/*.css</include>
+                    <include>**/*.map</include>
+                    <include>**/*.png</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.eot</include>
+                    <include>**/*.svg</include>
+                    <include>**/*.ttf</include>
+                    <include>**/*.woff</include>
+                    <include>**/*.woff2</include>
                 </includes>
             </resource>
 

@@ -97,6 +97,24 @@ public class JU_006 extends BaseJunit
     
     
     
+    public void test_添加实例备注()
+    {
+        FlowInfo v_FlowInfo = null;
+        
+        try
+        {
+            v_FlowInfo = XFlowEngine.getInstance().createByName(manager ,$TemplateName ,serviceDataID);
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_FlowInfo != null);
+    }
+    
+    
+    
     /**
      * 执行喷涂工艺
      * 

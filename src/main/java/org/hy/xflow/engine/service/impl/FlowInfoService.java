@@ -2,10 +2,15 @@ package org.hy.xflow.engine.service.impl;
 
 import java.util.List;
 
+import org.hy.common.Date;
+import org.hy.common.Help;
+import org.hy.common.StringHelp;
 import org.hy.common.xml.annotation.Xjava;
+import org.hy.xflow.engine.bean.FlowComment;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.common.BaseService;
+import org.hy.xflow.engine.dao.IFlowCommentDAO;
 import org.hy.xflow.engine.dao.IFlowInfoDAO;
 import org.hy.xflow.engine.enums.RouteTypeEnum;
 import org.hy.xflow.engine.service.IFlowInfoService;
@@ -26,7 +31,10 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
 {
     
     @Xjava
-    private IFlowInfoDAO flowInfoDAO;
+    private IFlowInfoDAO    flowInfoDAO;
+    
+    @Xjava
+    private IFlowCommentDAO flowCommendDAO;
     
     
     
@@ -173,6 +181,66 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
     public boolean toHistoryByServiceDataID(String i_ServiceDataID)
     {
         return this.flowInfoDAO.toHistoryByServiceDataID(i_ServiceDataID);
+    }
+    
+    
+    
+    /**
+     * 工作流实例ID，查询工作流备注信息（活动及历史的均查询）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     * @param i_WorkID  工作流实例ID
+     * @return
+     */
+    @Override
+    public List<FlowComment> queryCommentByWorkID(String i_WorkID)
+    {
+        return this.flowCommendDAO.queryByWorkID(i_WorkID);
+    }
+    
+    
+    
+    /**
+     * 按第三方使用系统的业务数据ID，查询工作流备注信息（活动及历史的均查询）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
+     * @return
+     */
+    @Override
+    public List<FlowComment> queryCommentByServiceDataID(String i_ServiceDataID)
+    {
+        return this.flowCommendDAO.queryByServiceDataID(i_ServiceDataID);
+    }
+    
+    
+    
+    /**
+     * 添加工作流备注信息
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     * @param io_FlowComment
+     * @return
+     */
+    @Override
+    public boolean addComment(FlowComment io_FlowComment)
+    {
+        if ( Help.isNull(io_FlowComment.getFcID()) )
+        {
+            io_FlowComment.setFcID(StringHelp.getUUID());
+        }
+        
+        io_FlowComment.setCreateTime(new Date());
+        return this.flowCommendDAO.addFlowComment(io_FlowComment) == 1;
     }
     
 }

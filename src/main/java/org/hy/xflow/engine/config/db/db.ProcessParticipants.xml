@@ -166,6 +166,49 @@
         
         
         
+        <sql id="XSQL_XFlow_ProcessParticipants_QueryByMinObjectType"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  DISTINCT WA.objectType 
+                  FROM (
+                        SELECT  DISTINCT A.objectType 
+                          FROM  TProcessParticipants  A
+                         WHERE  A.workID    = ':workID'
+                           AND (
+                                A.objectID  = ':createUser.userID'
+                     <[     OR  A.objectID  = ':createUser.orgID'     ]>
+                     <[     OR  A.objectID IN (:createUser.roleIDs)   ]>
+                               )
+                         UNION  
+                        SELECT  DISTINCT A.objectType 
+                          FROM  TProcessParticipants_History  A
+                         WHERE  A.workID    = ':workID'
+                           AND (
+                                A.objectID  = ':createUser.userID'
+                     <[     OR  A.objectID  = ':createUser.orgID'     ]>
+                     <[     OR  A.objectID IN (:createUser.roleIDs)   ]>
+                               )
+                       )    WA
+                 ORDER  BY CASE WHEN WA.objectType = 21 THEN 0
+                                WHEN WA.objectType = 22 THEN 1
+                                ELSE WA.objectType END
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.ProcessParticipant</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询人员在工作流实例中的最大参与者角色是什么</comment>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_XFlow_ProcessParticipants_ToHistory"> 
         
             <dataSourceGroup ref="DSG_XFlow" />

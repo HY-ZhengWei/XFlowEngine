@@ -3,6 +3,7 @@ package org.hy.xflow.engine.service;
 import java.util.List;
 
 import org.hy.common.PartitionMap;
+import org.hy.xflow.engine.bean.FlowComment;
 import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.User;
 
@@ -74,5 +75,19 @@ public interface IProcessParticipantsService
      * @return
      */
     public List<ProcessParticipant> queryBySupervision(User i_User);
+    
+    
+    
+    /**
+     * 查询人员在工作流实例中的最大参与者角色是什么
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     * @param i_FlowComment
+     * @return
+     */
+    public ProcessParticipant queryByMinObjectType(FlowComment i_FlowComment);
     
 }

@@ -34,7 +34,7 @@
                   FROM  TFlowComment  A
             <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
             <[   WHERE  A.workID        = ':workID'          ]>
-                 UNION  ALL
+                 UNION
                 SELECT  A.fcID
                        ,A.workID
                        ,A.serviceDataID
