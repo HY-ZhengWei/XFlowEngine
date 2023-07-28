@@ -339,7 +339,7 @@
                 
                 ALTER TABLE TTemplate ADD CONSTRAINT PK_TTemplate PRIMARY KEY (templateID);/
                 
-                ALTER TABLE TTemplate ADD CONSTRAINT IDX_Template_Name_Version UNIQUE (templateName ,versionNo);/
+                ALTER TABLE TTemplate ADD CONSTRAINT UK_Template_Name_Version UNIQUE (templateName ,versionNo);/
                 
                 COMMENT ON TABLE  TTemplate                               IS '工作流模板表';/
                 COMMENT ON COLUMN TTemplate.templateID                    IS '模板ID';/
@@ -406,7 +406,7 @@
                 
                 ALTER TABLE TTemplate ADD CONSTRAINT PK_TTemplate PRIMARY KEY (templateID);/
                 
-                ALTER TABLE TTemplate ADD CONSTRAINT IDX_Template_Name_Version UNIQUE (templateName ,versionNo);/
+                ALTER TABLE TTemplate ADD CONSTRAINT UK_Template_Name_Version UNIQUE (templateName ,versionNo);/
                 
                 EXEC P_TableComment  TTemplate                                ,'工作流模板表';/
                 EXEC P_ColumnComment TTemplate ,templateID                    ,'模板ID';/
@@ -472,7 +472,7 @@
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT PK_TActivityInfo PRIMARY KEY (activityID);/
                 
-                ALTER TABLE TActivityInfo ADD CONSTRAINT IDX_Activity_AC_TID UNIQUE (activityCode ,templateID);/
+                ALTER TABLE TActivityInfo ADD CONSTRAINT UK_Activity_AC_TID UNIQUE (activityCode ,templateID);/
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
                 ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityATID FOREIGN KEY (activityTypeID) REFERENCES TActivityType (activityTypeID);/
@@ -590,7 +590,7 @@
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT PK_TActivityInfo PRIMARY KEY (activityID);/
                 
-                ALTER TABLE TActivityInfo ADD CONSTRAINT IDX_Activity_AC_TID UNIQUE (activityCode ,templateID);/
+                ALTER TABLE TActivityInfo ADD CONSTRAINT UK_Activity_AC_TID UNIQUE (activityCode ,templateID);/
                 
                 ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
                 ALTER TABLE TActivityInfo ADD CONSTRAINT FK_ActivityATID FOREIGN KEY (activityTypeID) REFERENCES TActivityType (activityTypeID);/
@@ -666,7 +666,7 @@
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT PK_TActivityRoute PRIMARY KEY (activityRouteID);/
                 
-                ALTER TABLE TActivityRoute ADD CONSTRAINT IDX_AR_AID_ARouteCode UNIQUE (activityID ,activityRouteCode);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT UK_AR_AID_ARouteCode UNIQUE (activityID ,activityRouteCode);/
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
                 ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteRTID FOREIGN KEY (routeTypeID)    REFERENCES TRouteType    (routeTypeID);/
@@ -766,7 +766,7 @@
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT PK_TActivityRoute PRIMARY KEY (activityRouteID);/
                 
-                ALTER TABLE TActivityRoute ADD CONSTRAINT IDX_AR_AID_ARouteCode UNIQUE (activityID ,activityRouteCode);/
+                ALTER TABLE TActivityRoute ADD CONSTRAINT UK_AR_AID_ARouteCode UNIQUE (activityID ,activityRouteCode);/
                 
                 ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteTID  FOREIGN KEY (templateID)     REFERENCES TTemplate     (templateID);/
                 ALTER TABLE TActivityRoute ADD CONSTRAINT FK_ActivityRouteRTID FOREIGN KEY (routeTypeID)    REFERENCES TRouteType    (routeTypeID);/
@@ -827,7 +827,7 @@
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT PK_TActivityParticipants PRIMARY KEY (participantID);/
                 
-                ALTER TABLE TActivityParticipants ADD CONSTRAINT IDX_AP_AID_OType_OID UNIQUE (activityID ,objectType ,objectID);/
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT UK_AP_AID_OType_OID UNIQUE (activityID ,objectType ,objectID);/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartTID FOREIGN KEY (templateID) REFERENCES TTemplate        (templateID);/
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartAID FOREIGN KEY (activityID) REFERENCES TActivityInfo    (activityID);/
@@ -893,7 +893,7 @@
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT PK_TActivityParticipants PRIMARY KEY (participantID);/
                 
-                ALTER TABLE TActivityParticipants ADD CONSTRAINT IDX_AP_AID_OType_OID UNIQUE (activityID ,objectType ,objectID);/
+                ALTER TABLE TActivityParticipants ADD CONSTRAINT UK_AP_AID_OType_OID UNIQUE (activityID ,objectType ,objectID);/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartTID FOREIGN KEY (templateID) REFERENCES TTemplate        (templateID);/
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT FK_ActivityPartAID FOREIGN KEY (activityID) REFERENCES TActivityInfo    (activityID);/
@@ -942,7 +942,7 @@
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (participantID);/
                 
-                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT IDX_ARP_ARID_OType_OID UNIQUE (activityRouteID ,objectType ,objectID);/
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT UK_ARP_ARID_OType_OID UNIQUE (activityRouteID ,objectType ,objectID);/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartTID  FOREIGN KEY (templateID)      REFERENCES TTemplate        (templateID);/
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartARID FOREIGN KEY (activityRouteID) REFERENCES TActivityRoute   (activityRouteID);/
@@ -1008,7 +1008,7 @@
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (participantID);/
                 
-                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT IDX_ARP_ARID_OType_OID UNIQUE (activityRouteID ,objectType ,objectID);/
+                ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT UK_ARP_ARID_OType_OID UNIQUE (activityRouteID ,objectType ,objectID);/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartTID  FOREIGN KEY (templateID)      REFERENCES TTemplate        (templateID);/
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT FK_ActivityRoutePartARID FOREIGN KEY (activityRouteID) REFERENCES TActivityRoute   (activityRouteID);/

@@ -52,7 +52,7 @@
                   FROM  TFlowComment_History  A
             <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
             <[   WHERE  A.workID        = ':workID'          ]>
-                 ORDER  BY A.createTime DESC
+                 ORDER  BY createTime DESC
                 ]]>
             </content>
             

@@ -154,6 +154,8 @@
             
             <content if="ORACLE == DSG_XFlow.getDbProductType">
                 <![CDATA[
+                ALTER TABLE TFlowInfo_History ADD CONSTRAINT UK_FlowInfoHis_SID UNIQUE (serviceDataID);/
+                
                 CREATE TABLE TFlowComment_History
                 (
                  fcID               VARCHAR2(64)                     NOT NULL
@@ -197,6 +199,8 @@
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
+                ALTER TABLE TFlowInfo_History ADD CONSTRAINT UK_FlowInfoHis_SID UNIQUE (serviceDataID);/
+                
                 CREATE TABLE TFlowComment_History
                 (
                  fcID               VARCHAR(64)                     NOT NULL COMMENT '工作流备注主键ID'
@@ -226,6 +230,8 @@
             
             <content if="SQLSERVER == DSG_XFlow.getDbProductType">
                 <![CDATA[
+                ALTER TABLE TFlowInfo_History ADD CONSTRAINT UK_FlowInfoHis_SID UNIQUE (serviceDataID);/
+                
                 CREATE TABLE TFlowComment_History
                 (
                  fcID               VARCHAR(64)                     NOT NULL

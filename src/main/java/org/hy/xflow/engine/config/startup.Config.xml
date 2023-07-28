@@ -36,6 +36,10 @@
                 <value>dbCreate/create.03.FlowHistory.xml</value>
             </item>
             
+            <item>
+                <value>dbCreate/create.901.Upgrade2023-07-26.xml</value>
+            </item>
+            
             
             
             <item>
@@ -59,15 +63,17 @@
             </item>
             
             <item>
-                <value>db/db.FlowFutureOperator.xml</value>
+                <value>db/db.Template.xml</value>
             </item>
+            
+            
             
             <item>
                 <value>db/db.FlowInfo.xml</value>
             </item>
             
             <item>
-                <value>db/db.FlowLastOperator.xml</value>
+                <value>db/db.FlowComment.xml</value>
             </item>
             
             <item>
@@ -79,7 +85,11 @@
             </item>
             
             <item>
-                <value>db/db.Template.xml</value>
+                <value>db/db.FlowLastOperator.xml</value>
+            </item>
+            
+            <item>
+                <value>db/db.FlowFutureOperator.xml</value>
             </item>
             
             

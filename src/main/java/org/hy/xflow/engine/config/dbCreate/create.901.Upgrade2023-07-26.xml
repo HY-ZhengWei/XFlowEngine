@@ -10,6 +10,54 @@
     <!-- 2023-07-26升级版本的自动化脚本的相关SQL -->
     <sqls>
     
+        <!-- 回退脚本（请人工执行）
+        ALTER TABLE TActivityInfo                DROP CONSTRAINT FK_ActivityTID          ; 
+        ALTER TABLE TActivityInfo                DROP CONSTRAINT FK_ActivityATID         ; 
+        
+        ALTER TABLE TActivityRoute               DROP CONSTRAINT FK_ActivityRouteTID     ; 
+        ALTER TABLE TActivityRoute               DROP CONSTRAINT FK_ActivityRouteRTID    ; 
+        ALTER TABLE TActivityRoute               DROP CONSTRAINT FK_ActivityRouteAID     ; 
+        ALTER TABLE TActivityRoute               DROP CONSTRAINT FK_ActivityRouteNAID    ; 
+        
+        ALTER TABLE TActivityParticipants        DROP CONSTRAINT FK_ActivityPartTID      ; 
+        ALTER TABLE TActivityParticipants        DROP CONSTRAINT FK_ActivityPartAID      ; 
+        ALTER TABLE TActivityParticipants        DROP CONSTRAINT FK_ActivityPartOT       ; 
+        
+        ALTER TABLE TActivityRouteParticipants   DROP CONSTRAINT FK_ActivityRoutePartTID ; 
+        ALTER TABLE TActivityRouteParticipants   DROP CONSTRAINT FK_ActivityRoutePartARID; 
+        ALTER TABLE TActivityRouteParticipants   DROP CONSTRAINT FK_ActivityRoutePartOT  ; 
+        
+        
+        
+        ALTER TABLE TFlowInfo                    DROP CONSTRAINT FK_FlowInfoTID          ; 
+        
+        ALTER TABLE TProcess                     DROP CONSTRAINT FK_ProcessWID           ; 
+        ALTER TABLE TProcess                     DROP CONSTRAINT FK_ProcessSID           ; 
+        
+        ALTER TABLE TProcessParticipants         DROP CONSTRAINT FK_ProcessPartPID       ; 
+        ALTER TABLE TProcessParticipants         DROP CONSTRAINT FK_ProcessPartWID       ; 
+        ALTER TABLE TProcessParticipants         DROP CONSTRAINT FK_ProcessPartSID       ; 
+        
+        ALTER TABLE TFlowLastOperator            DROP CONSTRAINT FK_FlowLastOperPID      ; 
+        ALTER TABLE TFlowLastOperator            DROP CONSTRAINT FK_FlowLastOperWID      ; 
+        ALTER TABLE TFlowLastOperator            DROP CONSTRAINT FK_FlowLastOperSID      ; 
+        
+        ALTER TABLE TFlowFutureOperator          DROP CONSTRAINT FK_FlowFutureOperPID    ; 
+        ALTER TABLE TFlowFutureOperator          DROP CONSTRAINT FK_FlowFutureOperWID    ; 
+        ALTER TABLE TFlowFutureOperator          DROP CONSTRAINT FK_FlowFutureOperSID    ; 
+        
+        
+        
+        ALTER TABLE TFlowInfo_History            DROP CONSTRAINT FK_FlowInfoHisTID       ; 
+        
+        ALTER TABLE TProcess_History             DROP CONSTRAINT FK_ProcessHisWID        ; 
+        ALTER TABLE TProcess_History             DROP CONSTRAINT FK_ProcessHisSID        ; 
+        
+        ALTER TABLE TProcessParticipants_History DROP CONSTRAINT FK_ProcessPartHisPID    ; 
+        ALTER TABLE TProcessParticipants_History DROP CONSTRAINT FK_ProcessPartHisWID    ; 
+        ALTER TABLE TProcessParticipants_History DROP CONSTRAINT FK_ProcessPartHisSID    ; 
+        -->
+    
         <sql id="XSQL_Upgrade_20230726_Step001">
         
             <dataSourceGroup ref="DSG_XFlow" />
@@ -20,49 +68,43 @@
                 
                 ALTER TABLE TActivityInfo                ADD CONSTRAINT FK_ActivityTID           FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityInfo                ADD CONSTRAINT FK_ActivityATID          FOREIGN KEY (activityTypeID)  REFERENCES TActivityType     (activityTypeID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TActivityRoute               ADD CONSTRAINT FK_ActivityRouteTID      FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityRoute               ADD CONSTRAINT FK_ActivityRouteRTID     FOREIGN KEY (routeTypeID)     REFERENCES TRouteType        (routeTypeID);/
                 ALTER TABLE TActivityRoute               ADD CONSTRAINT FK_ActivityRouteAID      FOREIGN KEY (activityID)      REFERENCES TActivityInfo     (activityID);/
                 ALTER TABLE TActivityRoute               ADD CONSTRAINT FK_ActivityRouteNAID     FOREIGN KEY (nextActivityID)  REFERENCES TActivityInfo     (activityID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TActivityParticipants        ADD CONSTRAINT FK_ActivityPartTID       FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityParticipants        ADD CONSTRAINT FK_ActivityPartAID       FOREIGN KEY (activityID)      REFERENCES TActivityInfo     (activityID);/
                 ALTER TABLE TActivityParticipants        ADD CONSTRAINT FK_ActivityPartOT        FOREIGN KEY (objectType)      REFERENCES TParticipantType  (participantTypeID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartTID  FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartARID FOREIGN KEY (activityRouteID) REFERENCES TActivityRoute    (activityRouteID);/
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartOT   FOREIGN KEY (objectType)      REFERENCES TParticipantType  (participantTypeID);/
-                                                                                                                                                            
-                                                                                                                                                            
-                                                                                                                                                            
+                
+                
+                
                 ALTER TABLE TFlowInfo                    ADD CONSTRAINT FK_FlowInfoTID           FOREIGN KEY (flowTemplateID)  REFERENCES TTemplate         (templateID);/
-                                                                                                                                                            
-                ALTER TABLE TFlowComment                 ADD CONSTRAINT FK_FlowCommentWID        FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
-                ALTER TABLE TFlowComment                 ADD CONSTRAINT FK_FlowCommentSID        FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TProcess                     ADD CONSTRAINT FK_ProcessWID            FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TProcess                     ADD CONSTRAINT FK_ProcessSID            FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartPID        FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartWID        FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartSID        FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperPID       FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperWID       FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperSID       FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperPID     FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperWID     FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperSID     FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                         
-                                                         
-                                                         
+                
+                
+                
                 ALTER TABLE TFlowInfo_History            ADD CONSTRAINT FK_FlowInfoHisTID        FOREIGN KEY (flowTemplateID)  REFERENCES TTemplate         (templateID);/
-                                                         
-                ALTER TABLE TFlowComment_History         ADD CONSTRAINT FK_FlowCommentHisWID     FOREIGN KEY (workID)          REFERENCES TFlowInfo_History (workID);/
-                ALTER TABLE TFlowComment_History         ADD CONSTRAINT FK_FlowCommentHisSID     FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo_History (serviceDataID);/
-                                                                                                                               
+                
                 ALTER TABLE TProcess_History             ADD CONSTRAINT FK_ProcessHisWID         FOREIGN KEY (workID)          REFERENCES TFlowInfo_History (workID);/
                 ALTER TABLE TProcess_History             ADD CONSTRAINT FK_ProcessHisSID         FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo_History (serviceDataID);/
                 
@@ -73,7 +115,6 @@
                 UPDATE TUpgrade20230726 SET updateTime = SYSDATE WHERE id = '全部表添加外键约束';/
                 ]]>
             </content>
-            
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
@@ -94,36 +135,30 @@
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartTID  FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartARID FOREIGN KEY (activityRouteID) REFERENCES TActivityRoute    (activityRouteID);/
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartOT   FOREIGN KEY (objectType)      REFERENCES TParticipantType  (participantTypeID);/
-                                                                                                                                                            
-                                                                                                                                                            
-                                                                                                                                                            
+                
+                
+                
                 ALTER TABLE TFlowInfo                    ADD CONSTRAINT FK_FlowInfoTID           FOREIGN KEY (flowTemplateID)  REFERENCES TTemplate         (templateID);/
-                                                                                                                                                            
-                ALTER TABLE TFlowComment                 ADD CONSTRAINT FK_FlowCommentWID        FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
-                ALTER TABLE TFlowComment                 ADD CONSTRAINT FK_FlowCommentSID        FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TProcess                     ADD CONSTRAINT FK_ProcessWID            FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TProcess                     ADD CONSTRAINT FK_ProcessSID            FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartPID        FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartWID        FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartSID        FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperPID       FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperWID       FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperSID       FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperPID     FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperWID     FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperSID     FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                         
-                                                         
-                                                         
+                
+                
+                
                 ALTER TABLE TFlowInfo_History            ADD CONSTRAINT FK_FlowInfoHisTID        FOREIGN KEY (flowTemplateID)  REFERENCES TTemplate         (templateID);/
-                                                         
-                ALTER TABLE TFlowComment_History         ADD CONSTRAINT FK_FlowCommentHisWID     FOREIGN KEY (workID)          REFERENCES TFlowInfo_History (workID);/
-                ALTER TABLE TFlowComment_History         ADD CONSTRAINT FK_FlowCommentHisSID     FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo_History (serviceDataID);/
-                                                                                                                               
+                
                 ALTER TABLE TProcess_History             ADD CONSTRAINT FK_ProcessHisWID         FOREIGN KEY (workID)          REFERENCES TFlowInfo_History (workID);/
                 ALTER TABLE TProcess_History             ADD CONSTRAINT FK_ProcessHisSID         FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo_History (serviceDataID);/
                 
@@ -141,49 +176,43 @@
                 
                 ALTER TABLE TActivityInfo                ADD CONSTRAINT FK_ActivityTID           FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityInfo                ADD CONSTRAINT FK_ActivityATID          FOREIGN KEY (activityTypeID)  REFERENCES TActivityType     (activityTypeID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TActivityRoute               ADD CONSTRAINT FK_ActivityRouteTID      FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityRoute               ADD CONSTRAINT FK_ActivityRouteRTID     FOREIGN KEY (routeTypeID)     REFERENCES TRouteType        (routeTypeID);/
                 ALTER TABLE TActivityRoute               ADD CONSTRAINT FK_ActivityRouteAID      FOREIGN KEY (activityID)      REFERENCES TActivityInfo     (activityID);/
                 ALTER TABLE TActivityRoute               ADD CONSTRAINT FK_ActivityRouteNAID     FOREIGN KEY (nextActivityID)  REFERENCES TActivityInfo     (activityID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TActivityParticipants        ADD CONSTRAINT FK_ActivityPartTID       FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityParticipants        ADD CONSTRAINT FK_ActivityPartAID       FOREIGN KEY (activityID)      REFERENCES TActivityInfo     (activityID);/
                 ALTER TABLE TActivityParticipants        ADD CONSTRAINT FK_ActivityPartOT        FOREIGN KEY (objectType)      REFERENCES TParticipantType  (participantTypeID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartTID  FOREIGN KEY (templateID)      REFERENCES TTemplate         (templateID);/
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartARID FOREIGN KEY (activityRouteID) REFERENCES TActivityRoute    (activityRouteID);/
                 ALTER TABLE TActivityRouteParticipants   ADD CONSTRAINT FK_ActivityRoutePartOT   FOREIGN KEY (objectType)      REFERENCES TParticipantType  (participantTypeID);/
-                                                                                                                                                            
-                                                                                                                                                            
-                                                                                                                                                            
+                
+                
+                
                 ALTER TABLE TFlowInfo                    ADD CONSTRAINT FK_FlowInfoTID           FOREIGN KEY (flowTemplateID)  REFERENCES TTemplate         (templateID);/
-                                                                                                                                                            
-                ALTER TABLE TFlowComment                 ADD CONSTRAINT FK_FlowCommentWID        FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
-                ALTER TABLE TFlowComment                 ADD CONSTRAINT FK_FlowCommentSID        FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TProcess                     ADD CONSTRAINT FK_ProcessWID            FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TProcess                     ADD CONSTRAINT FK_ProcessSID            FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartPID        FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartWID        FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TProcessParticipants         ADD CONSTRAINT FK_ProcessPartSID        FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperPID       FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperWID       FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TFlowLastOperator            ADD CONSTRAINT FK_FlowLastOperSID       FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                                                                                                                            
+                
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperPID     FOREIGN KEY (processID)       REFERENCES TProcess          (processID);/
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperWID     FOREIGN KEY (workID)          REFERENCES TFlowInfo         (workID);/
                 ALTER TABLE TFlowFutureOperator          ADD CONSTRAINT FK_FlowFutureOperSID     FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo         (serviceDataID);/
-                                                         
-                                                         
-                                                         
+                
+                
+                
                 ALTER TABLE TFlowInfo_History            ADD CONSTRAINT FK_FlowInfoHisTID        FOREIGN KEY (flowTemplateID)  REFERENCES TTemplate         (templateID);/
-                                                         
-                ALTER TABLE TFlowComment_History         ADD CONSTRAINT FK_FlowCommentHisWID     FOREIGN KEY (workID)          REFERENCES TFlowInfo_History (workID);/
-                ALTER TABLE TFlowComment_History         ADD CONSTRAINT FK_FlowCommentHisSID     FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo_History (serviceDataID);/
-                                                                                                                               
+                
                 ALTER TABLE TProcess_History             ADD CONSTRAINT FK_ProcessHisWID         FOREIGN KEY (workID)          REFERENCES TFlowInfo_History (workID);/
                 ALTER TABLE TProcess_History             ADD CONSTRAINT FK_ProcessHisSID         FOREIGN KEY (serviceDataID)   REFERENCES TFlowInfo_History (serviceDataID);/
                 
@@ -255,7 +284,7 @@
             </trigger>
             
             <comment>2023-07-26升级版本</comment>
-            <create if="启用 == IsCreateDB_MS_CDC.getValue">TUpgrade20230726</create>
+            <create>TUpgrade20230726</create>
             
         </sql>
         

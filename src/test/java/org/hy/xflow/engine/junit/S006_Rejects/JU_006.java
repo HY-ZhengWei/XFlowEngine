@@ -7,6 +7,7 @@ import java.util.List;
 import org.hy.common.Help;
 import org.hy.common.xml.log.Logger;
 import org.hy.xflow.engine.XFlowEngine;
+import org.hy.xflow.engine.bean.FlowComment;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
@@ -97,20 +98,48 @@ public class JU_006 extends BaseJunit
     
     
     
+    /**
+     * 添加实例备注
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-07-27
+     * @version     v1.0
+     *
+     */
+    @Test
     public void test_添加实例备注()
     {
-        FlowInfo v_FlowInfo = null;
+        boolean     v_Ret         = false;
+        FlowComment v_FlowComment = new FlowComment();
+        
+        v_FlowComment.setServiceDataID("HY20230601-001");
+        v_FlowComment.setCreaterID("99099");
+        v_FlowComment.setCreater("张博超");
+        v_FlowComment.setComment("测试");
         
         try
         {
-            v_FlowInfo = XFlowEngine.getInstance().createByName(manager ,$TemplateName ,serviceDataID);
+            XFlowEngine.getInstance().addComment(v_FlowComment);
         }
         catch (Exception exce)
         {
             $Logger.error(exce);
         }
         
-        assertTrue(v_FlowInfo != null);
+        assertTrue(v_Ret);
+    }
+    
+    
+    
+    @Test
+    public void test_查询实例备注()
+    {
+        List<FlowComment> v_FComments = null;
+        
+        v_FComments = XFlowEngine.getInstance().queryCommentByWorkID       ("XFBC8926C89E6B421C8AE941B53BCFBF0C");
+        v_FComments = XFlowEngine.getInstance().queryCommentByServiceDataID("HY20230601-001");
+        
+        $Logger.info(v_FComments);
     }
     
     

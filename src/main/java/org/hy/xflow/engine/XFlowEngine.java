@@ -2172,7 +2172,7 @@ public class XFlowEngine
             return false;
         }
         
-        if ( Help.isNull(io_FlowComment.getWorkID()) || Help.isNull(io_FlowComment.getServiceDataID()) )
+        if ( Help.isNull(io_FlowComment.getWorkID()) && Help.isNull(io_FlowComment.getServiceDataID()) )
         {
             $Logger.warn("WorkID and ServiceDataID is null.");
             return false;
@@ -2185,9 +2185,9 @@ public class XFlowEngine
         }
         
         if ( Help.isNull(io_FlowComment.getCommentTitle())
-          || Help.isNull(io_FlowComment.getComment())
-          || Help.isNull(io_FlowComment.getCommentFiles())
-          || Help.isNull(io_FlowComment.getCommentImages()) )
+          && Help.isNull(io_FlowComment.getComment())
+          && Help.isNull(io_FlowComment.getCommentFiles())
+          && Help.isNull(io_FlowComment.getCommentImages()) )
         {
             $Logger.warn("Comment is null.");
             return false;

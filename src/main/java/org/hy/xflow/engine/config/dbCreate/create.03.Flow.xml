@@ -39,6 +39,8 @@
                 
                 ALTER TABLE TFlowInfo ADD CONSTRAINT PK_TFlowInfo PRIMARY KEY (workID);/
                 
+                ALTER TABLE TFlowInfo ADD CONSTRAINT IDX_FlowInfo_SID UNIQUE (serviceDataID);/
+                
                 ALTER TABLE TFlowInfo ADD CONSTRAINT FK_FlowInfoTID FOREIGN KEY (flowTemplateID) REFERENCES TTemplate (templateID);/
                 
                 COMMENT ON TABLE  TFlowInfo                               IS '工作流信息表';/
@@ -154,6 +156,8 @@
             
             <content if="ORACLE == DSG_XFlow.getDbProductType">
                 <![CDATA[
+                ALTER TABLE TFlowInfo         ADD CONSTRAINT UK_FlowInfo_SID    UNIQUE (serviceDataID);/
+                
                 CREATE TABLE TFlowComment
                 (
                  fcID               VARCHAR2(64)                     NOT NULL
@@ -197,6 +201,8 @@
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
+                ALTER TABLE TFlowInfo         ADD CONSTRAINT UK_FlowInfo_SID    UNIQUE (serviceDataID);/
+                
                 CREATE TABLE TFlowComment
                 (
                  fcID               VARCHAR(64)                     NOT NULL COMMENT '工作流备注主键ID'
@@ -226,6 +232,8 @@
             
             <content if="SQLSERVER == DSG_XFlow.getDbProductType">
                 <![CDATA[
+                ALTER TABLE TFlowInfo         ADD CONSTRAINT UK_FlowInfo_SID    UNIQUE (serviceDataID);/
+                
                 CREATE TABLE TFlowComment
                 (
                  fcID               VARCHAR(64)                     NOT NULL
