@@ -1,6 +1,6 @@
 Manifest-Version: 1.1.7
 Created-By: HY.ZhengWei@qq.com  2018
-Specification-Version: 1.1.7  2023-07-27
+Specification-Version: 1.1.7  2023-07-28
 SourceCode: https://github.com/HY-ZhengWei/XFlowEngine
 SourceCodeChina: https://gitee.com/HY-ZhengWei/XFlowEngine
 Build-JDK: 1.8
