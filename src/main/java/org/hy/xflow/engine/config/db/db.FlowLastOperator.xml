@@ -35,6 +35,32 @@
         
         
         
+        <sql id="XSQL_XFlow_TFlowLastOperator_ToHistory_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowLastOperator
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TFlowLastOperator
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>用于转历史单时：删除工作流实例的最后操作人</comment>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_XFlow_TFlowLastOperator_GoOn_Del"> 
         
             <dataSourceGroup ref="DSG_XFlow" />

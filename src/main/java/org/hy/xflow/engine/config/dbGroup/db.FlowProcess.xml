@@ -295,34 +295,33 @@
             
             
             <sqlNode>
-                <beforeCommit>true</beforeCommit>
-                <sql  ref="XSQL_XFlow_TFlowFutureOperator_Del" />
-                <type ref="this.$Type_ExecuteCommit" />
+                <sql  ref="XSQL_XFlow_TFlowFutureOperator_ToHistory_Del" />
+                <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
             <sqlNode>
-                <sql  ref="XSQL_XFlow_TFlowLastOperator_Del" />
-                <type ref="this.$Type_ExecuteCommit" />
+                <sql  ref="XSQL_XFlow_TFlowLastOperator_ToHistory_Del" />
+                <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
             <sqlNode>
                 <sql  ref="XSQL_XFlow_ProcessParticipants_ToHistory_Del" />
-                <type ref="this.$Type_ExecuteCommit" />
+                <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
             <sqlNode>
                 <sql  ref="XSQL_XFlow_Process_ToHistory_Del" />
-                <type ref="this.$Type_ExecuteCommit" />
+                <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
             <sqlNode>
                 <sql  ref="XSQL_XFlow_FlowComment_ToHistory_Del" />
-                <type ref="this.$Type_ExecuteCommit" />
+                <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
             <sqlNode>
                 <sql  ref="XSQL_XFlow_FlowInfo_ToHistory_Del" />
-                <type ref="this.$Type_ExecuteCommit" />
+                <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
             <comment>全流转结束后转历史</comment>
