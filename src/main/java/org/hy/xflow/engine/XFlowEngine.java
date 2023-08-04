@@ -61,6 +61,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  *                                     2.督查的相关查询接口
  *              v5.0  2023-07-27  添加：1.工作流备注查询接口两个
  *                                添加：2.工作流备注添加接口
+ *              v6.0  2023-08-02  添加：流程的发起人有权随时结束整个流程
  */
 @Xjava
 public class XFlowEngine
@@ -1879,6 +1880,132 @@ public class XFlowEngine
                                      + v_NextRoutes.getCurrentActivity().getActivityCode()
                                      + "]  RejectActivityCode[" + StringHelp.toString(Help.toListKeys(i_ActivityUsers))
                                      + "] User[" + i_User.getUserID() + "]");
+        }
+    }
+    
+    
+    
+    /**
+     * 流程的发起人有权随时结束整个流程。按第三方使用系统的业务数据ID
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-08-03
+     * @version     v1.0
+     *
+     * @param i_User                操作用户
+     * @param i_ServiceDataID       第三方使用系统的业务数据ID
+     * @param i_ProcessExtra        流转的附加信息。非必填
+     * @return
+     */
+    public FlowProcess toFinishCreaterByServiceDataID(User i_User ,String i_ServiceDataID ,FlowProcess i_ProcessExtra)
+    {
+        String v_WorkID = this.futureOperatorService.querySToWorkID(i_ServiceDataID);
+        if ( Help.isNull(v_WorkID) )
+        {
+            throw new NullPointerException("ServiceDataID[" + i_ServiceDataID + "] is not find WorkID.");
+        }
+        
+        return this.toFinishCreater(i_User ,v_WorkID ,i_ProcessExtra);
+    }
+    
+    
+    
+    /**
+     * 流程的发起人有权随时结束整个流程
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-08-02
+     * @version     v1.0
+     *
+     * @param i_User                操作用户
+     * @param i_WorkID              工作流ID
+     * @param i_ProcessExtra        流转的附加信息。非必填
+     * @return
+     */
+    public FlowProcess toFinishCreater(User i_User ,String i_WorkID ,FlowProcess i_ProcessExtra)
+    {
+        if ( i_User == null )
+        {
+            throw new NullPointerException("User is null.");
+        }
+        else if ( Help.isNull(i_User.getUserID()) )
+        {
+            throw new NullPointerException("UserID is null.");
+        }
+        else if ( Help.isNull(i_WorkID) )
+        {
+            throw new NullPointerException("WorkID is null.");
+        }
+       
+        FlowInfo v_FlowInfo = this.flowInfoService.queryByWorkID(i_WorkID);
+        if ( v_FlowInfo == null || Help.isNull(v_FlowInfo.getWorkID()))
+        {
+            throw new NullPointerException("WorkID[" + i_WorkID + "] is not exists.");
+        }
+        
+        boolean v_IsCreater = i_User.getUserID().equals(v_FlowInfo.getCreaterID());
+        if ( !v_IsCreater )
+        {
+            throw new RuntimeException("User[" + i_User.getUserID() + "] is not create WorkID[" + i_WorkID + "].");
+        }
+        
+        Template v_Template = this.templateService.queryByID(v_FlowInfo.getFlowTemplateID());
+        if ( v_Template == null )
+        {
+            throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not exists. WorkID[" + i_WorkID + "] for User[" + i_User.getUserID() + "]");
+        }
+        
+        Map<String ,ActivityInfo> v_EndActivitys = v_Template.getActivityRouteTree().getEndActivity();
+        if ( Help.isNull(v_EndActivitys) )
+        {
+            throw new NullPointerException("Template[" + v_FlowInfo.getFlowTemplateID() + "] is not end activity. WorkID[" + i_WorkID + "] for User[" + i_User.getUserID() + "]");
+        }
+        
+        ActivityInfo      v_StaActivity = v_Template.getActivityRouteTree().getStartActivity();
+        ActivityInfo      v_EndActivity = v_EndActivitys.values().iterator().next();
+        List<FlowProcess> v_ProcessList = this.flowProcessService.queryByWorkID(i_WorkID);
+        FlowProcess       v_Previous    = v_ProcessList.get(0);
+        FlowProcess       v_NewProcess  = new FlowProcess();
+        
+        v_NewProcess.init_ToNext(i_User ,v_FlowInfo ,v_Previous ,v_StaActivity.getRoutes().get(0));
+        v_NewProcess.setCurrentActivityID  (v_EndActivity.getActivityID());
+        v_NewProcess.setCurrentActivityCode(v_EndActivity.getActivityCode());
+        v_NewProcess.setCurrentActivityName(v_EndActivity.getActivityName());
+        v_NewProcess.setPreviousOperateTypeID(RouteTypeEnum.$Finish.getValue());
+        v_Previous.setOperateTypeID(RouteTypeEnum.$Finish.getValue());
+        v_Previous.setOperateType(RouteTypeEnum.$Finish.getDesc());
+        
+        // 驳回原因或附加数据，应当记录到当前流转中，而不是下一条流转中
+        if ( i_ProcessExtra != null )
+        {
+            v_NewProcess.setOperateFiles(Help.NVL(i_ProcessExtra.getOperateFiles()));
+            v_NewProcess.setOperateDatas(Help.NVL(i_ProcessExtra.getOperateDatas()));
+            v_NewProcess.setInfoComment( Help.NVL(i_ProcessExtra.getInfoComment()));
+        }
+        
+        FlowInfo v_Flow = new FlowInfo();
+        v_Flow.setWorkID(       i_WorkID);
+        v_Flow.setLastProcessID(v_Previous.getProcessID());
+        v_Flow.setLastTime(new Date());
+        v_Flow.setLastUserID(       i_User.getUserID());
+        v_Flow.setLastUser(Help.NVL(i_User.getUserName()));
+        v_Flow.setLastOrgID(        i_User.getOrgID());
+        v_Flow.setLastOrg(Help.NVL( i_User.getOrgName()));
+        
+        v_ProcessList.clear();
+        v_ProcessList.add(v_NewProcess);
+        boolean v_Ret = this.flowInfoService.toNext(v_Flow ,v_ProcessList ,v_Previous);
+        
+        if ( v_Ret )
+        {
+            this.flowInfoService.toHistory(i_WorkID);
+            this.futureOperatorService.delCacheToHistory(v_Previous);
+            
+            return v_NewProcess;
+        }
+        else
+        {
+            throw new RuntimeException("WorkID[" + i_WorkID + "] to finish is error. User[" + i_User.getUserID() + "] is creater.");
         }
     }
     

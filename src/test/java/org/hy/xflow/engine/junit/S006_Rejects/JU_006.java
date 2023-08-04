@@ -99,6 +99,25 @@ public class JU_006 extends BaseJunit
     
     
     /**
+     * 创建者随时随地的结束流程
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-08-03
+     * @version     v1.0
+     *
+     */
+    @Test
+    public void test_创建者结束流程()
+    {
+        User v_Creater = new User();
+        v_Creater.setUserID("31415926");
+        
+        XFlowEngine.getInstance().toFinishCreater(v_Creater ,"XF004B068321BB4DF8808481487CD48E69" ,null);
+    }
+    
+    
+    
+    /**
      * 添加实例备注
      * 
      * @author      ZhengWei(HY)
