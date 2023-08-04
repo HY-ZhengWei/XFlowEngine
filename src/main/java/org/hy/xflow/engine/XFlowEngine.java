@@ -2364,7 +2364,14 @@ public class XFlowEngine
         }
         io_FlowComment.setObjectType(v_PPObjectType.getObjectType());
         
-        return this.flowInfoService.addComment(io_FlowComment);
+        if ( v_Flow.getIsHistory() == 1 )
+        {
+            return this.flowInfoService.addCommentToHistory(io_FlowComment);
+        }
+        else
+        {
+            return this.flowInfoService.addComment(io_FlowComment);
+        }
     }
     
 }

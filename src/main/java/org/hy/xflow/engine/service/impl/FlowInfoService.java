@@ -243,4 +243,28 @@ public class FlowInfoService extends BaseService implements IFlowInfoService
         return this.flowCommendDAO.addFlowComment(io_FlowComment) == 1;
     }
     
+    
+    
+    /**
+     * 添加工作流备注信息（转历史的）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-08-04
+     * @version     v1.0
+     *
+     * @param i_FlowComment
+     * @return
+     */
+    @Override
+    public boolean addCommentToHistory(FlowComment io_FlowComment)
+    {
+        if ( Help.isNull(io_FlowComment.getFcID()) )
+        {
+            io_FlowComment.setFcID(StringHelp.getUUID());
+        }
+        
+        io_FlowComment.setCreateTime(new Date());
+        return this.flowCommendDAO.addFlowCommentToHistory(io_FlowComment) == 1;
+    }
+    
 }

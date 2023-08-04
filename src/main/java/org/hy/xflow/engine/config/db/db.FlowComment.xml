@@ -111,6 +111,52 @@
         
         
         
+        <sql id="XSQL_XFlow_FlowComment_Insert_ToHistory"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowComment
+                       (
+                        fcID         
+                       ,workID       
+                       ,serviceDataID
+                       ,commentType  
+                       ,commentTitle 
+                       ,comment      
+                       ,commentImages
+                       ,commentFiles 
+                       ,objectType   
+                       ,createrID    
+                       ,creater      
+                       ,createOrgID  
+                       ,createOrg    
+                       ,createTime   
+                       )
+                VALUES (
+                        ':fcID'
+                       ,':workID'
+                       ,':serviceDataID'
+                       ,':commentType'
+                       ,':commentTitle'
+                       ,':comment'
+                       ,':commentImages'
+                       ,':commentFiles'
+                       ,':objectType'
+                       ,':createrID'
+                       ,':creater'
+                       ,':createOrgID'
+                       ,':createOrg'
+                       ,':createTime.fullMilli'
+                       )
+                ]]>
+            </content>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_XFlow_FlowComment_ToHistory"> 
         
             <dataSourceGroup ref="DSG_XFlow" />

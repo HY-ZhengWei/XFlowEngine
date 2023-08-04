@@ -160,6 +160,20 @@ public interface IFlowInfoService
      * @param i_FlowComment
      * @return
      */
-    public boolean addComment(FlowComment i_FlowComment);
+    public boolean addComment(FlowComment io_FlowComment);
+    
+    
+    
+    /**
+     * 添加工作流备注信息（转历史的）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2023-08-04
+     * @version     v1.0
+     *
+     * @param i_FlowComment
+     * @return
+     */
+    public boolean addCommentToHistory(FlowComment io_FlowComment);
     
 }
