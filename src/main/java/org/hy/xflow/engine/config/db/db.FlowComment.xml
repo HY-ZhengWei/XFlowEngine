@@ -117,7 +117,7 @@
             
             <content>
                 <![CDATA[
-                INSERT  INTO TFlowComment
+                INSERT  INTO TFlowComment_History
                        (
                         fcID         
                        ,workID       
