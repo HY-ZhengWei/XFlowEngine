@@ -20,13 +20,14 @@ import org.hy.xflow.engine.service.IFlowProcessService;
  * @author      ZhengWei(HY)
  * @createDate  2018-04-27
  * @version     v1.0
+ *              v2.0  2024-02-23  添加：按人员信息查询已办时，可按流程模板名称过滤
  */
 @Xjava
 public class FlowProcessService extends BaseService implements IFlowProcessService
 {
     
     @Xjava
-    private IFlowProcessDAO flowProcessDAO; 
+    private IFlowProcessDAO flowProcessDAO;
     
     
     
@@ -43,6 +44,7 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @param i_WorkID  工作流实例ID
      * @return
      */
+    @Override
     public List<FlowProcess> queryByWorkID(String i_WorkID)
     {
         List<FlowProcess> v_Ret = this.flowProcessDAO.queryByWorkID(i_WorkID);
@@ -70,6 +72,7 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
      * @return
      */
+    @Override
     public List<FlowProcess> queryByServiceDataID(String i_ServiceDataID)
     {
         List<FlowProcess> v_Ret = this.flowProcessDAO.queryByServiceDataID(i_ServiceDataID);
@@ -90,13 +93,16 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @author      ZhengWei(HY)
      * @createDate  2018-06-11
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
      * @return
      */
-    public List<String> queryWorkIDsByDone(User i_User)
+    @Override
+    public List<String> queryWorkIDsByDone(User i_User ,String i_TemplateName)
     {
-        return this.flowProcessDAO.queryWorkIDsByDone(i_User);
+        return this.flowProcessDAO.queryWorkIDsByDone(i_User.getUserID() ,i_TemplateName);
     }
     
     
@@ -107,13 +113,16 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @author      ZhengWei(HY)
      * @createDate  2018-06-11
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
      * @return
      */
-    public List<String> queryServiceDataIDsByDone(User i_User)
+    @Override
+    public List<String> queryServiceDataIDsByDone(User i_User ,String i_TemplateName)
     {
-        return this.flowProcessDAO.queryServiceDataIDsByDone(i_User);
+        return this.flowProcessDAO.queryServiceDataIDsByDone(i_User.getUserID() ,i_TemplateName);
     }
     
     
@@ -128,6 +137,7 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @param i_Process
      * @return
      */
+    @Override
     public FlowProcess querySummary(FlowProcess i_Process)
     {
         return this.flowProcessDAO.querySummary(i_Process);
@@ -145,6 +155,7 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @param i_WorkID  工作流实例ID
      * @return
      */
+    @Override
     public List<FlowProcess> querySummarysByWorkID(String i_WorkID)
     {
         List<FlowProcess> v_Ret = this.flowProcessDAO.querySummarysByWorkID(i_WorkID);
@@ -169,6 +180,7 @@ public class FlowProcessService extends BaseService implements IFlowProcessServi
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
      * @return
      */
+    @Override
     public List<FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID)
     {
         List<FlowProcess> v_Ret = this.flowProcessDAO.querySummarysByServiceDataID(i_ServiceDataID);

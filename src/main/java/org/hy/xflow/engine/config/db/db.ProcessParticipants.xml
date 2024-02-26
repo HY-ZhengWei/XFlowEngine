@@ -111,12 +111,17 @@
                        ,A.serviceDataID
                   FROM  TProcessParticipants  A
                        ,TParticipantType      B
+                       ,TFlowInfo             C
+                       ,TTemplate             T
                  WHERE  B.participantType LIKE '%抄送%'
                    AND  A.objectType         = B.participantTypeID 
+                   AND  A.workID             = C.workID 
+                   AND  C.flowTemplateID     = T.templateID 
+             <[    AND  T.templateName       = ':templateName'    ]>
                    AND (
-                        A.objectID           = ':userID'
-             <[     OR  A.objectID           = ':orgID'     ]>
-             <[     OR  A.objectID          IN (:roleIDs)   ]>
+                        A.objectID           = ':user.userID'
+             <[     OR  A.objectID           = ':user.orgID'           ]>
+             <[     OR  A.objectID          IN (:user.roleIDs)         ]>
                        )
                  ORDER  BY A.workID
                 ]]>
@@ -144,12 +149,17 @@
                        ,A.serviceDataID
                   FROM  TProcessParticipants_History  A
                        ,TParticipantType              B
+                       ,TFlowInfo_History             C
+                       ,TTemplate                     T
                  WHERE  B.participantType LIKE '%抄送%'
                    AND  A.objectType         = B.participantTypeID 
+                   AND  A.workID             = C.workID 
+                   AND  C.flowTemplateID     = T.templateID 
+             <[    AND  T.templateName       = ':templateName'    ]>
                    AND (
-                        A.objectID           = ':userID'
-             <[     OR  A.objectID           = ':orgID'     ]>
-             <[     OR  A.objectID          IN (:roleIDs)   ]>
+                        A.objectID           = ':user.userID'
+             <[     OR  A.objectID           = ':user.orgID'      ]>
+             <[     OR  A.objectID          IN (:user.roleIDs)    ]>
                        )
                  ORDER  BY A.workID
                 ]]>

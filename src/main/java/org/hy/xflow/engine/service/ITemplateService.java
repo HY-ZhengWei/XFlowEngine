@@ -62,6 +62,20 @@ public interface ITemplateService
     
     
     /**
+     * 按模板ID查询模板信息。内部组合生成关系数据网。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-04-19
+     * @version     v1.0
+     *
+     * @param i_TemplateID
+     * @return
+     */
+    public Template queryByIDByTrue(String i_TemplateID);
+    
+    
+    
+    /**
      * 按模板名称查询版本号最大的有效的模板信息。内部组合生成关系数据网。
      * 
      * @author      ZhengWei(HY)

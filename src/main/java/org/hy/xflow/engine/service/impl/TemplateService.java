@@ -151,7 +151,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      * @param i_TemplateID
      * @return
      */
-    private synchronized Template queryByIDByTrue(String i_TemplateID)
+    public synchronized Template queryByIDByTrue(String i_TemplateID)
     {
         Template v_Template = $CacheTemplates.get(i_TemplateID);
         if ( v_Template != null )
@@ -339,6 +339,7 @@ public class TemplateService extends BaseService implements ITemplateService ,Co
      * @param i_RequestData
      * @return
      */
+    @Override
     public CommunicationResponse communication(CommunicationRequest i_RequestData)
     {
         CommunicationResponse v_ResponseData = new CommunicationResponse();

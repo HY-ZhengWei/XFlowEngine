@@ -7,7 +7,6 @@ import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
 import org.hy.common.xml.annotation.Xsql;
 import org.hy.xflow.engine.bean.FlowProcess;
-import org.hy.xflow.engine.bean.User;
 
 
 
@@ -19,6 +18,7 @@ import org.hy.xflow.engine.bean.User;
  * @author      ZhengWei(HY)
  * @createDate  2018-04-27
  * @version     v1.0
+ *              v2.0  2024-02-23  添加：按人员信息查询已办时，可按流程模板名称过滤
  */
 @Xjava(id="FlowProcessDAO" ,value=XType.XSQL)
 public interface IFlowProcessDAO
@@ -98,12 +98,15 @@ public interface IFlowProcessDAO
      * @author      ZhengWei(HY)
      * @createDate  2018-06-11
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_UserID        流程用户ID
+     * @param i_TemplateName  流程模板名称
      * @return
      */
     @Xsql("XSQL_XFlow_Process_queryWorkIDsByDone")
-    public List<String> queryWorkIDsByDone(User i_User);
+    public List<String> queryWorkIDsByDone(@Xparam(id="userID")       String i_UserID
+                                          ,@Xparam(id="templateName") String i_TemplateName);
     
     
     
@@ -113,12 +116,15 @@ public interface IFlowProcessDAO
      * @author      ZhengWei(HY)
      * @createDate  2018-06-11
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_UserID        流程用户ID
+     * @param i_TemplateName  流程模板名称
      * @return
      */
     @Xsql("XSQL_XFlow_Process_queryServiceDataIDsByDone")
-    public List<String> queryServiceDataIDsByDone(User i_User);
+    public List<String> queryServiceDataIDsByDone(@Xparam(id="userID")       String i_UserID
+                                                 ,@Xparam(id="templateName") String i_TemplateName);
     
     
     

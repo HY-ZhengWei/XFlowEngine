@@ -18,6 +18,7 @@ import org.hy.xflow.engine.bean.FutureOperator;
  * @author      ZhengWei(HY)
  * @createDate  2018-05-15
  * @version     v1.0
+ *              v2.0  2024-02-23  添加：人和流程模板查询的高速缓存方法
  */
 @Xjava(id="FlowFutureOperatorDAO" ,value=XType.XSQL)
 public interface IFlowFutureOperatorDAO
@@ -26,7 +27,7 @@ public interface IFlowFutureOperatorDAO
     /**
      * 查询所有未来操作人，并分区保存，用于人找实例ID的高速缓存查询
      * 
-     *   Map.key分区为参与人的形式的值：objectType:objectID 
+     *   Map.key分区为参与人的形式的值：objectType:objectID
      *   Map.value元素为工作流实例ID：workID
      * 
      * @author      ZhengWei(HY)
@@ -41,10 +42,27 @@ public interface IFlowFutureOperatorDAO
     
     
     /**
+     * 查询所有未来操作人，并分区保存，用于人和流程模板找实例ID的高速缓存查询
+     * 
+     *   Map.key分区为参与人的形式的值：objectType:objectID:TemplateName
+     *   Map.value元素为工作流实例ID：workID
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-02-23
+     * @version     v1.0
+     *
+     * @return
+     */
+    @Xsql(id="XSQL_XFlow_TFlowFutureOperator_QueryAllFroTemplateName" ,cacheID="$FutureOperatorsFroTemplateName")
+    public PartitionMap<String ,FutureOperator> queryAllFroTemplateName();
+    
+    
+    
+    /**
      * 查询所有未来操作人，并分区保存，用于实例ID找人的高速缓存查询
      * 
      *   Map.key分区为工作流实例ID：workID
-     *   Map.value元素为参与人的形式的值：objectType:objectID 
+     *   Map.value元素为参与人的形式的值：objectType:objectID
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15

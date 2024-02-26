@@ -5,6 +5,7 @@ import java.util.List;
 import org.hy.common.PartitionMap;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.FutureOperator;
+import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 
@@ -18,6 +19,7 @@ import org.hy.xflow.engine.enums.ParticipantTypeEnum;
  * @author      ZhengWei(HY)
  * @createDate  2018-05-15
  * @version     v1.0
+ *              v2.0  2024-02-23  添加：按人员信息查询待办时，可按流程模板名称过滤
  */
 public interface IFlowFutureOperatorService
 {
@@ -33,11 +35,29 @@ public interface IFlowFutureOperatorService
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
      * @return
      */
-    public List<String> queryWorkIDs(User i_User);
+    public List<String> queryWorkIDs(User i_User ,String i_TemplateName);
+    
+    
+    
+    /**
+     * 查询所有未来操作人，并分区保存，用于高速缓存查询（按流程模板名称过滤）
+     * 
+     *   Map.key分区为参与人的形式的值：objectType:objectID
+     *   Map.value元素为工作流实例ID：workID
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-02-23
+     * @version     v1.0
+     *
+     * @return
+     */
+    public PartitionMap<String ,FutureOperator> queryAllByForTemplateName();
     
     
     
@@ -51,11 +71,13 @@ public interface IFlowFutureOperatorService
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
      * @return
      */
-    public List<String> queryServiceDataIDs(User i_User);
+    public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName);
     
     
     
@@ -92,10 +114,12 @@ public interface IFlowFutureOperatorService
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
+     *              v2.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
-    public void updateCache(FlowProcess i_Process);
+    public void updateCache(FlowProcess i_Process ,Template i_Template);
     
     
     
@@ -105,10 +129,13 @@ public interface IFlowFutureOperatorService
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
+     *              v3.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
-    public void addCache(FlowProcess i_Process);
+    public void addCache(FlowProcess i_Process ,Template i_Template);
     
     
     
@@ -118,10 +145,13 @@ public interface IFlowFutureOperatorService
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
+     *              v3.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
-    public void delCache(FlowProcess i_Process);
+    public void delCache(FlowProcess i_Process ,Template i_Template);
     
     
     
@@ -131,10 +161,12 @@ public interface IFlowFutureOperatorService
      * @author      ZhengWei(HY)
      * @createDate  2023-02-27
      * @version     v1.0
+     *              v2.0  2024-02-26  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
-    public void delCacheByAll(FlowProcess i_Process);
+    public void delCacheByAll(FlowProcess i_Process ,Template i_Template);
     
     
     
@@ -144,10 +176,13 @@ public interface IFlowFutureOperatorService
      * @author      ZhengWei(HY)
      * @createDate  2019-09-11
      * @version     v1.0
+     *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
+     *              v3.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
-    public void delCacheToHistory(FlowProcess i_Process);
+    public void delCacheToHistory(FlowProcess i_Process ,Template i_Template);
     
     
     

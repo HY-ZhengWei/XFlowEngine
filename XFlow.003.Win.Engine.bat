@@ -29,3 +29,4 @@ del /Q hy.xflow.engine-sources.jar
 rd /s/q META-INF
 cd ..\..\..
 
+pause

@@ -8,8 +8,8 @@ import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
 import org.hy.common.xml.annotation.Xsql;
 import org.hy.xflow.engine.bean.FlowComment;
+import org.hy.xflow.engine.bean.FlowData;
 import org.hy.xflow.engine.bean.ProcessParticipant;
-import org.hy.xflow.engine.bean.User;
 
 
 
@@ -21,6 +21,8 @@ import org.hy.xflow.engine.bean.User;
  * @author      ZhengWei(HY)
  * @createDate  2018-05-08
  * @version     v1.0
+ *              v2.0  2024-02-23  添加：按人员信息查询督查时，可按流程模板名称过滤
+ *                                添加：按人员信息查询督办时，可按流程模板名称过滤
  */
 @Xjava(id="ProcessParticipantsDAO" ,value=XType.XSQL)
 public interface IProcessParticipantsDAO
@@ -62,12 +64,13 @@ public interface IProcessParticipantsDAO
      * @author      ZhengWei(HY)
      * @createDate  2023-06-01
      * @version     v1.0
+     *              v2.0  2024-02-23  添加：按人员信息查询督办时，可按流程模板名称过滤
      *
-     * @param i_User
+     * @param i_FlowData  工作流接口数据
      * @return
      */
     @Xsql("XSQL_XFlow_ProcessParticipants_QueryBySupervise")
-    public List<ProcessParticipant> queryBySupervise(User i_User);
+    public List<ProcessParticipant> queryBySupervise(FlowData i_FlowData);
     
     
     
@@ -77,12 +80,13 @@ public interface IProcessParticipantsDAO
      * @author      ZhengWei(HY)
      * @createDate  2023-06-01
      * @version     v1.0
+     *              v2.0  2024-02-23  添加：按人员信息查询督查时，可按流程模板名称过滤
      *
-     * @param i_User
+     * @param i_FlowData  工作流接口数据
      * @return
      */
     @Xsql("XSQL_XFlow_ProcessParticipants_QueryBySupervision")
-    public List<ProcessParticipant> queryBySupervision(User i_User);
+    public List<ProcessParticipant> queryBySupervision(FlowData i_FlowData);
     
     
     

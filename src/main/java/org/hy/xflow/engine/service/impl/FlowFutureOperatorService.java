@@ -13,12 +13,14 @@ import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.FutureOperator;
 import org.hy.xflow.engine.bean.ProcessParticipant;
+import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.bean.UserRole;
 import org.hy.xflow.engine.common.BaseService;
 import org.hy.xflow.engine.dao.IFlowFutureOperatorDAO;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 import org.hy.xflow.engine.service.IFlowFutureOperatorService;
+import org.hy.xflow.engine.service.ITemplateService;
 
 
 
@@ -33,6 +35,7 @@ import org.hy.xflow.engine.service.IFlowFutureOperatorService;
  *              v2.0  2019-09-12  1. 优化：从业务ID找工作流实例ID
  *                                2. 添加：支持多路并行路由的流程
  *              v3.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
+ *              v4.0  2024-02-23  1. 添加：按人员信息查询待办时，可按流程模板名称过滤
  */
 @Xjava
 public class FlowFutureOperatorService extends BaseService implements IFlowFutureOperatorService ,CommunicationListener
@@ -44,6 +47,13 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *   Map.value元素为工作流实例ID：workID
      */
     private static PartitionMap<String ,FutureOperator> $FutureOperatorsByWorkID          = null;
+    
+    /**
+     * 用人和流程模块找实例的高速缓存。
+     *   Map.key分区为参与人的形式的值：objectType:objectID:templateName
+     *   Map.value元素为工作流实例ID：workID
+     */
+    private static PartitionMap<String ,FutureOperator> $FutureOperatorsFroTemplateName   = null;
     
     /**
      * 用实例找人的高速缓存。
@@ -64,6 +74,9 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     @Xjava
     private IFlowFutureOperatorDAO futureOperatorDAO;
     
+    @Xjava
+    private ITemplateService       templateService;
+    
     
     
     /**
@@ -76,14 +89,16 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
      * @return
      */
     @Override
-    public List<String> queryWorkIDs(User i_User)
+    public List<String> queryWorkIDs(User i_User ,String i_TemplateName)
     {
-        return queryIDs(i_User ,"workID");
+        return queryIDs(i_User ,i_TemplateName ,"workID");
     }
     
     
@@ -98,14 +113,16 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
      * @return
      */
     @Override
-    public List<String> queryServiceDataIDs(User i_User)
+    public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName)
     {
-        return queryIDs(i_User ,"serviceDataID");
+        return queryIDs(i_User ,i_TemplateName ,"serviceDataID");
     }
     
     
@@ -122,18 +139,28 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @version     v1.0
      *              v2.0  2023-02-10  添加：三种角色的抄送功能
      *              v3.0  2023-06-01  删除：使用 "督办" 查询接口代替 "抄送"
-     *
-     * @param i_User
-     * @param i_IDName  实例ID或业务ID的属性名称。它决定着函数返回的是实例ID，还是业务ID。
+     *              v4.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @param i_IDName        实例ID或业务ID的属性名称。它决定着函数返回的是实例ID，还是业务ID。
      * @return
      */
     @SuppressWarnings("unchecked")
-    private List<String> queryIDs(User i_User ,String i_IDName)
+    private List<String> queryIDs(User i_User ,String i_TemplateName ,String i_IDName)
     {
         List<String>         v_IDs  = new ArrayList<String>();
         List<FutureOperator> v_Temp = null;
         
-        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID());
+        if ( Help.isNull(i_TemplateName) )
+        {
+            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID());
+        }
+        else
+        {
+            v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+        }
+        
         if ( !Help.isNull(v_Temp) )
         {
             v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
@@ -150,7 +177,15 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
         
         if ( !Help.isNull(i_User.getOrgID()) )
         {
-            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$Org.getValue() + ":" + i_User.getOrgID());
+            if ( Help.isNull(i_TemplateName) )
+            {
+                v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$Org.getValue() + ":" + i_User.getOrgID());
+            }
+            else
+            {
+                v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$Org.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+            }
+            
             if ( !Help.isNull(v_Temp) )
             {
                 v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
@@ -170,7 +205,15 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
         {
             for (UserRole v_Role : i_User.getRoles())
             {
-                v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$Role.getValue() + ":" + v_Role.getRoleID());
+                if ( Help.isNull(i_TemplateName) )
+                {
+                    v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$Role.getValue() + ":" + v_Role.getRoleID());
+                }
+                else
+                {
+                    v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$Role.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+                }
+                
                 if ( !Help.isNull(v_Temp) )
                 {
                     v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
@@ -342,6 +385,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
         if ( $FutureOperatorsByWorkID == null )
         {
             this.queryAllByWorkID();
+            this.queryAllByForTemplateName();
             this.queryAll_KeyWorkID();
             this.queryAll_SToWorkID();
         }
@@ -355,14 +399,16 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
+     *              v2.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
     @Override
-    public void updateCache(FlowProcess i_Process)
+    public void updateCache(FlowProcess i_Process ,Template i_Template)
     {
-        this.delCache(i_Process);
-        this.addCache(i_Process);
+        this.delCache(i_Process ,i_Template);
+        this.addCache(i_Process ,i_Template);
     }
     
     
@@ -374,13 +420,15 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @createDate  2018-05-15
      * @version     v1.0
      *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
+     *              v3.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
     @Override
-    public void addCache(FlowProcess i_Process)
+    public void addCache(FlowProcess i_Process ,Template i_Template)
     {
-        addCacheByTrue(i_Process);
+        addCacheByTrue(i_Process ,i_Template);
         
         CommunicationRequest v_RequestData = new CommunicationRequest();
         v_RequestData.setEventType(    this.getEventType());
@@ -398,10 +446,12 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
+     *              v2.0  2024-02-23  添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
-    private synchronized void addCacheByTrue(FlowProcess i_Process)
+    private synchronized void addCacheByTrue(FlowProcess i_Process ,Template i_Template)
     {
         if ( Help.isNull(i_Process.getServiceDataID()) )
         {
@@ -423,6 +473,12 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 if ( $FutureOperatorsByWorkID.getRow(v_ID ,v_FO) == null )
                 {
                     $FutureOperatorsByWorkID.putRow(v_ID ,v_FO);
+                }
+                
+                String v_IDTemplate = v_ID + ":" + i_Template.getTemplateName();
+                if ( $FutureOperatorsFroTemplateName.getRow(v_IDTemplate ,v_FO) == null )
+                {
+                    $FutureOperatorsFroTemplateName.putRow(v_IDTemplate ,v_FO);
                 }
             }
         }
@@ -449,6 +505,12 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 {
                     $FutureOperatorsByWorkID.putRow(v_ID ,v_FO);
                 }
+                
+                String v_IDTemplate = v_ID + ":" + i_Template.getTemplateName();
+                if ( $FutureOperatorsFroTemplateName.getRow(v_IDTemplate ,v_FO) == null )
+                {
+                    $FutureOperatorsFroTemplateName.putRow(v_IDTemplate ,v_FO);
+                }
             }
         }
     }
@@ -462,13 +524,15 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @createDate  2018-05-15
      * @version     v1.0
      *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
+     *              v3.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
     @Override
-    public void delCache(FlowProcess i_Process)
+    public void delCache(FlowProcess i_Process ,Template i_Template)
     {
-        delCacheByTrue(i_Process);
+        delCacheByTrue(i_Process ,i_Template);
         
         CommunicationRequest v_RequestData = new CommunicationRequest();
         v_RequestData.setEventType(    this.getEventType());
@@ -486,10 +550,12 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
+     *              v2.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
-    private synchronized void delCacheByTrue(FlowProcess i_Process)
+    private synchronized void delCacheByTrue(FlowProcess i_Process ,Template i_Template)
     {
         List<FutureOperator> v_FutureOperators = $FutureOperators_KeyWorkID.get(i_Process.getWorkID());
         
@@ -519,9 +585,32 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                                 }
                                 // 缓存中的流转信息是上一个流转信息
                                 else if ( !Help.isNull(i_Process.getPreviousProcessID())
-                                        && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
+                                       && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
                                 {
                                     v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
+                                }
+                            }
+                        }
+                        
+                        // 删除人员、流程模板的缓存 Add 2024-02-26
+                        v_ID      += ":" + i_Template.getTemplateName();
+                        v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
+                        if ( !Help.isNull(v_DelDatas) )
+                        {
+                            for (int x=v_DelDatas.size() -1; x>=0; x--)
+                            {
+                                FutureOperator v_Del = v_DelDatas.get(x);
+                                
+                                // 未来参与人全相等时
+                                if ( v_Del.equals(v_FO) && v_FO.getProcessID().equals(v_Del.getProcessID()) )
+                                {
+                                    v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                                }
+                                // 缓存中的流转信息是上一个流转信息
+                                else if ( !Help.isNull(i_Process.getPreviousProcessID())
+                                       && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
+                                {
+                                    v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
                                 }
                             }
                         }
@@ -552,6 +641,29 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                                     && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
                             {
                                 v_Del = $FutureOperatorsByWorkID.removeRow(v_ID ,x);
+                            }
+                        }
+                    }
+                    
+                    // 删除人员、流程模板的缓存 Add 2024-02-26
+                    v_ID      += ":" + i_Template.getTemplateName();
+                    v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
+                    if ( !Help.isNull(v_DelDatas) )
+                    {
+                        for (int x=v_DelDatas.size() -1; x>=0; x--)
+                        {
+                            FutureOperator v_Del = v_DelDatas.get(x);
+                            
+                            // 未来参与人全相等时
+                            if ( v_Del.equals(v_FO) )
+                            {
+                                v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                            }
+                            // 缓存中的流转信息是上一个流转信息
+                            else if ( !Help.isNull(i_Process.getPreviousProcessID())
+                                    && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
+                            {
+                                v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
                             }
                         }
                     }
@@ -587,13 +699,15 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2023-02-27
      * @version     v1.0
+     *              v2.0  2024-02-26  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
     @Override
-    public void delCacheByAll(FlowProcess i_Process)
+    public void delCacheByAll(FlowProcess i_Process ,Template i_Template)
     {
-        delCacheByAllTrue(i_Process);
+        delCacheByAllTrue(i_Process ,i_Template);
         
         CommunicationRequest v_RequestData = new CommunicationRequest();
         v_RequestData.setEventType(    this.getEventType());
@@ -611,10 +725,12 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2023-02-27
      * @version     v1.0
+     *              v2.0  2024-02-26  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
-    private synchronized void delCacheByAllTrue(FlowProcess i_Process)
+    private synchronized void delCacheByAllTrue(FlowProcess i_Process ,Template i_Template)
     {
         List<FutureOperator> v_FutureOperators = $FutureOperators_KeyWorkID.get(i_Process.getWorkID());
         
@@ -637,6 +753,21 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                         }
                     }
                 }
+                
+                // 删除人员、流程模板的缓存 Add 2024-02-26
+                v_ID      += ":" + i_Template.getTemplateName();
+                v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
+                if ( !Help.isNull(v_DelDatas) )
+                {
+                    for (int x=v_DelDatas.size() -1; x>=0; x--)
+                    {
+                        FutureOperator v_Del = v_DelDatas.get(x);
+                        if ( v_FO.getWorkID().equals(v_Del.getWorkID()) )
+                        {
+                            v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                        }
+                    }
+                }
             }
             
             $FutureOperators_KeyWorkID.remove(i_Process.getWorkID());
@@ -652,15 +783,17 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @createDate  2019-09-11
      * @version     v1.0
      *              v2.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
+     *              v3.0  2024-02-23  1. 添加：流程模板信息，从中获取模板名称
      *
-     * @param i_Process
+     * @param i_Process   实例流转信息
+     * @param i_Template  流程模板信息
      */
     @Override
-    public synchronized void delCacheToHistory(FlowProcess i_Process)
+    public synchronized void delCacheToHistory(FlowProcess i_Process ,Template i_Template)
     {
         i_Process.setSplitProcessID("");
         
-        delCache(i_Process);
+        delCache(i_Process ,i_Template);
         
         if ( !Help.isNull(i_Process.getServiceDataID()) )
         {
@@ -696,6 +829,30 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             $FutureOperatorsByWorkID = this.futureOperatorDAO.queryAllByWorkID();
         }
         return $FutureOperatorsByWorkID;
+    }
+    
+    
+    
+    /**
+     * 查询所有未来操作人，并分区保存，用于高速缓存查询（按流程模板名称过滤）
+     * 
+     *   Map.key分区为参与人的形式的值：objectType:objectID
+     *   Map.value元素为工作流实例ID：workID
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-02-23
+     * @version     v1.0
+     *
+     * @return
+     */
+    @Override
+    public PartitionMap<String ,FutureOperator> queryAllByForTemplateName()
+    {
+        if ( $FutureOperatorsFroTemplateName == null )
+        {
+            $FutureOperatorsFroTemplateName = this.futureOperatorDAO.queryAllFroTemplateName();
+        }
+        return $FutureOperatorsFroTemplateName;
     }
     
     
@@ -888,7 +1045,10 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 }
             }
             
-            this.addCacheByTrue((FlowProcess)i_RequestData.getData());
+            FlowProcess v_FlowProcess = (FlowProcess)i_RequestData.getData();
+            Template    v_Template    = this.templateService.queryByIDByTrue(v_FlowProcess.getTemplateID());
+            
+            this.addCacheByTrue(v_FlowProcess ,v_Template);
         }
         else if ( "delCache".equals(i_RequestData.getDataOperation()) )
         {
@@ -910,7 +1070,10 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 }
             }
             
-            this.delCacheByTrue((FlowProcess)i_RequestData.getData());
+            FlowProcess v_FlowProcess = (FlowProcess)i_RequestData.getData();
+            Template    v_Template    = this.templateService.queryByIDByTrue(v_FlowProcess.getTemplateID());
+            
+            this.delCacheByTrue(v_FlowProcess ,v_Template);
         }
         
         return v_ResponseData;

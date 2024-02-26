@@ -17,6 +17,7 @@ import org.hy.common.xml.log.Logger;
 import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
 import org.hy.xflow.engine.bean.FlowComment;
+import org.hy.xflow.engine.bean.FlowData;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
@@ -62,6 +63,10 @@ import org.hy.xflow.engine.service.ITemplateService;
  *              v5.0  2023-07-27  添加：1.工作流备注查询接口两个
  *                                添加：2.工作流备注添加接口
  *              v6.0  2023-08-02  添加：流程的发起人有权随时结束整个流程
+ *              v7.0  2024-02-23  添加：按人员信息查询待办时，可按流程模板名称过滤
+ *                                添加：按人员信息查询已办时，可按流程模板名称过滤
+ *                                添加：按人员信息查询督查时，可按流程模板名称过滤
+ *                                添加：按人员信息查询督办时，可按流程模板名称过滤
  */
 @Xjava
 public class XFlowEngine
@@ -1440,7 +1445,7 @@ public class XFlowEngine
                       || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
                     {
                         this.flowInfoService.toHistory(i_WorkID);
-                        this.futureOperatorService.delCacheToHistory(v_ProcessList.get(0));
+                        this.futureOperatorService.delCacheToHistory(v_ProcessList.get(0) ,v_Template);
                         
                         return v_ProcessList;
                     }
@@ -1449,7 +1454,7 @@ public class XFlowEngine
             
             for (FlowProcess v_Process : v_ProcessList)
             {
-                this.futureOperatorService.updateCache(v_Process);
+                this.futureOperatorService.updateCache(v_Process ,v_Template);
             }
             
             return v_ProcessList;
@@ -1861,14 +1866,14 @@ public class XFlowEngine
         {
             if ( v_RejectTeam )
             {
-                this.futureOperatorService.delCacheByAll(v_ProcessList.get(0));
-                this.futureOperatorService.addCache(     v_ProcessList.get(0));
+                this.futureOperatorService.delCacheByAll(v_ProcessList.get(0) ,v_Template);
+                this.futureOperatorService.addCache(     v_ProcessList.get(0) ,v_Template);
             }
             else
             {
                 for (FlowProcess v_Process : v_ProcessList)
                 {
-                    this.futureOperatorService.updateCache(v_Process);
+                    this.futureOperatorService.updateCache(v_Process ,v_Template);
                 }
             }
             
@@ -1999,7 +2004,7 @@ public class XFlowEngine
         if ( v_Ret )
         {
             this.flowInfoService.toHistory(i_WorkID);
-            this.futureOperatorService.delCacheToHistory(v_Previous);
+            this.futureOperatorService.delCacheToHistory(v_Previous ,v_Template);
             
             return v_NewProcess;
         }
@@ -2021,13 +2026,36 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
-     *
-     * @param i_User
+     * 
+     * @param i_User  流程用户
      * @return
      */
     public List<String> queryWorkIDs(User i_User)
     {
-        return this.futureOperatorService.queryWorkIDs(i_User);
+        return this.futureOperatorService.queryWorkIDs(i_User ,null);
+    }
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-15
+     * @version     v1.0
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @return
+     */
+    public List<String> queryWorkIDs(User i_User ,String i_TemplateName)
+    {
+        return this.futureOperatorService.queryWorkIDs(i_User ,i_TemplateName);
     }
     
     
@@ -2042,13 +2070,36 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2018-05-15
      * @version     v1.0
-     *
-     * @param i_User
+     * 
+     * @param i_User 流程用户
      * @return
      */
     public List<String> queryServiceDataIDs(User i_User)
     {
-        return this.futureOperatorService.queryServiceDataIDs(i_User);
+        return this.futureOperatorService.queryServiceDataIDs(i_User ,null);
+    }
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-05-15
+     * @version     v1.0
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @return
+     */
+    public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName)
+    {
+        return this.futureOperatorService.queryServiceDataIDs(i_User ,i_TemplateName);
     }
     
     
@@ -2061,13 +2112,34 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2018-06-11
      * @version     v1.0
-     *
-     * @param i_User
+     * 
+     * @param i_User  流程用户
      * @return
      */
     public List<String> queryWorkIDsByDone(User i_User)
     {
-        return this.flowProcessService.queryWorkIDsByDone(i_User);
+        return this.flowProcessService.queryWorkIDsByDone(i_User ,null);
+    }
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @return
+     */
+    public List<String> queryWorkIDsByDone(User i_User ,String i_TemplateName)
+    {
+        return this.flowProcessService.queryWorkIDsByDone(i_User ,i_TemplateName);
     }
     
     
@@ -2080,13 +2152,34 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2018-06-11
      * @version     v1.0
-     *
-     * @param i_User
+     * 
+     * @param i_User  流程用户
      * @return
      */
     public List<String> queryServiceDataIDsByDone(User i_User)
     {
-        return this.flowProcessService.queryServiceDataIDsByDone(i_User);
+        return this.flowProcessService.queryServiceDataIDsByDone(i_User ,null);
+    }
+    
+    
+    
+    /**
+     * 获取用户已处理过的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-06-11
+     * @version     v1.0
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @return
+     */
+    public List<String> queryServiceDataIDsByDone(User i_User ,String i_TemplateName)
+    {
+        return this.flowProcessService.queryServiceDataIDsByDone(i_User ,i_TemplateName);
     }
     
     
@@ -2109,14 +2202,15 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2023-06-01
      * @version     v1.0
+     *              v2.0  2024-02-23  添加：按人员信息查询督办时，可按流程模板名称过滤
      *
-     * @param i_User
+     * @param i_FlowData  工作流接口数据
      * @return
      */
     @SuppressWarnings("unchecked")
-    public List<String> querySuperviseWorkIDs(User i_User)
+    public List<String> querySuperviseWorkIDs(FlowData i_FlowData)
     {
-        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervise(i_User) ,"workID");
+        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervise(i_FlowData) ,"workID");
     }
     
     
@@ -2139,14 +2233,15 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2023-06-01
      * @version     v1.0
+     *              v2.0  2024-02-23  添加：按人员信息查询督办时，可按流程模板名称过滤
      *
-     * @param i_User
+     * @param i_FlowData  工作流接口数据
      * @return
      */
     @SuppressWarnings("unchecked")
-    public List<String> querySuperviseServiceDataIDs(User i_User)
+    public List<String> querySuperviseServiceDataIDs(FlowData i_FlowData)
     {
-        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervise(i_User) ,"serviceDataID");
+        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervise(i_FlowData) ,"serviceDataID");
     }
     
     
@@ -2161,14 +2256,15 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2023-06-01
      * @version     v1.0
+     *              v2.0  2024-02-23  添加：按人员信息查询督查时，可按流程模板名称过滤
      *
-     * @param i_User
+     * @param i_FlowData  工作流接口数据
      * @return
      */
     @SuppressWarnings("unchecked")
-    public List<String> queryBySupervisionWorkIDs(User i_User)
+    public List<String> queryBySupervisionWorkIDs(FlowData i_FlowData)
     {
-        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervision(i_User) ,"workID");
+        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervision(i_FlowData) ,"workID");
     }
     
     
@@ -2183,14 +2279,15 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2023-06-01
      * @version     v1.0
+     *              v2.0  2024-02-23  添加：按人员信息查询督查时，可按流程模板名称过滤
      *
-     * @param i_User
+     * @param i_FlowData  工作流接口数据
      * @return
      */
     @SuppressWarnings("unchecked")
-    public List<String> queryBySupervisionServiceDataIDs(User i_User)
+    public List<String> queryBySupervisionServiceDataIDs(FlowData i_FlowData)
     {
-        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervision(i_User) ,"serviceDataID");
+        return (List<String>) Help.toList(this.processParticipantsService.queryBySupervision(i_FlowData) ,"serviceDataID");
     }
     
     

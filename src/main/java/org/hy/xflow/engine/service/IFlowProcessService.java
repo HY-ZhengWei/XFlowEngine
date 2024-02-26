@@ -15,6 +15,7 @@ import org.hy.xflow.engine.bean.User;
  * @author      ZhengWei(HY)
  * @createDate  2018-04-27
  * @version     v1.0
+ *              v2.0  2024-02-23  添加：按人员信息查询已办时，可按流程模板名称过滤
  */
 public interface IFlowProcessService
 {
@@ -57,11 +58,13 @@ public interface IFlowProcessService
      * @author      ZhengWei(HY)
      * @createDate  2018-06-11
      * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
      * @return
      */
-    public List<String> queryWorkIDsByDone(User i_User);
+    public List<String> queryWorkIDsByDone(User i_User ,String i_TemplateName);
     
     
     
@@ -70,12 +73,13 @@ public interface IFlowProcessService
      * 
      * @author      ZhengWei(HY)
      * @createDate  2018-06-11
-     * @version     v1.0
-     *
-     * @param i_User
+     *              v2.0  2024-02-23  添加：流程模板名称的查询条件
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
      * @return
      */
-    public List<String> queryServiceDataIDsByDone(User i_User);
+    public List<String> queryServiceDataIDsByDone(User i_User ,String i_TemplateName);
     
     
     
@@ -115,7 +119,7 @@ public interface IFlowProcessService
      * @version     v1.0
      *
      * @param i_ServiceDataID  第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息
-     * @return 
+     * @return
      */
     public List<FlowProcess> querySummarysByServiceDataID(String i_ServiceDataID);
     

@@ -2,19 +2,19 @@
 
 <config>
 
-	<import name="xconfig"         class="java.util.ArrayList" />
-	<import name="job"             class="org.hy.common.thread.Job" />
-	<import name="jobs"            class="org.hy.common.thread.Jobs" />
-	
-	
-	
-	<!-- 任务配置信息 -->
-	<xconfig>
-	    
-	    <jobs id="JOBS" this="JOBS">
-	    	<call name="startup" />
-	    </jobs>
-		
-	</xconfig>
-	
+    <import name="xconfig"         class="java.util.ArrayList" />
+    <import name="job"             class="org.hy.common.thread.Job" />
+    <import name="jobs"            class="org.hy.common.thread.Jobs" />
+    
+    
+    
+    <!-- 任务配置信息 -->
+    <xconfig>
+        
+        <jobs id="JOBS" this="JOBS">
+            <call name="startup" />
+        </jobs>
+        
+    </xconfig>
+    
 </config>

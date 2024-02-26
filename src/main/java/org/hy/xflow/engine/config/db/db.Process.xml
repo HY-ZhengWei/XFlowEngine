@@ -788,11 +788,21 @@
                 <![CDATA[
                 SELECT  DISTINCT A.workID
                   FROM  TProcess  A
-                 WHERE  A.operateUserID = ':userID'
+                       ,TFlowInfo B
+                       ,TTemplate T
+                 WHERE  A.operateUserID  = ':userID'
+                   AND  A.workID         = B.workID 
+                   AND  B.flowTemplateID = T.templateID 
+              <[   AND  T.templateName   = ':templateName'   ]>
                  UNION
                 SELECT  DISTINCT A.workID
                   FROM  TProcess_History  A
+                       ,TFlowInfo_History B
+                       ,TTemplate         T
                  WHERE  A.operateUserID = ':userID'
+                   AND  A.workID         = B.workID 
+                   AND  B.flowTemplateID = T.templateID 
+              <[   AND  T.templateName   = ':templateName'   ]>
                 ]]>
             </content>
             
@@ -815,11 +825,21 @@
                 <![CDATA[
                 SELECT  DISTINCT A.serviceDataID
                   FROM  TProcess  A
-                 WHERE  A.operateUserID = ':userID'
+                       ,TFlowInfo B
+                       ,TTemplate T
+                 WHERE  A.operateUserID  = ':userID'
+                   AND  A.workID         = B.workID 
+                   AND  B.flowTemplateID = T.templateID 
+              <[   AND  T.templateName   = ':templateName'   ]>
                  UNION
                 SELECT  DISTINCT A.serviceDataID
                   FROM  TProcess_History  A
+                       ,TFlowInfo_History B
+                       ,TTemplate         T
                  WHERE  A.operateUserID = ':userID'
+                   AND  A.workID         = B.workID 
+                   AND  B.flowTemplateID = T.templateID 
+              <[   AND  T.templateName   = ':templateName'   ]>
                 ]]>
             </content>
             
