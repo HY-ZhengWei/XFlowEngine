@@ -475,10 +475,13 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                     $FutureOperatorsByWorkID.putRow(v_ID ,v_FO);
                 }
                 
-                String v_IDTemplate = v_ID + ":" + i_Template.getTemplateName();
-                if ( $FutureOperatorsFroTemplateName.getRow(v_IDTemplate ,v_FO) == null )
+                if ( i_Template != null )
                 {
-                    $FutureOperatorsFroTemplateName.putRow(v_IDTemplate ,v_FO);
+                    String v_IDTemplate = v_ID + ":" + i_Template.getTemplateName();
+                    if ( $FutureOperatorsFroTemplateName.getRow(v_IDTemplate ,v_FO) == null )
+                    {
+                        $FutureOperatorsFroTemplateName.putRow(v_IDTemplate ,v_FO);
+                    }
                 }
             }
         }
@@ -506,10 +509,13 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                     $FutureOperatorsByWorkID.putRow(v_ID ,v_FO);
                 }
                 
-                String v_IDTemplate = v_ID + ":" + i_Template.getTemplateName();
-                if ( $FutureOperatorsFroTemplateName.getRow(v_IDTemplate ,v_FO) == null )
+                if ( i_Template != null )
                 {
-                    $FutureOperatorsFroTemplateName.putRow(v_IDTemplate ,v_FO);
+                    String v_IDTemplate = v_ID + ":" + i_Template.getTemplateName();
+                    if ( $FutureOperatorsFroTemplateName.getRow(v_IDTemplate ,v_FO) == null )
+                    {
+                        $FutureOperatorsFroTemplateName.putRow(v_IDTemplate ,v_FO);
+                    }
                 }
             }
         }
@@ -592,25 +598,28 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                             }
                         }
                         
-                        // 删除人员、流程模板的缓存 Add 2024-02-26
-                        v_ID      += ":" + i_Template.getTemplateName();
-                        v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
-                        if ( !Help.isNull(v_DelDatas) )
+                        if ( i_Template != null )
                         {
-                            for (int x=v_DelDatas.size() -1; x>=0; x--)
+                            // 删除人员、流程模板的缓存 Add 2024-02-26
+                            v_ID      += ":" + i_Template.getTemplateName();
+                            v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
+                            if ( !Help.isNull(v_DelDatas) )
                             {
-                                FutureOperator v_Del = v_DelDatas.get(x);
-                                
-                                // 未来参与人全相等时
-                                if ( v_Del.equals(v_FO) && v_FO.getProcessID().equals(v_Del.getProcessID()) )
+                                for (int x=v_DelDatas.size() -1; x>=0; x--)
                                 {
-                                    v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
-                                }
-                                // 缓存中的流转信息是上一个流转信息
-                                else if ( !Help.isNull(i_Process.getPreviousProcessID())
-                                       && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
-                                {
-                                    v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                                    FutureOperator v_Del = v_DelDatas.get(x);
+                                    
+                                    // 未来参与人全相等时
+                                    if ( v_Del.equals(v_FO) && v_FO.getProcessID().equals(v_Del.getProcessID()) )
+                                    {
+                                        v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                                    }
+                                    // 缓存中的流转信息是上一个流转信息
+                                    else if ( !Help.isNull(i_Process.getPreviousProcessID())
+                                           && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
+                                    {
+                                        v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                                    }
                                 }
                             }
                         }
@@ -645,25 +654,28 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                         }
                     }
                     
-                    // 删除人员、流程模板的缓存 Add 2024-02-26
-                    v_ID      += ":" + i_Template.getTemplateName();
-                    v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
-                    if ( !Help.isNull(v_DelDatas) )
+                    if ( i_Template != null )
                     {
-                        for (int x=v_DelDatas.size() -1; x>=0; x--)
+                        // 删除人员、流程模板的缓存 Add 2024-02-26
+                        v_ID      += ":" + i_Template.getTemplateName();
+                        v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
+                        if ( !Help.isNull(v_DelDatas) )
                         {
-                            FutureOperator v_Del = v_DelDatas.get(x);
-                            
-                            // 未来参与人全相等时
-                            if ( v_Del.equals(v_FO) )
+                            for (int x=v_DelDatas.size() -1; x>=0; x--)
                             {
-                                v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
-                            }
-                            // 缓存中的流转信息是上一个流转信息
-                            else if ( !Help.isNull(i_Process.getPreviousProcessID())
-                                    && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
-                            {
-                                v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                                FutureOperator v_Del = v_DelDatas.get(x);
+                                
+                                // 未来参与人全相等时
+                                if ( v_Del.equals(v_FO) )
+                                {
+                                    v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                                }
+                                // 缓存中的流转信息是上一个流转信息
+                                else if ( !Help.isNull(i_Process.getPreviousProcessID())
+                                        && i_Process.getPreviousProcessID().equals(v_Del.getProcessID()) )
+                                {
+                                    v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                                }
                             }
                         }
                     }
@@ -754,17 +766,20 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                     }
                 }
                 
-                // 删除人员、流程模板的缓存 Add 2024-02-26
-                v_ID      += ":" + i_Template.getTemplateName();
-                v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
-                if ( !Help.isNull(v_DelDatas) )
+                if ( i_Template != null )
                 {
-                    for (int x=v_DelDatas.size() -1; x>=0; x--)
+                    // 删除人员、流程模板的缓存 Add 2024-02-26
+                    v_ID      += ":" + i_Template.getTemplateName();
+                    v_DelDatas = $FutureOperatorsFroTemplateName.get(v_ID);
+                    if ( !Help.isNull(v_DelDatas) )
                     {
-                        FutureOperator v_Del = v_DelDatas.get(x);
-                        if ( v_FO.getWorkID().equals(v_Del.getWorkID()) )
+                        for (int x=v_DelDatas.size() -1; x>=0; x--)
                         {
-                            v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                            FutureOperator v_Del = v_DelDatas.get(x);
+                            if ( v_FO.getWorkID().equals(v_Del.getWorkID()) )
+                            {
+                                v_Del = $FutureOperatorsFroTemplateName.removeRow(v_ID ,x);
+                            }
                         }
                     }
                 }
