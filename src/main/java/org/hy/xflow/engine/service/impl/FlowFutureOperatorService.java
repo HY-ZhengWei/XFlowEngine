@@ -183,7 +183,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             }
             else
             {
-                v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$Org.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+                v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$Org.getValue() + ":" + i_User.getOrgID() + ":" + i_TemplateName);
             }
             
             if ( !Help.isNull(v_Temp) )
@@ -211,7 +211,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 }
                 else
                 {
-                    v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$Role.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+                    v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$Role.getValue() + ":" + v_Role.getRoleID() + ":" + i_TemplateName);
                 }
                 
                 if ( !Help.isNull(v_Temp) )
