@@ -6,7 +6,7 @@
 
     <groupId>org</groupId>
     <artifactId>hy.xflow.engine</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
     <packaging>jar</packaging>
 
     <name>cn.openapis.hy.xflow.engine</name>
@@ -15,8 +15,8 @@
     <description>cn.openapis.hy.xflow.engine</description>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -54,14 +54,14 @@
         <dependency>
             <groupId>cn.openapis</groupId>
             <artifactId>hy.common</artifactId>
-            <version>1.2.0</version>
+            <version>3.0.2</version>
             <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>cn.openapis</groupId>
             <artifactId>hy.xflow.engine-client</artifactId>
-            <version>1.1.5</version>
+            <version>1.1.7</version>
         </dependency>
         
         <dependency>
