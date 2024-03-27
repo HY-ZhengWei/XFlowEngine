@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 2024-03-27升级版本的自动化脚本的相关SQL -->
+    <sqls>
+    
+        <sql id="XSQL_Upgrade_20240327_Step001">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现' ,SYSDATE);/
+                
+                UPDATE TRouteType SET routeType = '汇总'     WHERE routeTypeID = 'RT003';/
+                UPDATE TRouteType SET routeType = '汇总关闭' WHERE routeTypeID = 'RT004';/
+                
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
+                
+                UPDATE TUpgrade20240327 SET updateTime = SYSDATE WHERE id = '汇签与汇总区分实现';/
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现' ,NOW());/
+                
+                UPDATE TRouteType SET routeType = '汇总'     WHERE routeTypeID = 'RT003';/
+                UPDATE TRouteType SET routeType = '汇总关闭' WHERE routeTypeID = 'RT004';/
+                
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
+                
+                UPDATE TUpgrade20240327 SET updateTime = NOW() WHERE id = '汇签与汇总区分实现';/
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现' ,GETDATE());/
+                
+                UPDATE TRouteType SET routeType = '汇总'     WHERE routeTypeID = 'RT003';/
+                UPDATE TRouteType SET routeType = '汇总关闭' WHERE routeTypeID = 'RT004';/
+                
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
+                
+                UPDATE TUpgrade20240327 SET updateTime = GETDATE() WHERE id = '汇签与汇总区分实现';/
+                ]]>
+            </content>
+            
+            <comment>汇签与汇总区分实现</comment>
+            
+        </sql>
+        
+        
+    
+        <sql id="XSQL_Create_Upgrade_20240327">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TUpgrade20240327
+                (
+                 id                         VARCHAR2(64)  NOT NULL
+                ,createTime                 DATE          NOT NULL
+                ,updateTime                 DATE
+                );/
+                
+                ALTER TABLE TUpgrade20240327 ADD CONSTRAINT PK_TUpgrade20240327 PRIMARY KEY (id);/
+                
+                COMMENT ON TABLE TUpgrade20240327 IS '2024-03-27升级版本';/
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TUpgrade20240327
+                (
+                 id                         VARCHAR(64)   NOT NULL COMMENT '主键'
+                ,createTime                 DATETIME      NOT NULL COMMENT '创建时间'
+                ,updateTime                 DATETIME               COMMENT '修改时间'
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;/
+                
+                ALTER TABLE TUpgrade20240327 ADD CONSTRAINT PK_TUpgrade20240327 PRIMARY KEY (id);/
+                
+                Alter TABLE TUpgrade20240327 COMMENT = '2024-03-27升级版本';/
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TUpgrade20240327
+                (
+                 id                         VARCHAR(64)   NOT NULL
+                ,createTime                 DATETIME      NOT NULL
+                ,updateTime                 DATETIME
+                );/
+                
+                ALTER TABLE TUpgrade20240327 ADD CONSTRAINT PK_TUpgrade20240327 PRIMARY KEY (id);/
+                
+                EXEC P_TableComment TUpgrade20240327 ,'2024-03-27升级版本';/
+                ]]>
+            </content>
+            
+            <trigger>
+                <create ref="XSQL_Upgrade_20240327_Step001" />
+            </trigger>
+            
+            <comment>2024-03-27升级版本</comment>
+            <create>TUpgrade20240327</create>
+            
+        </sql>
+        
+    </sqls>
+    
+</config>

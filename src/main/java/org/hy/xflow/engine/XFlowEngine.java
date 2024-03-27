@@ -1821,7 +1821,7 @@ public class XFlowEngine
                 // 协同多条路由线路一同驳回
                 // 情况1：接口要求协同模式
                 // 情况2：回目地节点经过分派节点，无论是否为协同模式均要按协同模式处理
-                // 情况3：当前节点为汇签，无论是否为协同模式均要按协同模式处理
+                // 情况3：当前节点为汇总，无论是否为协同模式均要按协同模式处理
                 if ( RejectModeEnum.$Team == i_RejectMode
                   || !v_IsMany
                   || RouteTypeEnum.$ToSum.getValue().equalsIgnoreCase(v_NextRoutes.getCurrentProcess().getPreviousOperateTypeID()) )

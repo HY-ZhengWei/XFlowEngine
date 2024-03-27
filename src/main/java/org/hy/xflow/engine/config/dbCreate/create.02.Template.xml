@@ -28,7 +28,7 @@
         
         
         
-        <!-- 活动类型有：开始、结束、转派、分派、汇签、驳回、追回、回退、催办、限时自动流、自由流 -->
+        <!-- 活动类型有：开始、结束、转派、分派、汇总、驳回、追回、回退、催办、限时自动流、自由流 -->
         <sql id="XSQL_Create_TActivityType">
         
             <dataSourceGroup ref="DSG_XFlow" />
@@ -129,8 +129,9 @@
                 <![CDATA[
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT001'     ,'转派'             ,1);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT002'     ,'分派'             ,2);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003'     ,'汇签'             ,3);/
-                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT004'     ,'汇签关闭'         ,4);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT003'     ,'汇总'             ,3);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT004'     ,'汇总关闭'         ,4);/
+                INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006'     ,'汇签'             ,6);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020'     ,'驳回'             ,20);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020AUTO' ,'自由驳回_自动模式' ,20);/
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT020TEAM' ,'自由驳回_协同模式' ,20);/
@@ -170,6 +171,13 @@
                 COMMENT ON COLUMN TRouteType.routeType                 IS '工作流路由类型名称';/
                 COMMENT ON COLUMN TRouteType.infoComment               IS '备注说明';/
                 COMMENT ON COLUMN TRouteType.orderNo                   IS '排列顺序';/
+                
+                CREATE TABLE TUpgrade20240327
+                (
+                 id                         VARCHAR2(64)  NOT NULL
+                ,createTime                 DATE          NOT NULL
+                ,updateTime                 DATE
+                );/
                 ]]>
             </content>
             
@@ -186,6 +194,13 @@
                 ALTER TABLE TRouteType ADD CONSTRAINT PK_TRouteType PRIMARY KEY (routeTypeID);/
                 
                 ALTER TABLE TRouteType     COMMENT                      = '工作流路由类型';/
+                
+                CREATE TABLE TUpgrade20240327
+                (
+                 id                         VARCHAR2(64)  NOT NULL
+                ,createTime                 DATE          NOT NULL
+                ,updateTime                 DATE
+                );/
                 ]]>
             </content>
             
@@ -206,6 +221,13 @@
                 EXEC P_ColumnComment TRouteType ,routeType                 ,'工作流路由类型名称';/
                 EXEC P_ColumnComment TRouteType ,infoComment               ,'备注说明';/
                 EXEC P_ColumnComment TRouteType ,orderNo                   ,'排列顺序';/
+                
+                CREATE TABLE TUpgrade20240327
+                (
+                 id                         VARCHAR2(64)  NOT NULL
+                ,createTime                 DATE          NOT NULL
+                ,updateTime                 DATE
+                );/
                 ]]>
             </content>
             

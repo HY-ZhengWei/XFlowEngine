@@ -342,7 +342,7 @@
                        ,operateTime            = ':process.operateTime.fullMilli'         
                        ,operateTimeLen         =  0       
                        ,operateTypeID          = 'RT004'       
-                       ,operateType            = '汇签关闭'         
+                       ,operateType            = '汇总关闭'         
                        ,operateUserID          = 'FLOW-SYSTEM'       
                        ,operateUser            = 'FLOW-SYSTEM'         
                        ,operateOrgID           = ''
