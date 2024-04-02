@@ -25,7 +25,7 @@
             <driverClass>oracle.jdbc.driver.OracleDriver</driverClass>
             <jdbcUrl>jdbc:oracle:thin:@127.0.0.1:1521:orcl</jdbcUrl>
             <user>XFlow</user>
-            <password encrypt="true">xflow</password>             <!-- 明文自动加密成密文 -->
+            <password encrypt="true"></password>             <!-- 明文自动加密成密文 -->
             <maxPoolSize>100</maxPoolSize>
             <initialPoolSize>2</initialPoolSize>
             <checkoutTimeout>10000</checkoutTimeout>
@@ -37,7 +37,7 @@
             <driverClass>com.mysql.cj.jdbc.Driver</driverClass>
             <jdbcUrl>jdbc:mysql://10.1.20.202:3307/service_change?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
             <user>root</user>
-            <password>wzybVM9114</password>        <!-- 明文自动加密成密文 -->
+            <password></password>        <!-- 明文自动加密成密文 -->
             <maxPoolSize>100</maxPoolSize>
             <initialPoolSize>2</initialPoolSize>
             <checkoutTimeout>30000</checkoutTimeout>
@@ -49,7 +49,7 @@
             <driverClass>net.sourceforge.jtds.jdbc.Driver</driverClass>
             <jdbcUrl>jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=XFlow</jdbcUrl>
             <user>sa</user>
-            <password encrypt="true">sa123</password>             <!-- 明文自动加密成密文 -->
+            <password encrypt="true"></password>             <!-- 明文自动加密成密文 -->
             <maxPoolSize>100</maxPoolSize>
             <initialPoolSize>2</initialPoolSize>
             <checkoutTimeout>10000</checkoutTimeout>
