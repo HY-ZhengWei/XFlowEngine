@@ -35,6 +35,7 @@
                        ,A.conditionVType
                        ,A.lineColor
                        ,A.fontColor
+                       ,A.weight
                        ,A.infoComment
                        ,A.createrID
                        ,A.creater
@@ -52,7 +53,7 @@
                    AND  A.templateID     = C.templateID
                    AND  A.routeTypeID    = B.routeTypeID
                    AND  A.templateID     = ':templateID'
-                 ORDER  BY A.activityID ,B.orderNo ,A.nextActivityID
+                 ORDER  BY A.weight DESC ,A.activityID ,B.orderNo ,A.nextActivityID
                 ]]>
             </content>
             

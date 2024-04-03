@@ -677,6 +677,7 @@
                 ,conditionVType     NUMBER(2)
                 ,lineColor          VARCHAR2(16)
                 ,fontColor          VARCHAR2(16)
+                ,weight             NUMBER(10) 
                 ,infoComment        VARCHAR2(4000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            VARCHAR2(128)
@@ -710,6 +711,7 @@
                 COMMENT ON COLUMN TActivityRoute.conditionVType           IS '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
                 COMMENT ON COLUMN TActivityRoute.lineColor                IS '路由连接线的颜色';/
                 COMMENT ON COLUMN TActivityRoute.fontColor                IS '路由连接线的文字颜色';/
+                COMMENT ON COLUMN TActivityRoute.weight                   IS '权重';/
                 COMMENT ON COLUMN TActivityRoute.infoComment              IS '备注说明';/
                 COMMENT ON COLUMN TActivityRoute.createrID                IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityRoute.creater                  IS '创建人员名称';/
@@ -737,6 +739,7 @@
                 ,conditionVType     INT(2)                                   COMMENT '有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）'
                 ,lineColor          VARCHAR(16)                              COMMENT '路由连接线的颜色'
                 ,fontColor          VARCHAR(16)                              COMMENT '路由连接线的文字颜色'
+                ,weight             INT(10)                                  COMMENT '权重'
                 ,infoComment        VARCHAR(4000)                            COMMENT '备注说明'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
@@ -777,6 +780,7 @@
                 ,conditionVType     INT
                 ,lineColor          VARCHAR(16)
                 ,fontColor          VARCHAR(16)
+                ,weight             INT
                 ,infoComment        VARCHAR(4000)
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            VARCHAR(128)
@@ -810,6 +814,7 @@
                 EXEC P_ColumnComment TActivityRoute ,conditionVType           ,'有条件判定时，对比值的数据类型（1:数字；2:布尔值；3:文本）';/
                 EXEC P_ColumnComment TActivityRoute ,lineColor                ,'路由连接线的颜色';/
                 EXEC P_ColumnComment TActivityRoute ,fontColor                ,'路由连接线的文字颜色';/
+                EXEC P_ColumnComment TActivityRoute ,weight                   ,'权重';/
                 EXEC P_ColumnComment TActivityRoute ,infoComment              ,'备注说明';/
                 EXEC P_ColumnComment TActivityRoute ,createrID                ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityRoute ,creater                  ,'创建人员名称';/
