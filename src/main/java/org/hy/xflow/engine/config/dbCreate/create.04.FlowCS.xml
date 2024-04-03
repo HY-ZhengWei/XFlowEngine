@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流实例活动汇签的初始化对象创建（自动创建）的相关SQL -->
+    <sqls>
+    
+        <sql id="XSQL_Create_TProcessCounterSignature">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TProcessCounterSignature
+                (
+                 pcsID              VARCHAR2(64)                     NOT NULL
+                ,processID          VARCHAR2(64)                     NOT NULL
+                ,workID             VARCHAR2(64)                     NOT NULL
+                ,serviceDataID      VARCHAR2(64)
+                ,csMaxUserCount     NUMBER(10)                       NOT NULL
+                ,csMinUserCount     NUMBER(10)                       NOT NULL
+                ,csExpireTime       DATE
+                ,createrID          VARCHAR2(64)                     NOT NULL
+                ,creater            VARCHAR2(128)
+                ,createOrgID        VARCHAR2(64)
+                ,createOrg          VARCHAR2(128)
+                ,createTime         DATE                             NOT NULL
+                );/
+                
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT PK_ProcessCounterSignature PRIMARY KEY (pcsID);/
+                
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
+                
+                COMMENT ON TABLE  TProcessCounterSignature                    IS '工作流过程的汇签';/
+                COMMENT ON COLUMN TProcessCounterSignature.pcsID              IS '主键ID';/
+                COMMENT ON COLUMN TProcessCounterSignature.processID          IS '工作流的过程ID';/
+                COMMENT ON COLUMN TProcessCounterSignature.workID             IS '工作流实例ID';/
+                COMMENT ON COLUMN TProcessCounterSignature.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                COMMENT ON COLUMN TProcessCounterSignature.csMaxUserCount     IS '应当汇签人数';/
+                COMMENT ON COLUMN TProcessCounterSignature.csMinUserCount     IS '最小汇签人数';/
+                COMMENT ON COLUMN TProcessCounterSignature.csExpireTime       IS '汇签过期时间';/
+                COMMENT ON COLUMN TProcessCounterSignature.createrID          IS '创建人员ID';/
+                COMMENT ON COLUMN TProcessCounterSignature.creater            IS '创建人员名称';/
+                COMMENT ON COLUMN TProcessCounterSignature.createOrgID        IS '创建部门ID';/
+                COMMENT ON COLUMN TProcessCounterSignature.createOrg          IS '创建部门名称';/
+                COMMENT ON COLUMN TProcessCounterSignature.createTime         IS '创建时间';/
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TProcessCounterSignature
+                (
+                 pcsID              VARCHAR(64)                     NOT NULL COMMENT '主键ID'
+                ,processID          VARCHAR(64)                     NOT NULL COMMENT '工作流的过程ID'
+                ,workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
+                ,serviceDataID      VARCHAR(64)                              COMMENT '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,csMaxUserCount     INT(10)                         NOT NULL COMMENT '应当汇签人数'
+                ,csMinUserCount     INT(10)                         NOT NULL COMMENT '最小汇签人数'
+                ,csExpireTime       DATETIME                                 COMMENT '汇签过期时间'
+                ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
+                ,createOrgID        VARCHAR(64)                              COMMENT '创建部门ID'
+                ,createOrg          VARCHAR(128)                             COMMENT '创建部门名称'
+                ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
+                );/
+                
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT PK_ProcessCounterSignature PRIMARY KEY (pcsID);/
+                
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
+                
+                ALTER TABLE TProcessCounterSignature COMMENT = '工作流过程的汇签';/
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TProcessCounterSignature
+                (
+                 pcsID              VARCHAR(64)                     NOT NULL
+                ,processID          VARCHAR(64)                     NOT NULL
+                ,workID             VARCHAR(64)                     NOT NULL
+                ,serviceDataID      VARCHAR(64)
+                ,csMaxUserCount     INT                             NOT NULL
+                ,csMinUserCount     INT                             NOT NULL
+                ,csExpireTime       DATETIME
+                ,createrID          VARCHAR(64)                     NOT NULL
+                ,creater            VARCHAR(128)
+                ,createOrgID        VARCHAR(64)
+                ,createOrg          VARCHAR(128)
+                ,createTime         DATETIME                        NOT NULL
+                );/
+                
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT PK_ProcessCounterSignature PRIMARY KEY (pcsID);/
+                
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSPID FOREIGN KEY (processID)     REFERENCES TProcess  (processID);/
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSWID FOREIGN KEY (workID)        REFERENCES TFlowInfo (workID);/
+                ALTER TABLE TProcessCounterSignature ADD CONSTRAINT FK_ProcessCSSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo (serviceDataID);/
+                
+                EXEC P_TableComment  TProcessCounterSignature                     ,'工作流过程的汇签';/
+                EXEC P_ColumnComment TProcessCounterSignature ,pcsID              ,'主键ID';/
+                EXEC P_ColumnComment TProcessCounterSignature ,processID          ,'工作流的过程ID';/
+                EXEC P_ColumnComment TProcessCounterSignature ,workID             ,'工作流实例ID';/
+                EXEC P_ColumnComment TProcessCounterSignature ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                EXEC P_ColumnComment TProcessCounterSignature ,csMaxUserCount     ,'应当汇签人数';/
+                EXEC P_ColumnComment TProcessCounterSignature ,csMinUserCount     ,'最小汇签人数';/
+                EXEC P_ColumnComment TProcessCounterSignature ,csExpireTime       ,'汇签过期时间';/
+                EXEC P_ColumnComment TProcessCounterSignature ,createrID          ,'创建人员ID';/
+                EXEC P_ColumnComment TProcessCounterSignature ,creater            ,'创建人员名称';/
+                EXEC P_ColumnComment TProcessCounterSignature ,createOrgID        ,'创建部门ID';/
+                EXEC P_ColumnComment TProcessCounterSignature ,createOrg          ,'创建部门名称';/
+                EXEC P_ColumnComment TProcessCounterSignature ,createTime         ,'创建时间';/
+                ]]>
+            </content>
+            
+            <comment>工作流过程的汇签</comment>
+            <create>TProcessCounterSignature</create>
+            
+        </sql>
+        
+        
+        
+        
+        
+        <sql id="XSQL_Create_TProcessCounterSignatureLog">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="ORACLE == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TProcessCounterSignatureLog
+                (
+                 pcslID             VARCHAR2(64)                     NOT NULL
+                ,pcsID              VARCHAR2(64)                     NOT NULL
+                ,processID          VARCHAR2(64)                     NOT NULL
+                ,workID             VARCHAR2(64)                     NOT NULL
+                ,serviceDataID      VARCHAR2(64)
+                ,csTime             DATE                             NOT NULL
+                ,csTypeID           VARCHAR2(64)
+                ,csType             VARCHAR2(128)
+                ,csUserID           VARCHAR2(64)                     NOT NULL
+                ,csUser             VARCHAR2(128)                    NOT NULL
+                ,csOrgID            VARCHAR2(64)
+                ,csOrg              VARCHAR2(128)
+                ,csFiles            VARCHAR2(2000)
+                ,csDatas            VARCHAR2(2000)
+                ,csComment          VARCHAR2(2000)
+                );/
+                
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT PK_ProcessCounterSignatureLog PRIMARY KEY (pcslID);/
+                
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogPCS FOREIGN KEY (pcsID)         REFERENCES TProcessCounterSignature (pcsID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogPID FOREIGN KEY (processID)     REFERENCES TProcess                 (processID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogWID FOREIGN KEY (workID)        REFERENCES TFlowInfo                (workID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo                (serviceDataID);/
+                
+                COMMENT ON TABLE  TProcessCounterSignatureLog                    IS '工作流过程的汇签日志';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.pcslID             IS '主键ID';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.pcsID              IS '汇签ID';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.processID          IS '工作流的过程ID';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.workID             IS '工作流实例ID';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.serviceDataID      IS '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csTime             IS '汇签时间';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csTypeID           IS '汇签类型ID，由第三方使用者定义其内容（拓展性数据）';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csType             IS '汇签类型名称，由第三方使用者定义其内容（拓展性数据）';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csUserID           IS '汇签人员ID';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csUser             IS '汇签人员名称';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csOrgID            IS '汇签部门ID';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csOrg              IS '汇签部门名称';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csFiles            IS '汇签文件信息，由第三方使用者定义其内容（拓展性数据）';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csDatas            IS '汇签数据信息，由第三方使用者定义其内容（拓展性数据）';/
+                COMMENT ON COLUMN TProcessCounterSignatureLog.csComment          IS '汇签说明';/
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TProcessCounterSignatureLog
+                (
+                 pcslID             VARCHAR(64)                     NOT NULL COMMENT '主键ID'
+                ,pcsID              VARCHAR(64)                     NOT NULL COMMENT '汇签ID'
+                ,processID          VARCHAR(64)                     NOT NULL COMMENT '工作流的过程ID'
+                ,workID             VARCHAR(64)                     NOT NULL COMMENT '工作流实例ID'
+                ,serviceDataID      VARCHAR(64)                              COMMENT '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
+                ,csTime             DATETIME                        NOT NULL COMMENT '汇签时间'
+                ,csTypeID           VARCHAR(64)                              COMMENT '汇签类型ID，由第三方使用者定义其内容（拓展性数据）'
+                ,csType             VARCHAR(128)                             COMMENT '汇签类型名称，由第三方使用者定义其内容（拓展性数据）'
+                ,csUserID           VARCHAR(64)                     NOT NULL COMMENT '汇签人员ID'
+                ,csUser             VARCHAR(128)                    NOT NULL COMMENT '汇签人员名称'
+                ,csOrgID            VARCHAR(64)                              COMMENT '汇签部门ID'
+                ,csOrg              VARCHAR(128)                             COMMENT '汇签部门名称'
+                ,csFiles            VARCHAR(2000)                            COMMENT '汇签文件信息，由第三方使用者定义其内容（拓展性数据）'
+                ,csDatas            VARCHAR(2000)                            COMMENT '汇签数据信息，由第三方使用者定义其内容（拓展性数据）'
+                ,csComment          VARCHAR(2000)                            COMMENT '汇签说明'
+                );/
+                
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT PK_ProcessCounterSignatureLog PRIMARY KEY (pcslID);/
+                
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogPCS FOREIGN KEY (pcsID)         REFERENCES TProcessCounterSignature (pcsID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogPID FOREIGN KEY (processID)     REFERENCES TProcess                 (processID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogWID FOREIGN KEY (workID)        REFERENCES TFlowInfo                (workID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo                (serviceDataID);/
+                
+                ALTER TABLE TProcessCounterSignatureLog COMMENT = '工作流过程的汇签日志';/
+                ]]>
+            </content>
+            
+            <content if="SQLSERVER == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TProcessCounterSignatureLog
+                (
+                 pcslID             VARCHAR(64)                     NOT NULL
+                ,pcsID              VARCHAR(64)                     NOT NULL
+                ,processID          VARCHAR(64)                     NOT NULL
+                ,workID             VARCHAR(64)                     NOT NULL
+                ,serviceDataID      VARCHAR(64)
+                ,csTime             DATETIME                        NOT NULL
+                ,csTypeID           VARCHAR(64)                             
+                ,csType             VARCHAR(128)                            
+                ,csUserID           VARCHAR(64)                     NOT NULL
+                ,csUser             VARCHAR(128)                    NOT NULL
+                ,csOrgID            VARCHAR(64)                             
+                ,csOrg              VARCHAR(128)                            
+                ,csFiles            VARCHAR(2000)                           
+                ,csDatas            VARCHAR(2000)                           
+                ,csComment          VARCHAR(2000)                           
+                );/
+                
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT PK_ProcessCounterSignatureLog PRIMARY KEY (pcsID);/
+                
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogPCS FOREIGN KEY (pcsID)         REFERENCES TProcessCounterSignature (pcsID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogPID FOREIGN KEY (processID)     REFERENCES TProcess                 (processID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogWID FOREIGN KEY (workID)        REFERENCES TFlowInfo                (workID);/
+                ALTER TABLE TProcessCounterSignatureLog ADD CONSTRAINT FK_ProcessCSLogSID FOREIGN KEY (serviceDataID) REFERENCES TFlowInfo                (serviceDataID);/
+                
+                EXEC P_TableComment  TProcessCounterSignatureLog                     ,'工作流过程的汇签日志';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog ,pcslID             ,'主键ID';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog ,pcsID              ,'汇签ID';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog ,processID          ,'工作流的过程ID';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog ,workID             ,'工作流实例ID';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog ,serviceDataID      ,'第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csTime              ,'汇签时间';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csTypeID            ,'汇签类型ID，由第三方使用者定义其内容（拓展性数据）';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csType              ,'汇签类型名称，由第三方使用者定义其内容（拓展性数据）';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csUserID            ,'汇签人员ID';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csUser              ,'汇签人员名称';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csOrgID             ,'汇签部门ID';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csOrg               ,'汇签部门名称';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csFiles             ,'汇签文件信息，由第三方使用者定义其内容（拓展性数据）';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csDatas             ,'汇签数据信息，由第三方使用者定义其内容（拓展性数据）';/
+                EXEC P_ColumnComment TProcessCounterSignatureLog csComment           ,'汇签说明';/
+                ]]>
+            </content>
+            
+            <comment>工作流过程的汇签日志</comment>
+            <create>TProcessCounterSignatureLog</create>
+            
+        </sql>
+        
+    </sqls>
+    
+</config>
