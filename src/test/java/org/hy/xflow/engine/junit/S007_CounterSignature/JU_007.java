@@ -2,11 +2,13 @@ package org.hy.xflow.engine.junit.S007_CounterSignature;
 
 import static org.junit.Assert.assertTrue;
 
+import org.hy.common.Date;
 import org.hy.common.xml.log.Logger;
 import org.hy.xflow.engine.XFlowEngine;
 import org.hy.xflow.engine.bean.ActivityRouteTree;
 import org.hy.xflow.engine.bean.FlowInfo;
 import org.hy.xflow.engine.bean.FlowProcess;
+import org.hy.xflow.engine.bean.ProcessCounterSignatureLog;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.common.BaseJunit;
 import org.junit.FixMethodOrder;
@@ -110,6 +112,38 @@ public class JU_007 extends BaseJunit
         try
         {
             v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(teacher ,serviceDataID ,null ,ActivityRouteTree.$AutoActivityRouteCode);
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_FlowProcess != null);
+    }
+    
+    
+    
+    /**
+     * 教师部署家庭作业（汇签场景01：下发汇签任务）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-03
+     * @version     v1.0
+     */
+    @Test
+    public void test_布置作业()
+    {
+        FlowProcess v_FlowProcess = null;
+        
+        try
+        {
+            FlowProcess v_ProcessExtra = new FlowProcess();
+            v_ProcessExtra.setCounterSignature(new ProcessCounterSignatureLog());
+            v_ProcessExtra.getCounterSignature().setCsMaxUserCount(2);
+            v_ProcessExtra.getCounterSignature().setCsMinUserCount(2);
+            v_ProcessExtra.getCounterSignature().setCsExpireTime(new Date().getDate(1));
+            
+            v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(teacher ,serviceDataID ,v_ProcessExtra ,ActivityRouteTree.$AutoActivityRouteCode);
         }
         catch (Exception exce)
         {

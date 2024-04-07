@@ -11,13 +11,13 @@
     <!-- 工作流过程的汇签模块的相关SQL -->
     <sqls>
     
-        <sql id="XSQL_XFlow_ProcessCounterSignatureLog_Insert"> 
+        <sql id="XSQL_XFlow_ProcessCounterSignature_Insert"> 
         
             <dataSourceGroup ref="DSG_XFlow" />
             
             <content>
                 <![CDATA[
-                INSERT  INTO TProcessCounterSignatureLog
+                INSERT  INTO TProcessCounterSignature
                        (
                         pcsID        
                        ,processID    
@@ -33,23 +33,23 @@
                        ,createTime
                        )
                 VALUES (
-                        ':.pcsID'
-                       ,':.processID'
-                       ,':.workID'
-                       ,':.serviceDataID'
-                       ,':.csMaxUserCount'
-                       ,':.csMinUserCount'
-                       ,':.csExpireTime'
-                       ,':.createrID'
-                       ,':.creater'
-                       ,':.createOrgID'
-                       ,':.createOrg'
-                       ,':.createTime'
+                        ':process.counterSignature.pcsID'
+                       ,':process.counterSignature.processID'
+                       ,':process.counterSignature.workID'
+                       ,':process.counterSignature.serviceDataID'
+                       ,':process.counterSignature.csMaxUserCount'
+                       ,':process.counterSignature.csMinUserCount'
+                       ,':process.counterSignature.csExpireTime'
+                       ,':process.counterSignature.createrID'
+                       ,':process.counterSignature.creater'
+                       ,':process.counterSignature.createOrgID'
+                       ,':process.counterSignature.createOrg'
+                       ,':process.counterSignature.createTime'
                        )
                 ]]>
             </content>
             
-            <comment>适用于汇签场景01：新增汇签总体配置</comment>
+            <comment>适用于汇签场景01：新增汇签任务</comment>
             
         </sql>
         
@@ -80,21 +80,21 @@
                        ,csComment 
                        )
                 VALUES (
-                        ':.pcslID'
-                       ,':.pcsID'
-                       ,':.processID'
-                       ,':.workID'
-                       ,':.serviceDataID'
-                       ,':.csTime'
-                       ,':.csTypeID'
-                       ,':.csType'
-                       ,':.csUserID'
-                       ,':.csUser'
-                       ,':.csOrgID'
-                       ,':.csOrg'
-                       ,':.csFiles'
-                       ,':.csDatas'
-                       ,':.csComment'
+                        ':process.counterSignature.pcslID'
+                       ,':process.counterSignature.pcsID'
+                       ,':process.counterSignature.processID'
+                       ,':process.counterSignature.workID'
+                       ,':process.counterSignature.serviceDataID'
+                       ,':process.counterSignature.csTime'
+                       ,':process.counterSignature.csTypeID'
+                       ,':process.counterSignature.csType'
+                       ,':process.counterSignature.csUserID'
+                       ,':process.counterSignature.csUser'
+                       ,':process.counterSignature.csOrgID'
+                       ,':process.counterSignature.csOrg'
+                       ,':process.counterSignature.csFiles'
+                       ,':process.counterSignature.csDatas'
+                       ,':process.counterSignature.csComment'
                        )
                 ]]>
             </content>

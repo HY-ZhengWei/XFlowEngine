@@ -37,7 +37,19 @@
             </item>
             
             <item>
+                <value>dbCreate/create.04.FlowCS.xml</value>
+            </item>
+            
+            <item>
+                <value>dbCreate/create.04.FlowCSHistory.xml</value>
+            </item>
+            
+            <item>
                 <value>dbCreate/create.901.Upgrade2023-07-26.xml</value>
+            </item>
+            
+            <item>
+                <value>dbCreate/create.902.Upgrade2024-03-27.xml</value>
             </item>
             
             
@@ -82,6 +94,10 @@
             
             <item>
                 <value>db/db.ProcessParticipants.xml</value>
+            </item>
+            
+            <item>
+                <value>db/db.ProcessCounterSignature.xml</value>
             </item>
             
             <item>

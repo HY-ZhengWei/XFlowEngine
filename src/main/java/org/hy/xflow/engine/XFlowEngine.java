@@ -23,6 +23,7 @@ import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.NextRoutes;
 import org.hy.xflow.engine.bean.Participant;
 import org.hy.xflow.engine.bean.ProcessActivitys;
+import org.hy.xflow.engine.bean.ProcessCounterSignatureLog;
 import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
@@ -49,6 +50,10 @@ import org.hy.xflow.engine.service.ITemplateService;
  * 已办：做过什么
  * 督办：监督、协同他人正在做的。抄送一次，流程完结前全流程随时可查
  * 督查：复查督办全流程已完结的
+ * 
+ * 汇签：前一节点A发起的多人并行审批操作，当前节点B无论审批结果什么，都允许向下流转或驳回。
+ *      它是A to B 点对点闭环并行操作(即，A发起，B结束，中间不允许穿插有其它节点)。
+ *      它可加快审批处理速度，记录每个人员的审批意见，以便最终形成完整的审批历史。
  *
  * @author      ZhengWei(HY)
  * @createDate  2017-03-10
@@ -67,6 +72,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  *                                添加：按人员信息查询已办时，可按流程模板名称过滤
  *                                添加：按人员信息查询督查时，可按流程模板名称过滤
  *                                添加：按人员信息查询督办时，可按流程模板名称过滤
+ *              v8.0  2024-03-27  添加：汇签功能
  */
 @Xjava
 public class XFlowEngine
@@ -1159,6 +1165,7 @@ public class XFlowEngine
         List<ActivityRoute> v_RouteList   = new ArrayList<ActivityRoute>();
         for (String v_ActivityRouteCode : i_ActivityRouteCodes.keySet())
         {
+            // 支持自动流转的时的路由标示
             ActivityRoute v_Route = v_Template.getActivityRouteTree().getActivityRoute(v_NextRoutes.getCurrentActivity().getActivityCode() ,v_ActivityRouteCode);
             if ( v_Route == null )
             {
@@ -1201,6 +1208,48 @@ public class XFlowEngine
             
             FlowProcess v_Process = new FlowProcess();
             v_Process.init_ToNext(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
+            
+            // 判定其后的节点是否为：汇签 Add 2024-04-07
+            if ( RouteTypeEnum.$CounterSignature == v_Route.getRouteTypeID() )
+            {
+                if ( i_ProcessExtra.getCounterSignature() == null )
+                {
+                    throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is CounterSignature ,but it has not parameters. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                }
+                
+                v_Process.setCounterSignature(i_ProcessExtra.getCounterSignature());
+                ProcessCounterSignatureLog v_PCS = v_Process.getCounterSignature();
+                v_PCS.setCsMaxUserCount(Help.max(Help.NVL(v_PCS.getCsMaxUserCount() ,0) ,0));
+                v_PCS.setCsMinUserCount(Help.max(Help.NVL(v_PCS.getCsMinUserCount() ,0) ,0));
+                
+                // 应当汇签人数、最小汇签、汇签过期时间不能均为空或0值，这样就无法结束流程了
+                if ( v_PCS.getCsMaxUserCount() == 0 && v_PCS.getCsMinUserCount() == 0 )
+                {
+                    if ( v_PCS.getCsExpireTime() == null )
+                    {
+                        throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is CounterSignature ,but invalid CsExpireTime. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                    }
+                }
+                
+                // 汇签过期时间应大于当前时间
+                if ( v_PCS.getCsExpireTime() != null )
+                {
+                    if ( v_PCS.getCsExpireTime().differ(Date.getNowTime()) <= 0 )
+                    {
+                        throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is CounterSignature ,but CsExpireTime is too small. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                    }
+                }
+                
+                v_PCS.setPcsID("PCS" + StringHelp.getUUID());
+                v_PCS.setProcessID(    v_Process.getProcessID());
+                v_PCS.setWorkID(       v_Process.getWorkID());
+                v_PCS.setServiceDataID(v_Process.getServiceDataID());
+                v_PCS.setCreaterID(    v_Process.getOperateUserID());
+                v_PCS.setCreater(      v_Process.getOperateUser());
+                v_PCS.setCreateOrgID(  v_Process.getOperateOrgID());
+                v_PCS.setCreateOrg(    v_Process.getOperateOrg());
+                v_PCS.setCreateTime(   v_Process.getOperateTime());
+            }
             
             // 生成参与人信息
             List<UserParticipant> v_Participants = i_ActivityRouteCodes.get(v_ActivityRouteCode);

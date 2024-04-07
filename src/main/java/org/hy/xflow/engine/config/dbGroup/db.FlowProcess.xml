@@ -68,6 +68,20 @@
             </sqlNode>
             
             <sqlNode>
+                <sql  ref="XSQL_XFlow_ProcessCounterSignature_Insert" />
+                <type ref="this.$Type_ExecuteUpdate" />
+                <condition><![CDATA[:process.counterSignature.createTime != NULL]]></condition>
+                <comment>汇签场景01：下发汇签任务</comment>
+            </sqlNode>
+            
+            <sqlNode>
+                <sql  ref="XSQL_XFlow_ProcessCounterSignatureLog_Insert" />
+                <type ref="this.$Type_ExecuteUpdate" />
+                <condition><![CDATA[:process.counterSignature.createTime == NULL]]></condition>
+                <comment>汇签场景02：记录每位的汇签</comment>
+            </sqlNode>
+            
+            <sqlNode>
                 <sql  ref="XSQL_XFlow_TFlowFutureOperator_Del" />
                 <type ref="this.$Type_ExecuteUpdate" />
                 <comment>删除之前的未来操作人</comment>
