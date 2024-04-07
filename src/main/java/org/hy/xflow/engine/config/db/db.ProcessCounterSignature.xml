@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+    <import name="sqls"            class="java.util.ArrayList" />
+    <import name="sqlGroup"        class="org.hy.common.xml.plugins.XSQLGroup" />
+    <import name="sql"             class="org.hy.common.xml.XSQL" />
+
+
+
+    <!-- 工作流过程的汇签模块的相关SQL -->
+    <sqls>
+    
+        <sql id="XSQL_XFlow_ProcessCounterSignatureLog_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcessCounterSignatureLog
+                       (
+                        pcsID        
+                       ,processID    
+                       ,workID       
+                       ,serviceDataID
+                       ,csMaxUserCount
+                       ,csMinUserCount
+                       ,csExpireTime
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       )
+                VALUES (
+                        ':.pcsID'
+                       ,':.processID'
+                       ,':.workID'
+                       ,':.serviceDataID'
+                       ,':.csMaxUserCount'
+                       ,':.csMinUserCount'
+                       ,':.csExpireTime'
+                       ,':.createrID'
+                       ,':.creater'
+                       ,':.createOrgID'
+                       ,':.createOrg'
+                       ,':.createTime'
+                       )
+                ]]>
+            </content>
+            
+            <comment>适用于汇签场景01：新增汇签总体配置</comment>
+            
+        </sql>
+        
+        
+    
+        <sql id="XSQL_XFlow_ProcessCounterSignatureLog_Insert"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcessCounterSignatureLog
+                       (
+                        pcslID       
+                       ,pcsID        
+                       ,processID    
+                       ,workID       
+                       ,serviceDataID
+                       ,csTime       
+                       ,csTypeID     
+                       ,csType       
+                       ,csUserID     
+                       ,csUser       
+                       ,csOrgID      
+                       ,csOrg        
+                       ,csFiles      
+                       ,csDatas      
+                       ,csComment 
+                       )
+                VALUES (
+                        ':.pcslID'
+                       ,':.pcsID'
+                       ,':.processID'
+                       ,':.workID'
+                       ,':.serviceDataID'
+                       ,':.csTime'
+                       ,':.csTypeID'
+                       ,':.csType'
+                       ,':.csUserID'
+                       ,':.csUser'
+                       ,':.csOrgID'
+                       ,':.csOrg'
+                       ,':.csFiles'
+                       ,':.csDatas'
+                       ,':.csComment'
+                       )
+                ]]>
+            </content>
+            
+            <comment>适用于汇签场景02：记录每位人员的汇签</comment>
+            
+        </sql>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessCounterSignature_ToHistory"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcessCounterSignatureHis
+                       (
+                        pcsID
+                       ,processID
+                       ,workID
+                       ,serviceDataID
+                       ,csMaxUserCount
+                       ,csMinUserCount
+                       ,csExpireTime
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       )
+                SELECT  A.pcsID
+                       ,A.processID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.csMaxUserCount
+                       ,A.csMinUserCount
+                       ,A.csExpireTime
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                  FROM  TProcessCounterSignature  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>全流转结束后转历史</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessCounterSignatureLog_ToHistory"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcessCounterSignatureLogHis
+                       (
+                        pcslID
+                       ,pcsID
+                       ,processID
+                       ,workID
+                       ,serviceDataID
+                       ,csTime
+                       ,csTypeID
+                       ,csType
+                       ,csUserID
+                       ,csUser
+                       ,csOrgID
+                       ,csOrg
+                       ,csFiles
+                       ,csDatas
+                       ,csComment
+                       )
+                SELECT  A.pcslID
+                       ,A.pcsID
+                       ,A.processID
+                       ,A.workID
+                       ,A.serviceDataID
+                       ,A.csTime
+                       ,A.csTypeID
+                       ,A.csType
+                       ,A.csUserID
+                       ,A.csUser
+                       ,A.csOrgID
+                       ,A.csOrg
+                       ,A.csFiles
+                       ,A.csDatas
+                       ,A.csComment
+                  FROM  TProcessCounterSignatureLog  A
+            <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  A.workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>全流转结束后转历史</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessCounterSignature_ToHistory_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TProcessCounterSignature
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TProcessCounterSignature
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>删除前转历史</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessCounterSignatureLog_ToHistory_Del"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TProcessCounterSignatureLog
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE FROM TProcessCounterSignatureLog
+            <[   WHERE  serviceDataID = ':serviceDataID'   ]>
+            <[   WHERE  workID        = ':workID'          ]>
+                ]]>
+            </content>
+            
+            <comment>删除前转历史</comment>
+            
+        </sql>
+        
+    </sqls>
+    
+</config>

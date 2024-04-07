@@ -16,44 +16,52 @@
             
             <content if="ORACLE == DSG_XFlow.getDbProductType">
                 <![CDATA[
-                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现' ,SYSDATE);/
+                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现&自动流转的路由标示' ,SYSDATE);/
                 
                 UPDATE TRouteType SET routeType = '汇总'     WHERE routeTypeID = 'RT003';/
                 UPDATE TRouteType SET routeType = '汇总关闭' WHERE routeTypeID = 'RT004';/
                 
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
                 
-                UPDATE TUpgrade20240327 SET updateTime = SYSDATE WHERE id = '汇签与汇总区分实现';/
+                ALTER TABLE TActivityRoute ADD weight NUMBER(10);/
+                COMMENT ON COLUMN TActivityRoute.weight IS '权重';/
+                
+                UPDATE TUpgrade20240327 SET updateTime = SYSDATE WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>
             </content>
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
-                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现' ,NOW());/
+                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现&自动流转的路由标示' ,NOW());/
                 
                 UPDATE TRouteType SET routeType = '汇总'     WHERE routeTypeID = 'RT003';/
                 UPDATE TRouteType SET routeType = '汇总关闭' WHERE routeTypeID = 'RT004';/
                 
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
                 
-                UPDATE TUpgrade20240327 SET updateTime = NOW() WHERE id = '汇签与汇总区分实现';/
+                ALTER TABLE TActivityRoute ADD weight INT(10) NULL COMMENT '权重';/
+                
+                UPDATE TUpgrade20240327 SET updateTime = NOW() WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>
             </content>
             
             <content if="SQLSERVER == DSG_XFlow.getDbProductType">
                 <![CDATA[
-                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现' ,GETDATE());/
+                INSERT INTO TUpgrade20240327 (id,createTime) VALUES ('汇签与汇总区分实现&自动流转的路由标示' ,GETDATE());/
                 
                 UPDATE TRouteType SET routeType = '汇总'     WHERE routeTypeID = 'RT003';/
                 UPDATE TRouteType SET routeType = '汇总关闭' WHERE routeTypeID = 'RT004';/
                 
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
                 
-                UPDATE TUpgrade20240327 SET updateTime = GETDATE() WHERE id = '汇签与汇总区分实现';/
+                ALTER TABLE TActivityRoute ADD weight INT NULL;/
+                EXEC P_ColumnComment TActivityRoute ,weight ,'权重';/
+                
+                UPDATE TUpgrade20240327 SET updateTime = GETDATE() WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>
             </content>
             
-            <comment>汇签与汇总区分实现</comment>
+            <comment>汇签与汇总区分实现、自动流转的路由标示</comment>
             
         </sql>
         

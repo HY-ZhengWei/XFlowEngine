@@ -292,6 +292,16 @@
                 <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
+            <sqlNode>
+                <sql  ref="XSQL_XFlow_ProcessCounterSignature_ToHistory" />
+                <type ref="this.$Type_ExecuteUpdate" />
+            </sqlNode>
+            
+            <sqlNode>
+                <sql  ref="XSQL_XFlow_ProcessCounterSignatureLog_ToHistory" />
+                <type ref="this.$Type_ExecuteUpdate" />
+            </sqlNode>
+            
             
             
             <sqlNode>
@@ -301,6 +311,16 @@
             
             <sqlNode>
                 <sql  ref="XSQL_XFlow_TFlowLastOperator_ToHistory_Del" />
+                <type ref="this.$Type_ExecuteUpdate" />
+            </sqlNode>
+            
+            <sqlNode>
+                <sql  ref="XSQL_XFlow_ProcessCounterSignatureLog_ToHistory_Del" />
+                <type ref="this.$Type_ExecuteUpdate" />
+            </sqlNode>
+            
+            <sqlNode>
+                <sql  ref="XSQL_XFlow_ProcessCounterSignature_ToHistory_Del" />
                 <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>
             
