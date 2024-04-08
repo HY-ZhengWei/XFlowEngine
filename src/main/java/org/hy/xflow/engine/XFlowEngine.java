@@ -1209,7 +1209,7 @@ public class XFlowEngine
             FlowProcess v_Process = new FlowProcess();
             v_Process.init_ToNext(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
             
-            // 判定其后的节点是否为：汇签 Add 2024-04-07
+            // 汇签下发：判定其后的节点是否为：汇签 Add 2024-04-07
             if ( RouteTypeEnum.$CounterSignature == v_Route.getRouteTypeID() )
             {
                 if ( i_ProcessExtra.getCounterSignature() == null )
@@ -1249,6 +1249,11 @@ public class XFlowEngine
                 v_PCS.setCreateOrgID(  v_Process.getOperateOrgID());
                 v_PCS.setCreateOrg(    v_Process.getOperateOrg());
                 v_PCS.setCreateTime(   v_Process.getOperateTime());
+            }
+            // 汇签记录：判定之前的操作类型是否为：汇签 Add 2024-04-07
+            else if ( RouteTypeEnum.$CounterSignature.getValue().equals(v_Previous.getPreviousOperateTypeID()) )
+            {
+                
             }
             
             // 生成参与人信息
