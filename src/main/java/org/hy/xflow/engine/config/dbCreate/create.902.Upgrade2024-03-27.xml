@@ -23,8 +23,19 @@
                 
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
                 
-                ALTER TABLE TActivityRoute ADD weight NUMBER(10);/
+                ALTER TABLE TActivityRoute ADD   weight NUMBER(10);/
                 COMMENT ON COLUMN TActivityRoute.weight IS '权重';/
+                
+                ALTER TABLE TProcess         ADD   isCS NUMBER(1);/
+                ALTER TABLE TProcess_History ADD   isCS NUMBER(1);/
+                COMMENT ON COLUMN TProcess        .isCS IS '是否汇签';/
+                COMMENT ON COLUMN TProcess_History.isCS IS '是否汇签';/
+                
+                UPDATE TProcess         SET isCS = 0;/
+                UPDATE TProcess_History SET isCS = 0;/
+                
+                ALTER TABLE TProcess         MODIFY isCS NUMBER(1) NOT NULL;/
+                ALTER TABLE TProcess_History MODIFY isCS NUMBER(1) NOT NULL;/
                 
                 UPDATE TUpgrade20240327 SET updateTime = SYSDATE WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>
@@ -41,6 +52,15 @@
                 
                 ALTER TABLE TActivityRoute ADD weight INT(10) NULL COMMENT '权重';/
                 
+                ALTER TABLE TProcess         ADD isCS INT(1) NULL COMMENT '是否汇签';/
+                ALTER TABLE TProcess_History ADD isCS INT(1) NULL COMMENT '是否汇签';/
+                
+                UPDATE TProcess         SET isCS = 0;/
+                UPDATE TProcess_History SET isCS = 0;/
+                
+                ALTER TABLE TProcess         MODIFY COLUMN isCS INT(1) NOT NULL COMMENT '是否汇签';/
+                ALTER TABLE TProcess_History MODIFY COLUMN isCS INT(1) NOT NULL COMMENT '是否汇签';/
+                
                 UPDATE TUpgrade20240327 SET updateTime = NOW() WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>
             </content>
@@ -54,8 +74,19 @@
                 
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
                 
-                ALTER TABLE TActivityRoute ADD weight INT NULL;/
+                ALTER TABLE TActivityRoute ADD       weight INT NULL;/
                 EXEC P_ColumnComment TActivityRoute ,weight ,'权重';/
+                
+                ALTER TABLE TProcess         ADD       isCS INT NULL;/
+                ALTER TABLE TProcess_History ADD       isCS INT NULL;/
+                EXEC P_ColumnComment TProcess         ,isCS ,'是否汇签';/
+                EXEC P_ColumnComment TProcess_History ,isCS ,'是否汇签';/
+                
+                UPDATE TProcess         SET isCS = 0;/
+                UPDATE TProcess_History SET isCS = 0;/
+                
+                ALTER TABLE TProcess         ALTER COLUMN isCS INT NOT NULL;/
+                ALTER TABLE TProcess_History ALTER COLUMN isCS INT NOT NULL;/
                 
                 UPDATE TUpgrade20240327 SET updateTime = GETDATE() WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>
