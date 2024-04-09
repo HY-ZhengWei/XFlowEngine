@@ -237,11 +237,10 @@ public class JU_007 extends BaseJunit
     @Test
     public void test_查询待办_学生A()
     {
-        FlowProcess v_FlowProcess = null;
-        
+        List<String> v_WorkIDs = null;
         try
         {
-            List<String> v_WorkIDs = XFlowEngine.getInstance().queryWorkIDs(student01 ,$TemplateName);
+            v_WorkIDs = XFlowEngine.getInstance().queryWorkIDs(student01 ,$TemplateName);
             Help.print(v_WorkIDs);
         }
         catch (Exception exce)
@@ -249,7 +248,48 @@ public class JU_007 extends BaseJunit
             $Logger.error(exce);
         }
         
-        assertTrue(v_FlowProcess != null);
+        assertTrue(v_WorkIDs != null);
+    }
+    
+    
+    
+    /**
+     * 查询汇签
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-09
+     * @version     v1.0
+     */
+    @Test
+    public void test_查询汇签()
+    {
+        List<ProcessCounterSignatureLog> v_CSInfos = null;
+        
+        try
+        {
+            ProcessCounterSignatureLog v_CSLogParam = new ProcessCounterSignatureLog();
+            v_CSLogParam.setServiceDataID(serviceDataID);
+            
+            v_CSInfos = XFlowEngine.getInstance().queryCSLogsByServiceDataID(v_CSLogParam);
+            if ( v_CSInfos != null )
+            {
+                for (ProcessCounterSignatureLog v_CSInfo : v_CSInfos)
+                {
+                    System.out.println(v_CSInfo.getCreater() + " 汇签下发 " + v_CSInfo.getCsMaxUserCount() + "人，最少汇签 " + v_CSInfo.getCsMinUserCount() + "人，完成于：" + v_CSInfo.getCsFinishTime());
+                    
+                    for (ProcessCounterSignatureLog v_CSLog : v_CSInfo.getLogs())
+                    {
+                        System.out.println(v_CSLog.getCsTime() + " " + v_CSLog.getCsUser() + " - " + v_CSLog.getCsType());
+                    }
+                }
+            }
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_CSInfos != null);
     }
     
 }

@@ -148,12 +148,12 @@
                        ,(
                          SELECT  COUNT(SA.pcslID) 
                            FROM  TProcessCounterSignatureLog  SA
-                          WHERE  SA.processID = A.processID
+                          WHERE  SA.pcsID = A.pcsID
                         )    AS  csUserCount
                        ,(
                          SELECT  MAX(SB.csTime) 
                            FROM  TProcessCounterSignatureLog  SB
-                          WHERE  SB.processID = A.processID
+                          WHERE  SB.pcsID = A.pcsID
                         )    AS  csLastTime
                   FROM  TProcessCounterSignature  A
                  WHERE  A.workID    = ':workID'
@@ -203,6 +203,111 @@
             <result>
                 <row>org.hy.xflow.engine.bean.ProcessCounterSignatureLog</row>
                 <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询用户是否有汇签记录</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessCounterSignatureLog_Query"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  WA.*
+                  FROM  (
+                            SELECT  A.pcsID        
+                                   ,A.processID    
+                                   ,A.workID       
+                                   ,A.serviceDataID
+                                   ,A.csMaxUserCount
+                                   ,A.csMinUserCount
+                                   ,A.csExpireTime
+                                   ,A.csFinishTime
+                                   ,A.createrID
+                                   ,A.creater
+                                   ,A.createOrgID
+                                   ,A.createOrg
+                                   ,A.createTime
+                                   ,B.pcslID         AS "logs.pcslID"
+                                   ,B.pcsID          AS "logs.pcsID"
+                                   ,B.processID      AS "logs.processID"
+                                   ,B.workID         AS "logs.workID"
+                                   ,B.serviceDataID  AS "logs.serviceDataID"
+                                   ,B.csTime         AS "logs.csTime"
+                                   ,B.csTypeID       AS "logs.csTypeID"
+                                   ,B.csType         AS "logs.csType"
+                                   ,B.csUserID       AS "logs.csUserID"
+                                   ,B.csUser         AS "logs.csUser"
+                                   ,B.csOrgID        AS "logs.csOrgID"
+                                   ,B.csOrg          AS "logs.csOrg"
+                                   ,B.csFiles        AS "logs.csFiles"
+                                   ,B.csDatas        AS "logs.csDatas"
+                                   ,B.csComment      AS "logs.csComment"
+                                   ,B.csTime         AS orderBycsTime
+                                   ,B.pcslID         AS orderBypcslID
+                              FROM  TProcessCounterSignature          A
+                              LEFT  JOIN TProcessCounterSignatureLog  B ON B.pcsID = A.pcsID
+                         <[  WHERE  A.workID        = ':workID'          ]>
+                         <[  WHERE  A.serviceDataID = ':serviceDataID'   ]>
+                         <[    AND  A.processID     = ':processID'       ]>
+                         <[    AND  A.csTypeID      = ':csTypeID'        ]>
+                         <[    AND  A.csType        = ':csType'          ]>
+                         <[    AND  A.csUserID      = ':csUserID'        ]>
+                             UNION
+                            SELECT  A.pcsID        
+                                   ,A.processID    
+                                   ,A.workID       
+                                   ,A.serviceDataID
+                                   ,A.csMaxUserCount
+                                   ,A.csMinUserCount
+                                   ,A.csExpireTime
+                                   ,A.csFinishTime
+                                   ,A.createrID
+                                   ,A.creater
+                                   ,A.createOrgID
+                                   ,A.createOrg
+                                   ,A.createTime
+                                   ,B.pcslID         AS "logs.pcslID"
+                                   ,B.pcsID          AS "logs.pcsID"
+                                   ,B.processID      AS "logs.processID"
+                                   ,B.workID         AS "logs.workID"
+                                   ,B.serviceDataID  AS "logs.serviceDataID"
+                                   ,B.csTime         AS "logs.csTime"
+                                   ,B.csTypeID       AS "logs.csTypeID"
+                                   ,B.csType         AS "logs.csType"
+                                   ,B.csUserID       AS "logs.csUserID"
+                                   ,B.csUser         AS "logs.csUser"
+                                   ,B.csOrgID        AS "logs.csOrgID"
+                                   ,B.csOrg          AS "logs.csOrg"
+                                   ,B.csFiles        AS "logs.csFiles"
+                                   ,B.csDatas        AS "logs.csDatas"
+                                   ,B.csComment      AS "logs.csComment"
+                                   ,B.csTime         AS orderBycsTime
+                                   ,B.pcslID         AS orderBypcslID
+                              FROM  TProcessCounterSignatureHis          A
+                              LEFT  JOIN TProcessCounterSignatureLogHis  B ON B.pcsID = A.pcsID
+                         <[  WHERE  A.workID        = ':workID'          ]>
+                         <[  WHERE  A.serviceDataID = ':serviceDataID'   ]>
+                         <[    AND  A.processID     = ':processID'       ]>
+                         <[    AND  A.csTypeID      = ':csTypeID'        ]>
+                         <[    AND  A.csType        = ':csType'          ]>
+                         <[    AND  A.csUserID      = ':csUserID'        ]>
+                       )  WA
+                 ORDER  BY WA.workID
+                          ,WA.createTime DESC
+                          ,WA.orderBycsTime
+                          ,WA.orderBypcslID
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.ProcessCounterSignatureLog</row>
+                <cfill>setter(colValue)</cfill>
+                <relationKeys>pcsID</relationKeys>
             </result>
             
             <comment>查询用户是否有汇签记录</comment>

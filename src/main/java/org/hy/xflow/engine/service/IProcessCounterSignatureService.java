@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.service;
 
+import java.util.List;
+
 import org.hy.xflow.engine.bean.ProcessCounterSignatureLog;
 
 
@@ -55,5 +57,37 @@ public interface IProcessCounterSignatureService
      * @return
      */
     public ProcessCounterSignatureLog queryCSLog(ProcessCounterSignatureLog i_CSLog);
+    
+    
+    
+    /**
+     * 查询汇签信息及记录（包括：活动库、历史库）
+     * 
+     * 汇签要求按时间线倒排、汇签记录按时间线正排
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-09
+     * @version     v1.0
+     *
+     * @param i_CSLog  汇签日志
+     * @return
+     */
+    public List<ProcessCounterSignatureLog> queryCSLogsByWorkID(ProcessCounterSignatureLog i_CSLog);
+    
+    
+    
+    /**
+     * 查询汇签信息及记录（包括：活动库、历史库）
+     * 
+     * 汇签要求按时间线倒排、汇签记录按时间线正排
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-09
+     * @version     v1.0
+     *
+     * @param i_CSLog  汇签日志
+     * @return
+     */
+    public List<ProcessCounterSignatureLog> queryCSLogsByServiceDataID(ProcessCounterSignatureLog i_CSLog);
     
 }

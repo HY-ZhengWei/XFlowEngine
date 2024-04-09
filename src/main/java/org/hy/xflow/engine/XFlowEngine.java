@@ -73,7 +73,8 @@ import org.hy.xflow.engine.service.ITemplateService;
  *                                添加：按人员信息查询已办时，可按流程模板名称过滤
  *                                添加：按人员信息查询督查时，可按流程模板名称过滤
  *                                添加：按人员信息查询督办时，可按流程模板名称过滤
- *              v8.0  2024-03-27  添加：汇签功能
+ *              v8.0  2024-03-27  添加：汇签下发、汇签记录、汇签完成功能
+ *                                添加：汇签查询
  */
 @Xjava
 public class XFlowEngine
@@ -1306,7 +1307,10 @@ public class XFlowEngine
                         v_CSInfo.setCsFiles(  v_CSLog.getCsFiles());
                         v_CSInfo.setCsDatas(  v_CSLog.getCsDatas());
                         v_CSInfo.setCsComment(v_CSLog.getCsComment());
+                        v_CSInfo.setCsRetain( v_CSLog.getCsRetain());
                     }
+                    
+                    v_CSInfo.setCsRetain(Help.NVL(v_CSInfo.getCsRetain() ,0));
                     
                     // 写入汇签记录
                     if ( !this.counterSignatureService.saveCSLog(v_CSInfo) )
@@ -2604,6 +2608,44 @@ public class XFlowEngine
         {
             return this.flowInfoService.addComment(io_FlowComment);
         }
+    }
+    
+    
+    
+    /**
+     * 工作流实例ID及其它条件，查询汇签信息及记录（包括：活动库、历史库）
+     * 
+     * 汇签要求按时间线倒排、汇签记录按时间线正排
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-09
+     * @version     v1.0
+     *
+     * @param i_CSLog  汇签日志
+     * @return
+     */
+    public List<ProcessCounterSignatureLog> queryCSLogsByWorkID(ProcessCounterSignatureLog i_CSLog)
+    {
+        return this.counterSignatureService.queryCSLogsByWorkID(i_CSLog);
+    }
+    
+    
+    
+    /**
+     * 按第三方使用系统的业务数据ID及其它条件，查询汇签信息及记录（包括：活动库、历史库）
+     * 
+     * 汇签要求按时间线倒排、汇签记录按时间线正排
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-09
+     * @version     v1.0
+     *
+     * @param i_CSLog  汇签日志
+     * @return
+     */
+    public List<ProcessCounterSignatureLog> queryCSLogsByServiceDataID(ProcessCounterSignatureLog i_CSLog)
+    {
+        return this.counterSignatureService.queryCSLogsByServiceDataID(i_CSLog);
     }
     
 }

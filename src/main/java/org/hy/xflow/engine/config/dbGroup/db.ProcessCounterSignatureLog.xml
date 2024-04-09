@@ -20,6 +20,7 @@
             <sqlNode>
                 <sql  ref="XSQL_XFlow_ProcessParticipants_Add_CounterSignature" />
                 <type ref="this.$Type_ExecuteUpdate" />
+                <condition><![CDATA[:csLog.csRetain == 0]]></condition>
                 <comment>添加排除执行人</comment>
             </sqlNode>
             

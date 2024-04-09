@@ -1,5 +1,7 @@
 package org.hy.xflow.engine.service.impl;
 
+import java.util.List;
+
 import org.hy.common.Date;
 import org.hy.common.Help;
 import org.hy.common.StringHelp;
@@ -83,6 +85,58 @@ public class ProcessCounterSignatureService extends BaseService implements IProc
     public ProcessCounterSignatureLog queryCSLog(ProcessCounterSignatureLog i_CSLog)
     {
         return this.counterSignatureDAO.queryCSLog(i_CSLog);
+    }
+    
+    
+    
+    /**
+     * 查询汇签信息及记录（包括：活动库、历史库）
+     * 
+     * 汇签要求按时间线倒排、汇签记录按时间线正排
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-09
+     * @version     v1.0
+     *
+     * @param i_CSLog  汇签日志
+     * @return
+     */
+    @Override
+    public List<ProcessCounterSignatureLog> queryCSLogsByWorkID(ProcessCounterSignatureLog i_CSLog)
+    {
+        if ( i_CSLog == null || Help.isNull(i_CSLog.getWorkID()) )
+        {
+            return null;
+        }
+        
+        i_CSLog.setServiceDataID(null);
+        return this.counterSignatureDAO.queryCSLogs(i_CSLog);
+    }
+    
+    
+    
+    /**
+     * 查询汇签信息及记录（包括：活动库、历史库）
+     * 
+     * 汇签要求按时间线倒排、汇签记录按时间线正排
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-09
+     * @version     v1.0
+     *
+     * @param i_CSLog  汇签日志
+     * @return
+     */
+    @Override
+    public List<ProcessCounterSignatureLog> queryCSLogsByServiceDataID(ProcessCounterSignatureLog i_CSLog)
+    {
+        if ( i_CSLog == null || Help.isNull(i_CSLog.getServiceDataID()) )
+        {
+            return null;
+        }
+        
+        i_CSLog.setWorkID(null);
+        return this.counterSignatureDAO.queryCSLogs(i_CSLog);
     }
     
 }
