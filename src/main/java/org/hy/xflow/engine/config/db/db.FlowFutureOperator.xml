@@ -25,7 +25,7 @@
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
-                DELETE FROM TFlowFutureOperator
+                DELETE  FROM TFlowFutureOperator
             <[   WHERE  serviceDataID = ':serviceDataID'   ]>
             <[   WHERE  workID        = ':workID'          ]>
                 ]]>
@@ -51,7 +51,7 @@
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
-                DELETE FROM TFlowFutureOperator
+                DELETE  FROM TFlowFutureOperator
                  WHERE  workID    = ':previous.workID'
                    AND  processID = ':previous.processID'
                 ]]>
@@ -77,7 +77,7 @@
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
-                DELETE FROM TFlowFutureOperator
+                DELETE  FROM TFlowFutureOperator
                  WHERE  workID    = ':previous.workID'
                    AND  processID = ':previous.processID'
                 ]]>
@@ -103,7 +103,7 @@
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
-                DELETE FROM TFlowFutureOperator
+                DELETE  FROM TFlowFutureOperator
                  WHERE  workID    = ':previous.workID'
                    AND  processID = ':previous.processID'
                 ]]>
@@ -128,12 +128,88 @@
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
-                DELETE FROM TFlowFutureOperator
+                DELETE  FROM TFlowFutureOperator
                  WHERE  workID    = ':previous.workID'
                 ]]>
             </content>
             
             <comment>自由驳回_协同模式：删除工作流实例的所有的未来操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_Del_CounterSignature"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TFlowFutureOperator
+                 WHERE  workID     = ':csLog.workID'
+                   AND  processID  = ':csLog.processID'
+                   AND  objectType = 1
+                   ANd  objectID   = ':csLog.csUserID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE  FROM TFlowFutureOperator
+                 WHERE  workID     = ':csLog.workID'
+                   AND  processID  = ':csLog.processID'
+                   AND  objectType = 1
+                   ANd  objectID   = ':csLog.csUserID'
+                ]]>
+            </content>
+            
+            <comment>汇签记录：删除工作流实例的指定的未来操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_Add_CounterSignature"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TFlowFutureOperator
+                       (
+                        workID
+                       ,serviceDataID
+                       ,processID
+                       ,splitProcessID
+                       ,objectType
+                       ,objectID
+                       ,objectName
+                       ,objectNo
+                       ,createrID
+                       ,creater
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       )
+                VALUES (
+                        ':csLog.workID'
+                       ,':csLog.serviceDataID'
+                       ,':csLog.processID'
+                       ,''
+                       ,-1
+                       ,':csLog.csUserID'
+                       ,':csLog.csUser'
+                       ,1
+                       ,':csLog.csUserID'
+                       ,':csLog.csUser'
+                       ,':csLog.csOrgID'
+                       ,':csLog.csOrg'
+                       ,':csLog.csTime'
+                       )
+                ]]>
+            </content>
+            
+            <comment>汇签记录：添加排除执行人</comment>
             
         </sql>
         

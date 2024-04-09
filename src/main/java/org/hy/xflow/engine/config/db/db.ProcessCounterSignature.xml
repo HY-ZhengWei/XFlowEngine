@@ -49,7 +49,26 @@
                 ]]>
             </content>
             
-            <comment>适用于汇签场景01：新增汇签任务</comment>
+            <comment>汇签下发</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessCounterSignature_Update"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                UPDATE  TProcessCounterSignature 
+                   SET  csFinishTime = ':process.counterSignature.csFinishTime'     
+                 WHERE  workID       = ':process.workID'
+                   AND  processID    = ':process.processID'
+                ]]>
+            </content>
+            
+            <comment>汇签完成</comment>
             
         </sql>
         
@@ -80,34 +99,112 @@
                        ,csComment 
                        )
                 VALUES (
-                        ':process.counterSignature.pcslID'
-                       ,':process.counterSignature.pcsID'
-                       ,':process.counterSignature.processID'
-                       ,':process.counterSignature.workID'
-                       ,':process.counterSignature.serviceDataID'
-                       ,':process.counterSignature.csTime'
-                       ,':process.counterSignature.csTypeID'
-                       ,':process.counterSignature.csType'
-                       ,':process.counterSignature.csUserID'
-                       ,':process.counterSignature.csUser'
-                       ,':process.counterSignature.csOrgID'
-                       ,':process.counterSignature.csOrg'
-                       ,':process.counterSignature.csFiles'
-                       ,':process.counterSignature.csDatas'
-                       ,':process.counterSignature.csComment'
+                        ':csLog.pcslID'
+                       ,':csLog.pcsID'
+                       ,':csLog.processID'
+                       ,':csLog.workID'
+                       ,':csLog.serviceDataID'
+                       ,':csLog.csTime'
+                       ,':csLog.csTypeID'
+                       ,':csLog.csType'
+                       ,':csLog.csUserID'
+                       ,':csLog.csUser'
+                       ,':csLog.csOrgID'
+                       ,':csLog.csOrg'
+                       ,':csLog.csFiles'
+                       ,':csLog.csDatas'
+                       ,':csLog.csComment'
                        )
                 ]]>
             </content>
             
-            <comment>适用于汇签场景02：记录每位人员的汇签</comment>
+            <comment>汇签记录</comment>
             
         </sql>
         
         
         
+        <sql id="XSQL_XFlow_ProcessCounterSignature_QueryByProcessID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.pcsID        
+                       ,A.processID    
+                       ,A.workID       
+                       ,A.serviceDataID
+                       ,A.csMaxUserCount
+                       ,A.csMinUserCount
+                       ,A.csExpireTime
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,(
+                         SELECT  COUNT(SA.pcslID) 
+                           FROM  TProcessCounterSignatureLog  SA
+                          WHERE  SA.processID = A.processID
+                        )    AS  csUserCount
+                       ,(
+                         SELECT  MAX(SB.csTime) 
+                           FROM  TProcessCounterSignatureLog  SB
+                          WHERE  SB.processID = A.processID
+                        )    AS  csLastTime
+                  FROM  TProcessCounterSignature  A
+                 WHERE  A.workID    = ':workID'
+                   AND  A.processID = ':processID'
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.ProcessCounterSignatureLog</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询汇签要求</comment>
+            
+        </sql>
         
         
         
+        <sql id="XSQL_XFlow_ProcessCounterSignatureLog_QueryByUserID"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.pcslID       
+                       ,A.pcsID        
+                       ,A.processID    
+                       ,A.workID       
+                       ,A.serviceDataID
+                       ,A.csTime       
+                       ,A.csTypeID     
+                       ,A.csType       
+                       ,A.csUserID     
+                       ,A.csUser       
+                       ,A.csOrgID      
+                       ,A.csOrg        
+                       ,A.csFiles      
+                       ,A.csDatas      
+                       ,A.csComment 
+                  FROM  TProcessCounterSignatureLog  A
+                 WHERE  A.workID    = ':workID'
+                   AND  A.processID = ':processID'
+                   AND  A.csUserID  = ':csUserID'
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.ProcessCounterSignatureLog</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询用户是否有汇签记录</comment>
+            
+        </sql>
         
         
         

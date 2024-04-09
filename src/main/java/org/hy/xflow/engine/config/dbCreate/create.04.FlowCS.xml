@@ -25,6 +25,7 @@
                 ,csMaxUserCount     NUMBER(10)                       NOT NULL
                 ,csMinUserCount     NUMBER(10)                       NOT NULL
                 ,csExpireTime       DATE
+                ,csFinishTime       DATE
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            VARCHAR2(128)
                 ,createOrgID        VARCHAR2(64)
@@ -46,6 +47,7 @@
                 COMMENT ON COLUMN TProcessCounterSignature.csMaxUserCount     IS '应当汇签人数';/
                 COMMENT ON COLUMN TProcessCounterSignature.csMinUserCount     IS '最小汇签人数';/
                 COMMENT ON COLUMN TProcessCounterSignature.csExpireTime       IS '汇签过期时间';/
+                COMMENT ON COLUMN TProcessCounterSignature.csFinishTime       IS '汇签完成时间';/
                 COMMENT ON COLUMN TProcessCounterSignature.createrID          IS '创建人员ID';/
                 COMMENT ON COLUMN TProcessCounterSignature.creater            IS '创建人员名称';/
                 COMMENT ON COLUMN TProcessCounterSignature.createOrgID        IS '创建部门ID';/
@@ -65,6 +67,7 @@
                 ,csMaxUserCount     INT(10)                         NOT NULL COMMENT '应当汇签人数'
                 ,csMinUserCount     INT(10)                         NOT NULL COMMENT '最小汇签人数'
                 ,csExpireTime       DATETIME                                 COMMENT '汇签过期时间'
+                ,csFinishTime       DATETIME                                 COMMENT '汇签完成时间'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createOrgID        VARCHAR(64)                              COMMENT '创建部门ID'
@@ -93,6 +96,7 @@
                 ,csMaxUserCount     INT                             NOT NULL
                 ,csMinUserCount     INT                             NOT NULL
                 ,csExpireTime       DATETIME
+                ,csFinishTime       DATETIME
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            VARCHAR(128)
                 ,createOrgID        VARCHAR(64)
@@ -114,6 +118,7 @@
                 EXEC P_ColumnComment TProcessCounterSignature ,csMaxUserCount     ,'应当汇签人数';/
                 EXEC P_ColumnComment TProcessCounterSignature ,csMinUserCount     ,'最小汇签人数';/
                 EXEC P_ColumnComment TProcessCounterSignature ,csExpireTime       ,'汇签过期时间';/
+                EXEC P_ColumnComment TProcessCounterSignature ,csFinishTime       ,'汇签完成时间';/
                 EXEC P_ColumnComment TProcessCounterSignature ,createrID          ,'创建人员ID';/
                 EXEC P_ColumnComment TProcessCounterSignature ,creater            ,'创建人员名称';/
                 EXEC P_ColumnComment TProcessCounterSignature ,createOrgID        ,'创建部门ID';/

@@ -56,16 +56,22 @@ public class JU_007 extends BaseJunit
         teacher = new User();
         teacher.setUserID("目老师");
         teacher.setUserName("目老师");
+        teacher.setOrgID("math");
+        teacher.setOrgID("数学系");
         teacher.addRole("教师的角色" ,"教师的角色");
         
         student01 = new User();
         student01.setUserID("ZhengWei");
         student01.setUserName("阿伟");
+        student01.setOrgID("IT");
+        student01.setOrgID("计算机系");
         student01.addRole("学生的角色" ,"学生的角色");
         
         student02 = new User();
         student02.setUserID("HY");
         student02.setUserName("开心");
+        student02.setOrgID("IT");
+        student02.setOrgID("计算机系");
         student02.addRole("学生的角色" ,"学生的角色");
     }
     
@@ -124,7 +130,7 @@ public class JU_007 extends BaseJunit
     
     
     /**
-     * 教师部署家庭作业（汇签场景01：下发汇签任务）
+     * 教师部署家庭作业（汇签场景01：汇签下发）
      * 
      * @author      ZhengWei(HY)
      * @createDate  2024-04-03
@@ -144,6 +150,37 @@ public class JU_007 extends BaseJunit
             v_ProcessExtra.getCounterSignature().setCsExpireTime(new Date().getDate(1));
             
             v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(teacher ,serviceDataID ,v_ProcessExtra ,ActivityRouteTree.$AutoActivityRouteCode);
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_FlowProcess != null);
+    }
+    
+    
+    
+    /**
+     * 学生提交作业（汇签场景02：汇签记录）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-08
+     * @version     v1.0
+     */
+    @Test
+    public void test_提交作业_学生A()
+    {
+        FlowProcess v_FlowProcess = null;
+        
+        try
+        {
+            FlowProcess v_ProcessExtra = new FlowProcess();
+            v_ProcessExtra.setCounterSignature(new ProcessCounterSignatureLog());
+            v_ProcessExtra.getCounterSignature().setCsType  ("完成作业");
+            v_ProcessExtra.getCounterSignature().setCsTypeID("Finish");
+            
+            v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(student01 ,serviceDataID ,v_ProcessExtra ,ActivityRouteTree.$AutoActivityRouteCode);
         }
         catch (Exception exce)
         {

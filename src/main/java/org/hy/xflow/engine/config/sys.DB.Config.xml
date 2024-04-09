@@ -35,7 +35,7 @@
         <!-- MySQL数据库 -->
         <dataSource id="DS_XFlow_01" if="MYSQL == XFlow_DataSourceType.getValue">
             <driverClass>com.mysql.cj.jdbc.Driver</driverClass>
-            <jdbcUrl>jdbc:mysql://10.1.20.202:3307/service_change?useUnicode=true&amp;characterEncoding=utf-8</jdbcUrl>
+            <jdbcUrl><![CDATA[jdbc:mysql://10.1.20.202:3307/service_change?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&autoReconnect=true]]></jdbcUrl>
             <user>root</user>
             <password></password>        <!-- 明文自动加密成密文 -->
             <maxPoolSize>100</maxPoolSize>

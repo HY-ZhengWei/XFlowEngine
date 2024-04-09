@@ -70,15 +70,15 @@
             <sqlNode>
                 <sql  ref="XSQL_XFlow_ProcessCounterSignature_Insert" />
                 <type ref="this.$Type_ExecuteUpdate" />
-                <condition><![CDATA[:process.counterSignature.createTime != NULL]]></condition>
-                <comment>汇签场景01：下发汇签任务</comment>
+                <condition><![CDATA[:process.counterSignature != NULL && :process.counterSignature.createTime != NULL]]></condition>
+                <comment>汇签场景01：汇签下发</comment>
             </sqlNode>
             
             <sqlNode>
-                <sql  ref="XSQL_XFlow_ProcessCounterSignatureLog_Insert" />
+                <sql  ref="XSQL_XFlow_ProcessCounterSignature_Update" />
                 <type ref="this.$Type_ExecuteUpdate" />
-                <condition><![CDATA[:process.counterSignature.createTime == NULL]]></condition>
-                <comment>汇签场景02：记录每位的汇签</comment>
+                <condition><![CDATA[:process.counterSignature != NULL && :process.counterSignature.csFinish == 1]]></condition>
+                <comment>汇签场景03：汇签完成</comment>
             </sqlNode>
             
             <sqlNode>

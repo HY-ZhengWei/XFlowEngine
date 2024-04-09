@@ -36,6 +36,7 @@ import org.hy.xflow.engine.enums.RouteTypeEnum;
 import org.hy.xflow.engine.service.IFlowFutureOperatorService;
 import org.hy.xflow.engine.service.IFlowInfoService;
 import org.hy.xflow.engine.service.IFlowProcessService;
+import org.hy.xflow.engine.service.IProcessCounterSignatureService;
 import org.hy.xflow.engine.service.IProcessParticipantsService;
 import org.hy.xflow.engine.service.ITemplateService;
 
@@ -82,19 +83,22 @@ public class XFlowEngine
     
     
     @Xjava
-    private ITemplateService            templateService;
+    private ITemplateService                templateService;
     
     @Xjava
-    private IFlowInfoService            flowInfoService;
+    private IFlowInfoService                flowInfoService;
     
     @Xjava
-    private IFlowProcessService         flowProcessService;
+    private IFlowProcessService             flowProcessService;
     
     @Xjava
-    private IProcessParticipantsService processParticipantsService;
+    private IProcessParticipantsService     processParticipantsService;
     
     @Xjava
-    private IFlowFutureOperatorService  futureOperatorService;
+    private IFlowFutureOperatorService      futureOperatorService;
+    
+    @Xjava
+    private IProcessCounterSignatureService counterSignatureService;
     
     
     
@@ -1250,10 +1254,84 @@ public class XFlowEngine
                 v_PCS.setCreateOrg(    v_Process.getOperateOrg());
                 v_PCS.setCreateTime(   v_Process.getOperateTime());
             }
+            // 汇签完成：主动结束汇签 Add 2024-04-07
+            else if ( i_ProcessExtra != null && i_ProcessExtra.getCounterSignature() != null && Help.NVL(i_ProcessExtra.getCounterSignature().getCsFinish()) == 1 )
+            {
+                ProcessCounterSignatureLog v_CSInfo = i_ProcessExtra.getCounterSignature();
+                v_CSInfo.setCsFinishTime(Help.NVL(v_CSInfo.getCsFinishTime() ,new Date()));
+                v_Process.setCounterSignature(v_CSInfo);
+            }
             // 汇签记录：判定之前的操作类型是否为：汇签 Add 2024-04-07
             else if ( RouteTypeEnum.$CounterSignature.getValue().equals(v_Previous.getPreviousOperateTypeID()) )
             {
-                
+                synchronized ( this )
+                {
+                    ProcessCounterSignatureLog v_CSParam = new ProcessCounterSignatureLog();
+                    v_CSParam.setWorkID(   v_Previous.getWorkID());
+                    v_CSParam.setProcessID(v_Previous.getProcessID());
+                    v_CSParam.setCsUserID(     i_User.getUserID());
+                    
+                    // 判定用户是否汇签过
+                    ProcessCounterSignatureLog v_CSLog = this.counterSignatureService.queryCSLog(v_CSParam);
+                    if ( v_CSLog != null )
+                    {
+                        throw new RuntimeException("WorkID[" + i_WorkID + "] has counterSignature is " + v_CSLog.getCsTime().getFull() + ". ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                    }
+                    
+                    ProcessCounterSignatureLog v_CSInfo = this.counterSignatureService.queryCSInfo(v_CSParam);
+                    if ( v_CSInfo == null )
+                    {
+                        throw new RuntimeException("WorkID[" + i_WorkID + "] counterSignature is not exists. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                    }
+                    // 判定汇签时效是否过期
+                    if ( v_CSInfo.getCsExpireTime() != null )
+                    {
+                        if ( v_CSInfo.getCsExpireTime().differ(Date.getNowTime()) <= 0 )
+                        {
+                            throw new RuntimeException("WorkID[" + i_WorkID + "] counterSignature ExpireTime is " + v_CSInfo.getCsExpireTime().getFull() + ". ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                        }
+                    }
+                    
+                    if ( i_ProcessExtra != null && i_ProcessExtra.getCounterSignature() != null )
+                    {
+                        v_CSLog = i_ProcessExtra.getCounterSignature();
+                        v_CSInfo.setCsUserID(  i_User.getUserID());
+                        v_CSInfo.setCsUser(    i_User.getUserName());
+                        v_CSInfo.setCsOrgID(   i_User.getOrgID());
+                        v_CSInfo.setCsOrg(     i_User.getOrgName());
+                        v_CSInfo.setCsTime(   v_CSLog.getCsTime());
+                        v_CSInfo.setCsTypeID( v_CSLog.getCsTypeID());
+                        v_CSInfo.setCsType  ( v_CSLog.getCsType());
+                        v_CSInfo.setCsFiles(  v_CSLog.getCsFiles());
+                        v_CSInfo.setCsDatas(  v_CSLog.getCsDatas());
+                        v_CSInfo.setCsComment(v_CSLog.getCsComment());
+                    }
+                    
+                    // 写入汇签记录
+                    if ( !this.counterSignatureService.saveCSLog(v_CSInfo) )
+                    {
+                        throw new RuntimeException("WorkID[" + i_WorkID + "] counterSignature write DB is error. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
+                    }
+                    
+                    v_CSInfo.setCsLastTime(Help.max(v_CSInfo.getCsLastTime() ,v_CSInfo.getCsTime()));
+                    v_CSInfo.setCsUserCount(v_CSInfo.getCsUserCount() + 1);
+                    
+                    // 满足最小汇签人数
+                    // 满足应当汇签人数
+                    if ( (v_CSInfo.getCsMinUserCount() > 0 && v_CSInfo.getCsMinUserCount() <= v_CSInfo.getCsUserCount())
+                      || (v_CSInfo.getCsMaxUserCount() > 0 && v_CSInfo.getCsMaxUserCount() <= v_CSInfo.getCsUserCount()) )
+                    {
+                        v_CSInfo.setCsFinishTime(v_CSInfo.getCsLastTime());
+                        v_Process.setCounterSignature(v_CSInfo);
+                    }
+                    // 仅汇签记录的直接返回
+                    else
+                    {
+                        v_Previous.setCounterSignature(v_CSInfo);
+                        v_ProcessList.add(v_Previous);
+                        return v_ProcessList;
+                    }
+                }
             }
             
             // 生成参与人信息
