@@ -9,6 +9,7 @@ cd .\target\classes
 
 
 rd /s/q .\org\hy\xflow\engine\junit
+del /q .\org\hy\xflow\engine\config\sys.DB.Config.xml
 
 
 jar cvfm hy.xflow.engine.jar META-INF/MANIFEST.MF META-INF org
