@@ -18,13 +18,7 @@
             </sqlNode>
             
             <sqlNode>
-                <sql  ref="XSQL_XFlow_TFlowFutureOperator_Del_CounterSignature" />
-                <type ref="this.$Type_ExecuteUpdate" />
-                <comment>删除指定的未来操作人</comment>
-            </sqlNode>
-            
-            <sqlNode>
-                <sql  ref="XSQL_XFlow_TFlowFutureOperator_Add_CounterSignature" />
+                <sql  ref="XSQL_XFlow_ProcessParticipants_Add_CounterSignature" />
                 <type ref="this.$Type_ExecuteUpdate" />
                 <comment>添加排除执行人</comment>
             </sqlNode>

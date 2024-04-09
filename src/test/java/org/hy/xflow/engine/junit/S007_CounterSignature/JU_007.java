@@ -2,7 +2,10 @@ package org.hy.xflow.engine.junit.S007_CounterSignature;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.hy.common.Date;
+import org.hy.common.Help;
 import org.hy.common.xml.log.Logger;
 import org.hy.xflow.engine.XFlowEngine;
 import org.hy.xflow.engine.bean.ActivityRouteTree;
@@ -45,7 +48,7 @@ public class JU_007 extends BaseJunit
     private User   student02;
     
     /** 业务流转ID */
-    private String serviceDataID = "202404-001";
+    private String serviceDataID = "202404-004";
     
     
     
@@ -145,8 +148,8 @@ public class JU_007 extends BaseJunit
         {
             FlowProcess v_ProcessExtra = new FlowProcess();
             v_ProcessExtra.setCounterSignature(new ProcessCounterSignatureLog());
-            v_ProcessExtra.getCounterSignature().setCsMaxUserCount(2);
-            v_ProcessExtra.getCounterSignature().setCsMinUserCount(2);
+            v_ProcessExtra.getCounterSignature().setCsMaxUserCount(0);
+            v_ProcessExtra.getCounterSignature().setCsMinUserCount(0);
             v_ProcessExtra.getCounterSignature().setCsExpireTime(new Date().getDate(1));
             
             v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(teacher ,serviceDataID ,v_ProcessExtra ,ActivityRouteTree.$AutoActivityRouteCode);
@@ -181,6 +184,65 @@ public class JU_007 extends BaseJunit
             v_ProcessExtra.getCounterSignature().setCsTypeID("Finish");
             
             v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(student01 ,serviceDataID ,v_ProcessExtra ,ActivityRouteTree.$AutoActivityRouteCode);
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_FlowProcess != null);
+    }
+    
+    
+    
+    /**
+     * 学生提交作业（汇签场景02：汇签记录）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-08
+     * @version     v1.0
+     */
+    @Test
+    public void test_提交作业_学生B()
+    {
+        FlowProcess v_FlowProcess = null;
+        
+        try
+        {
+            FlowProcess v_ProcessExtra = new FlowProcess();
+            v_ProcessExtra.setCounterSignature(new ProcessCounterSignatureLog());
+            v_ProcessExtra.getCounterSignature().setCsType  ("完成作业");
+            v_ProcessExtra.getCounterSignature().setCsTypeID("Finish");
+            
+            v_FlowProcess = XFlowEngine.getInstance().toNextByServiceDataID(student02 ,serviceDataID ,v_ProcessExtra ,ActivityRouteTree.$AutoActivityRouteCode);
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        
+        assertTrue(v_FlowProcess != null);
+    }
+    
+    
+    
+    /**
+     * 学生A提交作业之前，可以查询到待办信息
+     * 学生A提交作业之后，不应查询到待办信息。哪怕未来操作是按角色下发的汇签任务，也不应查询到
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-09
+     * @version     v1.0
+     */
+    @Test
+    public void test_查询待办_学生A()
+    {
+        FlowProcess v_FlowProcess = null;
+        
+        try
+        {
+            List<String> v_WorkIDs = XFlowEngine.getInstance().queryWorkIDs(student01 ,$TemplateName);
+            Help.print(v_WorkIDs);
         }
         catch (Exception exce)
         {

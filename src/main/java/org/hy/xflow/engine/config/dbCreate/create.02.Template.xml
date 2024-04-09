@@ -248,14 +248,16 @@
             
             <content>
                 <![CDATA[
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(1  ,'执行人'        ,1);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(2  ,'执行部门'      ,2);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(3  ,'执行角色'      ,3);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(11 ,'抄送人'        ,11);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(12 ,'抄送部门'      ,12);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(13 ,'抄送角色'      ,13);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(21 ,'发起人'        ,21);/
-                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(22 ,'活动实际操作人' ,22);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(-1  ,'排除执行人'    ,-2);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(-11 ,'排除抄送人'    ,-1);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(1   ,'执行人'        ,1);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(2   ,'执行部门'      ,2);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(3   ,'执行角色'      ,3);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(11  ,'抄送人'        ,11);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(12  ,'抄送部门'      ,12);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(13  ,'抄送角色'      ,13);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(21  ,'发起人'        ,21);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(22  ,'活动实际操作人' ,22);/
                 ]]>
             </content>
             

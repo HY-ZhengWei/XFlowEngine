@@ -59,7 +59,6 @@
         
         
         
-        <!-- 暂不启用 -->
         <sql id="XSQL_XFlow_ProcessParticipants_Del_CounterSignature"> 
         
             <dataSourceGroup ref="DSG_XFlow" />
@@ -67,24 +66,24 @@
             <content>
                 <![CDATA[
                 DELETE  TProcessParticipants
-                 WHERE  workID     = ':csLog.workID'
-                   AND  processID  = ':csLog.processID'
-                   AND  objectType = 1
-                   ANd  objectID   = ':csLog.csUserID'
+                 WHERE  workID     = ':process.workID'
+                   AND  processID  = ':process.previousProcessID'
+                   AND  objectType = -1
+                   ANd  pwpID   LIKE 'PCSL%'
                 ]]>
             </content>
             
             <content if="MYSQL == DSG_XFlow.getDbProductType">
                 <![CDATA[
                 DELETE  FROM TProcessParticipants
-                 WHERE  workID     = ':csLog.workID'
-                   AND  processID  = ':csLog.processID'
-                   AND  objectType = 1
-                   ANd  objectID   = ':csLog.csUserID'
+                 WHERE  workID     = ':process.workID'
+                   AND  processID  = ':process.previousProcessID'
+                   AND  objectType = -1
+                   ANd  pwpID   LIKE 'PCSL%'
                 ]]>
             </content>
             
-            <comment>汇签记录：删除工作流实例的指定的未来操作人</comment>
+            <comment>汇签记录：删除暂时添加的排除执行人信息</comment>
             
         </sql>
         

@@ -36,6 +36,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  *                                2. 添加：支持多路并行路由的流程
  *              v3.0  2020-01-02  1. 添加：工作流引擎集群，同步引擎数据
  *              v4.0  2024-02-23  1. 添加：按人员信息查询待办时，可按流程模板名称过滤
+ *              v5.0  2024-04-09  1. 添加：排除执行人、排除抄送人
  */
 @Xjava
 public class FlowFutureOperatorService extends BaseService implements IFlowFutureOperatorService ,CommunicationListener
@@ -140,6 +141,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      *              v2.0  2023-02-10  添加：三种角色的抄送功能
      *              v3.0  2023-06-01  删除：使用 "督办" 查询接口代替 "抄送"
      *              v4.0  2024-02-23  添加：流程模板名称的查询条件
+     *              v5.0  2024-04-09  添加：排除执行人、排除抄送人
      * 
      * @param i_User          流程用户
      * @param i_TemplateName  流程模板名称
@@ -154,11 +156,21 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
         
         if ( Help.isNull(i_TemplateName) )
         {
-            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID());
+            // 排除执行人
+            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$ExcludeUser.getValue() + ":" + i_User.getUserID());
+            if ( v_Temp == null )
+            {
+                v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID());
+            }
         }
         else
         {
-            v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+            // 排除执行人
+            v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$ExcludeUser.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+            if ( v_Temp == null )
+            {
+                v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+            }
         }
         
         if ( !Help.isNull(v_Temp) )
@@ -241,6 +253,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
      * @author      ZhengWei(HY)
      * @createDate  2023-02-10
      * @version     v1.0
+     *              v2.0  2024-04-09  添加：排除执行人、排除抄送人
      *
      * @param i_User    参与人
      * @param i_WorkID  工作流实例ID
@@ -250,6 +263,19 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     public ParticipantTypeEnum queryParticipantType(User i_User ,String i_WorkID)
     {
         List<FutureOperator> v_Temp = null;
+        
+        // 排除执行人
+        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$ExcludeUser.getValue() + ":" + i_User.getUserID());
+        if ( !Help.isNull(v_Temp) )
+        {
+            for (FutureOperator v_FutureOpt : v_Temp)
+            {
+                if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                {
+                    return ParticipantTypeEnum.$ExcludeUser;
+                }
+            }
+        }
         
         v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$User.getValue() + ":" + i_User.getUserID());
         if ( !Help.isNull(v_Temp) )
@@ -316,6 +342,19 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                             return ParticipantTypeEnum.$Role;
                         }
                     }
+                }
+            }
+        }
+        
+        // 排除抄送人
+        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$ExcludeUserSend.getValue() + ":" + i_User.getUserID());
+        if ( !Help.isNull(v_Temp) )
+        {
+            for (FutureOperator v_FutureOpt : v_Temp)
+            {
+                if ( i_WorkID.equals(v_FutureOpt.getWorkID()) )
+                {
+                    return ParticipantTypeEnum.$ExcludeUserSend;
                 }
             }
         }

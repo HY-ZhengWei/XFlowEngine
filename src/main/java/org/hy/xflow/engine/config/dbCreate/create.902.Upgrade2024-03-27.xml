@@ -26,6 +26,9 @@
                 ALTER TABLE TActivityRoute ADD   weight NUMBER(10);/
                 COMMENT ON COLUMN TActivityRoute.weight IS '权重';/
                 
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(-1  ,'排除执行人'    ,-2);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(-11 ,'排除抄送人'    ,-1);/
+                
                 UPDATE TUpgrade20240327 SET updateTime = SYSDATE WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>
             </content>
@@ -40,6 +43,9 @@
                 INSERT  INTO TRouteType(routeTypeID ,routeType ,orderNo) VALUES('RT006' ,'汇签' ,6);/
                 
                 ALTER TABLE TActivityRoute ADD weight INT(10) NULL COMMENT '权重';/
+                
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(-1  ,'排除执行人'    ,-2);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(-11 ,'排除抄送人'    ,-1);/
                 
                 UPDATE TUpgrade20240327 SET updateTime = NOW() WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>
@@ -56,6 +62,9 @@
                 
                 ALTER TABLE TActivityRoute ADD       weight INT NULL;/
                 EXEC P_ColumnComment TActivityRoute ,weight ,'权重';/
+                
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(-1  ,'排除执行人'    ,-2);/
+                INSERT  INTO TParticipantType(participantTypeID ,participantType ,orderNo) VALUES(-11 ,'排除抄送人'    ,-1);/
                 
                 UPDATE TUpgrade20240327 SET updateTime = GETDATE() WHERE id = '汇签与汇总区分实现&自动流转的路由标示';/
                 ]]>

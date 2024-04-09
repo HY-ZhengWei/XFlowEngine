@@ -1222,43 +1222,44 @@ public class XFlowEngine
                 }
                 
                 v_Process.setCounterSignature(i_ProcessExtra.getCounterSignature());
-                ProcessCounterSignatureLog v_PCS = v_Process.getCounterSignature();
-                v_PCS.setCsMaxUserCount(Help.max(Help.NVL(v_PCS.getCsMaxUserCount() ,0) ,0));
-                v_PCS.setCsMinUserCount(Help.max(Help.NVL(v_PCS.getCsMinUserCount() ,0) ,0));
+                ProcessCounterSignatureLog v_CSInfo = v_Process.getCounterSignature();
+                v_CSInfo.setCsMaxUserCount(Help.max(Help.NVL(v_CSInfo.getCsMaxUserCount() ,0) ,0));
+                v_CSInfo.setCsMinUserCount(Help.max(Help.NVL(v_CSInfo.getCsMinUserCount() ,0) ,0));
                 
                 // 应当汇签人数、最小汇签、汇签过期时间不能均为空或0值，这样就无法结束流程了
-                if ( v_PCS.getCsMaxUserCount() == 0 && v_PCS.getCsMinUserCount() == 0 )
+                if ( v_CSInfo.getCsMaxUserCount() == 0 && v_CSInfo.getCsMinUserCount() == 0 )
                 {
-                    if ( v_PCS.getCsExpireTime() == null )
+                    if ( v_CSInfo.getCsExpireTime() == null )
                     {
                         throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is CounterSignature ,but invalid CsExpireTime. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
                     }
                 }
                 
                 // 汇签过期时间应大于当前时间
-                if ( v_PCS.getCsExpireTime() != null )
+                if ( v_CSInfo.getCsExpireTime() != null )
                 {
-                    if ( v_PCS.getCsExpireTime().differ(Date.getNowTime()) <= 0 )
+                    if ( v_CSInfo.getCsExpireTime().differ(Date.getNowTime()) <= 0 )
                     {
                         throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is CounterSignature ,but CsExpireTime is too small. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
                     }
                 }
                 
-                v_PCS.setPcsID("PCS" + StringHelp.getUUID());
-                v_PCS.setProcessID(    v_Process.getProcessID());
-                v_PCS.setWorkID(       v_Process.getWorkID());
-                v_PCS.setServiceDataID(v_Process.getServiceDataID());
-                v_PCS.setCreaterID(    v_Process.getOperateUserID());
-                v_PCS.setCreater(      v_Process.getOperateUser());
-                v_PCS.setCreateOrgID(  v_Process.getOperateOrgID());
-                v_PCS.setCreateOrg(    v_Process.getOperateOrg());
-                v_PCS.setCreateTime(   v_Process.getOperateTime());
+                v_CSInfo.setPcsID("PCS" + StringHelp.getUUID());
+                v_CSInfo.setProcessID(    v_Process.getProcessID());
+                v_CSInfo.setWorkID(       v_Process.getWorkID());
+                v_CSInfo.setServiceDataID(v_Process.getServiceDataID());
+                v_CSInfo.setCreaterID(    v_Process.getOperateUserID());
+                v_CSInfo.setCreater(      v_Process.getOperateUser());
+                v_CSInfo.setCreateOrgID(  v_Process.getOperateOrgID());
+                v_CSInfo.setCreateOrg(    v_Process.getOperateOrg());
+                v_CSInfo.setCreateTime(   v_Process.getOperateTime());
             }
             // 汇签完成：主动结束汇签 Add 2024-04-07
             else if ( i_ProcessExtra != null && i_ProcessExtra.getCounterSignature() != null && Help.NVL(i_ProcessExtra.getCounterSignature().getCsFinish()) == 1 )
             {
                 ProcessCounterSignatureLog v_CSInfo = i_ProcessExtra.getCounterSignature();
                 v_CSInfo.setCsFinishTime(Help.NVL(v_CSInfo.getCsFinishTime() ,new Date()));
+                v_CSInfo.setCreateTime(null);
                 v_Process.setCounterSignature(v_CSInfo);
             }
             // 汇签记录：判定之前的操作类型是否为：汇签 Add 2024-04-07
@@ -1313,6 +1314,7 @@ public class XFlowEngine
                         throw new RuntimeException("WorkID[" + i_WorkID + "] counterSignature write DB is error. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
                     }
                     
+                    v_CSInfo.setCreateTime(null);  // 一定要设置为NULL，因为XSQL组是通过它来判定汇签场景的
                     v_CSInfo.setCsLastTime(Help.max(v_CSInfo.getCsLastTime() ,v_CSInfo.getCsTime()));
                     v_CSInfo.setCsUserCount(v_CSInfo.getCsUserCount() + 1);
                     
@@ -1321,6 +1323,7 @@ public class XFlowEngine
                     if ( (v_CSInfo.getCsMinUserCount() > 0 && v_CSInfo.getCsMinUserCount() <= v_CSInfo.getCsUserCount())
                       || (v_CSInfo.getCsMaxUserCount() > 0 && v_CSInfo.getCsMaxUserCount() <= v_CSInfo.getCsUserCount()) )
                     {
+                        v_CSInfo.setCsFinish(1);
                         v_CSInfo.setCsFinishTime(v_CSInfo.getCsLastTime());
                         v_Process.setCounterSignature(v_CSInfo);
                     }

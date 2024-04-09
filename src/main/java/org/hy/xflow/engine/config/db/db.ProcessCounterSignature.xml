@@ -26,6 +26,7 @@
                        ,csMaxUserCount
                        ,csMinUserCount
                        ,csExpireTime
+                       ,csFinishTime
                        ,createrID
                        ,creater
                        ,createOrgID
@@ -40,6 +41,7 @@
                        ,':process.counterSignature.csMaxUserCount'
                        ,':process.counterSignature.csMinUserCount'
                        ,':process.counterSignature.csExpireTime'
+                       ,NULL
                        ,':process.counterSignature.createrID'
                        ,':process.counterSignature.creater'
                        ,':process.counterSignature.createOrgID'
@@ -64,7 +66,7 @@
                 UPDATE  TProcessCounterSignature 
                    SET  csFinishTime = ':process.counterSignature.csFinishTime'     
                  WHERE  workID       = ':process.workID'
-                   AND  processID    = ':process.processID'
+                   AND  processID    = ':process.previousProcessID'
                 ]]>
             </content>
             
@@ -137,6 +139,7 @@
                        ,A.csMaxUserCount
                        ,A.csMinUserCount
                        ,A.csExpireTime
+                       ,A.csFinishTime
                        ,A.createrID
                        ,A.creater
                        ,A.createOrgID
@@ -223,6 +226,7 @@
                        ,csMaxUserCount
                        ,csMinUserCount
                        ,csExpireTime
+                       ,csFinishTime
                        ,createrID
                        ,creater
                        ,createOrgID
@@ -236,6 +240,7 @@
                        ,A.csMaxUserCount
                        ,A.csMinUserCount
                        ,A.csExpireTime
+                       ,A.csFinishTime
                        ,A.createrID
                        ,A.creater
                        ,A.createOrgID
