@@ -59,6 +59,85 @@
         
         
         
+        <!-- 暂不启用 -->
+        <sql id="XSQL_XFlow_ProcessParticipants_Del_CounterSignature"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                DELETE  TProcessParticipants
+                 WHERE  workID     = ':csLog.workID'
+                   AND  processID  = ':csLog.processID'
+                   AND  objectType = 1
+                   ANd  objectID   = ':csLog.csUserID'
+                ]]>
+            </content>
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                DELETE  FROM TProcessParticipants
+                 WHERE  workID     = ':csLog.workID'
+                   AND  processID  = ':csLog.processID'
+                   AND  objectType = 1
+                   ANd  objectID   = ':csLog.csUserID'
+                ]]>
+            </content>
+            
+            <comment>汇签记录：删除工作流实例的指定的未来操作人</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_ProcessParticipants_Add_CounterSignature"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                INSERT  INTO TProcessParticipants
+                       (
+                        pwpID
+                       ,processID
+                       ,splitProcessID
+                       ,workID
+                       ,serviceDataID
+                       ,objectID
+                       ,objectName
+                       ,objectNo
+                       ,objectType
+                       ,createOrgID
+                       ,createOrg
+                       ,createTime
+                       ,createrID
+                       ,creater
+                       )
+                VALUES (
+                        ':csLog.pcslID'
+                       ,':csLog.processID'
+                       ,''
+                       ,':csLog.workID'
+                       ,':csLog.serviceDataID'
+                       ,':csLog.csUserID'
+                       ,':csLog.csUser'
+                       ,1
+                       ,-1
+                       ,':csLog.csOrgID'
+                       ,':csLog.csOrg'
+                       ,':csLog.csTime'
+                       ,':csLog.csUserID'
+                       ,':csLog.csUser'
+                       )
+                ]]>
+            </content>
+            
+            <comment>汇签记录：添加排除执行人</comment>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_XFlow_ProcessParticipants_QueryByWorkID_ServiceDataID"> 
         
             <dataSourceGroup ref="DSG_XFlow" />
@@ -83,6 +162,9 @@
             <[   WHERE  A.workID        = ':workID'          ]>
             <[   WHERE  A.serviceDataID = ':serviceDataID'   ]>
                  ORDER  BY A.processID
+                          ,CASE WHEN A.objectType = -1  THEN -2
+                                WHEN A.objectType = -11 THEN -1
+                                ELSE 0 END
                           ,A.objectNo
                 ]]>
             </content>
@@ -106,8 +188,7 @@
             
             <content>
                 <![CDATA[
-                SELECT  DISTINCT 
-                        A.workID
+                SELECT  A.workID
                        ,A.serviceDataID
                   FROM  TProcessParticipants  A
                        ,TParticipantType      B
@@ -116,13 +197,17 @@
                  WHERE  B.participantType LIKE '%抄送%'
                    AND  A.objectType         = B.participantTypeID 
                    AND  A.workID             = C.workID 
-                   AND  C.flowTemplateID     = T.templateID 
+                   AND  C.flowTemplateID     = T.templateID
+                   AND  A.pwpID       NOT LIKE 'PCSL%' 
              <[    AND  T.templateName       = ':templateName'    ]>
                    AND (
                         A.objectID           = ':user.userID'
              <[     OR  A.objectID           = ':user.orgID'           ]>
              <[     OR  A.objectID          IN (:user.roleIDs)         ]>
                        )
+                 GROUP  BY A.workID
+                          ,A.serviceDataID
+                HAVING  MIN(B.participantTypeID) >= 0
                  ORDER  BY A.workID
                 ]]>
             </content>
@@ -144,8 +229,7 @@
             
             <content>
                 <![CDATA[
-                SELECT  DISTINCT 
-                        A.workID
+                SELECT  A.workID
                        ,A.serviceDataID
                   FROM  TProcessParticipants_History  A
                        ,TParticipantType              B
@@ -155,12 +239,16 @@
                    AND  A.objectType         = B.participantTypeID 
                    AND  A.workID             = C.workID 
                    AND  C.flowTemplateID     = T.templateID 
+                   AND  A.pwpID       NOT LIKE 'PCSL%' 
              <[    AND  T.templateName       = ':templateName'    ]>
                    AND (
                         A.objectID           = ':user.userID'
              <[     OR  A.objectID           = ':user.orgID'      ]>
              <[     OR  A.objectID          IN (:user.roleIDs)    ]>
                        )
+                 GROUP  BY A.workID
+                          ,A.serviceDataID
+                HAVING  MIN(B.participantTypeID) >= 0
                  ORDER  BY A.workID
                 ]]>
             </content>
@@ -182,26 +270,30 @@
             
             <content>
                 <![CDATA[
-                SELECT  DISTINCT WA.objectType 
+                SELECT  WA.objectType 
                   FROM (
                         SELECT  DISTINCT A.objectType 
                           FROM  TProcessParticipants  A
-                         WHERE  A.workID    = ':workID'
+                         WHERE  A.workID       = ':workID'
+                           AND  A.pwpID NOT LIKE 'PCSL%'
                            AND (
-                                A.objectID  = ':createUser.userID'
-                     <[     OR  A.objectID  = ':createUser.orgID'     ]>
-                     <[     OR  A.objectID IN (:createUser.roleIDs)   ]>
+                                A.objectID     = ':createUser.userID'
+                     <[     OR  A.objectID     = ':createUser.orgID'     ]>
+                     <[     OR  A.objectID    IN (:createUser.roleIDs)   ]>
                                )
                          UNION  
                         SELECT  DISTINCT A.objectType 
                           FROM  TProcessParticipants_History  A
-                         WHERE  A.workID    = ':workID'
+                         WHERE  A.workID       = ':workID'
+                           AND  A.pwpID NOT LIKE 'PCSL%'
                            AND (
-                                A.objectID  = ':createUser.userID'
-                     <[     OR  A.objectID  = ':createUser.orgID'     ]>
-                     <[     OR  A.objectID IN (:createUser.roleIDs)   ]>
+                                A.objectID     = ':createUser.userID'
+                     <[     OR  A.objectID     = ':createUser.orgID'     ]>
+                     <[     OR  A.objectID    IN (:createUser.roleIDs)   ]>
                                )
                        )    WA
+                 GROUP  BY WA.objectType
+                HAVING  MIN(WA.objectType) >= 0
                  ORDER  BY CASE WHEN WA.objectType = 21 THEN 0
                                 WHEN WA.objectType = 22 THEN 1
                                 ELSE WA.objectType END
