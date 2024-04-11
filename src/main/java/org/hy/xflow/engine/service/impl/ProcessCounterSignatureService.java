@@ -72,6 +72,30 @@ public class ProcessCounterSignatureService extends BaseService implements IProc
     
     
     /**
+     * 查询过期的汇签要求（非历史库）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-10
+     * @version     v1.0
+     *
+     * @param i_CSExpireTime  过期时间。允许为空，取当前系统时间
+     * @return
+     */
+    @Override
+    public List<ProcessCounterSignatureLog> queryCSExpireTimes(Date i_CSExpireTime)
+    {
+        Date v_CSExpireTime = i_CSExpireTime;
+        if ( v_CSExpireTime == null )
+        {
+            v_CSExpireTime = new Date();
+        }
+        
+        return this.counterSignatureDAO.queryCSExpireTimes(v_CSExpireTime);
+    }
+    
+    
+    
+    /**
      * 查询用户是否有汇签记录（非历史库）
      * 
      * @author      ZhengWei(HY)

@@ -172,6 +172,52 @@
         
         
         
+        <sql id="XSQL_XFlow_ProcessCounterSignature_QueryByExpireTime"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.pcsID        
+                       ,A.processID    
+                       ,A.workID       
+                       ,A.serviceDataID
+                       ,A.csMaxUserCount
+                       ,A.csMinUserCount
+                       ,A.csExpireTime
+                       ,A.csFinishTime
+                       ,A.createrID
+                       ,A.creater
+                       ,A.createOrgID
+                       ,A.createOrg
+                       ,A.createTime
+                       ,(
+                         SELECT  COUNT(SA.pcslID) 
+                           FROM  TProcessCounterSignatureLog  SA
+                          WHERE  SA.pcsID = A.pcsID
+                        )    AS  csUserCount
+                       ,(
+                         SELECT  MAX(SB.csTime) 
+                           FROM  TProcessCounterSignatureLog  SB
+                          WHERE  SB.pcsID = A.pcsID
+                        )    AS  csLastTime
+                  FROM  TProcessCounterSignature  A
+                 WHERE  A.csExpireTime <= ':csExpireTime'
+                 ORDER  BY A.createTime
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.ProcessCounterSignatureLog</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询过期的汇签要求</comment>
+            
+        </sql>
+        
+        
+        
         <sql id="XSQL_XFlow_ProcessCounterSignatureLog_QueryByUserID"> 
         
             <dataSourceGroup ref="DSG_XFlow" />

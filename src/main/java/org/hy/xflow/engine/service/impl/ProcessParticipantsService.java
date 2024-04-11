@@ -3,6 +3,7 @@ package org.hy.xflow.engine.service.impl;
 import java.util.List;
 
 import org.hy.common.PartitionMap;
+import org.hy.common.StringHelp;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.xflow.engine.bean.FlowComment;
 import org.hy.xflow.engine.bean.FlowData;
@@ -121,6 +122,25 @@ public class ProcessParticipantsService extends BaseService implements IProcessP
     public ProcessParticipant queryByMinObjectType(FlowComment i_FlowComment)
     {
         return this.processParticipantsDAO.queryByMinObjectType(i_FlowComment);
+    }
+    
+    
+    
+    /**
+     * 添加参与人（仅用于汇签过期时，添加系统为参与人，执行汇签完成）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-10
+     * @version     v1.0
+     *
+     * @param i_ProcessParticipant  参与人信息
+     * @return
+     */
+    @Override
+    public boolean insert(ProcessParticipant i_ProcessParticipant)
+    {
+        i_ProcessParticipant.setPwpID("PP" + StringHelp.getUUID());
+        return this.processParticipantsDAO.insert(i_ProcessParticipant) == 1;
     }
     
 }

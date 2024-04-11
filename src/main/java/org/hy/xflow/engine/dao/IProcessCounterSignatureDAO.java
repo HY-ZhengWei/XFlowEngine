@@ -2,6 +2,7 @@ package org.hy.xflow.engine.dao;
 
 import java.util.List;
 
+import org.hy.common.Date;
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.annotation.Xparam;
@@ -50,6 +51,21 @@ public interface IProcessCounterSignatureDAO
      */
     @Xsql(id="XSQL_XFlow_ProcessCounterSignature_QueryByProcessID" ,returnOne=true)
     public ProcessCounterSignatureLog queryCSInfo(ProcessCounterSignatureLog i_CSInfo);
+    
+    
+    
+    /**
+     * 查询过期的汇签要求（非历史库）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-10
+     * @version     v1.0
+     *
+     * @param i_CSExpireTime  过期时间
+     * @return
+     */
+    @Xsql("XSQL_XFlow_ProcessCounterSignature_QueryByExpireTime")
+    public List<ProcessCounterSignatureLog> queryCSExpireTimes(@Xparam("csExpireTime") Date i_CSExpireTime);
     
     
     

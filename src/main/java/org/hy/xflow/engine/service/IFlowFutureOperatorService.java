@@ -5,6 +5,7 @@ import java.util.List;
 import org.hy.common.PartitionMap;
 import org.hy.xflow.engine.bean.FlowProcess;
 import org.hy.xflow.engine.bean.FutureOperator;
+import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
@@ -20,6 +21,7 @@ import org.hy.xflow.engine.enums.ParticipantTypeEnum;
  * @createDate  2018-05-15
  * @version     v1.0
  *              v2.0  2024-02-23  添加：按人员信息查询待办时，可按流程模板名称过滤
+ *              v3.0  2024-04-10  添加：为汇签过期，自动完成汇签而暂时添加未来参与人
  */
 public interface IFlowFutureOperatorService
 {
@@ -120,6 +122,19 @@ public interface IFlowFutureOperatorService
      * @param i_Template  流程模板信息
      */
     public void updateCache(FlowProcess i_Process ,Template i_Template);
+    
+    
+    
+    /**
+     * 为汇签过期，自动完成汇签而暂时添加未来参与人
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-10
+     * @version     v1.0
+     *
+     * @param i_Part  未来参与人
+     */
+    public void addCacheByCounterSignatureExpire(ProcessParticipant i_Part);
     
     
     

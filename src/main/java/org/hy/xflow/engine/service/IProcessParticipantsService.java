@@ -94,4 +94,18 @@ public interface IProcessParticipantsService
      */
     public ProcessParticipant queryByMinObjectType(FlowComment i_FlowComment);
     
+    
+    
+    /**
+     * 添加参与人（仅用于汇签过期时，添加系统为参与人，执行汇签完成）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-10
+     * @version     v1.0
+     *
+     * @param i_ProcessParticipant  参与人信息
+     * @return
+     */
+    public boolean insert(ProcessParticipant i_ProcessParticipant);
+    
 }

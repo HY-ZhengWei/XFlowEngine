@@ -16,6 +16,7 @@ import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.log.Logger;
 import org.hy.xflow.engine.bean.ActivityInfo;
 import org.hy.xflow.engine.bean.ActivityRoute;
+import org.hy.xflow.engine.bean.ActivityRouteTree;
 import org.hy.xflow.engine.bean.FlowComment;
 import org.hy.xflow.engine.bean.FlowData;
 import org.hy.xflow.engine.bean.FlowInfo;
@@ -28,6 +29,7 @@ import org.hy.xflow.engine.bean.ProcessParticipant;
 import org.hy.xflow.engine.bean.Template;
 import org.hy.xflow.engine.bean.User;
 import org.hy.xflow.engine.bean.UserParticipant;
+import org.hy.xflow.engine.bean.UserRole;
 import org.hy.xflow.engine.config.InitConfig;
 import org.hy.xflow.engine.enums.ActivityTypeEnum;
 import org.hy.xflow.engine.enums.ParticipantTypeEnum;
@@ -75,6 +77,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  *                                添加：按人员信息查询督办时，可按流程模板名称过滤
  *              v8.0  2024-03-27  添加：汇签下发、汇签记录、汇签完成功能
  *                                添加：汇签查询
+ *              v8.1  2024-04-10  添加：汇签过期检查，并向下自动流转的功能
  */
 @Xjava
 public class XFlowEngine
@@ -100,6 +103,9 @@ public class XFlowEngine
     
     @Xjava
     private IProcessCounterSignatureService counterSignatureService;
+    
+    /** 是否正在运行汇签过期检查 */
+    private boolean                         isRunningCSExpire;
     
     
     
@@ -187,6 +193,7 @@ public class XFlowEngine
      * @author      ZhengWei(HY)
      * @createDate  2018-05-08
      * @version     v1.0
+     *              v2.0  2024-04-11  添加：是指定动态参与人时（系统用户，汇签过期向下流转）
      *
      * @param i_User      用户
      * @param i_Flow      工作流实例。内部有此实例的所有流转信息
@@ -202,6 +209,50 @@ public class XFlowEngine
         
         if ( Help.isNull(i_Route.getParticipants()) )
         {
+            if ( !Help.isNull(io_Process.getParticipants()) )
+            {
+                // 是指定动态参与人时
+                for (Participant v_PartItem : io_Process.getParticipants())
+                {
+                    if ( ParticipantTypeEnum.$ExcludeUser == v_PartItem.getObjectType() )
+                    {
+                        if ( v_PartItem.getObjectID().equals(i_User.getUserID()) )
+                        {
+                            break;
+                        }
+                    }
+                    else if ( ParticipantTypeEnum.$User == v_PartItem.getObjectType() )
+                    {
+                        if ( v_PartItem.getObjectID().equals(i_User.getUserID()) )
+                        {
+                            return v_PartItem;
+                        }
+                    }
+                    else if ( ParticipantTypeEnum.$Org == v_PartItem.getObjectType() )
+                    {
+                        if ( v_PartItem.getObjectID().equals(i_User.getOrgID()) )
+                        {
+                            return v_PartItem;
+                        }
+                    }
+                    else if ( ParticipantTypeEnum.$Role == v_PartItem.getObjectType() )
+                    {
+                        if ( Help.isNull(i_User.getRoles()) )
+                        {
+                            continue;
+                        }
+                        
+                        for (UserRole v_Role : i_User.getRoles())
+                        {
+                            if ( v_PartItem.getObjectID().equals(v_Role.getRoleID()) )
+                            {
+                                return v_PartItem;
+                            }
+                        }
+                    }
+                }
+            }
+            
             // 是之前工作流流转过程的活动实际操作人时
             v_Participant = whereTo_ParticipantTypeEnum_ActivityUser(i_User ,i_Route.getActivity() ,v_OldProcessMap);
             if ( v_Participant == null )
@@ -232,6 +283,28 @@ public class XFlowEngine
                 else
                 {
                     v_Participant = i_Route.isParticipant(i_User);
+                }
+                
+                if ( v_Participant == null && User.$SYS_UserID_CSExpire.equals(i_User.getUserID()) )
+                {
+                    // 是指定动态参与人时（系统用户，汇签过期向下流转）
+                    for (Participant v_PartItem : io_Process.getParticipants())
+                    {
+                        if ( ParticipantTypeEnum.$ExcludeUser == v_PartItem.getObjectType() )
+                        {
+                            if ( v_PartItem.getObjectID().equals(i_User.getUserID()) )
+                            {
+                                break;
+                            }
+                        }
+                        else if ( ParticipantTypeEnum.$User == v_PartItem.getObjectType() )
+                        {
+                            if ( v_PartItem.getObjectID().equals(i_User.getUserID()) )
+                            {
+                                return v_PartItem;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -707,7 +780,7 @@ public class XFlowEngine
                 v_Activity = v_Template.getActivityRouteTree().getActivity(v_Process.getCurrentActivityCode());
                 
                 // 查询动态参与人
-                v_AllProcessParts = processParticipantsService.queryByWorkID(i_WorkID);
+                v_AllProcessParts = this.processParticipantsService.queryByWorkID(i_WorkID);
                 v_Process.setParticipants(v_AllProcessParts.get(v_Process.getProcessID()));
                 
                 v_WhereTo = whereTo(i_User ,v_FlowInfo ,v_Process ,v_Activity);
@@ -904,7 +977,7 @@ public class XFlowEngine
                 v_Activity = v_Template.getActivityRouteTree().getActivity(v_Process.getCurrentActivityCode());
                 
                 // 查询动态参与人
-                v_AllProcessParts = processParticipantsService.queryByWorkID(i_WorkID);
+                v_AllProcessParts = this.processParticipantsService.queryByWorkID(i_WorkID);
                 v_Process.setParticipants(v_AllProcessParts.get(v_Process.getProcessID()));
                 
                 v_OnceTo = onceTo(i_User ,v_FlowInfo ,v_Process ,v_Activity ,v_Template);
@@ -1035,7 +1108,7 @@ public class XFlowEngine
      *                                             但当路由上没有设定参与人时，动态参与人将畅通无阻
      * @return
      */
-    public FlowProcess toNext(User i_User ,String i_ServiceDataID ,FlowProcess i_ProcessExtra ,String i_ActivityRouteCode ,UserParticipant i_Participant)
+    public FlowProcess toNext(User i_User ,String i_WorkID ,FlowProcess i_ProcessExtra ,String i_ActivityRouteCode ,UserParticipant i_Participant)
     {
         List<UserParticipant> v_Participants = null;
         
@@ -1045,7 +1118,7 @@ public class XFlowEngine
             v_Participants.add(i_Participant);
         }
         
-        return this.toNext(i_User ,i_ServiceDataID ,i_ProcessExtra ,i_ActivityRouteCode ,v_Participants);
+        return this.toNext(i_User ,i_WorkID ,i_ProcessExtra ,i_ActivityRouteCode ,v_Participants);
     }
     
     
@@ -1201,10 +1274,11 @@ public class XFlowEngine
                 throw new RuntimeException("WorkID[" + i_WorkID + "] to next process is not Route. ActivityCode[" + v_Route.getActivityCode() + "]  ActivityRouteCode[" + v_ActivityRouteCode + "] User[" + i_User.getUserID() + "]");
             }
             
-            // 设置动态参与人
+            // 设置当前活动节点的动态参与人
             v_Previous.setParticipants(v_NextRoutes.getFlowParticipants().get(v_Previous.getProcessID()));
             
-            // 判定是否为参与人
+            // 判定是否为之后路由线路的参与人（高优先级）
+            // 判定是否为当前活动节点的参与人
             Participant v_Participant = isParticipant(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
             if ( v_Participant == null )
             {
@@ -1741,6 +1815,91 @@ public class XFlowEngine
         }
         
         return this.toNext(i_User ,v_WorkID ,i_ProcessExtra ,i_ActivityRouteCodes);
+    }
+    
+    
+    
+    /**
+     * 汇签过期，自动向下继续流转
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-10
+     * @version     v1.0
+     *
+     */
+    public void toNextCounterSignatureExpire()
+    {
+        synchronized ( this )
+        {
+            if ( this.isRunningCSExpire )
+            {
+                return;
+            }
+            
+            this.isRunningCSExpire = true;
+        }
+        
+        List<ProcessCounterSignatureLog> v_CSInfos = this.counterSignatureService.queryCSExpireTimes(null);
+        if ( Help.isNull(v_CSInfos) )
+        {
+            return;
+        }
+        
+        // 需主动初始化一次
+        getInstance();
+        
+        try
+        {
+            User v_UserSys = new User();
+            v_UserSys.setUserID(User.$SYS_UserID_CSExpire);
+            v_UserSys.setUserName("汇签过期");
+            v_UserSys.setOrgID(User.$SYS_OrgID);
+            v_UserSys.setOrgName("工作流系统");
+            
+            FlowProcess v_ProcessExtra = new FlowProcess();
+            v_ProcessExtra.setCounterSignature(new ProcessCounterSignatureLog());
+            v_ProcessExtra.getCounterSignature().setCsFinish(1);
+            
+            ProcessParticipant v_Participant = new ProcessParticipant();
+            v_Participant.setCreaterID    (v_UserSys.getUserID());
+            v_Participant.setCreater      (v_UserSys.getUserName());
+            v_Participant.setCreateOrgID  (v_UserSys.getOrgID());
+            v_Participant.setCreateOrg    (v_UserSys.getOrgName());
+            v_Participant.setObjectID     (v_UserSys.getUserID());
+            v_Participant.setObjectName   (v_UserSys.getUserName());
+            v_Participant.setObjectType   (ParticipantTypeEnum.$User);
+            v_Participant.setObjectNo     (1);
+            
+            for (ProcessCounterSignatureLog v_CSInfo : v_CSInfos)
+            {
+                v_Participant.setProcessID    (v_CSInfo.getProcessID());
+                v_Participant.setWorkID       (v_CSInfo.getWorkID());
+                v_Participant.setServiceDataID(v_CSInfo.getServiceDataID());
+                v_Participant.setCreateTime   (new Date());
+                
+                // 添加未来操作人
+                this.futureOperatorService.addCacheByCounterSignatureExpire(v_Participant);
+                
+                // 添加动态参与人
+                if ( this.processParticipantsService.insert(v_Participant) )
+                {
+                    v_ProcessExtra.getCounterSignature().setCsFinishTime(v_Participant.getCreateTime());
+                    this.toNext(v_UserSys ,v_CSInfo.getWorkID() ,v_ProcessExtra ,ActivityRouteTree.$AutoActivityRouteCode);
+                }
+                else
+                {
+                    $Logger.error("WorkID[" + v_CSInfo.getWorkID() + "] is CounterSignature Expire ,but insert Participant error.");
+                }
+            }
+        }
+        catch (Exception exce)
+        {
+            $Logger.error(exce);
+        }
+        finally
+        {
+            this.isRunningCSExpire = false;
+        }
     }
     
     

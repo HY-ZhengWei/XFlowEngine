@@ -2,6 +2,7 @@ package org.hy.xflow.engine.service;
 
 import java.util.List;
 
+import org.hy.common.Date;
 import org.hy.xflow.engine.bean.ProcessCounterSignatureLog;
 
 
@@ -43,6 +44,20 @@ public interface IProcessCounterSignatureService
      * @return
      */
     public ProcessCounterSignatureLog queryCSInfo(ProcessCounterSignatureLog i_CSInfo);
+    
+    
+    
+    /**
+     * 查询过期的汇签要求（非历史库）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-04-10
+     * @version     v1.0
+     *
+     * @param i_CSExpireTime  过期时间。允许为空，取当前系统时间
+     * @return
+     */
+    public List<ProcessCounterSignatureLog> queryCSExpireTimes(Date i_CSExpireTime);
     
     
     
