@@ -163,9 +163,9 @@
                 ,serviceDataID      VARCHAR2(64)
                 ,commentType        VARCHAR2(64)
                 ,commentTitle       VARCHAR2(100)
-                ,comment            VARCHAR2(4000)
-                ,commentImages      VARCHAR2(4000)
-                ,commentFiles       VARCHAR2(4000)
+                ,comment            VARCHAR2(2000)
+                ,commentImages      VARCHAR2(2000)
+                ,commentFiles       VARCHAR2(2000)
                 ,objectType         NUMBER(2)                        NOT NULL
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            VARCHAR2(128)
@@ -208,9 +208,9 @@
                 ,serviceDataID      VARCHAR(64)                              COMMENT '第三方使用系统的业务数据ID。即支持用第三方ID也能找到工作流信息'
                 ,commentType        VARCHAR(64)                              COMMENT '工作流备注分类'
                 ,commentTitle       VARCHAR(100)                             COMMENT '工作流备注标题'
-                ,comment            VARCHAR(4000)                            COMMENT '工作流备注内容'
-                ,commentImages      VARCHAR(4000)                            COMMENT '工作流备注图片'
-                ,commentFiles       VARCHAR(4000)                            COMMENT '工作流备注文件'
+                ,comment            VARCHAR(2000)                            COMMENT '工作流备注内容'
+                ,commentImages      VARCHAR(2000)                            COMMENT '工作流备注图片'
+                ,commentFiles       VARCHAR(2000)                            COMMENT '工作流备注文件'
                 ,objectType         INT(2)                          NOT NULL COMMENT '参与者类型'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
@@ -239,9 +239,9 @@
                 ,serviceDataID      VARCHAR(64)
                 ,commentType        VARCHAR(64) 
                 ,commentTitle       VARCHAR(64)
-                ,comment            VARCHAR(4000) 
-                ,commentImages      VARCHAR(4000) 
-                ,commentFiles       VARCHAR(4000) 
+                ,comment            VARCHAR(2000) 
+                ,commentImages      VARCHAR(2000) 
+                ,commentFiles       VARCHAR(2000) 
                 ,objectType         INT                             NOT NULL
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            VARCHAR(128)
@@ -301,10 +301,10 @@
                 ,previousActivityCode   VARCHAR2(64)
                 ,previousActivityName   VARCHAR2(64)
                 ,previousOperateTypeID  VARCHAR2(64)
-                ,nextProcessID          VARCHAR2(4000)
-                ,nextActivityID         VARCHAR2(4000)
-                ,nextActivityCode       VARCHAR2(4000)
-                ,nextActivityName       VARCHAR2(4000)
+                ,nextProcessID          VARCHAR2(2000)
+                ,nextActivityID         VARCHAR2(2000)
+                ,nextActivityCode       VARCHAR2(2000)
+                ,nextActivityName       VARCHAR2(2000)
                 ,createrID              VARCHAR2(64)                     NOT NULL
                 ,creater                VARCHAR2(128)
                 ,createOrgID            VARCHAR2(64)
@@ -400,10 +400,10 @@
                 ,previousActivityCode   VARCHAR(64)                              COMMENT '上一活动编码'
                 ,previousActivityName   VARCHAR(64)                              COMMENT '上一活动名称'
                 ,previousOperateTypeID  VARCHAR(64)                              COMMENT '上一活动的操作类型ID'
-                ,nextProcessID          VARCHAR(4000)                            COMMENT '下一过程ID。分单时记录多个ID，用逗号分隔'
-                ,nextActivityID         VARCHAR(4000)                            COMMENT '下一活动ID。分单时记录多个ID，用逗号分隔'
-                ,nextActivityCode       VARCHAR(4000)                            COMMENT '下一活动编码。分单时记录多个ID，用逗号分隔'
-                ,nextActivityName       VARCHAR(4000)                            COMMENT '下一活动名称。分单时记录多个ID，用逗号分隔'
+                ,nextProcessID          VARCHAR(2000)                            COMMENT '下一过程ID。分单时记录多个ID，用逗号分隔'
+                ,nextActivityID         VARCHAR(2000)                            COMMENT '下一活动ID。分单时记录多个ID，用逗号分隔'
+                ,nextActivityCode       VARCHAR(2000)                            COMMENT '下一活动编码。分单时记录多个ID，用逗号分隔'
+                ,nextActivityName       VARCHAR(2000)                            COMMENT '下一活动名称。分单时记录多个ID，用逗号分隔'
                 ,createrID              VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater                VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createOrgID            VARCHAR(64)                              COMMENT '创建部门ID'
@@ -457,10 +457,10 @@
                 ,previousActivityCode    VARCHAR(64)
                 ,previousActivityName    VARCHAR(64)
                 ,previousOperateTypeID   VARCHAR(64)
-                ,nextProcessID           VARCHAR(4000)
-                ,nextActivityID          VARCHAR(4000)
-                ,nextActivityCode        VARCHAR(4000)
-                ,nextActivityName        VARCHAR(4000)
+                ,nextProcessID           VARCHAR(2000)
+                ,nextActivityID          VARCHAR(2000)
+                ,nextActivityCode        VARCHAR(2000)
+                ,nextActivityName        VARCHAR(2000)
                 ,createrID               VARCHAR(64)                      NOT NULL
                 ,creater                 VARCHAR(128)
                 ,createOrgID             VARCHAR(64)

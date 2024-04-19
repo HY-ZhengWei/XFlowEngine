@@ -39,7 +39,7 @@
                 (
                  activityTypeID     VARCHAR2(64)                     NOT NULL
                 ,activityType       VARCHAR2(128)                    NOT NULL
-                ,infoComment        VARCHAR2(4000)
+                ,infoComment        VARCHAR2(2000)
                 ,orderNo            NUMBER(10)
                 );/
                 
@@ -66,7 +66,7 @@
                 (
                  activityTypeID     VARCHAR(64)                    NOT NULL comment '工作流活动类型ID'
                 ,activityType       VARCHAR(128)                   NOT NULL comment '工作流活动类型名称'
-                ,infoComment        VARCHAR(4000)                           comment '备注说明'
+                ,infoComment        VARCHAR(2000)                           comment '备注说明'
                 ,orderNo            INT(10)                                 comment '排列顺序'
                 );/
                 
@@ -89,7 +89,7 @@
                 (
                  activityTypeID     VARCHAR(64)                     NOT NULL
                 ,activityType       VARCHAR(128)                    NOT NULL
-                ,infoComment        VARCHAR(4000)
+                ,infoComment        VARCHAR(2000)
                 ,orderNo            INT
                 );/
                 
@@ -160,7 +160,7 @@
                 (
                  routeTypeID        VARCHAR2(64)                     NOT NULL
                 ,routeType          VARCHAR2(128)                    NOT NULL
-                ,infoComment        VARCHAR2(4000)
+                ,infoComment        VARCHAR2(2000)
                 ,orderNo            NUMBER(10)
                 );/
                 
@@ -187,7 +187,7 @@
                 (
                  routeTypeID        VARCHAR(64)                    NOT NULL comment '工作流路由类型ID'
                 ,routeType          VARCHAR(128)                   NOT NULL comment '工作流路由类型名称'
-                ,infoComment        VARCHAR(4000)                           comment '备注说明'
+                ,infoComment        VARCHAR(2000)                           comment '备注说明'
                 ,orderNo            INT(10)                                 comment '排列顺序'
                 );/
                 
@@ -197,9 +197,9 @@
                 
                 CREATE TABLE TUpgrade20240327
                 (
-                 id                         VARCHAR2(64)  NOT NULL
-                ,createTime                 DATE          NOT NULL
-                ,updateTime                 DATE
+                 id                         VARCHAR(64)   NOT NULL
+                ,createTime                 DATETIME      NOT NULL
+                ,updateTime                 DATETIME
                 );/
                 ]]>
             </content>
@@ -210,7 +210,7 @@
                 (
                  routeTypeID        VARCHAR(64)                     NOT NULL
                 ,routeType          VARCHAR(128)                    NOT NULL
-                ,infoComment        VARCHAR(4000)
+                ,infoComment        VARCHAR(2000)
                 ,orderNo            INT
                 );/
                 
@@ -224,9 +224,9 @@
                 
                 CREATE TABLE TUpgrade20240327
                 (
-                 id                         VARCHAR2(64)  NOT NULL
-                ,createTime                 DATE          NOT NULL
-                ,updateTime                 DATE
+                 id                         VARCHAR(64)   NOT NULL
+                ,createTime                 DATETIME      NOT NULL
+                ,updateTime                 DATETIME
                 );/
                 ]]>
             </content>
@@ -277,7 +277,7 @@
                 (
                  participantTypeID  NUMBER(2)                        NOT NULL
                 ,participantType    VARCHAR2(128)                    NOT NULL
-                ,infoComment        VARCHAR2(4000)
+                ,infoComment        VARCHAR2(2000)
                 ,orderNo            NUMBER(10)
                 );/
                 
@@ -297,7 +297,7 @@
                 (
                  participantTypeID  INT(2)                         NOT NULL comment '参与人类型ID'
                 ,participantType    VARCHAR(128)                   NOT NULL comment '参与人类型名称'
-                ,infoComment        VARCHAR(4000)                           comment '备注说明'
+                ,infoComment        VARCHAR(2000)                           comment '备注说明'
                 ,orderNo            INT(10)                                 comment '排列顺序'
                 );/
                 
@@ -313,7 +313,7 @@
                 (
                  participantTypeID  INT                             NOT NULL
                 ,participantType    VARCHAR(128)                    NOT NULL
-                ,infoComment        VARCHAR(4000)
+                ,infoComment        VARCHAR(2000)
                 ,orderNo            INT
                 );/
                 
@@ -350,7 +350,7 @@
                 ,versionNo          NUMBER(10)                       NOT NULL
                 ,version            VARCHAR2(32)
                 ,templateName       VARCHAR2(128)                    NOT NULL
-                ,infoComment        VARCHAR2(4000)
+                ,infoComment        VARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -390,7 +390,7 @@
                 ,versionNo          INT(11)                          NOT NULL comment '模板版本号（数值递增型）'
                 ,version            VARCHAR(32)                               comment '模板版本号'
                 ,templateName       VARCHAR(128)                     NOT NULL comment '模板名称'
-                ,infoComment        VARCHAR(4000)                             comment '备注说明'
+                ,infoComment        VARCHAR(2000)                             comment '备注说明'
                 ,createrID          VARCHAR(64)                      NOT NULL comment '创建人员ID'
                 ,creater            VARCHAR(128)                              comment '创建人员名称'
                 ,createTime         DATETIME                         NOT NULL comment '创建时间'
@@ -417,7 +417,7 @@
                 ,versionNo          INT                              NOT NULL
                 ,version            VARCHAR(32)
                 ,templateName       VARCHAR(128)                     NOT NULL
-                ,infoComment        VARCHAR(4000)
+                ,infoComment        VARCHAR(2000)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            VARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
@@ -479,13 +479,13 @@
                 ,lineColor          VARCHAR2(16)
                 ,flagColor          VARCHAR2(16)
                 ,fontColor          VARCHAR2(16)
-                ,infoComment        VARCHAR2(4000)
+                ,infoComment        VARCHAR2(2000)
                 ,summaryPass        NUMBER(18 ,2)
                 ,counterPass        NUMBER(10)
                 ,passType           VARCHAR2(3)
                 ,configPageURL      VARCHAR2(1000)
-                ,configPageDatas    VARCHAR2(4000)
-                ,xrouteConfig       VARCHAR2(4000)
+                ,configPageDatas    VARCHAR2(2000)
+                ,xrouteConfig       VARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -552,13 +552,13 @@
                 ,lineColor          VARCHAR(16)                              COMMENT '活动节点的边框线颜色'
                 ,flagColor          VARCHAR(16)                              COMMENT '活动节点的标记块颜色'
                 ,fontColor          VARCHAR(16)                              COMMENT '活动节点的文字颜色'
-                ,infoComment        VARCHAR(4000)                            COMMENT '备注说明'
+                ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
                 ,summaryPass        DECIMAL(18 ,4)                           COMMENT '汇总通过值。当大于等于此值后，才能继续向下流转'
                 ,counterPass        INT(10)                                  COMMENT '汇总人数的限制。当大于等于此值后，才能继续向下流转'
                 ,passType           VARCHAR(3)                               COMMENT '汇总类型。指summaryPass和counterPass的关系是与，还是或'
                 ,configPageURL      VARCHAR(1000)                            COMMENT '配置页面的路径，可由终端用户决定配置页面的展示样子。用于配置阶段，并非实例流转'
-                ,configPageDatas    VARCHAR(4000)                            COMMENT '配置页面的数据。将保存配置页面中的数据到工作流系统中，当再次打开配置时，通过POST请求传递参数的方式给配置页面'
-                ,xrouteConfig       VARCHAR(4000)                            COMMENT '规则引擎的配置代码'
+                ,configPageDatas    VARCHAR(2000)                            COMMENT '配置页面的数据。将保存配置页面中的数据到工作流系统中，当再次打开配置时，通过POST请求传递参数的方式给配置页面'
+                ,xrouteConfig       VARCHAR(2000)                            COMMENT '规则引擎的配置代码'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
@@ -597,13 +597,13 @@
                 ,lineColor          VARCHAR(16)
                 ,flagColor          VARCHAR(16)
                 ,fontColor          VARCHAR(16)
-                ,infoComment        VARCHAR(4000)
+                ,infoComment        VARCHAR(2000)
                 ,summaryPass        DECIMAL(18 ,4)
                 ,counterPass        INT
                 ,passType           VARCHAR(3)
                 ,configPageURL      VARCHAR(1000)
-                ,configPageDatas    VARCHAR(4000)
-                ,xrouteConfig       VARCHAR(4000)
+                ,configPageDatas    VARCHAR(2000)
+                ,xrouteConfig       VARCHAR(2000)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            VARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
@@ -680,7 +680,7 @@
                 ,lineColor          VARCHAR2(16)
                 ,fontColor          VARCHAR2(16)
                 ,weight             NUMBER(10) 
-                ,infoComment        VARCHAR2(4000)
+                ,infoComment        VARCHAR2(2000)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -742,7 +742,7 @@
                 ,lineColor          VARCHAR(16)                              COMMENT '路由连接线的颜色'
                 ,fontColor          VARCHAR(16)                              COMMENT '路由连接线的文字颜色'
                 ,weight             INT(10)                                  COMMENT '权重'
-                ,infoComment        VARCHAR(4000)                            COMMENT '备注说明'
+                ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
@@ -783,7 +783,7 @@
                 ,lineColor          VARCHAR(16)
                 ,fontColor          VARCHAR(16)
                 ,weight             INT
-                ,infoComment        VARCHAR(4000)
+                ,infoComment        VARCHAR(2000)
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            VARCHAR(128)
                 ,createTime         DATETIME                        NOT NULL
