@@ -22,6 +22,8 @@
                        ,A.version
                        ,A.templateName
                        ,A.infoComment
+                       ,A.formTableName
+                       ,A.companyCode
                        ,A.createrID
                        ,A.creater
                        ,A.createTime
@@ -56,6 +58,8 @@
                        ,A.version
                        ,A.templateName
                        ,A.infoComment
+                       ,A.formTableName
+                       ,A.companyCode
                        ,A.createrID
                        ,A.creater
                        ,A.createTime
@@ -92,6 +96,8 @@
                        ,A.version
                        ,A.templateName
                        ,A.infoComment
+                       ,A.formTableName
+                       ,A.companyCode
                        ,A.createrID
                        ,A.creater
                        ,A.createTime

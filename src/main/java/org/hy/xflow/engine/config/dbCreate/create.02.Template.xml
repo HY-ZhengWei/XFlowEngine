@@ -351,6 +351,8 @@
                 ,version            VARCHAR2(32)
                 ,templateName       VARCHAR2(128)                    NOT NULL
                 ,infoComment        VARCHAR2(2000)
+                ,formTableName      VARCHAR2(300)
+                ,companyCode        VARCHAR2(300)
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -371,6 +373,8 @@
                 COMMENT ON COLUMN TTemplate.version                       IS '模板版本号';/
                 COMMENT ON COLUMN TTemplate.templateName                  IS '模板名称';/
                 COMMENT ON COLUMN TTemplate.infoComment                   IS '备注说明';/
+                COMMENT ON COLUMN TTemplate.formTableName                 IS '关联表单的表名称';/
+                COMMENT ON COLUMN TTemplate.companyCode                   IS '归属公司编码';/
                 COMMENT ON COLUMN TTemplate.createrID                     IS '创建人员ID';/
                 COMMENT ON COLUMN TTemplate.creater                       IS '创建人员名称';/
                 COMMENT ON COLUMN TTemplate.createTime                    IS '创建时间';/
@@ -379,6 +383,13 @@
                 COMMENT ON COLUMN TTemplate.lastTime                      IS '最后修改时间';/
                 COMMENT ON COLUMN TTemplate.isValid                       IS '是否有效标记(0:无效；1:有效)';/
                 COMMENT ON COLUMN TTemplate.isDelete                      IS '是否删除标记(0:未删除；1:已删除)';/
+                
+                CREATE TABLE TUpgrade20240423
+                (
+                 id                         VARCHAR2(64)  NOT NULL
+                ,createTime                 DATE          NOT NULL
+                ,updateTime                 DATE
+                );/
                 ]]>
             </content>
             
@@ -386,19 +397,21 @@
                 <![CDATA[
                 CREATE TABLE TTemplate
                 (
-                 templateID         VARCHAR(64)                      NOT NULL comment '模板ID'
-                ,versionNo          INT(11)                          NOT NULL comment '模板版本号（数值递增型）'
-                ,version            VARCHAR(32)                               comment '模板版本号'
-                ,templateName       VARCHAR(128)                     NOT NULL comment '模板名称'
-                ,infoComment        VARCHAR(2000)                             comment '备注说明'
-                ,createrID          VARCHAR(64)                      NOT NULL comment '创建人员ID'
-                ,creater            VARCHAR(128)                              comment '创建人员名称'
-                ,createTime         DATETIME                         NOT NULL comment '创建时间'
-                ,lastUserID         VARCHAR(64)                      NOT NULL comment '最后修改人员ID'
-                ,lastUser           VARCHAR(128)                              comment '最后修改人员名称'
-                ,lastTime           DATETIME                                  comment '最后修改时间'
-                ,isValid            INT(1)                           NOT NULL comment '是否有效标记(0:无效；1:有效)'
-                ,isDelete           INT(1)                           NOT NULL comment '是否删除标记(0:未删除；1:已删除)'
+                 templateID         VARCHAR(64)                      NOT NULL COMMENT '模板ID'
+                ,versionNo          INT(11)                          NOT NULL COMMENT '模板版本号（数值递增型）'
+                ,version            VARCHAR(32)                               COMMENT '模板版本号'
+                ,templateName       VARCHAR(128)                     NOT NULL COMMENT '模板名称'
+                ,infoComment        VARCHAR(2000)                             COMMENT '备注说明'
+                ,formTableName      VARCHAR(300)                              COMMENT '关联表单的表名称'
+                ,companyCode        VARCHAR(300)                              COMMENT '归属公司编码'
+                ,createrID          VARCHAR(64)                      NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                              COMMENT '创建人员名称'
+                ,createTime         DATETIME                         NOT NULL COMMENT '创建时间'
+                ,lastUserID         VARCHAR(64)                      NOT NULL COMMENT '最后修改人员ID'
+                ,lastUser           VARCHAR(128)                              COMMENT '最后修改人员名称'
+                ,lastTime           DATETIME                                  COMMENT '最后修改时间'
+                ,isValid            INT(1)                           NOT NULL COMMENT '是否有效标记(0:无效；1:有效)'
+                ,isDelete           INT(1)                           NOT NULL COMMENT '是否删除标记(0:未删除；1:已删除)'
                 );/
                 
                 ALTER TABLE TTemplate ADD CONSTRAINT PK_TTemplate PRIMARY KEY (templateID);/
@@ -406,6 +419,13 @@
                 ALTER TABLE TTemplate ADD UNIQUE (templateName ,versionNo);/
                 
                 Alter TABLE TTemplate COMMENT                               = '工作流模板表';/
+                
+                CREATE TABLE TUpgrade20240423
+                (
+                 id                         VARCHAR(64)   NOT NULL
+                ,createTime                 DATETIME      NOT NULL
+                ,updateTime                 DATETIME
+                );/
                 ]]>
             </content>
             
@@ -418,6 +438,8 @@
                 ,version            VARCHAR(32)
                 ,templateName       VARCHAR(128)                     NOT NULL
                 ,infoComment        VARCHAR(2000)
+                ,formTableName      VARCHAR(300)
+                ,companyCode        VARCHAR(300)
                 ,createrID          VARCHAR(64)                      NOT NULL
                 ,creater            VARCHAR(128)
                 ,createTime         DATETIME                         NOT NULL
@@ -438,6 +460,8 @@
                 EXEC P_ColumnComment TTemplate ,version                       ,'模板版本号';/
                 EXEC P_ColumnComment TTemplate ,templateName                  ,'模板名称';/
                 EXEC P_ColumnComment TTemplate ,infoComment                   ,'备注说明';/
+                EXEC P_ColumnComment TTemplate ,formTableName                 ,'关联表单的表名称';/
+                EXEC P_ColumnComment TTemplate ,companyCode                   ,'归属公司编码';/
                 EXEC P_ColumnComment TTemplate ,createrID                     ,'创建人员ID';/
                 EXEC P_ColumnComment TTemplate ,creater                       ,'创建人员名称';/
                 EXEC P_ColumnComment TTemplate ,createTime                    ,'创建时间';/
@@ -446,6 +470,13 @@
                 EXEC P_ColumnComment TTemplate ,lastTime                      ,'最后修改时间';/
                 EXEC P_ColumnComment TTemplate ,isValid                       ,'是否有效标记(0:无效；1:有效)';/
                 EXEC P_ColumnComment TTemplate ,isDelete                      ,'是否删除标记(0:未删除；1:已删除)';/
+                
+                CREATE TABLE TUpgrade20240423
+                (
+                 id                         VARCHAR(64)   NOT NULL
+                ,createTime                 DATETIME      NOT NULL
+                ,updateTime                 DATETIME
+                );/
                 ]]>
             </content>
             
