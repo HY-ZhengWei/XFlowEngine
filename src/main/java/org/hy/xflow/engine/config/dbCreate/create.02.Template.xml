@@ -712,6 +712,10 @@
                 ,fontColor          VARCHAR2(16)
                 ,weight             NUMBER(10) 
                 ,infoComment        VARCHAR2(2000)
+                ,fromPort           VARCHAR2(10)
+                ,toPort             VARCHAR2(10)
+                ,isHaveCondition    NUMBER(2)
+                ,summaryValues      NUMBER(10 ,2) 
                 ,createrID          VARCHAR2(64)                     NOT NULL
                 ,creater            VARCHAR2(128)
                 ,createTime         DATE                             NOT NULL
@@ -746,6 +750,10 @@
                 COMMENT ON COLUMN TActivityRoute.fontColor                IS '路由连接线的文字颜色';/
                 COMMENT ON COLUMN TActivityRoute.weight                   IS '权重';/
                 COMMENT ON COLUMN TActivityRoute.infoComment              IS '备注说明';/
+                COMMENT ON COLUMN TActivityRoute.fromPort                 IS '界面UI：来自节点具体的端点';/
+                COMMENT ON COLUMN TActivityRoute.toPort                   IS '界面UI：去往节点的具体端点';/
+                COMMENT ON COLUMN TActivityRoute.isHaveCondition          IS '界面UI：是否挂载条件';/
+                COMMENT ON COLUMN TActivityRoute.summaryValues            IS '界面UI：汇签类型路由的汇总值';/
                 COMMENT ON COLUMN TActivityRoute.createrID                IS '创建人员ID';/
                 COMMENT ON COLUMN TActivityRoute.creater                  IS '创建人员名称';/
                 COMMENT ON COLUMN TActivityRoute.createTime               IS '创建时间';/
@@ -774,6 +782,10 @@
                 ,fontColor          VARCHAR(16)                              COMMENT '路由连接线的文字颜色'
                 ,weight             INT(10)                                  COMMENT '权重'
                 ,infoComment        VARCHAR(2000)                            COMMENT '备注说明'
+                ,fromPort           VARCHAR(10)                              COMMENT '界面UI：来自节点具体的端点'
+                ,toPort             VARCHAR(10)                              COMMENT '界面UI：去往节点的具体端点'
+                ,isHaveCondition    INT(2)                                   COMMENT '界面UI：是否挂载条件'
+                ,summaryValues      DOUBLE                                   COMMENT '界面UI：汇签类型路由的汇总值'
                 ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
                 ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
                 ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
@@ -815,6 +827,10 @@
                 ,fontColor          VARCHAR(16)
                 ,weight             INT
                 ,infoComment        VARCHAR(2000)
+                ,fromPort           VARCHAR(10)
+                ,toPort             VARCHAR(10)
+                ,isHaveCondition    INT
+                ,summaryValues      REAL
                 ,createrID          VARCHAR(64)                     NOT NULL
                 ,creater            VARCHAR(128)
                 ,createTime         DATETIME                        NOT NULL
@@ -849,6 +865,10 @@
                 EXEC P_ColumnComment TActivityRoute ,fontColor                ,'路由连接线的文字颜色';/
                 EXEC P_ColumnComment TActivityRoute ,weight                   ,'权重';/
                 EXEC P_ColumnComment TActivityRoute ,infoComment              ,'备注说明';/
+                EXEC P_ColumnComment TActivityRoute ,fromPort                 ,'界面UI：来自节点具体的端点';/
+                EXEC P_ColumnComment TActivityRoute ,toPort                   ,'界面UI：去往节点的具体端点';/
+                EXEC P_ColumnComment TActivityRoute ,isHaveCondition          ,'界面UI：是否挂载条件';/
+                EXEC P_ColumnComment TActivityRoute ,summaryValues            ,'界面UI：汇签类型路由的汇总值';/
                 EXEC P_ColumnComment TActivityRoute ,createrID                ,'创建人员ID';/
                 EXEC P_ColumnComment TActivityRoute ,creater                  ,'创建人员名称';/
                 EXEC P_ColumnComment TActivityRoute ,createTime               ,'创建时间';/
@@ -911,16 +931,16 @@
                 <![CDATA[
                 CREATE TABLE TActivityParticipants
                 (
-                 participantID      VARCHAR(64)                     NOT NULL comment '主键ID'
-                ,templateID         VARCHAR(64)                     NOT NULL comment '工作流的模板ID'
-                ,activityID         VARCHAR(64)                     NOT NULL comment '活动（节点）ID'
-                ,objectType         INT(2)                          NOT NULL comment '参与者类型'
-                ,objectID           VARCHAR(64)                     NOT NULL comment '参与者ID'
-                ,objectName         VARCHAR(128)                             comment '参与者名称'
-                ,objectNo           INT(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
-                ,createrID          VARCHAR(64)                     NOT NULL comment '创建人员ID'
-                ,creater            VARCHAR(128)                             comment '创建人员名称'
-                ,createTime         DATETIME                        NOT NULL comment '创建时间'
+                 participantID      VARCHAR(64)                     NOT NULL COMMENT '主键ID'
+                ,templateID         VARCHAR(64)                     NOT NULL COMMENT '工作流的模板ID'
+                ,activityID         VARCHAR(64)                     NOT NULL COMMENT '活动（节点）ID'
+                ,objectType         INT(2)                          NOT NULL COMMENT '参与者类型'
+                ,objectID           VARCHAR(64)                     NOT NULL COMMENT '参与者ID'
+                ,objectName         VARCHAR(128)                             COMMENT '参与者名称'
+                ,objectNo           INT(10)                         NOT NULL COMMENT '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
+                ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
+                ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
                 );/
                 
                 ALTER TABLE TActivityParticipants ADD CONSTRAINT PK_TActivityParticipants PRIMARY KEY (participantID);/
@@ -1026,16 +1046,16 @@
                 <![CDATA[
                 CREATE TABLE TActivityRouteParticipants
                 (
-                 participantID      VARCHAR(64)                     NOT NULL comment '主键ID'
-                ,templateID         VARCHAR(64)                     NOT NULL comment '工作流的模板ID'
-                ,activityRouteID    VARCHAR(64)                     NOT NULL comment '活动路由ID'
-                ,objectType         INT(2)                          NOT NULL comment '参与者类型'
-                ,objectID           VARCHAR(64)                     NOT NULL comment '参与者ID'
-                ,objectName         VARCHAR(128)                             comment '参与者名称'
-                ,objectNo           INT(10)                         NOT NULL comment '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
-                ,createrID          VARCHAR(64)                     NOT NULL comment '创建人员ID'
-                ,creater            VARCHAR(128)                             comment '创建人员名称'
-                ,createTime         DATETIME                        NOT NULL comment '创建时间'
+                 participantID      VARCHAR(64)                     NOT NULL COMMENT '主键ID'
+                ,templateID         VARCHAR(64)                     NOT NULL COMMENT '工作流的模板ID'
+                ,activityRouteID    VARCHAR(64)                     NOT NULL COMMENT '活动路由ID'
+                ,objectType         INT(2)                          NOT NULL COMMENT '参与者类型'
+                ,objectID           VARCHAR(64)                     NOT NULL COMMENT '参与者ID'
+                ,objectName         VARCHAR(128)                             COMMENT '参与者名称'
+                ,objectNo           INT(10)                         NOT NULL COMMENT '参与者序号，表示前后顺序。系统自动生成，下标从1开始'
+                ,createrID          VARCHAR(64)                     NOT NULL COMMENT '创建人员ID'
+                ,creater            VARCHAR(128)                             COMMENT '创建人员名称'
+                ,createTime         DATETIME                        NOT NULL COMMENT '创建时间'
                 );/
                 
                 ALTER TABLE TActivityRouteParticipants ADD CONSTRAINT PK_TActivityRouteParticipants PRIMARY KEY (participantID);/
@@ -1090,6 +1110,44 @@
             
             <comment>工作流活动组件(节点)路由的参与人</comment>
             <create>TActivityRouteParticipants</create>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_Create_TActivityWaitDays">
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content if="MYSQL == DSG_XFlow.getDbProductType">
+                <![CDATA[
+                CREATE TABLE TActivityWaitDays
+                (
+                 innerId            INT           NOT NULL AUTO_INCREMENT COMMENT '主键Id'
+                ,templateId         VARCHAR(255)                          COMMENT '模板Id'
+                ,activityId         VARCHAR(255)                          COMMENT '节点ID'
+                ,waitDays           INT                                   COMMENT '等待天数'
+                ,companyCode        VARCHAR(64)                           COMMENT '组织编码'
+                ,remark             VARCHAR(255)                          COMMENT '备注'
+                ,createUser         VARCHAR(10)                           COMMENT '创建人'
+                ,createTime         DATETIME                              COMMENT '创建时间'
+                ,updateUser         VARCHAR(10)                           COMMENT '修改人'
+                ,updateTime         DATETIME                              COMMENT '修改时间'
+                ,str1               VARCHAR(255)                          COMMENT '字符型字段1'
+                ,str2               VARCHAR(255)                          COMMENT '字符型字段2'
+                ,str3               VARCHAR(255)                          COMMENT '字符型字段3'
+                ,num1               INT                                   COMMENT '数字型字段1'
+                ,num2               INT                                   COMMENT '数字型字段2'
+                ,num3               INT                                   COMMENT '数字型字段3'
+                ,PRIMARY KEY (innerId)
+                );/
+                
+                ALTER TABLE TActivityWaitDays COMMENT = '配置节点等待多长时间进行自动审批';/
+                ]]>
+            </content>
+            
+            <comment>配置节点等待多长时间进行自动审批（界面UI的表）</comment>
+            <create>TActivityWaitDays</create>
             
         </sql>
         

@@ -18,10 +18,21 @@
                 <![CDATA[
                 INSERT INTO TUpgrade20240423 (id,createTime) VALUES ('配合界面UI添加字段' ,SYSDATE);/
                 
-                ALTER TABLE TTemplate ADD   formTableName VARCHAR2(300);/
-                ALTER TABLE TTemplate ADD   companyCode   VARCHAR2(300);/
+                ALTER TABLE TTemplate      ADD formTableName   VARCHAR2(300);/
+                ALTER TABLE TTemplate      ADD companyCode     VARCHAR2(300);/
+                
+                ALTER TABLE TActivityRoute ADD fromPort        VARCHAR2(10);/
+                ALTER TABLE TActivityRoute ADD toPort          VARCHAR2(10);/
+                ALTER TABLE TActivityRoute ADD isHaveCondition NUMBER(2);/
+                ALTER TABLE TActivityRoute ADD summaryValues   NUMBER(10 ,2);/
+                
                 COMMENT ON COLUMN TTemplate.formTableName IS '关联表单的表名称';/
                 COMMENT ON COLUMN TTemplate.companyCode   IS '归属公司编码';/
+                
+                COMMENT ON COLUMN TActivityRoute.fromPort        IS '界面UI：来自节点具体的端点';/
+                COMMENT ON COLUMN TActivityRoute.toPort          IS '界面UI：去往节点的具体端点';/
+                COMMENT ON COLUMN TActivityRoute.isHaveCondition IS '界面UI：是否挂载条件';/
+                COMMENT ON COLUMN TActivityRoute.isHaveCondition IS '界面UI：汇签类型路由的汇总值';/
                 
                 UPDATE TUpgrade20240423 SET updateTime = SYSDATE WHERE id = '配合界面UI添加字段';/
                 ]]>
@@ -31,8 +42,13 @@
                 <![CDATA[
                 INSERT INTO TUpgrade20240423 (id,createTime) VALUES ('配合界面UI添加字段' ,NOW());/
                 
-                ALTER TABLE TTemplate ADD formTableName VARCHAR(300) NULL COMMENT '关联表单的表名称';/
-                ALTER TABLE TTemplate ADD companyCode   VARCHAR(300) NULL COMMENT '归属公司编码';/
+                ALTER TABLE TTemplate      ADD formTableName   VARCHAR(300) NULL COMMENT '关联表单的表名称';/
+                ALTER TABLE TTemplate      ADD companyCode     VARCHAR(300) NULL COMMENT '归属公司编码';/
+                
+                ALTER TABLE TActivityRoute ADD fromPort        VARCHAR(10)  NULL COMMENT '界面UI：来自节点具体的端点';/
+                ALTER TABLE TActivityRoute ADD toPort          VARCHAR(10)  NULL COMMENT '界面UI：去往节点的具体端点';/
+                ALTER TABLE TActivityRoute ADD isHaveCondition INT(2)       NULL COMMENT '界面UI：是否挂载条件';/
+                ALTER TABLE TActivityRoute ADD summaryValues   DOUBLE       NULL COMMENT '界面UI：汇签类型路由的汇总值';/
                 
                 UPDATE TUpgrade20240423 SET updateTime = NOW() WHERE id = '配合界面UI添加字段';/
                 ]]>
@@ -42,10 +58,21 @@
                 <![CDATA[
                 INSERT INTO TUpgrade20240423 (id,createTime) VALUES ('配合界面UI添加字段' ,GETDATE());/
                 
-                ALTER TABLE TTemplate ADD       formTableName VARCHAR(300) NULL;/
-                ALTER TABLE TTemplate ADD       companyCode   VARCHAR(300) NULL;/
-                EXEC P_ColumnComment TTemplate ,formTableName ,'关联表单的表名称';/
-                EXEC P_ColumnComment TTemplate ,companyCode   ,'归属公司编码';/
+                ALTER TABLE TTemplate      ADD formTableName   VARCHAR(300) NULL;/
+                ALTER TABLE TTemplate      ADD companyCode     VARCHAR(300) NULL;/
+                
+                ALTER TABLE TActivityRoute ADD fromPort        VARCHAR(10);/
+                ALTER TABLE TActivityRoute ADD toPort          VARCHAR(10);/
+                ALTER TABLE TActivityRoute ADD isHaveCondition INT;/
+                ALTER TABLE TActivityRoute ADD summaryValues   REAL;/
+                
+                EXEC P_ColumnComment TTemplate      ,formTableName   ,'关联表单的表名称';/
+                EXEC P_ColumnComment TTemplate      ,companyCode     ,'归属公司编码';/
+                
+                EXEC P_ColumnComment TActivityRoute ,fromPort        ,'界面UI：来自节点具体的端点';/
+                EXEC P_ColumnComment TActivityRoute ,toPort          ,'界面UI：去往节点的具体端点';/
+                EXEC P_ColumnComment TActivityRoute ,isHaveCondition ,'界面UI：是否挂载条件';/
+                EXEC P_ColumnComment TActivityRoute ,summaryValues   ,'界面UI：汇签类型路由的汇总值';/
                 
                 UPDATE TUpgrade20240423 SET updateTime = GETDATE() WHERE id = '配合界面UI添加字段';/
                 ]]>

@@ -37,6 +37,10 @@
                        ,A.fontColor
                        ,A.weight
                        ,A.infoComment
+                       ,A.fromPort
+                       ,A.toPort
+                       ,A.isHaveCondition
+                       ,A.summaryValues
                        ,A.createrID
                        ,A.creater
                        ,A.createTime
