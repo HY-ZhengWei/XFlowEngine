@@ -1,5 +1,6 @@
 package org.hy.xflow.engine.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.hy.common.PartitionMap;
@@ -19,6 +20,7 @@ import org.hy.xflow.engine.bean.FutureOperator;
  * @createDate  2018-05-15
  * @version     v1.0
  *              v2.0  2024-02-23  添加：人和流程模板查询的高速缓存方法
+ *              v3.0  2024-05-06  添加：待办查询：可按活动节点Code查询
  */
 @Xjava(id="FlowFutureOperatorDAO" ,value=XType.XSQL)
 public interface IFlowFutureOperatorDAO
@@ -89,5 +91,35 @@ public interface IFlowFutureOperatorDAO
      */
     @Xsql(id="XSQL_XFlow_TFlowFutureOperator_QueryAll_SToWorkID" ,cacheID="$FutureOperators_SToWorkID")
     public Map<String ,String> queryAll_SToWorkID();
+    
+    
+    
+    /**
+     * 查询未来操作人（按人员、角色、部门和活动节点编码）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     *
+     * @param i_FutureOperator
+     * @return
+     */
+    @Xsql("XSQL_XFlow_TFlowFutureOperator_QueryActivityCode")
+    public List<FutureOperator> queryQueryActivityCode(FutureOperator i_FutureOperator);
+    
+    
+    
+    /**
+     * 查询未来操作人（按人员、角色、部门和活动节点编码及模板名称）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     *
+     * @param i_FutureOperator
+     * @return
+     */
+    @Xsql("XSQL_XFlow_TFlowFutureOperator_QueryActivityCodeTName")
+    public List<FutureOperator> queryQueryActivityCodeTName(FutureOperator i_FutureOperator);
     
 }

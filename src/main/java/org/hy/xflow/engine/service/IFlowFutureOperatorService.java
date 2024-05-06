@@ -22,6 +22,7 @@ import org.hy.xflow.engine.enums.ParticipantTypeEnum;
  * @version     v1.0
  *              v2.0  2024-02-23  添加：按人员信息查询待办时，可按流程模板名称过滤
  *              v3.0  2024-04-10  添加：为汇签过期，自动完成汇签而暂时添加未来参与人
+ *              v4.0  2024-05-06  添加：待办查询：可按活动节点Code查询
  */
 public interface IFlowFutureOperatorService
 {
@@ -80,6 +81,48 @@ public interface IFlowFutureOperatorService
      * @return
      */
     public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName);
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     *   4. 通过模板、活动Code查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @param i_ActivityCode  工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同（非空、必填）
+     * @return
+     */
+    public List<String> queryWorkIDs(User i_User ,String i_TemplateName ,String i_ActivityCode);
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     *   4. 通过模板、活动Code查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @param i_ActivityCode  工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同（非空、必填）
+     * @return
+     */
+    public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName ,String i_ActivityCode);
     
     
     

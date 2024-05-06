@@ -78,6 +78,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  *              v8.0  2024-03-27  添加：汇签下发、汇签记录、汇签完成功能
  *                                添加：汇签查询
  *              v8.1  2024-04-10  添加：汇签过期检查，并向下自动流转的功能
+ *              v9.0  2024-05-06  添加：待办查询：可按活动节点Code查询
  */
 @Xjava
 public class XFlowEngine
@@ -2359,6 +2360,30 @@ public class XFlowEngine
     
     
     /**
+     * 获取用户可以处理（或叫待办）的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     *   4. 通过模板、活动Code查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @param i_ActivityCode  工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同（非空、必填）
+     * @return
+     */
+    public List<String> queryWorkIDs(User i_User ,String i_TemplateName ,String i_ActivityCode)
+    {
+        return this.futureOperatorService.queryWorkIDs(i_User ,i_TemplateName ,i_ActivityCode);
+    }
+    
+    
+    
+    /**
      * 获取用户可以处理（或叫待办）的工作流实例对应的第三方使用系统的业务数据ID。
      * 
      *   1. 通过用户ID查询
@@ -2398,6 +2423,30 @@ public class XFlowEngine
     public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName)
     {
         return this.futureOperatorService.queryServiceDataIDs(i_User ,i_TemplateName);
+    }
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     *   4. 通过模板、活动Code查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @param i_ActivityCode  工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同（非空、必填）
+     * @return
+     */
+    public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName ,String i_ActivityCode)
+    {
+        return this.futureOperatorService.queryServiceDataIDs(i_User ,i_TemplateName ,i_ActivityCode);
     }
     
     

@@ -38,6 +38,7 @@ import org.hy.xflow.engine.service.ITemplateService;
  *              v4.0  2024-02-23  1. 添加：按人员信息查询待办时，可按流程模板名称过滤
  *              v5.0  2024-04-09  1. 添加：排除执行人、排除抄送人
  *                                2. 添加：为汇签过期，自动完成汇签而暂时添加未来参与人
+ *              v6.0  2024-05-06  1. 添加：待办查询：可按活动节点Code查询
  */
 @Xjava
 public class FlowFutureOperatorService extends BaseService implements IFlowFutureOperatorService ,CommunicationListener
@@ -125,6 +126,56 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName)
     {
         return queryIDs(i_User ,i_TemplateName ,"serviceDataID");
+    }
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     *   4. 通过模板、活动Code查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @param i_ActivityCode  工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同（非空、必填）
+     * @return
+     */
+    @Override
+    public List<String> queryWorkIDs(User i_User ,String i_TemplateName ,String i_ActivityCode)
+    {
+        return queryIDs(i_User ,i_TemplateName ,i_ActivityCode ,"workID");
+    }
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例对应的第三方使用系统的业务数据ID。
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     *   4. 通过模板、活动Code查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @param i_ActivityCode  工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同（非空、必填）
+     * @return
+     */
+    @Override
+    public List<String> queryServiceDataIDs(User i_User ,String i_TemplateName ,String i_ActivityCode)
+    {
+        return queryIDs(i_User ,i_TemplateName ,i_ActivityCode ,"serviceDataID");
     }
     
     
@@ -225,6 +276,138 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
                 else
                 {
                     v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$Role.getValue() + ":" + v_Role.getRoleID() + ":" + i_TemplateName);
+                }
+                
+                if ( !Help.isNull(v_Temp) )
+                {
+                    v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+                }
+                
+                // 使用督办查询接口代替  2023-06-01 Del
+                /*
+                v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$RoleSend.getValue() + ":" + v_Role.getRoleID());
+                if ( !Help.isNull(v_Temp) )
+                {
+                    v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+                }
+                */
+            }
+        }
+        
+        return Help.toDistinct(v_IDs);
+    }
+    
+    
+    
+    /**
+     * 获取用户可以处理（或叫待办）的工作流实例对应的实例ID、业务数据ID。
+     * （直查数据库）
+     * 
+     *   1. 通过用户ID查询
+     *   2. 通过部门ID查询
+     *   3. 通过角色ID查询，支持多角色。
+     *   4. 通过模板、活动Code查询
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2024-05-06
+     * @version     v1.0
+     * 
+     * @param i_User          流程用户
+     * @param i_TemplateName  流程模板名称
+     * @param i_ActivityCode  工作流活动Code。作为与外界交互的编码。同一版本的工作流下是惟一的，不同版本的同类工作流可以相同（非空、必填）
+     * @param i_IDName        实例ID或业务ID的属性名称。它决定着函数返回的是实例ID，还是业务ID。
+     * @return
+     */
+    @SuppressWarnings({"unchecked"})
+    private List<String> queryIDs(User i_User ,String i_TemplateName ,String i_ActivityCode ,String i_IDName)
+    {
+        List<String>         v_IDs    = new ArrayList<String>();
+        List<FutureOperator> v_Temp   = null;
+        FutureOperator       v_Params = new FutureOperator();
+        
+        v_Params.setActivityCode(i_ActivityCode);
+        v_Params.setTemplateName(Help.isNull(i_TemplateName) ? null : i_TemplateName);
+        
+        if ( Help.isNull(i_TemplateName) )
+        {
+            // 排除执行人
+            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$ExcludeUser.getValue() + ":" + i_User.getUserID());
+            if ( v_Temp == null )
+            {
+                v_Params.setObjectID(i_User.getUserID());
+                v_Params.setObjectType(ParticipantTypeEnum.$User.getValue());
+                v_Temp = this.futureOperatorDAO.queryQueryActivityCode(v_Params);
+            }
+        }
+        else
+        {
+            // 排除执行人
+            v_Temp = $FutureOperatorsFroTemplateName.get(ParticipantTypeEnum.$ExcludeUser.getValue() + ":" + i_User.getUserID() + ":" + i_TemplateName);
+            if ( v_Temp == null )
+            {
+                v_Params.setObjectID(i_User.getUserID());
+                v_Params.setObjectType(ParticipantTypeEnum.$User.getValue());
+                v_Temp = this.futureOperatorDAO.queryQueryActivityCodeTName(v_Params);
+            }
+        }
+        
+        if ( !Help.isNull(v_Temp) )
+        {
+            v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+        }
+        
+        // 使用督办查询接口代替  2023-06-01 Del
+        /*
+        v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$UserSend.getValue() + ":" + i_User.getUserID());
+        if ( !Help.isNull(v_Temp) )
+        {
+            v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+        }
+        */
+        
+        if ( !Help.isNull(i_User.getOrgID()) )
+        {
+            v_Params.setObjectID(i_User.getOrgID());
+            v_Params.setObjectType(ParticipantTypeEnum.$OrgSend.getValue());
+            
+            if ( Help.isNull(i_TemplateName) )
+            {
+                v_Temp = this.futureOperatorDAO.queryQueryActivityCode(v_Params);
+            }
+            else
+            {
+                v_Temp = this.futureOperatorDAO.queryQueryActivityCodeTName(v_Params);
+            }
+            
+            if ( !Help.isNull(v_Temp) )
+            {
+                v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+            }
+            
+            // 使用督办查询接口代替  2023-06-01 Del
+            /*
+            v_Temp = $FutureOperatorsByWorkID.get(ParticipantTypeEnum.$OrgSend.getValue() + ":" + i_User.getOrgID());
+            if ( !Help.isNull(v_Temp) )
+            {
+                v_IDs.addAll((List<String>)Help.toList(v_Temp ,i_IDName));
+            }
+            */
+        }
+        
+        if ( !Help.isNull(i_User.getRoles()) )
+        {
+            for (UserRole v_Role : i_User.getRoles())
+            {
+                v_Params.setObjectID(v_Role.getRoleID());
+                v_Params.setObjectType(ParticipantTypeEnum.$Role.getValue());
+                
+                if ( Help.isNull(i_TemplateName) )
+                {
+                    v_Temp = this.futureOperatorDAO.queryQueryActivityCode(v_Params);
+                }
+                else
+                {
+                    v_Temp = this.futureOperatorDAO.queryQueryActivityCodeTName(v_Params);
                 }
                 
                 if ( !Help.isNull(v_Temp) )

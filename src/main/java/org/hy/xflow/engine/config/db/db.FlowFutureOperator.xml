@@ -346,6 +346,70 @@
             
         </sql>
         
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_QueryActivityCode"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.workID
+                       ,A.serviceDataID
+                  FROM  TFlowFutureOperator  A
+                       ,TProcess             B
+                 WHERE  A.processID           = B.processID 
+                   AND  A.objectType          = ':objectType'
+                   AND  A.objectID            = ':objectID'
+                   AND  B.currentActivityCode = ':activityCode'
+                 ORDER  BY A.workID
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FutureOperator</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询未来操作人（按人员、角色、部门和活动节点编码）</comment>
+            
+        </sql>
+        
+        
+        
+        <sql id="XSQL_XFlow_TFlowFutureOperator_QueryActivityCodeTName"> 
+        
+            <dataSourceGroup ref="DSG_XFlow" />
+            
+            <content>
+                <![CDATA[
+                SELECT  A.workID
+                       ,A.serviceDataID
+                  FROM  TFlowFutureOperator  A
+                       ,TProcess             B
+                       ,TFlowInfo            C
+                       ,TTemplate            D
+                 WHERE  C.flowTemplateID      = D.templateID 
+                   AND  A.workID              = C.workID 
+                   AND  A.processID           = B.processID 
+                   AND  A.objectType          = ':objectType'
+                   AND  A.objectID            = ':objectID'
+                   AND  B.currentActivityCode = ':activityCode'
+                   AND  D.templateName        = ':templateName'
+                 ORDER  BY A.workID
+                ]]>
+            </content>
+            
+            <result>
+                <row>org.hy.xflow.engine.bean.FutureOperator</row>
+                <cfill>setter(colValue)</cfill>
+            </result>
+            
+            <comment>查询未来操作人（按人员、角色、部门和活动节点编码及模板名称）</comment>
+            
+        </sql>
+
+        
     </sqls>
     
 </config>
