@@ -215,28 +215,28 @@ public class XFlowEngine
                 // 是指定动态参与人时
                 for (Participant v_PartItem : io_Process.getParticipants())
                 {
-                    if ( ParticipantTypeEnum.$ExcludeUser == v_PartItem.getObjectType() )
+                    if ( ParticipantTypeEnum.$ExcludeUser == v_PartItem.getObjectTypeEnum() )
                     {
                         if ( v_PartItem.getObjectID().equals(i_User.getUserID()) )
                         {
                             break;
                         }
                     }
-                    else if ( ParticipantTypeEnum.$User == v_PartItem.getObjectType() )
+                    else if ( ParticipantTypeEnum.$User == v_PartItem.getObjectTypeEnum() )
                     {
                         if ( v_PartItem.getObjectID().equals(i_User.getUserID()) )
                         {
                             return v_PartItem;
                         }
                     }
-                    else if ( ParticipantTypeEnum.$Org == v_PartItem.getObjectType() )
+                    else if ( ParticipantTypeEnum.$Org == v_PartItem.getObjectTypeEnum() )
                     {
                         if ( v_PartItem.getObjectID().equals(i_User.getOrgID()) )
                         {
                             return v_PartItem;
                         }
                     }
-                    else if ( ParticipantTypeEnum.$Role == v_PartItem.getObjectType() )
+                    else if ( ParticipantTypeEnum.$Role == v_PartItem.getObjectTypeEnum() )
                     {
                         if ( Help.isNull(i_User.getRoles()) )
                         {
@@ -291,14 +291,14 @@ public class XFlowEngine
                     // 是指定动态参与人时（系统用户，汇签过期向下流转）
                     for (Participant v_PartItem : io_Process.getParticipants())
                     {
-                        if ( ParticipantTypeEnum.$ExcludeUser == v_PartItem.getObjectType() )
+                        if ( ParticipantTypeEnum.$ExcludeUser == v_PartItem.getObjectTypeEnum() )
                         {
                             if ( v_PartItem.getObjectID().equals(i_User.getUserID()) )
                             {
                                 break;
                             }
                         }
-                        else if ( ParticipantTypeEnum.$User == v_PartItem.getObjectType() )
+                        else if ( ParticipantTypeEnum.$User == v_PartItem.getObjectTypeEnum() )
                         {
                             if ( v_PartItem.getObjectID().equals(i_User.getUserID()) )
                             {
@@ -411,7 +411,7 @@ public class XFlowEngine
                     {
                         for (Participant v_ActivityParticipant : i_Activity.getParticipants())
                         {
-                            String v_ObjectKey = v_ActivityParticipant.getObjectType() + "@" + v_ActivityParticipant.getObjectID();
+                            String v_ObjectKey = v_ActivityParticipant.getObjectTypeEnum() + "@" + v_ActivityParticipant.getObjectID();
                             if ( !v_ObjectKeys.containsKey(v_ObjectKey) )
                             {
                                 io_Process.getParticipants().add(new ProcessParticipant().init(v_ActivityParticipant));
@@ -443,7 +443,7 @@ public class XFlowEngine
                     {
                         for (Participant v_RouteParticipant : v_Route.getParticipants())
                         {
-                            String v_ObjectKey = v_RouteParticipant.getObjectType() + "@" + v_RouteParticipant.getObjectID();
+                            String v_ObjectKey = v_RouteParticipant.getObjectTypeEnum() + "@" + v_RouteParticipant.getObjectID();
                             if ( !v_ObjectKeys.containsKey(v_ObjectKey) )
                             {
                                 io_Process.getParticipants().add(new ProcessParticipant().init(v_RouteParticipant));
@@ -1432,7 +1432,7 @@ public class XFlowEngine
                     {
                         throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] ObjectID is null to User[" + i_User.getUserID() + "].");
                     }
-                    else if ( v_UserPart.getObjectType() == null )
+                    else if ( v_UserPart.getObjectTypeEnum() == null )
                     {
                         throw new NullPointerException("WorkID[" + i_WorkID + "] participant[" + v_Index + "] ObjectType is null to User[" + i_User.getUserID() + "].");
                     }
@@ -1481,11 +1481,11 @@ public class XFlowEngine
                     {
                         ProcessParticipant v_FuturePart = new ProcessParticipant();
                         
-                        if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$CreateUser )
+                        if ( v_PartItem.getObjectTypeEnum() == ParticipantTypeEnum.$CreateUser )
                         {
                             v_FuturePart.init(i_User ,v_Process ,v_PartItem.toCreater(v_NextRoutes.getFlow()));
                         }
-                        else if ( v_PartItem.getObjectType() == ParticipantTypeEnum.$ActivityUser )
+                        else if ( v_PartItem.getObjectTypeEnum() == ParticipantTypeEnum.$ActivityUser )
                         {
                             if ( !Help.isNull(v_OldProcesses) )
                             {
@@ -1862,14 +1862,14 @@ public class XFlowEngine
             v_ProcessExtra.getCounterSignature().setCsFinish(1);
             
             ProcessParticipant v_Participant = new ProcessParticipant();
-            v_Participant.setCreaterID    (v_UserSys.getUserID());
-            v_Participant.setCreater      (v_UserSys.getUserName());
-            v_Participant.setCreateOrgID  (v_UserSys.getOrgID());
-            v_Participant.setCreateOrg    (v_UserSys.getOrgName());
-            v_Participant.setObjectID     (v_UserSys.getUserID());
-            v_Participant.setObjectName   (v_UserSys.getUserName());
-            v_Participant.setObjectType   (ParticipantTypeEnum.$User);
-            v_Participant.setObjectNo     (1);
+            v_Participant.setCreaterID     (v_UserSys.getUserID());
+            v_Participant.setCreater       (v_UserSys.getUserName());
+            v_Participant.setCreateOrgID   (v_UserSys.getOrgID());
+            v_Participant.setCreateOrg     (v_UserSys.getOrgName());
+            v_Participant.setObjectID      (v_UserSys.getUserID());
+            v_Participant.setObjectName    (v_UserSys.getUserName());
+            v_Participant.setObjectTypeEnum(ParticipantTypeEnum.$User);
+            v_Participant.setObjectNo      (1);
             
             for (ProcessCounterSignatureLog v_CSInfo : v_CSInfos)
             {
@@ -2105,9 +2105,9 @@ public class XFlowEngine
             UserParticipant    v_UserParticipant = new UserParticipant();
             ProcessParticipant v_FuturePart      = new ProcessParticipant();
             
-            v_UserParticipant.setObjectID(  v_Process.getOperateUserID());   // 用当时操作人为本次驳回的未来操作人：即驳回给当初操作人处理
-            v_UserParticipant.setObjectName(v_Process.getOperateUser());
-            v_UserParticipant.setObjectType(ParticipantTypeEnum.$User);
+            v_UserParticipant.setObjectID      (v_Process.getOperateUserID());   // 用当时操作人为本次驳回的未来操作人：即驳回给当初操作人处理
+            v_UserParticipant.setObjectName    (v_Process.getOperateUser());
+            v_UserParticipant.setObjectTypeEnum(ParticipantTypeEnum.$User);
             v_UserParticipant.setObjectNo(0);
             v_FuturePart.init(i_User ,v_NewProcess ,v_UserParticipant);
             
@@ -2806,7 +2806,7 @@ public class XFlowEngine
             $Logger.warn("WorkID[" + io_FlowComment.getWorkID() + "] User[" + io_FlowComment.getCreaterID() + "] is not participant.");
             return false;
         }
-        io_FlowComment.setObjectType(v_PPObjectType.getObjectType());
+        io_FlowComment.setObjectType(v_PPObjectType.getObjectTypeEnum());
         
         if ( v_Flow.getIsHistory() == 1 )
         {

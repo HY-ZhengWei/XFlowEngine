@@ -675,14 +675,14 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
     @Override
     public synchronized void addCacheByCounterSignatureExpire(ProcessParticipant i_Part)
     {
-        String         v_ID = i_Part.getObjectType().getValue() + ":" + i_Part.getObjectID();
+        String         v_ID = i_Part.getObjectTypeEnum().getValue() + ":" + i_Part.getObjectID();
         FutureOperator v_FO = new FutureOperator();
         v_FO.setWorkID(        i_Part.getWorkID());
         v_FO.setServiceDataID( "");
         v_FO.setProcessID(     i_Part.getProcessID());
         v_FO.setSplitProcessID(null);
         v_FO.setObjectID(      i_Part.getObjectID());
-        v_FO.setObjectType(    i_Part.getObjectType().getValue());
+        v_FO.setObjectType(    i_Part.getObjectTypeEnum().getValue());
         
         if ( $FutureOperators_KeyWorkID.getRow(i_Part.getWorkID() ,v_FO) == null )
         {
@@ -713,14 +713,14 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
         {
             for (ProcessParticipant v_Part : i_Process.getFutureParticipants())
             {
-                String         v_ID = v_Part.getObjectType().getValue() + ":" + v_Part.getObjectID();
+                String         v_ID = v_Part.getObjectTypeEnum().getValue() + ":" + v_Part.getObjectID();
                 FutureOperator v_FO = new FutureOperator();
                 v_FO.setWorkID(        i_Process.getWorkID());
                 v_FO.setServiceDataID( "");
                 v_FO.setProcessID(     i_Process.getProcessID());
                 v_FO.setSplitProcessID(i_Process.getSplitProcessID());
                 v_FO.setObjectID(      v_Part.getObjectID());
-                v_FO.setObjectType(    v_Part.getObjectType().getValue());
+                v_FO.setObjectType(    v_Part.getObjectTypeEnum().getValue());
                 
                 if ( $FutureOperators_KeyWorkID.getRow(i_Process.getWorkID() ,v_FO) == null )
                 {
@@ -747,14 +747,14 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
             
             for (ProcessParticipant v_Part : i_Process.getFutureParticipants())
             {
-                String         v_ID = v_Part.getObjectType().getValue() + ":" + v_Part.getObjectID();
+                String         v_ID = v_Part.getObjectTypeEnum().getValue() + ":" + v_Part.getObjectID();
                 FutureOperator v_FO = new FutureOperator();
                 v_FO.setWorkID(        i_Process.getWorkID());
                 v_FO.setServiceDataID( i_Process.getServiceDataID());
                 v_FO.setProcessID(     i_Process.getProcessID());
                 v_FO.setSplitProcessID(i_Process.getSplitProcessID());
                 v_FO.setObjectID(      v_Part.getObjectID());
-                v_FO.setObjectType(    v_Part.getObjectType().getValue());
+                v_FO.setObjectType(    v_Part.getObjectTypeEnum().getValue());
                 
                 if ( $FutureOperators_KeyWorkID.getRow(i_Process.getWorkID() ,v_FO) == null )
                 {

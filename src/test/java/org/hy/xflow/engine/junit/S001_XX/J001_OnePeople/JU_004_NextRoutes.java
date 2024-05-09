@@ -44,7 +44,7 @@ public class JU_004_NextRoutes extends BaseJunit
             ActivityRoute v_Route  = v_NextRoutes.getRoutes().get(0);
             
             UserParticipant v_Participant = new UserParticipant();
-            v_Participant.setObjectType(ParticipantTypeEnum.$Role);
+            v_Participant.setObjectTypeEnum(ParticipantTypeEnum.$Role);
             v_Participant.setObjectID("role-approval");
             v_Participant.setObjectName("选型审批人");
             v_Participant.setObjectNo(1);

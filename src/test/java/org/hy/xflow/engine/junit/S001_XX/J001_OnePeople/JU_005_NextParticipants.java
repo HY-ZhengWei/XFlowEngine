@@ -45,7 +45,7 @@ public class JU_005_NextParticipants extends BaseJunit
             
             v_UserPart.setObjectID("8a81b2b54b7b391b014b7d143a7400fe");
             v_UserPart.setObjectName("公用选型负责人");
-            v_UserPart.setObjectType(ParticipantTypeEnum.$User);
+            v_UserPart.setObjectTypeEnum(ParticipantTypeEnum.$User);
             
             ActivityRoute v_Route = v_NextRoutes.getRoutes().get(0);
             

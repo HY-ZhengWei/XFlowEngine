@@ -1,8 +1,14 @@
 package org.hy.xflow.engine.junit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hy.common.xml.XJSON;
 import org.hy.common.xml.log.Logger;
+import org.hy.xflow.engine.bean.FlowData;
 import org.hy.xflow.engine.bean.NextRoutes;
+import org.hy.xflow.engine.bean.UserParticipant;
+import org.hy.xflow.engine.enums.ParticipantTypeEnum;
 import org.junit.Test;
 
 
@@ -13,6 +19,23 @@ public class JU_Json
 {
     
     private static final Logger $Logger = new Logger(JU_Json.class ,true);
+    
+    
+    
+    @Test
+    public void test_JavaToJson_20240509() throws Exception
+    {
+        FlowData              v_FlowData = new FlowData();
+        List<UserParticipant> v_Users    = new ArrayList<UserParticipant>();
+        UserParticipant       v_User     = new UserParticipant();
+        XJSON                 v_XJson    = new XJSON();
+        
+        v_User.setObjectTypeEnum(ParticipantTypeEnum.$Role);
+        v_Users.add(v_User);
+        v_FlowData.setParticipants(v_Users);
+        
+        System.out.println(v_XJson.toJson(v_FlowData).toJSONString());
+    }
     
     
     
