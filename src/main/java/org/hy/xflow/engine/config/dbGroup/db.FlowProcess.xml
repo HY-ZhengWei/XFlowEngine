@@ -23,6 +23,12 @@
             </sqlNode>
             
             <sqlNode>
+                <sql  ref="XSQL_XFlow_TFlowFutureOperator_Insert" />
+                <type ref="this.$Type_CollectionToExecuteUpdate" />
+                <collectionID>process.futureParticipants</collectionID>
+            </sqlNode>
+            
+            <sqlNode>
                 <sql  ref="XSQL_XFlow_TFlowLastOperator_Del" />
                 <type ref="this.$Type_ExecuteUpdate" />
             </sqlNode>

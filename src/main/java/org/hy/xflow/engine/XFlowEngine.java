@@ -703,10 +703,33 @@ public class XFlowEngine
         
         FlowInfo    v_Flow    = new FlowInfo(i_User ,v_Template ,i_ServiceDataID);
         FlowProcess v_Process = new FlowProcess().init_CreateFlow(i_User ,v_Flow ,v_Template.getActivityRouteTree().getStartActivity());
-        boolean     v_Ret     = this.flowInfoService.createFlow(v_Flow ,v_Process);
+        
+        // 未来操作
+        ProcessParticipant v_Future = new ProcessParticipant();
+        v_Future.setCreaterID     (i_User.getUserID());
+        v_Future.setCreater       (i_User.getUserName());
+        v_Future.setCreateOrgID   (i_User.getOrgID());
+        v_Future.setCreateOrg     (i_User.getOrgName());
+        v_Future.setObjectID      (i_User.getUserID());
+        v_Future.setObjectName    (i_User.getUserName());
+        v_Future.setObjectTypeEnum(ParticipantTypeEnum.$User);
+        v_Future.setObjectNo      (1);
+        
+        v_Future.setProcessID     (v_Process.getProcessID());
+        v_Future.setWorkID        (v_Process.getWorkID());
+        v_Future.setServiceDataID (v_Process.getServiceDataID());
+        v_Future.setCreateTime    (new Date());
+        
+        v_Process.setFutureParticipants(new ArrayList<ProcessParticipant>());
+        v_Process.getFutureParticipants().add(v_Future);
+        
+        boolean v_Ret = this.flowInfoService.createFlow(v_Flow ,v_Process);
         
         if ( v_Ret )
         {
+            // 添加未来操作人
+            this.futureOperatorService.addCache(v_Process ,v_Template);
+            
             if ( !Help.isNull(i_ServiceDataID) )
             {
                 this.futureOperatorService.pushSToWorkID(v_Flow.getWorkID() ,i_ServiceDataID);
