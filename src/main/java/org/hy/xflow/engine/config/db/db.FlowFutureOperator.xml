@@ -166,7 +166,7 @@
                        ,:serviceDataID
                        ,:processID
                        ,:splitProcessID
-                       ,:objectType.value
+                       ,:objectTypeEnum.value
                        ,:objectID
                        ,:objectName
                        ,:objectNo
@@ -354,14 +354,15 @@
             
             <content>
                 <![CDATA[
-                SELECT  A.workID
+                SELECT  DISTINCT
+                        A.workID
                        ,A.serviceDataID
                   FROM  TFlowFutureOperator  A
                        ,TProcess             B
-                 WHERE  A.processID           = B.processID 
-                   AND  A.objectType          = ':objectType'
-                   AND  A.objectID            = ':objectID'
-                   AND  B.currentActivityCode = ':activityCode'
+                 WHERE  A.processID            = B.processID 
+                   AND  A.objectType           = ':objectType'
+                   AND  A.objectID             = ':objectID'
+                   AND  B.currentActivityCode IN (':activityCode')
                  ORDER  BY A.workID
                 ]]>
             </content>
@@ -383,19 +384,20 @@
             
             <content>
                 <![CDATA[
-                SELECT  A.workID
+                SELECT  DISTINCT
+                        A.workID
                        ,A.serviceDataID
                   FROM  TFlowFutureOperator  A
                        ,TProcess             B
                        ,TFlowInfo            C
                        ,TTemplate            D
-                 WHERE  C.flowTemplateID      = D.templateID 
-                   AND  A.workID              = C.workID 
-                   AND  A.processID           = B.processID 
-                   AND  A.objectType          = ':objectType'
-                   AND  A.objectID            = ':objectID'
-                   AND  B.currentActivityCode = ':activityCode'
-                   AND  D.templateName        = ':templateName'
+                 WHERE  C.flowTemplateID       = D.templateID 
+                   AND  A.workID               = C.workID 
+                   AND  A.processID            = B.processID 
+                   AND  A.objectType           = ':objectType'
+                   AND  A.objectID             = ':objectID'
+                   AND  B.currentActivityCode IN (':activityCode')
+                   AND  D.templateName         = ':templateName'
                  ORDER  BY A.workID
                 ]]>
             </content>

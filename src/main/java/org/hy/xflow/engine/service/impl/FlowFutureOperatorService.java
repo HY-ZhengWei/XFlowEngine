@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.hy.common.Help;
 import org.hy.common.PartitionMap;
+import org.hy.common.StringHelp;
 import org.hy.common.net.CommunicationListener;
 import org.hy.common.net.data.CommunicationRequest;
 import org.hy.common.net.data.CommunicationResponse;
@@ -325,7 +326,7 @@ public class FlowFutureOperatorService extends BaseService implements IFlowFutur
         List<FutureOperator> v_Temp   = null;
         FutureOperator       v_Params = new FutureOperator();
         
-        v_Params.setActivityCode(i_ActivityCode);
+        v_Params.setActivityCode(StringHelp.replaceAll(i_ActivityCode ,";" ,"','"));
         v_Params.setTemplateName(Help.isNull(i_TemplateName) ? null : i_TemplateName);
         
         if ( Help.isNull(i_TemplateName) )
