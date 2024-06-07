@@ -383,4 +383,26 @@ public class JU_Json
         $Logger.info(v_Object);
     }
     
+    
+    @Test
+    public void test_JsonToJava_20240607() throws Exception
+    {
+        XJSON      v_XJson   = new XJSON();
+        String     v_JsonStr = "";
+        NextRoutes v_Object = null;
+        
+        v_JsonStr = """
+                    {
+                        "body": {
+                                    "objectType": 2,
+                                    "objectTypeEnum": 1
+                            }
+                    }
+                    """;
+        v_Object = (NextRoutes) v_XJson.toJava(v_JsonStr ,"body" ,UserParticipant.class);
+        
+        System.out.println(v_Object.getCurrentProcess().getParticipants().get(0).getObjectType());
+        System.out.println(v_Object);
+    }
+    
 }
