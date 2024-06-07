@@ -924,7 +924,7 @@ public class XFlowEngine
      *              v2.0  2023-02-16  删除：与queryNextRoutes()方法整合为一个方法，减少接口数量，减轻开发用户的负担
      *
      * @param i_User    用户
-     * @param i_WorkID  工作流ID
+     * @param i_ServiceDataID  工作流ID
      * @return
      */
     @Deprecated
@@ -1647,7 +1647,7 @@ public class XFlowEngine
                 else
                 {
                     // 只有转流的路由是“汇总”路由时
-                    if ( RouteTypeEnum.$ToSum.equals(v_RouteList.get(0).getRouteTypeID()) )
+                    if ( RouteTypeEnum.$ToSum.equals(v_RouteList.get(0).getRouteTypeIDEnum()) )
                     {
                         // 汇总未通过时，删除未来操作人
                         for (FlowProcess v_FPItem : v_ProcessList)
