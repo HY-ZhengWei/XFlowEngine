@@ -1276,7 +1276,7 @@ public class XFlowEngine
             
             if ( i_ActivityRouteCodes.size() > 1 )
             {
-                if ( RouteTypeEnum.$ToMany != v_Route.getRouteTypeID() )
+                if ( RouteTypeEnum.$ToMany != v_Route.getRouteTypeIDEnum() )
                 {
                     // 路由类型不是：分派路由时，不允许并发多路路由
                     throw new RuntimeException("ActivityRouteCode[" + v_ActivityRouteCode + "] routeType is not RouteTypeEnum.$ToMany. WorkID[" + i_WorkID + "] or User[" + i_User.getUserID() + "]");
@@ -1313,7 +1313,7 @@ public class XFlowEngine
             v_Process.init_ToNext(i_User ,v_NextRoutes.getFlow() ,v_Previous ,v_Route);
             
             // 汇签下发：判定其后的节点是否为：汇签 Add 2024-04-07
-            if ( RouteTypeEnum.$CounterSignature == v_Route.getRouteTypeID() )
+            if ( RouteTypeEnum.$CounterSignature == v_Route.getRouteTypeIDEnum() )
             {
                 if ( i_ProcessExtra.getCounterSignature() == null )
                 {
@@ -1473,7 +1473,7 @@ public class XFlowEngine
             
             // 驳回的路由
             List<FlowProcess> v_OldProcesses = v_NextRoutes.getFlow().getProcessActivityMap().get(v_Route.getNextActivity().getActivityCode());
-            if ( v_Route.getRouteTypeID() == RouteTypeEnum.$Reject )
+            if ( v_Route.getRouteTypeIDEnum() == RouteTypeEnum.$Reject )
             {
                 if ( Help.isNull(v_OldProcesses) )
                 {
@@ -1678,8 +1678,8 @@ public class XFlowEngine
             {
                 for (ActivityRoute v_Route : v_RouteList)
                 {
-                    if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeID()
-                      || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeID() )
+                    if ( RouteTypeEnum.$Finish    == v_Route.getRouteTypeIDEnum()
+                      || ActivityTypeEnum.$Finish == v_Route.getNextActivity().getActivityTypeIDEnum() )
                     {
                         this.flowInfoService.toHistory(i_WorkID);
                         this.futureOperatorService.delCacheToHistory(v_ProcessList.get(0) ,v_Template);
@@ -2829,7 +2829,7 @@ public class XFlowEngine
             $Logger.warn("WorkID[" + io_FlowComment.getWorkID() + "] User[" + io_FlowComment.getCreaterID() + "] is not participant.");
             return false;
         }
-        io_FlowComment.setObjectType(v_PPObjectType.getObjectTypeEnum());
+        io_FlowComment.setObjectTypeEnum(v_PPObjectType.getObjectTypeEnum());
         
         if ( v_Flow.getIsHistory() == 1 )
         {
